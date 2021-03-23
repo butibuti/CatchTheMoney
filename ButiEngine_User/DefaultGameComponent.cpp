@@ -1,0 +1,6 @@
+#include"stdafx_u.h"
+#include"Header/GameObjects/DefaultGameComponent/Particle_3D.h"
+#include"Header/GameObjects/DefaultGameComponent/MeshDrawComponent.h"
+#include"Header/GameObjects/DefaultGameComponent/ModelDrawComponent.h"
+#include"Header/GameObjects/DefaultGameComponent/MeshDrawComponent_Static.h"
+#include"Header/GameObjects/DefaultGameComponent/ModelDrawComponent.h"

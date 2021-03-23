@@ -1,0 +1,50 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+*.suo
+*.db
+*.pdb
+*.opendb
+
+*.zip
+
+.vs/
+Temp/
+output/
+ButiEngine_User/Resources/*
+!ButiEngine_User/Resources/Shader/
+ButiEngine_User/Resources/Shader/Compiled/
+
+Libs/Library/cereal/
+Libs/Library/imGUI/
+Libs/Library/lib/
