@@ -2,11 +2,11 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class Player :public GameComponent
+	class Block :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "Player";
+			return "Block";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -18,22 +18,21 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+
+		void SetStartPoint(Vector2 arg_startPoint) { startPoint = arg_startPoint; }
+		void SetEndPoint(Vector2 arg_endPoint) { endPoint = arg_endPoint; }
+		void FinishCreate() { createFinished = true; }
 	private:
-		void Controll();
-		void Move();
-		void OnOutScreen();
-		void CreateBlock();
+		void Create();
+		void Correction();
 
-		std::weak_ptr<GameObject> wkp_block;
-
-		const Vector2 size = Vector2(60.0f, 60.0f);
-		Vector2 velocity;
-		float speed;
-
-		bool startCreateBlock;
+		bool createFinished;
 		Vector2 startPoint;
+		Vector2 endPoint;
+		Vector2 drawStartPoint;
+		Vector2 drawEndPoint;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(Player);
+BUTI_REGIST_GAMECOMPONENT(Block);

@@ -1,11 +1,13 @@
 #include "stdafx_u.h"
 #include "Player.h"
 #include"GameSettings.h"
+#include"Block.h"
 
 void ButiEngine::Player::OnUpdate()
 {
 	Controll();
 	Move();
+	CreateBlock();
 }
 
 void ButiEngine::Player::OnSet()
@@ -35,7 +37,7 @@ void ButiEngine::Player::Controll()
 	{
 		velocity.x += 1.0f;
 	}
-	if (GameDevice::GetInput()->CheckKey(Keys::A))
+	else if (GameDevice::GetInput()->CheckKey(Keys::A))
 	{
 		velocity.x -= 1.0f;
 	}
@@ -43,7 +45,7 @@ void ButiEngine::Player::Controll()
 	{
 		velocity.y += 1.0f;
 	}
-	if (GameDevice::GetInput()->CheckKey(Keys::S))
+	else if (GameDevice::GetInput()->CheckKey(Keys::S))
 	{
 		velocity.y -= 1.0f;
 	}
@@ -68,31 +70,63 @@ void ButiEngine::Player::OnOutScreen()
 	bool outScreen = false;
 	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
 	Vector2 sizeHalf = size / 2.0f;
-	Vector2 windowSizeHalf = Vector2(GameSettings::windowWidth / 2.0f, GameSettings::windowHeight / 2.0f);
 
-	if (position.x - sizeHalf.x <= -windowSizeHalf.x)
+	if (position.x - sizeHalf.x < 0)
 	{
-		position.x = -windowSizeHalf.x + sizeHalf.x;
+		position.x = sizeHalf.x;
 		outScreen = true;
 	}
-	else if (position.x + sizeHalf.x > windowSizeHalf.x)
+	else if (position.x + sizeHalf.x > GameSettings::windowWidth)
 	{
-		position.x = windowSizeHalf.x - sizeHalf.x;
+		position.x = GameSettings::windowWidth - sizeHalf.x;
 		outScreen = true;
 	}
-	if (position.y - sizeHalf.y <= -windowSizeHalf.y)
+	if (position.y - sizeHalf.y < -GameSettings::windowHeight)
 	{
-		position.y = -windowSizeHalf.y + sizeHalf.y;
+		position.y = -GameSettings::windowHeight + sizeHalf.y;
 		outScreen = true;
 	}
-	else if (position.y + sizeHalf.y > windowSizeHalf.y)
+	else if (position.y + sizeHalf.y > 0)
 	{
-		position.y = windowSizeHalf.y - sizeHalf.y;
+		position.y = -sizeHalf.y;
 		outScreen = true;
 	}
 
 	if (outScreen)
 	{
 		gameObject.lock()->transform->SetWorldPosition(Vector3(position.x, position.y, 0.0f));
+	}
+}
+
+void ButiEngine::Player::CreateBlock()
+{
+	if (GameDevice::GetInput()->TriggerKey(Keys::Space))
+	{
+		if (!startCreateBlock)
+		{
+			wkp_block = GetManager().lock()->AddObjectFromCereal("Block");
+			wkp_block.lock()->transform->SetLocalScale(Vector3::Zero);
+
+			auto block = wkp_block.lock()->GetGameComponent<Block>();
+			Vector3 position = gameObject.lock()->transform->GetWorldPosition();
+			Vector2 startPoint = Vector2(position.x, position.y);
+			block->SetStartPoint(startPoint);
+			startCreateBlock = true;
+		}
+	}
+	else if (GameDevice::GetInput()->ReleaseKey(Keys::Space))
+	{
+		auto block = wkp_block.lock()->GetGameComponent<Block>();
+		block->FinishCreate();
+		wkp_block = std::weak_ptr<GameObject>();
+		startCreateBlock = false;
+	}
+
+	if (wkp_block.lock() && startCreateBlock)
+	{
+		auto block = wkp_block.lock()->GetGameComponent<Block>();
+		Vector3 position = gameObject.lock()->transform->GetWorldPosition();
+		Vector2 endPoint = Vector2(position.x, position.y);
+		block->SetEndPoint(endPoint);
 	}
 }
