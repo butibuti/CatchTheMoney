@@ -22,9 +22,15 @@ namespace ButiEngine {
 		void SetStartPoint(Vector2 arg_startPoint) { startPoint = arg_startPoint; }
 		void SetEndPoint(Vector2 arg_endPoint) { endPoint = arg_endPoint; }
 		void FinishCreate() { createFinished = true; }
+		void CreateClone();
+		void SetClone(bool arg_clone) { clone = arg_clone; }
 	private:
 		void Create();
 		void Correction();
+		void OnOutScreen();
+
+		bool clone;
+		std::weak_ptr<GameObject> wkp_clone;
 
 		bool createFinished;
 		Vector2 startPoint;

@@ -5,6 +5,7 @@
 void ButiEngine::Block::OnUpdate()
 {
 	Create();
+	OnOutScreen();
 }
 
 void ButiEngine::Block::OnSet()
@@ -25,9 +26,23 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Block::Clone()
 	return ObjectFactory::Create<Block>();
 }
 
+void ButiEngine::Block::CreateClone()
+{
+	if (clone)
+	{
+		return;
+	}
+	wkp_clone = GetManager().lock()->AddObjectFromCereal("Block");
+	wkp_clone.lock()->GetGameComponent<Block>()->SetClone(true);
+	wkp_clone.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
+	wkp_clone.lock()->transform->SetLocalPosition(Vector3::Zero);
+	wkp_clone.lock()->transform->TranslateX(-GameSettings::windowWidth / gameObject.lock()->transform->GetLocalScale().x);
+	wkp_clone.lock()->transform->SetLocalScale(1.0f);
+}
+
 void ButiEngine::Block::Create()
 {
-	if (createFinished)
+	if (clone || createFinished)
 	{
 		return;
 	}
@@ -70,5 +85,16 @@ void ButiEngine::Block::Correction()
 	{
 		drawStartPoint.y = startBlockPos.y * GameSettings::gridSize;
 		drawEndPoint.y = (endBlockPos.y - 1) * GameSettings::gridSize;
+	}
+}
+
+void ButiEngine::Block::OnOutScreen()
+{
+	bool outScreen = false;
+	float left = gameObject.lock()->transform->GetWorldPosition().x - gameObject.lock()->transform->GetLocalScale().x / 2.0f;
+
+	if (left > GameSettings::windowWidth)
+	{
+		gameObject.lock()->transform->SetWorldPosition(wkp_clone.lock()->transform->GetWorldPosition());
 	}
 }

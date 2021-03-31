@@ -118,6 +118,7 @@ void ButiEngine::Player::CreateBlock()
 	{
 		auto block = wkp_block.lock()->GetGameComponent<Block>();
 		block->FinishCreate();
+		block->CreateClone();
 		wkp_block = std::weak_ptr<GameObject>();
 		startCreateBlock = false;
 	}
