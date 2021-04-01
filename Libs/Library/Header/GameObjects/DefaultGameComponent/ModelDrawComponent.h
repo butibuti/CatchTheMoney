@@ -17,7 +17,7 @@ namespace ButiEngine {
 		void OnSet()override;
 		std::shared_ptr<ModelDrawData> GetModelData();
 		std::shared_ptr<GameComponent> Clone()override;
-
+		std::shared_ptr<IBoneObject> GetBone();
 		void OnShowUI()override;
 
 
@@ -31,14 +31,19 @@ namespace ButiEngine {
 			archive(isActive);
 			archive(shp_transform);
 			archive(shp_drawInfo);
+			//archive(shp_bone);
 		}
 
 
 	protected:
+		std::shared_ptr<IBoneObject> shp_bone;
 		void CreateData()override;
 	private:
 		std::shared_ptr<ModelDrawData> shp_modelData;
 	};
 
 }
+
 BUTI_REGIST_GAMECOMPONENT(ModelDrawComponent)
+
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ButiEngine::MeshDrawComponent, ButiEngine::ModelDrawComponent);

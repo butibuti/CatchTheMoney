@@ -461,12 +461,17 @@ namespace ButiEngine {
 		void SetMeshTag(MeshTag  arg_meshTag);
 		void SetModelTag(ModelTag  arg_modelTag);
 		void SetShaderTag(ShaderTag  arg_shaderTag);
+		const MeshTag& GetMeshTag();
+		const ShaderTag& GetShaderTag();
+		const ModelTag& GetModelTag();
+		const std::vector<MaterialTag>& GetMaterialTag();
 		std::shared_ptr<GameComponent> Clone()override;
-		void Regist();
+		virtual void Regist();
 		void ReRegist();
-		void UnRegist();
+		virtual void UnRegist();
 		std::shared_ptr< DrawInformation > GetDrawInformation();
 		void OnShowUI()override;
+		std::shared_ptr<Transform> GetTransform();
 
 		template <class T>
 		std::shared_ptr<CBuffer< T>> CreateCBuffer(const std::string& arg_cBufferName, const UINT arg_slot, std::weak_ptr<GraphicDevice> arg_wkp_graphicDevice);
@@ -502,9 +507,9 @@ namespace ButiEngine {
 	class MeshDrawComponent_Static :public MeshDrawComponent
 	{
 	public:
-		MeshDrawComponent_Static(const MeshTag& arg_meshTag, const ShaderTag& arg_shaderTag, const MaterialTag& arg_materialTag, std::shared_ptr< DrawInformation >arg_shp_drawInfo = nullptr,  std::shared_ptr<Transform> arg_shp_transform = nullptr);
-		MeshDrawComponent_Static(const MeshTag& arg_meshTag, const ShaderTag& arg_shaderTag, const std::vector< MaterialTag>& arg_materialTag, std::shared_ptr< DrawInformation >arg_shp_drawInfo = nullptr,  std::shared_ptr<Transform> arg_shp_transform = nullptr);
-		MeshDrawComponent_Static(const ModelTag& arg_modelTag, const ShaderTag& arg_shaderTag, std::shared_ptr< DrawInformation >arg_shp_drawInfo = nullptr,  std::shared_ptr<Transform> arg_shp_transform = nullptr);
+		MeshDrawComponent_Static(const MeshTag& arg_meshTag, const ShaderTag& arg_shaderTag, const MaterialTag& arg_materialTag, std::shared_ptr< DrawInformation >arg_shp_drawInfo = nullptr, std::shared_ptr<Transform> arg_shp_transform = nullptr);
+		MeshDrawComponent_Static(const MeshTag& arg_meshTag, const ShaderTag& arg_shaderTag, const std::vector< MaterialTag>& arg_materialTag, std::shared_ptr< DrawInformation >arg_shp_drawInfo = nullptr, std::shared_ptr<Transform> arg_shp_transform = nullptr);
+		MeshDrawComponent_Static(const ModelTag& arg_modelTag, const ShaderTag& arg_shaderTag, std::shared_ptr< DrawInformation >arg_shp_drawInfo = nullptr, std::shared_ptr<Transform> arg_shp_transform = nullptr);
 		MeshDrawComponent_Static() {}
 		std::string GetGameComponentName() {
 			return "MeshDraw_Static";
@@ -524,15 +529,21 @@ namespace ButiEngine {
 		}
 	protected:
 	};
+	
 }
 
 //static const ButiEngine::GameComponentRegister  compRegister = ButiEngine::GameComponentRegister(ButiEngine::ObjectFactory::Create <ButiEngine::CameraMan>());
+
 
 BUTI_REGIST_GAMECOMPONENT(UIComponent)
 BUTI_REGIST_GAMECOMPONENT(SimpleBoneAnimatorComponent)
 
 BUTI_REGIST_GAMECOMPONENT(MeshDrawComponent)
 BUTI_REGIST_GAMECOMPONENT(MeshDrawComponent_Static)
+
+
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ButiEngine::MeshDrawComponent, ButiEngine::MeshDrawComponent_Static);
+
 BUTI_REGIST_GAMECOMPONENT(Collision::ColliderComponent)
 BUTI_REGIST_GAMECOMPONENT(SucideComponent)
 BUTI_REGIST_GAMECOMPONENT(TransformAnimation)

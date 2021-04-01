@@ -2,7 +2,6 @@
 #include<map>
 #include"Bone.h"
 namespace ButiEngine {
-	class IBoneDrawObject;
 	struct LarpData {
 		LarpData(BYTE* arg_data);
 		LarpData();
@@ -81,7 +80,7 @@ namespace ButiEngine {
 		void PreMotionStart(std::shared_ptr<Transform> arg_parentBoneTransform);
 		std::shared_ptr<IMotionTimeLine> AddMotionTimeLine(const std::string& arg_name, std::shared_ptr<IMotionTimeLine> arg_motion);
 		bool SetLoop(const bool arg_isLoop);
-		void SetBoneDrawObj(std::shared_ptr<IBoneDrawObject> arg_shp_boneDrawObj);
+		void SetBoneDrawObj(std::shared_ptr<IBoneObject> arg_shp_boneDrawObj);
 	private:
 		bool isActive = true;
 		bool isRoop = false;
@@ -91,7 +90,7 @@ namespace ButiEngine {
 		std::map<std::string, std::shared_ptr<IMotionTimeLine>> map_motionTimeLine;
 
 		std::vector<std::shared_ptr<IMotionTimeLine>> vec_timeLines;
-		std::shared_ptr<IBoneDrawObject> shp_boneDrawObj;
+		std::shared_ptr<IBoneObject> shp_boneDrawObj;
 	};
 
 }

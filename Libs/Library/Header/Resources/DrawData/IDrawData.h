@@ -212,9 +212,9 @@ namespace ButiEngine {
 		std::shared_ptr<Collision::CollisionPrimitive> GetPrimitive() override;
 		unsigned int* GetOctRegistPtr() override;
 	};
-	struct ModelDrawData :public IBoneDrawObject
+	struct ModelDrawData
 	{
-
+		std::shared_ptr<IBoneObject> shp_bone;
 		std::shared_ptr< CArrayBuffer<Matrix4x4>> cbuffer_bone;
 	};
 }

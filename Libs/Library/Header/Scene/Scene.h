@@ -46,6 +46,7 @@ namespace ButiEngine {
 		void ShowRenderingUI()override;
 		void ShowInspectorUI()override;
 		void ShowHeirarcyUI()override;
+		
 	protected:
 		std::shared_ptr<ISceneManager> shp_sceneManager;
 		std::shared_ptr<GameObjectManager> shp_gameObjectManager;

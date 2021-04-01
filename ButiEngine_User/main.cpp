@@ -24,7 +24,7 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	GameDevice::GetInput()->Initialize(app);
 	//ModelFileConverter::FBXtoB3M("simpleGround.fbx", "simpleGround.b3m", "Model/Stage/");
 	app->InitLoadResources();
-	app->GetSceneManager()->LoadScene_Init("Title");
+	app->GetSceneManager()->LoadScene_Init("Stage0");
 
 	app->GetGraphicDevice()->SetClearColor(Vector4(0.5,0.5,0.8, 1));
 	int returnCode = app->Run();

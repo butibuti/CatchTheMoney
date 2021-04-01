@@ -43,8 +43,12 @@ Temp/
 output/
 ButiEngine_User/Resources/*
 !ButiEngine_User/Resources/Shader/
+!ButiEngine_User/Resources/Scene/
+!ButiEngine_User/Resources/Application/
+!ButiEngine_User/Resources/GameObject/
 ButiEngine_User/Resources/Shader/Compiled/
 
 Libs/Library/cereal/
 Libs/Library/imGUI/
 Libs/Library/lib/
+Libs/Library/Source/

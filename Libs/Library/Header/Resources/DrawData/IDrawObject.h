@@ -28,13 +28,13 @@ namespace ButiEngine {
 		virtual std::shared_ptr<Collision::CollisionPrimitive> GetPrimitive() = 0;
 		virtual unsigned int* GetOctRegistPtr() = 0;
 	};
-	class IBoneDrawObject {
+	class IBoneObject :public  IObject{
 	public:
-		virtual void ModelUpdate() = 0;
 		std::vector<std::shared_ptr<Bone>> vec_bone;
 		std::vector<std::shared_ptr<Bone>> vec_IKBone;
 		std::vector<std::shared_ptr<Bone>> vec_addBone;
-
+		void Initialize()override {}
+		void PreInitialize()override{}
 		void InverseKinematic() {
 
 			for (auto itr = vec_IKBone.begin(); itr != vec_IKBone.end(); itr++) {

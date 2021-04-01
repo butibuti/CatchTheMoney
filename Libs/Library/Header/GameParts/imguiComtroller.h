@@ -27,11 +27,13 @@ namespace ButiEngine {
 		void SetResourceTag(PixelShaderTag arg_tag);
 		void SetResourceTag(GeometryShaderTag arg_tag);
 		void SetResourceTag(TextureTag arg_tag);
+		void SetDraggingCamera(std::shared_ptr<ICamera>arg_shp_camera);
 
 		void SetGUIObject(std::shared_ptr<IObject>arg_obj);
 		std::vector< std::shared_ptr<IObject>>vec_shp_GUIObjects;
 		
 		std::shared_ptr<IObject> GetDraggingObject();
+		std::shared_ptr<ICamera> GetDraggingCamera();
 
 		MeshTag GetMeshTag();
 		SoundTag GetSoundTag();
@@ -44,11 +46,12 @@ namespace ButiEngine {
 		GeometryShaderTag GetGeometryShaderTag();
 		TextureTag GetTextureTag();
 
+
 		GUI::GuiIO& GetGUIIO();
 
     private:
 
-
+		std::shared_ptr<ICamera> shp_icam;
 		std::unique_ptr<ImguiControllerInstance> unq_instance;
 		
     };

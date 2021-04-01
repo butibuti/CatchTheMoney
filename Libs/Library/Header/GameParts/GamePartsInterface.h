@@ -54,6 +54,7 @@ namespace ButiEngine
 		virtual void AddLayer() = 0;
 		virtual UINT GetLayerCount() = 0;
 		virtual void Rendering(const UINT arg_layer) = 0;
+		virtual void ShadowRendering(const UINT arg_layer) = 0;
 		virtual void RenderingEnd() = 0;
 		virtual void ClearDrawObjects() = 0;
 		virtual void Draw(const MeshTag& arg_meshTag) = 0;
@@ -62,10 +63,10 @@ namespace ButiEngine
 		virtual void TextureAttach(const TextureTag& arg_textureTag, const UINT arg_slot) = 0;
 		virtual void ShaderAttach(const ShaderTag& arg_shaderTag) = 0;
 		virtual void MaterialAttach(const UINT arg_slotOffset, const MaterialTag& arg_materialTag) = 0;
-		virtual UINT* RegistDrawObject(std::shared_ptr< IDrawObject> arg_shp_drawObject,const bool arg_afterDraw, const UINT arg_layer = 0) = 0;
+		virtual UINT* RegistDrawObject(std::shared_ptr< IDrawObject> arg_shp_drawObject,const bool arg_afterDraw, const UINT arg_layer = 0, const bool isShadow = false) = 0;
 		virtual void SetShadowTexture(const UINT arg_layer, TextureTag arg_shadowTex) = 0;
 		virtual TextureTag GetShadowTexture(const UINT arg_layer) = 0;
-		virtual void UnRegistDrawObject(UINT* arg_index, const bool arg_afterDraw, const UINT arg_layer = 0) = 0;
+		virtual void UnRegistDrawObject(UINT* arg_index, const bool arg_afterDraw, const UINT arg_layer = 0, const bool isShadow = false) = 0;
 		virtual void ShowUI() = 0;
 		virtual void Release() = 0;
 		virtual void UpdateFog(const Fog& arg_param) = 0;
@@ -298,8 +299,8 @@ namespace ButiEngine
 		std::string cameraName;
 		Vector4 clearColor;
 		bool isInitActive = true;
-		bool isEditActive = true;
-		bool isShadow = true;
+		bool isEditActive = false;
+		bool isShadow = false;
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
