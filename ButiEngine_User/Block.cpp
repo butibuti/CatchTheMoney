@@ -21,6 +21,14 @@ void ButiEngine::Block::Start()
 
 void ButiEngine::Block::OnCollision(std::weak_ptr<GameObject> arg_other)
 {
+	auto tag = GetTagManager()->GetObjectTag("ImpossibleCreateBlockArea");
+	if (arg_other.lock()->HasGameObjectTag(tag))
+	{
+		createable = false;
+		auto meshDraw = gameObject.lock()->GetGameComponent<MeshDrawComponent>();
+		meshDraw->SetMaterialTag(gameObject.lock()->GetResourceContainer()->GetMaterialTag("orange"));
+		meshDraw->ReRegist();
+	}
 }
 
 void ButiEngine::Block::OnCollisionEnter(std::weak_ptr<GameObject> arg_other)
