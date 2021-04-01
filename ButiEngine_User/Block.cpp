@@ -1,9 +1,14 @@
 #include "stdafx_u.h"
 #include "Block.h"
 #include"GameSettings.h"
+#include"PauseManager.h"
 
 void ButiEngine::Block::OnUpdate()
 {
+	if (shp_pauseManager->GetPause())
+	{
+		return;
+	}
 	Create();
 	OnOutScreen();
 }
@@ -14,6 +19,7 @@ void ButiEngine::Block::OnSet()
 
 void ButiEngine::Block::Start()
 {
+	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	createFinished = false;
 	createable = true;
 	gameObject.lock()->RegistReactionComponent(GetThis<GameComponent>());

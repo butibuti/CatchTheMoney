@@ -2,9 +2,14 @@
 #include "Player.h"
 #include"GameSettings.h"
 #include"Block.h"
+#include"PauseManager.h"
 
 void ButiEngine::Player::OnUpdate()
 {
+	if (shp_pauseManager->GetPause())
+	{
+		return;
+	}
 	Controll();
 	Move();
 	CreateBlock();
@@ -16,6 +21,7 @@ void ButiEngine::Player::OnSet()
 
 void ButiEngine::Player::Start()
 {
+	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	velocity = Vector2(0.0f, 0.0f);
 	speed = 10.0f;
 }
@@ -100,7 +106,7 @@ void ButiEngine::Player::OnOutScreen()
 
 void ButiEngine::Player::CreateBlock()
 {
-	if (GameDevice::GetInput()->TriggerKey(Keys::Space))
+	if (GameDevice::GetInput()->CheckKey(Keys::Space))
 	{
 		if (!startCreateBlock)
 		{
@@ -114,7 +120,7 @@ void ButiEngine::Player::CreateBlock()
 			startCreateBlock = true;
 		}
 	}
-	else if (GameDevice::GetInput()->ReleaseKey(Keys::Space))
+	else if (startCreateBlock)
 	{
 		auto block = wkp_block.lock()->GetGameComponent<Block>();
 		block->FinishCreate();

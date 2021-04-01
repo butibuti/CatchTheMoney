@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class PauseManager;
+
 	class Block :public GameComponent
 	{
 	public:
@@ -30,6 +32,8 @@ namespace ButiEngine {
 		void Correction();
 		void OnOutScreen();
 		void CreateClone();
+
+		std::shared_ptr<PauseManager> shp_pauseManager;
 
 		bool clone;
 		std::weak_ptr<GameObject> wkp_clone;

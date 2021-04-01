@@ -2,17 +2,16 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class PauseManager;
-
-	class Player :public GameComponent
+	class PauseManager :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "Player";
+			return "PauseManager";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
+		void OnShowUI()override;
 		void OnCollision(std::weak_ptr<GameObject> arg_other)override;
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
@@ -20,24 +19,11 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+		bool GetPause() { return pause; }
 	private:
-		void Controll();
-		void Move();
-		void OnOutScreen();
-		void CreateBlock();
-
-		std::shared_ptr<PauseManager> shp_pauseManager;
-
-		std::weak_ptr<GameObject> wkp_block;
-
-		const Vector2 size = Vector2(60.0f, 60.0f);
-		Vector2 velocity;
-		float speed;
-
-		bool startCreateBlock;
-		Vector2 startPoint;
+		bool pause;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(Player);
+BUTI_REGIST_GAMECOMPONENT(PauseManager);

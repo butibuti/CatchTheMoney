@@ -162,6 +162,7 @@
     <ClCompile Include="GameSettings.cpp" />
     <ClCompile Include="HitChecker.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PauseManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -176,6 +177,7 @@
     <ClInclude Include="DebugController.h" />
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="HitChecker.h" />
+    <ClInclude Include="PauseManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="StageSelect.h" />
