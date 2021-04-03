@@ -360,6 +360,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\ApplicationCreater.h">
       <Filter>header\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\ShadowComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Source\Common\Camera.cpp">
@@ -649,5 +650,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Source\Resources\Resource_Texture_Dx12_DepthStencil.cpp">
       <Filter>source\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\ShadowComponent.cpp" />
   </ItemGroup>
 </Project>
