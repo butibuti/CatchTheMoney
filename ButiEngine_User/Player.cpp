@@ -24,6 +24,8 @@ void ButiEngine::Player::Start()
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	velocity = Vector2(0.0f, 0.0f);
 	speed = 10.0f;
+
+	wkp_screenScroll = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
 }
 
 void ButiEngine::Player::OnCollision(std::weak_ptr<GameObject> arg_other)
@@ -69,6 +71,13 @@ void ButiEngine::Player::Move()
 	transform->TranslateY(velocity.y);
 
 	OnOutScreen();
+
+
+	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
+
+	auto scroll =( position.x / GameSettings::windowWidth)- 0.0675;
+	float dist = (scroll - wkp_screenScroll.lock()->Get().lightDir.x);
+	wkp_screenScroll.lock()->Get().lightDir.x +=abs( dist)*dist ;
 }
 
 void ButiEngine::Player::OnOutScreen()
@@ -77,24 +86,24 @@ void ButiEngine::Player::OnOutScreen()
 	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
 	Vector2 sizeHalf = size / 2.0f;
 
-	if (position.x - sizeHalf.x < 0)
+	if (position.x +- sizeHalf.x < -GameSettings::windowWidth / 2)
 	{
-		position.x = sizeHalf.x;
+		position.x =- GameSettings::windowWidth / 2 + sizeHalf.x;
 		outScreen = true;
 	}
-	else if (position.x + sizeHalf.x > GameSettings::windowWidth)
+	else if (position.x + sizeHalf.x > GameSettings::windowWidth/2)
 	{
-		position.x = GameSettings::windowWidth - sizeHalf.x;
+		position.x = GameSettings::windowWidth/2 - sizeHalf.x;
 		outScreen = true;
 	}
-	if (position.y - sizeHalf.y < -GameSettings::windowHeight)
+	if (position.y - sizeHalf.y < -GameSettings::windowHeight/2)
 	{
-		position.y = -GameSettings::windowHeight + sizeHalf.y;
+		position.y = -GameSettings::windowHeight/2 + sizeHalf.y;
 		outScreen = true;
 	}
-	else if (position.y + sizeHalf.y > 0)
+	else if (position.y + sizeHalf.y > GameSettings::windowHeight / 2)
 	{
-		position.y = -sizeHalf.y;
+		position.y = -sizeHalf.y+ GameSettings::windowHeight / 2;
 		outScreen = true;
 	}
 

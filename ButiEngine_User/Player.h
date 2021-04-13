@@ -29,6 +29,7 @@ namespace ButiEngine {
 		std::shared_ptr<PauseManager> shp_pauseManager;
 
 		std::weak_ptr<GameObject> wkp_block;
+		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
 
 		const Vector2 size = Vector2(60.0f, 60.0f);
 		Vector2 velocity;
