@@ -6,7 +6,7 @@ public:
 
 	static const int windowWidth = 3072;
 	static const int windowHeight = 256;
-	static const int gridSize = 64;
+	static const int gridSize = 32;
 private:
 	GameSettings();
 };

@@ -12,7 +12,6 @@ void ButiEngine::Player::OnUpdate()
 	}
 	Controll();
 	Move();
-	CreateBlock();
 }
 
 void ButiEngine::Player::OnSet()
@@ -23,13 +22,21 @@ void ButiEngine::Player::Start()
 {
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	velocity = Vector2(0.0f, 0.0f);
-	speed = 10.0f;
+	speed = 1.0f;
 
 	wkp_screenScroll = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
+
+	jump = true;
+	gravity = 0.6f;
 }
 
 void ButiEngine::Player::OnCollision(std::weak_ptr<GameObject> arg_other)
 {
+}
+
+void ButiEngine::Player::OnShowUI()
+{
+	GUI::SliderFloat("gravity", &gravity, 0.0f, 1.0f);
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
@@ -39,26 +46,26 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 
 void ButiEngine::Player::Controll()
 {
-	velocity = Vector2(0.0f, 0.0f);
-
+	velocity.x = 0.0f;
 	if (GameDevice::GetInput()->CheckKey(Keys::D))
 	{
-		velocity.x += 1.0f;
+		velocity.x = 1.0f;
 	}
 	else if (GameDevice::GetInput()->CheckKey(Keys::A))
 	{
-		velocity.x -= 1.0f;
+		velocity.x = -1.0f;
 	}
-	if (GameDevice::GetInput()->CheckKey(Keys::W))
+	if (GameDevice::GetInput()->TriggerKey(Keys::Space) && !jump)
 	{
-		velocity.y += 1.0f;
+		velocity.y = -10.0f;
+		jump = true;
 	}
-	else if (GameDevice::GetInput()->CheckKey(Keys::S))
+	if (jump)
 	{
-		velocity.y -= 1.0f;
+		velocity.y += gravity;
 	}
 
-	velocity.Normalize();
+	//velocity.Normalize();
 }
 
 void ButiEngine::Player::Move()
@@ -77,14 +84,16 @@ void ButiEngine::Player::Move()
 
 	auto scroll =( position.x / GameSettings::windowWidth)- 0.0675;
 	float dist = (scroll - wkp_screenScroll.lock()->Get().lightDir.x);
-	wkp_screenScroll.lock()->Get().lightDir.x +=abs( dist)*dist ;
+	wkp_screenScroll.lock()->Get().lightDir.x = scroll;
+	//wkp_screenScroll.lock()->Get().lightDir.x +=abs( dist)*dist ;
 }
 
 void ButiEngine::Player::OnOutScreen()
 {
 	bool outScreen = false;
 	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
-	Vector2 sizeHalf = size / 2.0f;
+	float tmp = GameSettings::gridSize / 2.0f;
+	Vector2 sizeHalf = Vector2(tmp, tmp);
 
 	/*if (position.x +- sizeHalf.x < -GameSettings::windowWidth / 2)
 	{
@@ -98,51 +107,20 @@ void ButiEngine::Player::OnOutScreen()
 	}*/
 	if (position.y - sizeHalf.y < -GameSettings::windowHeight/2)
 	{
-		position.y = -GameSettings::windowHeight/2 + sizeHalf.y;
+		position.y = -GameSettings::windowHeight/2 + sizeHalf.y + 0.1f;
 		outScreen = true;
+		velocity.y = 0;
 	}
 	else if (position.y + sizeHalf.y > GameSettings::windowHeight / 2)
 	{
 		position.y = -sizeHalf.y+ GameSettings::windowHeight / 2;
 		outScreen = true;
+		jump = false;
+		velocity.y = 0;
 	}
 
 	if (outScreen)
 	{
 		gameObject.lock()->transform->SetWorldPosition(Vector3(position.x, position.y, 0.0f));
-	}
-}
-
-void ButiEngine::Player::CreateBlock()
-{
-	return;
-	if (GameDevice::GetInput()->CheckKey(Keys::Space))
-	{
-		if (!startCreateBlock)
-		{
-			wkp_block = GetManager().lock()->AddObjectFromCereal("Block");
-			wkp_block.lock()->transform->SetLocalScale(Vector3::Zero);
-
-			auto block = wkp_block.lock()->GetGameComponent<Block>();
-			Vector3 position = gameObject.lock()->transform->GetWorldPosition();
-			Vector2 startPoint = Vector2(position.x, position.y);
-			block->SetStartPoint(startPoint);
-			startCreateBlock = true;
-		}
-	}
-	else if (startCreateBlock)
-	{
-		auto block = wkp_block.lock()->GetGameComponent<Block>();
-		block->FinishCreate();
-		wkp_block = std::weak_ptr<GameObject>();
-		startCreateBlock = false;
-	}
-
-	if (wkp_block.lock() && startCreateBlock)
-	{
-		auto block = wkp_block.lock()->GetGameComponent<Block>();
-		Vector3 position = gameObject.lock()->transform->GetWorldPosition();
-		Vector2 endPoint = Vector2(position.x, position.y);
-		block->SetEndPoint(endPoint);
 	}
 }

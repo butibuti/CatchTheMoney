@@ -2,19 +2,16 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class PauseManager;
-
-	class Player :public GameComponent
+	class MobiusLoop :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "Player";
+			return "MobiusLoop";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
 		void OnCollision(std::weak_ptr<GameObject> arg_other)override;
-		void OnShowUI()override;
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)
@@ -22,22 +19,10 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
-		void Controll();
-		void Move();
-		void OnOutScreen();
-
-		std::shared_ptr<PauseManager> shp_pauseManager;
-
-		std::weak_ptr<GameObject> wkp_block;
-		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
-
-		Vector2 velocity;
-		float speed;
-
-		bool jump;
-		float gravity;
+		std::weak_ptr<GameObject> left;
+		std::weak_ptr<GameObject> right;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(Player);
+BUTI_REGIST_GAMECOMPONENT(MobiusLoop);
