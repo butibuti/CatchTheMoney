@@ -86,7 +86,7 @@ void ButiEngine::Player::OnOutScreen()
 	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
 	Vector2 sizeHalf = size / 2.0f;
 
-	if (position.x +- sizeHalf.x < -GameSettings::windowWidth / 2)
+	/*if (position.x +- sizeHalf.x < -GameSettings::windowWidth / 2)
 	{
 		position.x =- GameSettings::windowWidth / 2 + sizeHalf.x;
 		outScreen = true;
@@ -95,7 +95,7 @@ void ButiEngine::Player::OnOutScreen()
 	{
 		position.x = GameSettings::windowWidth/2 - sizeHalf.x;
 		outScreen = true;
-	}
+	}*/
 	if (position.y - sizeHalf.y < -GameSettings::windowHeight/2)
 	{
 		position.y = -GameSettings::windowHeight/2 + sizeHalf.y;
@@ -115,6 +115,7 @@ void ButiEngine::Player::OnOutScreen()
 
 void ButiEngine::Player::CreateBlock()
 {
+	return;
 	if (GameDevice::GetInput()->CheckKey(Keys::Space))
 	{
 		if (!startCreateBlock)
