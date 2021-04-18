@@ -54,6 +54,12 @@
     <ClCompile Include="MobiusLoop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StageManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx_u.h">
@@ -90,6 +96,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MobiusLoop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StageManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

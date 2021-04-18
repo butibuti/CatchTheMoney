@@ -9,7 +9,7 @@ void ButiEngine::MobiusLoop::OnUpdate()
 	{
 		gameObject.lock()->transform->SetWorldPosition(left.lock()->transform->GetWorldPosition());
 	}
-	else if (x < -GameSettings::windowWidth / 2.0f - GameSettings::gridSize)
+	else if (x < -GameSettings::windowWidth / 2.0f - GameSettings::blockSize)
 	{
 		gameObject.lock()->transform->SetWorldPosition(right.lock()->transform->GetWorldPosition());
 	}
@@ -22,16 +22,19 @@ void ButiEngine::MobiusLoop::OnSet()
 void ButiEngine::MobiusLoop::Start()
 {
 	std::string name = gameObject.lock()->GetGameObjectName();
+	auto tag = GetTagManager()->GetObjectTag("MapChip");
 	auto meshDraw = gameObject.lock()->GetGameComponent<MeshDrawComponent>();
 
 	left = GetManager().lock()->AddObject(std::make_shared<Transform>(), name + "_Left");
 	left.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-	left.lock()->transform->TranslateX(-GameSettings::windowWidth / GameSettings::gridSize);
+	left.lock()->transform->TranslateX(-GameSettings::windowWidth / GameSettings::blockSize);
+	left.lock()->SetGameObjectTag(tag);
 	left.lock()->AddGameComponent(meshDraw->Clone());
 
 	right = GetManager().lock()->AddObject(std::make_shared<Transform>(), name + "_Right");
 	right.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-	right.lock()->transform->TranslateX(GameSettings::windowWidth / GameSettings::gridSize);
+	right.lock()->transform->TranslateX(GameSettings::windowWidth / GameSettings::blockSize);
+	right.lock()->SetGameObjectTag(tag);
 	right.lock()->AddGameComponent(meshDraw->Clone());
 }
 

@@ -13,7 +13,9 @@ namespace ButiEngine {
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
+		void OnCollisionEnter(std::weak_ptr<GameObject> arg_other)override;
 		void OnCollision(std::weak_ptr<GameObject> arg_other)override;
+		void OnCollisionEnd(std::weak_ptr<GameObject> arg_other)override;
 		void OnShowUI()override;
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
@@ -30,6 +32,8 @@ namespace ButiEngine {
 
 		std::weak_ptr<GameObject> wkp_block;
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
+
+		Vector3 minPoint, maxPoint;
 
 		Vector2 velocity;
 		float speed;

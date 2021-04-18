@@ -6,6 +6,10 @@
 
 void ButiEngine::Player::OnUpdate()
 {
+	//GUI::Begin("collision");
+	//GUI::Text("min : %f, %f", minPoint.x, minPoint.y);
+	//GUI::Text("max : %f, %f", maxPoint.x, maxPoint.y);
+	//GUI::End();
 	if (shp_pauseManager->GetPause())
 	{
 		return;
@@ -28,15 +32,26 @@ void ButiEngine::Player::Start()
 
 	jump = true;
 	gravity = 0.6f;
+
+	gameObject.lock()->RegistReactionComponent(GetThis<GameComponent>());
+}
+
+void ButiEngine::Player::OnCollisionEnter(std::weak_ptr<GameObject> arg_other)
+{
 }
 
 void ButiEngine::Player::OnCollision(std::weak_ptr<GameObject> arg_other)
 {
 }
 
+void ButiEngine::Player::OnCollisionEnd(std::weak_ptr<GameObject> arg_other)
+{
+}
+
 void ButiEngine::Player::OnShowUI()
 {
 	GUI::SliderFloat("gravity", &gravity, 0.0f, 1.0f);
+	GUI::SliderFloat("speed", &speed, 0.0f, 50.0f);
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
@@ -92,7 +107,7 @@ void ButiEngine::Player::OnOutScreen()
 {
 	bool outScreen = false;
 	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
-	float tmp = GameSettings::gridSize / 2.0f;
+	float tmp = GameSettings::blockSize / 2.0f;
 	Vector2 sizeHalf = Vector2(tmp, tmp);
 
 	/*if (position.x +- sizeHalf.x < -GameSettings::windowWidth / 2)

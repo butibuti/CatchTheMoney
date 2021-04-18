@@ -2,20 +2,18 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class PauseManager;
+	class Map;
 
-	class Block :public GameComponent
+	class StageManager :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "Block";
+			return "StageManager";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
 		void OnCollision(std::weak_ptr<GameObject> arg_other)override;
-		void OnCollisionEnter(std::weak_ptr<GameObject> arg_other)override;
-		void OnCollisionEnd(std::weak_ptr<GameObject> arg_other)override;
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)
@@ -23,8 +21,9 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
+		std::shared_ptr<Map> shp_map;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(Block);
+BUTI_REGIST_GAMECOMPONENT(StageManager);
