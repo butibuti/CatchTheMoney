@@ -159,10 +159,12 @@
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="DebugController.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
+    <ClCompile Include="EdgeCollider.cpp" />
     <ClCompile Include="GameSettings.cpp" />
     <ClCompile Include="HitChecker.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapChipCollider.cpp" />
     <ClCompile Include="MobiusLoop.cpp" />
     <ClCompile Include="PauseManager.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -178,9 +180,11 @@
   <ItemGroup>
     <ClInclude Include="Block.h" />
     <ClInclude Include="DebugController.h" />
+    <ClInclude Include="EdgeCollider.h" />
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="HitChecker.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MapChipCollider.h" />
     <ClInclude Include="MobiusLoop.h" />
     <ClInclude Include="PauseManager.h" />
     <ClInclude Include="Player.h" />

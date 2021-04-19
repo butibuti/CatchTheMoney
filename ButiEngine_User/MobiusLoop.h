@@ -19,8 +19,8 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
-		std::weak_ptr<GameObject> left;
-		std::weak_ptr<GameObject> right;
+		std::weak_ptr<GameObject> wkp_right;
+		std::weak_ptr<GameObject> wkp_left;
 	};
 
 }
