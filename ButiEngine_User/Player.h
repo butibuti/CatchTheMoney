@@ -41,6 +41,7 @@ namespace ButiEngine {
 
 		bool jump;
 		float gravity;
+		bool hitX, hitY;
 	};
 
 }

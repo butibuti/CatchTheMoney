@@ -14,14 +14,14 @@ void ButiEngine::MapChipCollider::OnSet()
 
 void ButiEngine::MapChipCollider::Start()
 {
-	float shortLength = 1.0f;
+	float shortLength = 8.0f;
 	float longLength = GameSettings::blockSize - shortLength * 2;
 	float distance = GameSettings::blockSize / 2.0f - shortLength / 2.0f;
 
 	SettingCollider(wkp_collider_right, Vector3(distance, 0.0f, 0.0f), Vector3(shortLength, longLength, 1.0f), "Right");
 	SettingCollider(wkp_collider_left, Vector3(-distance, 0.0f, 0.0f), Vector3(shortLength, longLength, 1.0f), "Left");
-	SettingCollider(wkp_collider_top, Vector3(0.0f, distance, 0.0f), Vector3(longLength, shortLength, 1.0f), "Top");
-	SettingCollider(wkp_collider_bottom, Vector3(0.0f, -distance, 0.0f), Vector3(longLength, shortLength, 1.0f), "Bottom");
+	SettingCollider(wkp_collider_top, Vector3(0.0f, distance, 0.0f), Vector3(28.0f, 8.0f, 1.0f), "Top");
+	SettingCollider(wkp_collider_bottom, Vector3(0.0f, -distance, 0.0f), Vector3(28.0f, 8.0f, 1.0f), "Bottom");
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::MapChipCollider::Clone()

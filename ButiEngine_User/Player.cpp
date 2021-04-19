@@ -30,12 +30,24 @@ void ButiEngine::Player::Start()
 	speed = 1.0f;
 	jump = true;
 	gravity = 0.6f;
+	hitX = false;
+	hitY = false;
 
 	gameObject.lock()->RegistReactionComponent(GetThis<GameComponent>());
 }
 
 void ButiEngine::Player::OnCollisionEnter(std::weak_ptr<GameObject> arg_other)
 {
+	if (abs(velocity.x) > abs(velocity.y))
+	{
+		BackX(arg_other);
+		BackY(arg_other);
+	}
+	else
+	{
+		BackY(arg_other);
+		BackX(arg_other);
+	}
 }
 
 void ButiEngine::Player::OnCollision(std::weak_ptr<GameObject> arg_other)
@@ -87,12 +99,22 @@ void ButiEngine::Player::Controll()
 	{
 		velocity.y += gravity;
 	}
-
-	//velocity.Normalize();
 }
 
 void ButiEngine::Player::Move()
 {
+	if (hitX)
+	{
+		velocity.x = 0;
+		hitX = false;
+	}
+
+	if (hitY)
+	{
+		velocity.y = 0;
+		hitY = false;
+	}
+
 	velocity *= speed;
 
 	auto transform = gameObject.lock()->transform;
@@ -153,13 +175,15 @@ void ButiEngine::Player::BackX(std::weak_ptr<GameObject> arg_other)
 	auto otherAABB = arg_other.lock()->GetGameComponent<Collision::ColliderComponent>()->GetCollisionPrimitive();
 	if (shp_mapChipCollider->IsHitRight(otherAABB))
 	{
-		float backLength = abs(arg_other.lock()->transform->GetWorldPosition().x - GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().x) + 0.1f;
+		float backLength = abs(arg_other.lock()->transform->GetWorldPosition().x - GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().x) + 0.001f;
 		gameObject.lock()->transform->TranslateX(-backLength);
+		hitX = true;
 	}
 	else if (shp_mapChipCollider->IsHitLeft(otherAABB))
 	{
-		float backLength = abs(arg_other.lock()->transform->GetWorldPosition().x - GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().x) + 0.1f;
+		float backLength = abs(arg_other.lock()->transform->GetWorldPosition().x + GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().x) + 0.001f;
 		gameObject.lock()->transform->TranslateX(backLength);
+		hitX = true;
 	}
 }
 
@@ -168,12 +192,15 @@ void ButiEngine::Player::BackY(std::weak_ptr<GameObject> arg_other)
 	auto otherAABB = arg_other.lock()->GetGameComponent<Collision::ColliderComponent>()->GetCollisionPrimitive();
 	if (shp_mapChipCollider->IsHitTop(otherAABB))
 	{
-		float backLength = abs(arg_other.lock()->transform->GetWorldPosition().y - GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().y) + 0.1f;
+		float backLength = abs(arg_other.lock()->transform->GetWorldPosition().y - GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().y);
 		gameObject.lock()->transform->TranslateY(-backLength);
+		jump = false;
+		hitY = true;
 	}
 	else if (shp_mapChipCollider->IsHitBottom(otherAABB))
 	{
-		float backLength = abs(arg_other.lock()->transform->GetWorldPosition().y - GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().y) + 0.1f;
+		float backLength = abs(arg_other.lock()->transform->GetWorldPosition().y + GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().y);
 		gameObject.lock()->transform->TranslateY(backLength);
+		hitY = true;
 	}
 }

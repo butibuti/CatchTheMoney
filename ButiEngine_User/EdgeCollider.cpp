@@ -8,7 +8,7 @@ void ButiEngine::EdgeCollider::OnUpdate()
 
 void ButiEngine::EdgeCollider::OnSet()
 {
-	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 0.499f), gameObject.lock()->transform);
+	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 0.999f), gameObject.lock()->transform);
 }
 
 void ButiEngine::EdgeCollider::Start()
