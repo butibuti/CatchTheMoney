@@ -6,10 +6,10 @@
 
 void ButiEngine::Player::OnUpdate()
 {
-	//GUI::Begin("collision");
-	//GUI::Text("min : %f, %f", minPoint.x, minPoint.y);
-	//GUI::Text("max : %f, %f", maxPoint.x, maxPoint.y);
-	//GUI::End();
+	GUI::Begin("collision");
+	GUI::Text("min : %f, %f", minPoint.x, minPoint.y);
+	GUI::Text("max : %f, %f", maxPoint.x, maxPoint.y);
+	GUI::End();
 	if (shp_pauseManager->GetPause())
 	{
 		return;
@@ -28,6 +28,7 @@ void ButiEngine::Player::Start()
 	velocity = Vector2(0.0f, 0.0f);
 	speed = 1.0f;
 
+	wkp_AABB = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>()->GetCollisionPrimitive();
 	wkp_screenScroll = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
 
 	jump = true;
@@ -38,6 +39,7 @@ void ButiEngine::Player::Start()
 
 void ButiEngine::Player::OnCollisionEnter(std::weak_ptr<GameObject> arg_other)
 {
+	
 }
 
 void ButiEngine::Player::OnCollision(std::weak_ptr<GameObject> arg_other)
@@ -91,6 +93,8 @@ void ButiEngine::Player::Move()
 
 	transform->TranslateX(velocity.x);
 	transform->TranslateY(velocity.y);
+
+	wkp_AABB.lock()->GetMaxPointAndMinPoint(maxPoint, minPoint);
 
 	OnOutScreen();
 

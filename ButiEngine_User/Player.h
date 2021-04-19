@@ -30,7 +30,7 @@ namespace ButiEngine {
 
 		std::shared_ptr<PauseManager> shp_pauseManager;
 
-		std::weak_ptr<GameObject> wkp_block;
+		std::weak_ptr<Collision::CollisionPrimitive> wkp_AABB;
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
 
 		Vector3 minPoint, maxPoint;

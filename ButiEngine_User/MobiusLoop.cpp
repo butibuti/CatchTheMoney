@@ -22,18 +22,21 @@ void ButiEngine::MobiusLoop::OnSet()
 void ButiEngine::MobiusLoop::Start()
 {
 	std::string name = gameObject.lock()->GetGameObjectName();
+	Vector3 localPosition = Vector3::Zero;
 	auto tag = GetTagManager()->GetObjectTag("MapChip");
 	auto meshDraw = gameObject.lock()->GetGameComponent<MeshDrawComponent>();
 
 	left = GetManager().lock()->AddObject(std::make_shared<Transform>(), name + "_Left");
 	left.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-	left.lock()->transform->TranslateX(-GameSettings::windowWidth / GameSettings::blockSize);
+	localPosition.x = -GameSettings::windowWidth / GameSettings::blockSize;
+	left.lock()->transform->SetLocalPosition(localPosition);
 	left.lock()->SetGameObjectTag(tag);
 	left.lock()->AddGameComponent(meshDraw->Clone());
 
 	right = GetManager().lock()->AddObject(std::make_shared<Transform>(), name + "_Right");
 	right.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-	right.lock()->transform->TranslateX(GameSettings::windowWidth / GameSettings::blockSize);
+	localPosition.x = GameSettings::windowWidth / GameSettings::blockSize;
+	right.lock()->transform->SetLocalPosition(localPosition);
 	right.lock()->SetGameObjectTag(tag);
 	right.lock()->AddGameComponent(meshDraw->Clone());
 }
