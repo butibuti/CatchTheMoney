@@ -136,6 +136,6 @@ void ButiEngine::Player::OnOutScreen()
 
 	if (outScreen)
 	{
-		gameObject.lock()->transform->SetWorldPosition(Vector3(position.x, position.y, 0.0f));
+		gameObject.lock()->transform->SetWorldPosition(Vector3(position.x, position.y, -0.1f));
 	}
 }
