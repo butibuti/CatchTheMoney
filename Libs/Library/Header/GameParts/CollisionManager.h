@@ -33,6 +33,8 @@ namespace ButiEngine {
 			void RemoveLayer(const int arg_layer)override;
 			void ReCreateLayers();
 			bool IsWillHit(std::shared_ptr< Collision::CollisionPrimitive>arg_prim, int arg_layer)override;
+			std::shared_ptr<GameObject> GetWillHitObject(std::shared_ptr< Collision::CollisionPrimitive>arg_prim, int arg_layer) override;
+			std::vector<std::shared_ptr<GameObject>> GetWillHitObjects(std::shared_ptr< Collision::CollisionPrimitive>arg_prim, int arg_layer) override;
 			void ShowGUI()override;
 			template<class Archive>
 			void serialize(Archive& archive)

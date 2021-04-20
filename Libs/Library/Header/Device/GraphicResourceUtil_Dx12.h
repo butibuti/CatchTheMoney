@@ -128,7 +128,7 @@ namespace ButiEngine {
 
 	namespace CommandListHelper {
 		static inline  Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> CreateSimple( std::shared_ptr<GraphicDevice_Dx12> arg_wkp_graphicDevice) {
-			//デバイスの取得
+			
 			Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> Ret;
 			(arg_wkp_graphicDevice->GetDevice().CreateCommandList(
 				0,
@@ -139,7 +139,7 @@ namespace ButiEngine {
 			return Ret;
 		}
 		static inline  Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> CreateBundleCommandList(std::shared_ptr<GraphicDevice_Dx12> arg_wkp_graphicDevice) {
-			//デバイスの取得
+			
 			Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> Ret;
 			auto hr= (arg_wkp_graphicDevice->GetDevice().CreateCommandList(
 				0,
@@ -151,7 +151,7 @@ namespace ButiEngine {
 		}
 
 		static inline  Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> CreateDefault(const Microsoft::WRL::ComPtr<ID3D12PipelineState>& pipelineState, std::shared_ptr<GraphicDevice_Dx12> arg_wkp_graphicDevice) {
-			//デバイスの取得
+			
 			Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> Ret;
 			auto hr = (arg_wkp_graphicDevice->GetDevice().CreateCommandList(
 				0,
@@ -162,7 +162,7 @@ namespace ButiEngine {
 			return Ret;
 		}
 		static inline  Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> CreateCopy(const Microsoft::WRL::ComPtr<ID3D12PipelineState>& pipelineState, std::shared_ptr<GraphicDevice_Dx12> arg_wkp_graphicDevice) {
-			//デバイスの取得
+			
 			Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> Ret;
 			(arg_wkp_graphicDevice->GetDevice().CreateCommandList(
 				0,
@@ -174,23 +174,33 @@ namespace ButiEngine {
 		}
 
 		static inline  void Reset(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& commandList, std::shared_ptr<GraphicDevice_Dx12> arg_wkp_graphicDevice) {
-			//デバイスの取得
+			
 			commandList->Reset(&arg_wkp_graphicDevice->GetCommandAllocator(arg_wkp_graphicDevice->GetFrameIndex()), nullptr);
 
 		}
 		static inline  void Reset(const Microsoft::WRL::ComPtr<ID3D12PipelineState>& pipelineState, const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& commandList,std::shared_ptr<GraphicDevice_Dx12> arg_wkp_graphicDevice) {
-			//デバイスの取得
+			
 			auto hr = commandList->Reset(&arg_wkp_graphicDevice->GetCommandAllocator(arg_wkp_graphicDevice->GetFrameIndex()), pipelineState.Get());
 			if (hr != S_OK) {
 				throw ButiException(L"", L"", L"");
 			}
 		}
-		static inline  void BundleReset(const Microsoft::WRL::ComPtr<ID3D12PipelineState>& pipelineState, const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& commandList,std::shared_ptr<GraphicDevice_Dx12> arg_wkp_graphicDevice) {
-			//デバイスの取得
-			auto hr = commandList->Reset(&arg_wkp_graphicDevice->GetBundleCommandAllocator(), pipelineState.Get());
+		static inline  void BundleReset(const Microsoft::WRL::ComPtr<ID3D12PipelineState>& pipelineState, const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& commandList, std::shared_ptr<GraphicDevice_Dx12> arg_wkp_graphicDevice) {
+
+			HRESULT hr;
+			if(pipelineState)
+				hr = commandList->Reset(&arg_wkp_graphicDevice->GetBundleCommandAllocator(), pipelineState.Get()); 
+			else{
+				hr = commandList->Reset(&arg_wkp_graphicDevice->GetBundleCommandAllocator(), nullptr);
+			}
 			if (hr != S_OK) {
 				throw ButiException(L"", L"", L"");
 			}
+		}
+		static inline  void BundleSetPipeLine(const Microsoft::WRL::ComPtr<ID3D12PipelineState>& pipelineState, ID3D12GraphicsCommandList& commandList, std::shared_ptr<GraphicDevice_Dx12> arg_wkp_graphicDevice) {
+
+			commandList.SetPipelineState( pipelineState.Get());
+		
 		}
 		static inline  void Close(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& commandList) {
 			auto hr = commandList->Close();

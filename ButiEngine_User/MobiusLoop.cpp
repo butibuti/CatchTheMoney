@@ -9,7 +9,7 @@ void ButiEngine::MobiusLoop::OnUpdate()
 	{
 		gameObject.lock()->transform->SetWorldPosition(wkp_left.lock()->transform->GetWorldPosition());
 	}
-	else if (x < -GameSettings::windowWidth / 2.0f - GameSettings::blockSize)
+	else if (x < -GameSettings::windowWidth / 2.0f)
 	{
 		gameObject.lock()->transform->SetWorldPosition(wkp_right.lock()->transform->GetWorldPosition());
 	}

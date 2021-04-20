@@ -41,10 +41,50 @@ namespace ButiEngine
 		virtual UINT GetLayerCount()= 0;
 		virtual void AddLayer(const Vector3& size, const int level)= 0;
 		virtual void RemoveLayer(const int arg_layer)= 0;
-		virtual bool IsWillHit(std::shared_ptr< Collision::CollisionPrimitive>arg_prim, int arg_layer)= 0;
+		virtual bool IsWillHit(std::shared_ptr< Collision::CollisionPrimitive>arg_prim, int arg_layer) = 0;
+		virtual std::shared_ptr<GameObject> GetWillHitObject(std::shared_ptr< Collision::CollisionPrimitive>arg_prim, int arg_layer) = 0;
+		virtual std::vector<std::shared_ptr<GameObject>> GetWillHitObjects(std::shared_ptr< Collision::CollisionPrimitive>arg_prim, int arg_layer)= 0;
 		virtual void ShowGUI()= 0;
 	};
+
+	namespace Collision {
+		template<typename T>
+		class CollisionLayer;
+		class CollisionPrimitive_Box_OBB;
+	}
 	class ICamera;
+
+
+	class IDrawLayer :public IObject {
+	public:
+
+		void Initialize()override {};
+		void PreInitialize()override {}
+
+		virtual void Clear() = 0;
+		virtual void BefRendering() = 0;
+		virtual UINT* Regist(std::shared_ptr< IDrawObject> arg_wkp_drawObject, const bool arg_isAfterRendering, std::shared_ptr<Collision::CollisionPrimitive_Box_OBB> arg_ret_pim = nullptr, const bool arg_isShadow = false) = 0;
+		virtual void UnRegist(UINT* arg_path, const bool arg_isAfterRendering, const bool arg_isShadow = false) = 0;
+		virtual void DeleteDrawObj(UINT* arg_path, const bool arg_isAfterRendering) = 0;
+
+		virtual void SetShadowCamera(std::shared_ptr<ICamera> arg_shadowCamera) = 0;
+		virtual void SetShadowTexture(TextureTag arg_textureTag) = 0;
+
+		virtual void Rendering() = 0;
+
+		virtual void ShadowRendering() = 0;
+		virtual std::shared_ptr<Collision::CollisionLayer<IDrawObject>> GetCollisionLayer() = 0;
+		virtual std::shared_ptr<ICamera> GetShadowCamera() = 0;
+		virtual TextureTag GetShadowTexture() = 0;
+	};
+
+	class IDrawLayer_Shadow {
+	public:
+
+		std::shared_ptr<ICamera> shp_shadowCamera;
+		TextureTag shadowTexture;
+		bool isShadowDrawed;
+	};
 	class IRenderer :public IObject {
 	public:
 		void PreInitialize()override {}

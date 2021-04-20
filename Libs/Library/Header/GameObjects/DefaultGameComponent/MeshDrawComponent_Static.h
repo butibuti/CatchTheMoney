@@ -3,8 +3,3 @@
 
 
 
-namespace ButiEngine {
-
-
-	
-}

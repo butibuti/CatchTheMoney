@@ -309,7 +309,7 @@ namespace ButiEngine {
 
 		namespace VertexIndexUtill {
 
-			static inline std::vector<int> ConvertTriPolygon(std::vector<int>& arg_polygonVertex, int offset = 0) {
+			inline std::vector<int> ConvertTriPolygon(std::vector<int>& arg_polygonVertex, int offset = 0) {
 				std::vector<int> out;
 				out.reserve(arg_polygonVertex.size() * 2);
 				std::vector<int> buffer;
@@ -352,7 +352,7 @@ namespace ButiEngine {
 				return out;
 			}
 
-			static inline std::vector<int> ConvertTriPolygon(std::vector<int>& arg_polygonVertex,  const std::vector<int>& arg_vec_materialIndex, const UINT arg_materialCount ,  std::vector<int>& arg_materialIndexSize,int offset=0) {
+			inline std::vector<int> ConvertTriPolygon(std::vector<int>& arg_polygonVertex,  const std::vector<int>& arg_vec_materialIndex, const UINT arg_materialCount ,  std::vector<int>& arg_materialIndexSize,int offset=0) {
 				std::vector<int> out;
 				std::vector<int> buffer;
 				buffer.resize(6);
@@ -419,7 +419,7 @@ namespace ButiEngine {
 
 			//true=Index_to_Direct
 			//false=Direct
-			static inline bool GetUVReferenceMode(std::shared_ptr<FBXNodeStructure> arg_UVLayernode)
+			inline bool GetUVReferenceMode(std::shared_ptr<FBXNodeStructure> arg_UVLayernode)
 			{
 				std::string refType = arg_UVLayernode->GetChildNode("ReferenceInformationType")->GetProperty<FBXNode_StringProperty>()->nodeProperty;
 				if (refType == "IndexToDirect")
@@ -436,7 +436,7 @@ namespace ButiEngine {
 
 			//true=Polygon_Vertex
 			//false=Controll_Point
-			static inline bool GetUVMappingMode(std::shared_ptr<FBXNodeStructure> arg_UVLayernode) {
+			inline bool GetUVMappingMode(std::shared_ptr<FBXNodeStructure> arg_UVLayernode) {
 				std::string mapType = arg_UVLayernode->GetChildNode("MappingInformationType")->GetProperty<FBXNode_StringProperty>()->nodeProperty;
 				if (mapType == "ByPolygonVertex")
 				{

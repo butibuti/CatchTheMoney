@@ -100,6 +100,9 @@ namespace ButiEngine {
 			return container_textures.GetValue(arg_key);
 		}
 		std::weak_ptr<IResource_Shader> GetShader(const ShaderTag & arg_key)override {
+			if (arg_key.IsEmpty()) {
+				return container_shaders.GetValue(ShaderTag("DefaultMesh"));
+			}
 			return container_shaders.GetValue(arg_key);
 		}
 		std::weak_ptr<IResource_Sound> GetSound(const SoundTag & arg_key) override {

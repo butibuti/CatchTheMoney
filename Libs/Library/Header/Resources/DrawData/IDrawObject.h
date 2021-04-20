@@ -19,7 +19,9 @@ namespace ButiEngine {
 		virtual void Draw() = 0;
 		virtual void DrawBefore() {}
 		virtual float GetZ() = 0;
-		virtual void CommandSet(){}
+		virtual void SetInfo() {}
+		virtual void SetInfo_WithoutCommand(){}
+		virtual void BufferUpdate() {}
 
 		virtual std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> GetMeshAABB() = 0;
 		virtual std::shared_ptr<Collision::CollisionPrimitive_Box_OBB> GetMeshOBB() = 0;

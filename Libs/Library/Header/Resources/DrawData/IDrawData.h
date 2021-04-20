@@ -201,7 +201,6 @@ namespace ButiEngine {
 	struct MeshDrawData:public DrawData,public IDrawObject,public IObject {
 		void PreInitialize() override{}
 
-
 		virtual void SetTransform(std::shared_ptr<Transform>& arg_transform) = 0;
 
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> GetMeshAABB()override;

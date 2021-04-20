@@ -3,7 +3,6 @@
 namespace ButiEngine {
 
 	class PauseManager;
-	class MapChipCollider;
 
 	class Player :public GameComponent
 	{
@@ -28,11 +27,8 @@ namespace ButiEngine {
 		void Controll();
 		void Move();
 		void OnOutScreen();
-		void BackX(std::weak_ptr<GameObject> arg_other);
-		void BackY(std::weak_ptr<GameObject> arg_other);
 
 		std::shared_ptr<PauseManager> shp_pauseManager;
-		std::shared_ptr<MapChipCollider> shp_mapChipCollider;
 
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
 
@@ -41,7 +37,6 @@ namespace ButiEngine {
 
 		bool jump;
 		float gravity;
-		bool hitX, hitY;
 	};
 
 }

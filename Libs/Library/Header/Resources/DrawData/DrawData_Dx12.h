@@ -9,7 +9,9 @@ namespace ButiEngine {
 
 		void CreatePipeLineState(const UINT arg_exCBuffer,const UINT srvCount);
 		void CommandExecute();
-		void BufferUpdate();
+		void BufferUpdate()override;
+		void SetInfo();
+		void SetInfo_WithoutCommand();
 		void CommandSet();
 		std::shared_ptr<ICBuffer> AddICBuffer(std::shared_ptr<ICBuffer> arg_cbuffer)override;
 
@@ -21,9 +23,6 @@ namespace ButiEngine {
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC pipeLineDesc;
 		//パイプラインステート
 		Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState;
-
-		///バンドルコマンドリスト
-		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList;
 
 		D3D12_RASTERIZER_DESC rasterizerStateDesc;
 		D3D12_ROOT_SIGNATURE_DESC rootdesc;

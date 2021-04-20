@@ -4,11 +4,6 @@
 #include"Header/Common/CArrayBuffer_Dx12.h"
 
 
-namespace ButiEngine {
-
-
-}
-
 BUTI_REGIST_CBUFFER(ButiEngine::TestGSVariable);
 
 

@@ -3,97 +3,12 @@
 #include"../Resources/DrawData/IDrawObject.h"
 namespace ButiEngine {
 
-	namespace Collision {
-		template<typename T>
-		class CollisionLayer;
-	}
 
 	struct RegistCommand {
 		UINT* p_index = nullptr;
 		bool isAfter;
 		bool isShadow;
 		std::shared_ptr< IDrawObject> shp_obj = nullptr;
-	};
-
-	class IDrawLayer :public IObject{
-	public:
-
-		void Initialize()override {};
-		void PreInitialize()override{}
-
-		virtual void Clear()=0;
-		virtual void BefRendering()=0;
-		virtual UINT* Regist(std::shared_ptr< IDrawObject> arg_wkp_drawObject, const bool arg_isAfterRendering, std::shared_ptr<Collision::CollisionPrimitive_Box_OBB> arg_ret_pim = nullptr,const bool arg_isShadow=false)=0;
-		virtual void UnRegist(UINT* arg_path, const bool arg_isAfterRendering, const bool arg_isShadow = false)=0;
-		virtual void DeleteDrawObj(UINT* arg_path, const bool arg_isAfterRendering)=0;
-
-		virtual void SetShadowCamera(std::shared_ptr<ICamera> arg_shadowCamera)=0;
-		virtual void SetShadowTexture(TextureTag arg_textureTag)=0;
-
-		virtual void Rendering()=0;
-
-		virtual void ShadowRendering() = 0;
-
-		virtual std::shared_ptr<ICamera> GetShadowCamera()=0;
-		virtual TextureTag GetShadowTexture()=0;
-	};
-
-	class IDrawLayer_Shadow  {
-	public:
-
-		std::shared_ptr<ICamera> shp_shadowCamera;
-		TextureTag shadowTexture;
-		bool isShadowDrawed;
-	};
-	class DrawLayer_Shadow;
-	struct DrawLayer :public IDrawLayer{
-
-		inline void ZSort(std::vector < std::shared_ptr< IDrawObject>>& arg_vec_drawObjects) {
-			sort(arg_vec_drawObjects.begin(), arg_vec_drawObjects.end(), [](const std::shared_ptr< IDrawObject> pmX, const std::shared_ptr<IDrawObject> pmY) {
-				//if(pmX.lock()&&pmY.lock())
-				return pmX->GetZ() > pmY->GetZ();
-				});
-		}
-		DrawLayer(std::weak_ptr<IRenderer> arg_wkp_renderer);
-		void Initialize()override;
-		void Clear()override;
-		void BefRendering()override;
-		UINT* Regist(std::shared_ptr< IDrawObject> arg_wkp_drawObject, const bool arg_isAfterRendering, std::shared_ptr<Collision::CollisionPrimitive_Box_OBB> arg_ret_pim=nullptr, const bool arg_isShadow = false)override;
-		void UnRegist(UINT* arg_path, const bool arg_isAfterRendering, const bool arg_isShadow = false)override;
-		void DeleteDrawObj(UINT* arg_path,const bool arg_isAfterRendering)override;
-
-		void SetShadowCamera(std::shared_ptr<ICamera> arg_shadowCamera)override;
-		void SetShadowTexture(TextureTag arg_textureTag)override;
-
-		void Rendering()override;
-		void ShadowRendering() override;
-
-		std::shared_ptr<ICamera> GetShadowCamera()override;
-		TextureTag GetShadowTexture()override;
-
-		std::vector<std::shared_ptr< IDrawObject>> vec_befDrawObj;
-		std::vector<std::shared_ptr< IDrawObject>> vec_afterDrawObj;
-
-		std::vector<RegistCommand> vec_registCommandBuff;
-
-		int nowFrameAdditionObjectCount=0;
-		int nowFrameAdditionObjectCount_after=0;
-		std::vector<UINT*> vec_befIndex;
-		std::vector<UINT*> vec_afterIndex;
-		std::shared_ptr<Collision::CollisionLayer<IDrawObject>> shp_collisionLayer;
-		std::weak_ptr<IRenderer> wkp_renderer;
-
-		std::shared_ptr<DrawLayer_Shadow> shp_shadowLayer;
-	};
-	class DrawLayer_Shadow : public DrawLayer, public IDrawLayer_Shadow {
-	public:
-		DrawLayer_Shadow(std::weak_ptr<IRenderer> arg_wkp_renderer):DrawLayer( arg_wkp_renderer){};
-		void BefRendering()override;
-		void Initialize()override {}
-		std::shared_ptr<ICamera> GetShadowCamera()override;
-		TextureTag GetShadowTexture()override;
-		void SetShadowCamera(std::shared_ptr<ICamera> arg_shadowCamera)override;
-		void SetShadowTexture(TextureTag arg_textureTag)override;
 	};
 
 	class Renderer:public IRenderer
@@ -134,7 +49,7 @@ namespace ButiEngine {
 		std::weak_ptr<GraphicDevice> wkp_graphicDevice;
 		std::weak_ptr<IScene> wkp_iScene;
 		std::weak_ptr<IResourceContainer>wkp_resourceContainer;
-		std::vector<std::shared_ptr< DrawLayer>> vec_drawLayers;
+		std::vector<std::shared_ptr< IDrawLayer>> vec_drawLayers;
 		std::shared_ptr<CBuffer_Dx12<Fog>> CBuffer_fog;
 	};
 }

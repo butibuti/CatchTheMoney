@@ -53,6 +53,7 @@ namespace ButiEngine {
 			}
 			std::shared_ptr<GameComponent> Clone()override;
 			std::shared_ptr<CollisionPrimitive> GetCollisionPrimitive();
+			void SetCollisionPrimitive(std::shared_ptr<CollisionPrimitive> arg_shp_collisionPrim);
 			void OnShowUI()override;
 
 			template<class Archive>
