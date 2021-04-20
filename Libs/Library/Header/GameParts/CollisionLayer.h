@@ -377,6 +377,7 @@ namespace ButiEngine {
 			Vector3 unit;		
 			DWORD maxCellNum;	
 			unsigned char maxLevel;
+			bool isCheckHitSame;
 		};
 
 	}

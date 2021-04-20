@@ -27,15 +27,23 @@ namespace ButiEngine {
 		void Controll();
 		void Move();
 		void OnOutScreen();
-
+		void MoveX();
+		void MoveY();
+		void BackX();
+		void BackY();
+		
 		std::shared_ptr<PauseManager> shp_pauseManager;
+		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB;
+
+		std::weak_ptr<GameObject> wkp_bottom;
+		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_bottomAABB;
 
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
 
 		Vector2 velocity;
 		float speed;
 
-		bool jump;
+		bool grounded;
 		float gravity;
 	};
 

@@ -21,12 +21,21 @@ void ButiEngine::Player::OnSet()
 void ButiEngine::Player::Start()
 {
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
+	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 1.0f), gameObject.lock()->transform);
 	wkp_screenScroll = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
 
 	velocity = Vector2(0.0f, 0.0f);
 	speed = 1.0f;
-	jump = true;
+	grounded = false;
 	gravity = 0.6f;
+
+	wkp_bottom = GetManager().lock()->AddObject(ObjectFactory::Create<Transform>(), "Player_Bottom");
+	wkp_bottom.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
+	wkp_bottom.lock()->transform->SetLocalPosition(Vector3(0.0f, 24.0f / GameSettings::blockSize, 0.0f));
+	wkp_bottom.lock()->transform->SetLocalScale(Vector3(1.0f, 0.5f, 1.0f));
+	
+	shp_bottomAABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 1.0f, 1.0f), wkp_bottom.lock()->transform);
+	
 
 	gameObject.lock()->RegistReactionComponent(GetThis<GameComponent>());
 }
@@ -65,12 +74,16 @@ void ButiEngine::Player::Controll()
 	{
 		velocity.x = -1.0f;
 	}
-	if (GameDevice::GetInput()->TriggerKey(Keys::Space) && !jump)
+
+	if (grounded)
 	{
-		velocity.y = -10.0f;
-		jump = true;
+		if (GameDevice::GetInput()->TriggerKey(Keys::Space))
+		{
+			velocity.y = -10.0f;
+			grounded = false;
+		}
 	}
-	if (jump)
+	else
 	{
 		velocity.y += gravity;
 	}
@@ -81,27 +94,22 @@ void ButiEngine::Player::Move()
 
 	velocity *= speed;
 
-	auto transform = gameObject.lock()->transform;
-
-	auto primitive = gameObject.lock()->GetGameComponent<Collision::ColliderComponent>()->GetCollisionPrimitive();
-	transform->TranslateX(velocity.x);
-	auto hitObjects = GetCollisionManager().lock()->GetWillHitObjects(primitive, 0);
-
-	if (hitObjects.size() >= 2)
+	if (fabsf(velocity.x) > fabsf(velocity.y))
 	{
-		if (velocity.x > 0)
-		{
-			float backLength = hitObjects[1]->transform->GetWorldPosition().x - GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().x;
-			gameObject.lock()->transform->TranslateX(backLength);
-		}
-		else if (velocity.x < 0)
-		{
-			float backLength = hitObjects[1]->transform->GetWorldPosition().x + GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().x;
-			gameObject.lock()->transform->TranslateX(backLength);
-		}
-		velocity.x = 0;
+		MoveX();
+		MoveY();
 	}
-	transform->TranslateY(velocity.y);
+	else
+	{
+		MoveY();
+		MoveX();
+	}
+
+	auto hitObjects = GetCollisionManager().lock()->GetWillHitObjects(shp_bottomAABB, 0);
+	if (hitObjects.size() == 0)
+	{
+		grounded = false;
+	}
 
 	OnOutScreen();
 
@@ -141,12 +149,91 @@ void ButiEngine::Player::OnOutScreen()
 	{
 		position.y = -sizeHalf.y+ GameSettings::windowHeight / 2;
 		outScreen = true;
-		jump = false;
+		grounded = true;
 		velocity.y = 0;
 	}
 
 	if (outScreen)
 	{
 		gameObject.lock()->transform->SetWorldPosition(Vector3(position.x, position.y, -0.1f));
+	}
+}
+
+void ButiEngine::Player::MoveX()
+{
+	//if (velocity.x == 0) { return; }
+	gameObject.lock()->transform->TranslateX(velocity.x);
+	shp_AABB->Update();
+	shp_bottomAABB->Update();
+	BackX();
+}
+
+void ButiEngine::Player::MoveY()
+{
+	//if (velocity.y == 0) { return; }
+	gameObject.lock()->transform->TranslateY(velocity.y);
+	shp_AABB->Update();
+	shp_bottomAABB->Update();
+	BackY();
+}
+
+void ButiEngine::Player::BackX()
+{
+	auto hitObjects = GetCollisionManager().lock()->GetWillHitObjects(shp_AABB, 0);
+
+	if (hitObjects.size() != 0)
+	{
+		auto end = hitObjects.end();
+		for (auto itr = hitObjects.begin(); itr != end; ++itr)
+		{
+			if ((*itr) == gameObject.lock()) { continue; }
+
+			if (velocity.x > 0)
+			{
+				float backLength = (*itr)->transform->GetWorldPosition().x - GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().x;
+				gameObject.lock()->transform->TranslateX(backLength);
+				shp_AABB->Update();
+				shp_bottomAABB->Update();
+			}
+			else if (velocity.x < 0)
+			{
+				float backLength = (*itr)->transform->GetWorldPosition().x + GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().x;
+				gameObject.lock()->transform->TranslateX(backLength);
+				shp_AABB->Update();
+				shp_bottomAABB->Update();
+			}
+		}
+		velocity.x = 0;
+	}
+}
+
+void ButiEngine::Player::BackY()
+{
+	auto hitObjects = GetCollisionManager().lock()->GetWillHitObjects(shp_AABB, 0);
+
+	if (hitObjects.size() != 0)
+	{
+		auto end = hitObjects.end();
+		for (auto itr = hitObjects.begin(); itr != end; ++itr)
+		{
+			if ((*itr) == gameObject.lock()) { continue; }
+
+			if (velocity.y > 0)
+			{
+				float backLength = (*itr)->transform->GetWorldPosition().y - GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().y;
+				gameObject.lock()->transform->TranslateY(backLength);
+				shp_AABB->Update();
+				shp_bottomAABB->Update();
+				grounded = true;
+			}
+			else if (velocity.y < 0)
+			{
+				float backLength = (*itr)->transform->GetWorldPosition().y + GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().y;
+				gameObject.lock()->transform->TranslateY(backLength);
+				shp_AABB->Update();
+				shp_bottomAABB->Update();
+			}
+		}
+		velocity.y = 0;
 	}
 }
