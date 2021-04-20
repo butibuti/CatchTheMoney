@@ -1,8 +1,8 @@
 #include "stdafx_u.h"
 #include "Player.h"
 #include"GameSettings.h"
-#include"Block.h"
 #include"PauseManager.h"
+#include"MobiusLoop.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -21,10 +21,11 @@ void ButiEngine::Player::OnSet()
 void ButiEngine::Player::Start()
 {
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
+	shp_mobiusLoop = gameObject.lock()->GetGameComponent<MobiusLoop>();
 	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 1.0f), gameObject.lock()->transform);
 	wkp_screenScroll = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
 
-	velocity = Vector2(0.0f, 0.0f);
+	velocity = Vector3::Zero;
 	speed = 1.0f;
 	grounded = false;
 	gravity = 0.6f;
@@ -105,6 +106,9 @@ void ButiEngine::Player::Move()
 		MoveX();
 	}
 
+	shp_AABB->Update();
+	shp_bottomAABB->Update();
+
 	auto hitObjects = GetCollisionManager().lock()->GetWillHitObjects(shp_bottomAABB, 0);
 	if (hitObjects.size() == 0)
 	{
@@ -165,6 +169,11 @@ void ButiEngine::Player::MoveX()
 	gameObject.lock()->transform->TranslateX(velocity.x);
 	shp_AABB->Update();
 	shp_bottomAABB->Update();
+	shp_mobiusLoop->UpdateAABB();
+	shp_mobiusLoop->BackXRight(velocity);
+	shp_AABB->Update();
+	shp_mobiusLoop->BackXLeft(velocity);
+	shp_AABB->Update();
 	BackX();
 }
 
@@ -174,6 +183,11 @@ void ButiEngine::Player::MoveY()
 	gameObject.lock()->transform->TranslateY(velocity.y);
 	shp_AABB->Update();
 	shp_bottomAABB->Update();
+	shp_mobiusLoop->UpdateAABB();
+	shp_mobiusLoop->BackYRight(velocity);
+	shp_AABB->Update();
+	shp_mobiusLoop->BackYLeft(velocity);
+	shp_AABB->Update();
 	BackY();
 }
 

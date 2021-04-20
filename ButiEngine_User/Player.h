@@ -3,6 +3,7 @@
 namespace ButiEngine {
 
 	class PauseManager;
+	class MobiusLoop;
 
 	class Player :public GameComponent
 	{
@@ -33,6 +34,7 @@ namespace ButiEngine {
 		void BackY();
 		
 		std::shared_ptr<PauseManager> shp_pauseManager;
+		std::shared_ptr<MobiusLoop> shp_mobiusLoop;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB;
 
 		std::weak_ptr<GameObject> wkp_bottom;
@@ -40,7 +42,7 @@ namespace ButiEngine {
 
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
 
-		Vector2 velocity;
+		Vector3 velocity;
 		float speed;
 
 		bool grounded;
