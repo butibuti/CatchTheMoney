@@ -202,16 +202,17 @@ void ButiEngine::Player::BackX()
 		{
 			if ((*itr) == gameObject.lock()) { continue; }
 
+			float widthHalf = (*itr)->transform->GetWorldScale().x * 0.5f;
 			if (velocity.x > 0)
 			{
-				float backLength = (*itr)->transform->GetWorldPosition().x - GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().x;
+				float backLength = (*itr)->transform->GetWorldPosition().x - widthHalf - GameSettings::blockSize * 0.5f - gameObject.lock()->transform->GetWorldPosition().x;
 				gameObject.lock()->transform->TranslateX(backLength);
 				shp_AABB->Update();
 				shp_bottomAABB->Update();
 			}
 			else if (velocity.x < 0)
 			{
-				float backLength = (*itr)->transform->GetWorldPosition().x + GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().x;
+				float backLength = (*itr)->transform->GetWorldPosition().x + widthHalf + GameSettings::blockSize * 0.5f - gameObject.lock()->transform->GetWorldPosition().x;
 				gameObject.lock()->transform->TranslateX(backLength);
 				shp_AABB->Update();
 				shp_bottomAABB->Update();
