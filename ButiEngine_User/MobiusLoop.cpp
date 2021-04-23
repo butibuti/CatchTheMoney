@@ -27,10 +27,8 @@ void ButiEngine::MobiusLoop::Start()
 	auto tag = GetTagManager()->GetObjectTag("MapChip");
 	auto meshDraw = gameObject.lock()->GetGameComponent<MeshDrawComponent>();
 
-	wkp_right = GetManager().lock()->AddObject(gameObject.lock()->Clone());
 	wkp_right.lock()->transform->TranslateX(64.0f);
 
-	wkp_left = GetManager().lock()->AddObject(gameObject.lock()->Clone());
 	wkp_right.lock()->transform->TranslateX(64.0f);
 }
 
