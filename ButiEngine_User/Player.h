@@ -27,7 +27,6 @@ namespace ButiEngine {
 	private:
 		void Controll();
 		void Move();
-		void OnOutScreen();
 		void MoveX();
 		void MoveY();
 		void BackX();

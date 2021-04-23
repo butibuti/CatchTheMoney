@@ -19,16 +19,9 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
-		void UpdateAABB();
-		void BackXRight(Vector3& arg_velocity);
-		void BackYRight(Vector3& arg_velocity);
-		void BackXLeft(Vector3& arg_velocity);
-		void BackYLeft(Vector3& arg_velocity);
 	private:
 		std::weak_ptr<GameObject> wkp_right;
 		std::weak_ptr<GameObject> wkp_left;
-		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB_right;
-		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB_left;
 	};
 
 }

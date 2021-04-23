@@ -33,7 +33,7 @@ void ButiEngine::Player::Start()
 
 	wkp_bottom = GetManager().lock()->AddObject(ObjectFactory::Create<Transform>(), "Player_Bottom");
 	wkp_bottom.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-	wkp_bottom.lock()->transform->SetLocalPosition(Vector3(0.0f, -24.0f / GameSettings::blockSize, 0.0f));
+	wkp_bottom.lock()->transform->SetLocalPosition(Vector3(0.0f, -0.75, 0.0f));
 	wkp_bottom.lock()->transform->SetLocalScale(Vector3(1.0f, 0.5f, 1.0f));
 	
 	shp_bottomAABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 1.0f, 1.0f), wkp_bottom.lock()->transform);
@@ -116,8 +116,6 @@ void ButiEngine::Player::Move()
 		grounded = false;
 	}
 
-	OnOutScreen();
-
 
 	//Vector3 position = gameObject.lock()->transform->GetWorldPosition();
 
@@ -127,54 +125,12 @@ void ButiEngine::Player::Move()
 	//wkp_screenScroll.lock()->Get().lightDir.x +=abs( dist)*dist ;
 }
 
-void ButiEngine::Player::OnOutScreen()
-{
-	bool outScreen = false;
-	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
-	float tmp = GameSettings::blockSize / 2.0f;
-	Vector2 sizeHalf = Vector2(tmp, tmp);
-
-	/*if (position.x +- sizeHalf.x < -GameSettings::windowWidth / 2)
-	{
-		position.x =- GameSettings::windowWidth / 2 + sizeHalf.x;
-		outScreen = true;
-	}
-	else if (position.x + sizeHalf.x > GameSettings::windowWidth/2)
-	{
-		position.x = GameSettings::windowWidth/2 - sizeHalf.x;
-		outScreen = true;
-	}*/
-	if (position.y - sizeHalf.y < -GameSettings::windowHeight/2)
-	{
-		position.y = -GameSettings::windowHeight/2 + sizeHalf.y + 0.1f;
-		outScreen = true;
-		velocity.y = 0;
-	}
-	else if (position.y + sizeHalf.y > GameSettings::windowHeight / 2)
-	{
-		position.y = -sizeHalf.y+ GameSettings::windowHeight / 2;
-		outScreen = true;
-		grounded = true;
-		velocity.y = 0;
-	}
-
-	if (outScreen)
-	{
-		gameObject.lock()->transform->SetWorldPosition(Vector3(position.x, position.y, -0.1f));
-	}
-}
-
 void ButiEngine::Player::MoveX()
 {
 	//if (velocity.x == 0) { return; }
 	gameObject.lock()->transform->TranslateX(velocity.x);
 	shp_AABB->Update();
 	shp_bottomAABB->Update();
-	shp_mobiusLoop->UpdateAABB();
-	shp_mobiusLoop->BackXRight(velocity);
-	shp_AABB->Update();
-	shp_mobiusLoop->BackXLeft(velocity);
-	shp_AABB->Update();
 	BackX();
 }
 
@@ -184,11 +140,6 @@ void ButiEngine::Player::MoveY()
 	gameObject.lock()->transform->TranslateY(velocity.y);
 	shp_AABB->Update();
 	shp_bottomAABB->Update();
-	shp_mobiusLoop->UpdateAABB();
-	shp_mobiusLoop->BackYRight(velocity);
-	shp_AABB->Update();
-	shp_mobiusLoop->BackYLeft(velocity);
-	shp_AABB->Update();
 	BackY();
 }
 
