@@ -92,8 +92,7 @@ void ButiEngine::Player::Controll()
 
 void ButiEngine::Player::Move()
 {
-
-	velocity *= speed;
+	velocity.x *= speed;
 
 	if (fabsf(velocity.x) > fabsf(velocity.y))
 	{
