@@ -24,6 +24,7 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+		void ReverseGravity();
 	private:
 		void Controll();
 		void Move();

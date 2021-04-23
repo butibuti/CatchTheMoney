@@ -31,6 +31,8 @@ void ButiEngine::Player::Start()
 	gravity = -0.6f;
 	jumpForce = 10.0f;
 
+	std::string name = gameObject.lock()->GetGameObjectName();
+
 	wkp_bottom = GetManager().lock()->AddObject(ObjectFactory::Create<Transform>(), "Player_Bottom");
 	wkp_bottom.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
 	wkp_bottom.lock()->transform->SetLocalPosition(Vector3(0.0f, -0.75, 0.0f));
@@ -56,7 +58,7 @@ void ButiEngine::Player::OnCollisionEnd(std::weak_ptr<GameObject> arg_other)
 
 void ButiEngine::Player::OnShowUI()
 {
-	GUI::SliderFloat("gravity", &gravity, 0.0f, 1.0f);
+	GUI::SliderFloat("gravity", &gravity, -1.0f, 1.0f);
 	GUI::SliderFloat("jump", &jumpForce, -20.0f, 20.0f);
 	GUI::SliderFloat("speed", &speed, 0.0f, 50.0f);
 }
@@ -64,6 +66,14 @@ void ButiEngine::Player::OnShowUI()
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 {
 	return ObjectFactory::Create<Player>();
+}
+
+void ButiEngine::Player::ReverseGravity()
+{
+	gravity *= -1.0f;
+	jumpForce *= -1.0f;
+
+	gameObject.lock()->transform->RollLocalRotationZ_Degrees(180.0f);
 }
 
 void ButiEngine::Player::Controll()
@@ -191,6 +201,10 @@ void ButiEngine::Player::BackY()
 				gameObject.lock()->transform->TranslateY(backLength);
 				shp_AABB->Update();
 				shp_bottomAABB->Update();
+				if (gravity > 0)
+				{
+					grounded = true;
+				}
 			}
 			else if (velocity.y < 0)
 			{
@@ -198,7 +212,10 @@ void ButiEngine::Player::BackY()
 				gameObject.lock()->transform->TranslateY(backLength);
 				shp_AABB->Update();
 				shp_bottomAABB->Update();
-				grounded = true;
+				if (gravity < 0)
+				{
+					grounded = true;
+				}
 			}
 		}
 		velocity.y = 0;

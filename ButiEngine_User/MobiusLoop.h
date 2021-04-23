@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class Player;
+
 	class MobiusLoop :public GameComponent
 	{
 	public:
@@ -22,6 +24,8 @@ namespace ButiEngine {
 	private:
 		std::weak_ptr<GameObject> wkp_right;
 		std::weak_ptr<GameObject> wkp_left;
+
+		std::shared_ptr<Player> shp_player;
 	};
 
 }
