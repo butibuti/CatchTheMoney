@@ -211,7 +211,7 @@ namespace ButiEngine {
 					ary_cells[cellNum]->RegistObject(*itr);
 				}
 			}
-			void Check(std::vector<std::shared_ptr<CollisionObject< T>>>& vec_collisionObjects) {
+			virtual void Check(std::vector<std::shared_ptr<CollisionObject< T>>>& vec_collisionObjects) {
 				std::list<std::shared_ptr<CollisionObject< T>>> list_objStack;
 
 
@@ -256,6 +256,9 @@ namespace ButiEngine {
 					}
 				}
 
+			}
+			std::vector<std::shared_ptr< OctRegistObj<T>>>& GetObjects() {
+				return vec_shp_collisionObjs;
 			}
 
 		private:
@@ -380,5 +383,15 @@ namespace ButiEngine {
 			bool isCheckHitSame;
 		};
 
+		template<typename T>
+		class CollisionLayer_noCheckSame :public CollisionLayer<T> {
+		public:
+			CollisionLayer_noCheckSame(const unsigned char  arg_level, const Vector3& arg_minPos, const Vector3& arg_maxPos):CollisionLayer<T>(arg_level,arg_minPos,arg_maxPos){
+
+			}
+			void Check(std::vector<std::shared_ptr<CollisionObject< T>>>& vec_collisionObjects) override{
+
+			}
+		};
 	}
 }

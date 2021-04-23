@@ -36,6 +36,8 @@ namespace ButiEngine {
 
 		ID3D12GraphicsCommandList& GetClearCommandList();
 
+		void SetPipeLine(const Microsoft::WRL::ComPtr<ID3D12PipelineState>& pipelineState);
+
 		std::pair< Microsoft::WRL::ComPtr<ID3D12RootSignature>, D3D12_ROOT_SIGNATURE_DESC> GetRootSignature(const std::wstring& Key);
 
 		std::weak_ptr<DescriptorHeapManager> GetDescriptorHeapManager();
@@ -130,7 +132,8 @@ namespace ButiEngine {
 		std::shared_ptr<PipelineStateManager> shp_pipelineStateManager;
 
 
-		ID3D12GraphicsCommandList* currentCommandList;
+		ID3D12GraphicsCommandList* currentCommandList; 
+		ID3D12PipelineState* currentPipelineState;
 
 		std::vector< ID3D12CommandList*> vec_drawCommandLists;
 		Microsoft::WRL::ComPtr<ID3D12Fence>  fence;

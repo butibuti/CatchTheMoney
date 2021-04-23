@@ -449,7 +449,8 @@ namespace ButiEngine {
 	public:
 		MeshDrawComponent(const MeshTag& arg_meshTag, const ShaderTag& arg_shaderTag, const MaterialTag& arg_materialTag, std::shared_ptr< DrawInformation >arg_shp_drawInfo = nullptr, std::shared_ptr<Transform> arg_shp_transform = nullptr);
 		MeshDrawComponent(const MeshTag& arg_meshTag, const ShaderTag& arg_shaderTag, const std::vector< MaterialTag>& arg_materialTag, std::shared_ptr< DrawInformation >arg_shp_drawInfo = nullptr, std::shared_ptr<Transform> arg_shp_transform = nullptr);
-		MeshDrawComponent(const ModelTag& arg_modelTag, const ShaderTag& arg_shaderTag, std::shared_ptr< DrawInformation >arg_shp_drawInfo = nullptr,std::shared_ptr<Transform> arg_shp_transform = nullptr);
+		MeshDrawComponent(const ModelTag& arg_modelTag, const ShaderTag& arg_shaderTag, std::shared_ptr< DrawInformation >arg_shp_drawInfo = nullptr, std::shared_ptr<Transform> arg_shp_transform = nullptr);
+		MeshDrawComponent(const MeshTag& arg_meshTag, const ModelTag& arg_modelTag, const ShaderTag& arg_shaderTag, const std::vector< MaterialTag>& arg_materialTag, std::shared_ptr< DrawInformation >arg_shp_drawInfo = nullptr,std::shared_ptr<Transform> arg_shp_transform = nullptr);
 		MeshDrawComponent() {}
 		std::string GetGameComponentName() {
 			return "MeshDraw";
@@ -511,6 +512,7 @@ namespace ButiEngine {
 		MeshDrawComponent_Static(const MeshTag& arg_meshTag, const ShaderTag& arg_shaderTag, const MaterialTag& arg_materialTag, std::shared_ptr< DrawInformation >arg_shp_drawInfo = nullptr, std::shared_ptr<Transform> arg_shp_transform = nullptr);
 		MeshDrawComponent_Static(const MeshTag& arg_meshTag, const ShaderTag& arg_shaderTag, const std::vector< MaterialTag>& arg_materialTag, std::shared_ptr< DrawInformation >arg_shp_drawInfo = nullptr, std::shared_ptr<Transform> arg_shp_transform = nullptr);
 		MeshDrawComponent_Static(const ModelTag& arg_modelTag, const ShaderTag& arg_shaderTag, std::shared_ptr< DrawInformation >arg_shp_drawInfo = nullptr, std::shared_ptr<Transform> arg_shp_transform = nullptr);
+		MeshDrawComponent_Static(const MeshTag& arg_meshTag, const ModelTag& arg_modelTag, const ShaderTag& arg_shaderTag, const std::vector< MaterialTag>& arg_materialTag, std::shared_ptr< DrawInformation >arg_shp_drawInfo = nullptr, std::shared_ptr<Transform> arg_shp_transform = nullptr);
 		MeshDrawComponent_Static() {}
 		std::string GetGameComponentName() {
 			return "MeshDraw_Static";

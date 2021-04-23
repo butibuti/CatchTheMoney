@@ -197,7 +197,7 @@ namespace ButiEngine {
 				throw ButiException(L"", L"", L"");
 			}
 		}
-		static inline  void BundleSetPipeLine(const Microsoft::WRL::ComPtr<ID3D12PipelineState>& pipelineState, ID3D12GraphicsCommandList& commandList, std::shared_ptr<GraphicDevice_Dx12> arg_wkp_graphicDevice) {
+		static inline  void BundleSetPipeLine(const Microsoft::WRL::ComPtr<ID3D12PipelineState>& pipelineState, ID3D12GraphicsCommandList& commandList) {
 
 			commandList.SetPipelineState( pipelineState.Get());
 		
