@@ -44,6 +44,7 @@ namespace ButiEngine {
 
 		Vector3 velocity;
 		float speed;
+		float jumpForce;
 
 		bool grounded;
 		float gravity;
