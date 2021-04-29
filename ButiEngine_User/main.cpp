@@ -22,7 +22,7 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	auto app = CreateEditorApplicationInstance("Editor", WindowPopType::max,1080,700, false);
 	GameDevice::Initialize();
 	GameDevice::GetInput()->Initialize(app);
-	//ModelFileConverter::FBXtoB3M("simpleGround.fbx", "simpleGround.b3m", "Model/Stage/");
+
 	app->InitLoadResources();
 	app->GetSceneManager()->LoadScene_Init("Stage0");
 

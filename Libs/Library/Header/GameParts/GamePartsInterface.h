@@ -39,7 +39,7 @@ namespace ButiEngine
 		virtual UINT* RegistCollisionObject(const int layerNum, std::shared_ptr< Collision::CollisionPrimitive>arg_prim, std::shared_ptr<GameObject> arg_registObj)= 0;
 		virtual void UnRegistCollisionObject(const int layerNum, UINT* registNum)= 0;
 		virtual UINT GetLayerCount()= 0;
-		virtual void AddLayer(const Vector3& size, const int level)= 0;
+		virtual void AddLayer(const Vector3& size, const int level, bool isCheckSame)= 0;
 		virtual void RemoveLayer(const int arg_layer)= 0;
 		virtual bool IsWillHit(std::shared_ptr< Collision::CollisionPrimitive>arg_prim, int arg_layer) = 0;
 		virtual std::shared_ptr<GameObject> GetWillHitObject(std::shared_ptr< Collision::CollisionPrimitive>arg_prim, int arg_layer) = 0;

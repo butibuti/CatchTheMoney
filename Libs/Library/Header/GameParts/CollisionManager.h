@@ -13,10 +13,14 @@ namespace ButiEngine {
 				archive(size);
 				archive(offset);
 				archive(level);
+				archive(isCheckSame);
+				archive(vec_checkOtherLayerIndex);
 			}
 			Vector3 size;
 			Vector3 offset;
 			int level;
+			bool isCheckSame;
+			std::vector<int> vec_checkOtherLayerIndex;
 		};
 		class CollisionManager :public ICollisionManager
 		{
@@ -29,7 +33,7 @@ namespace ButiEngine {
 			UINT* RegistCollisionObject(const int layerNum, std::shared_ptr< Collision::CollisionPrimitive>arg_prim,std::shared_ptr<GameObject> arg_registObj)override;
 			void UnRegistCollisionObject(const int layerNum, UINT* registNum)override;
 			UINT GetLayerCount()override;
-			void AddLayer(const Vector3& size,const int level)override;
+			void AddLayer(const Vector3& size,const int level,bool isCheckSame)override;
 			void RemoveLayer(const int arg_layer)override;
 			void ReCreateLayers();
 			bool IsWillHit(std::shared_ptr< Collision::CollisionPrimitive>arg_prim, int arg_layer)override;

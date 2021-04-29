@@ -445,8 +445,8 @@ namespace ButiEngine {
 				localMatrix->_41 = arg_position.x;
 				localMatrix->_42 = arg_position.y;
 				localMatrix->_43 = arg_position.z;
-			}
-			return  localPosition = arg_position;
+			}localPosition = arg_position;
+			return  localPosition;
 		}
 		inline const Vector3& SetWorldPosition(const Vector3& arg_position) {
 			if (localMatrix) {
