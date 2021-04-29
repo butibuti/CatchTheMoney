@@ -1,6 +1,7 @@
 #include "stdafx_u.h"
 #include "Map.h"
 #include"GameSettings.h"
+#include"ParentPanel.h"
 
 unsigned short ButiEngine::Map::stageNum = 0;
 
@@ -31,8 +32,10 @@ void ButiEngine::Map::PutBlock()
 
 	MapData mapData = MapData(stageNum);
 
-	std::weak_ptr<GameObject> mapChip = std::shared_ptr<GameObject>();
-	std::weak_ptr<GameObject> panel = std::shared_ptr<GameObject>();
+	std::weak_ptr<GameObject> tile = std::shared_ptr<GameObject>();
+	std::weak_ptr<GameObject> parentPanel = std::shared_ptr<GameObject>();
+	std::weak_ptr<GameObject> frontPanel = std::shared_ptr<GameObject>();
+	std::weak_ptr<GameObject> backPanel = std::shared_ptr<GameObject>();
 
 	Vector3 mapSize = mapData.GetSize();
 	Vector3 offset;
@@ -51,24 +54,35 @@ void ButiEngine::Map::PutBlock()
 		{
 			Vector3 panelPos;
 			panelPos.x = -GameSettings::windowWidth * 0.5f + (x + panelWidthBlock * 0.5f) * GameSettings::blockSize;
-			panel = GetManager().lock()->AddObjectFromCereal("Panel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
+			parentPanel = GetManager().lock()->AddObjectFromCereal("ParentPanel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
+
+			frontPanel = GetManager().lock()->AddObjectFromCereal("Panel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
+			frontPanel.lock()->SetObjectName("FrontPanel");
+			parentPanel.lock()->GetGameComponent<ParentPanel>()->SetFrontPanel(frontPanel);
+
 
 			Vector3 framePos = panelPos;
 			framePos.y = -GameSettings::panelHeight * 0.5f + GameSettings::blockSize * 0.5f;
-			mapChip = GetManager().lock()->AddObjectFromCereal("Floor", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
-			mapChip.lock()->transform->SetBaseTransform(panel.lock()->transform);
+			tile = GetManager().lock()->AddObjectFromCereal("Floor", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
+			tile.lock()->transform->SetBaseTransform(frontPanel.lock()->transform);
 
 			framePos.y *= -1.0f;
-			mapChip = GetManager().lock()->AddObjectFromCereal("Ceiling", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
-			mapChip.lock()->transform->SetBaseTransform(panel.lock()->transform);
+			tile = GetManager().lock()->AddObjectFromCereal("Ceiling", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
+			tile.lock()->transform->SetBaseTransform(frontPanel.lock()->transform);
+
+			panelPos.x += GameSettings::windowWidth * 0.5f;
+			backPanel = GetManager().lock()
+				->AddObjectFromCereal("Panel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
+			backPanel.lock()->SetObjectName("BackPanel");
+			parentPanel.lock()->GetGameComponent<ParentPanel>()->SetBackPanel(backPanel);
 
 			framePos.x += GameSettings::windowWidth * 0.5f;
-			mapChip = GetManager().lock()->AddObjectFromCereal("Floor", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
-			mapChip.lock()->transform->SetBaseTransform(panel.lock()->transform);
+			tile = GetManager().lock()->AddObjectFromCereal("Floor", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
+			tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
 
 			framePos.y *= -1.0f;
-			mapChip = GetManager().lock()->AddObjectFromCereal("Ceiling", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
-			mapChip.lock()->transform->SetBaseTransform(panel.lock()->transform);
+			tile = GetManager().lock()->AddObjectFromCereal("Ceiling", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
+			tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
 		}
 
 		for (unsigned int y = 0; y < mapSize.y; y++)
@@ -87,17 +101,17 @@ void ButiEngine::Map::PutBlock()
 			}
 			else if (mapChipID == GameSettings::player)
 			{
-				mapChip = GetManager().lock()->AddObjectFromCereal("Player", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
+				tile = GetManager().lock()->AddObjectFromCereal("Player", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
 			}
 			else if (mapChipID == GameSettings::block)
 			{
-				mapChip = GetManager().lock()->AddObjectFromCereal("Block", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
-				mapChip.lock()->transform->SetBaseTransform(panel.lock()->transform);
+				tile = GetManager().lock()->AddObjectFromCereal("Block", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
+				tile.lock()->transform->SetBaseTransform(frontPanel.lock()->transform);
 				Vector3 tmpPos = position;
 				tmpPos.x += GameSettings::windowWidth * 0.5f;
 				tmpPos.y *= -1.0f;
-				mapChip = GetManager().lock()->AddObjectFromCereal("Block", ObjectFactory::Create<Transform>(tmpPos, Vector3::Zero, scale));
-				mapChip.lock()->transform->SetBaseTransform(panel.lock()->transform);
+				tile = GetManager().lock()->AddObjectFromCereal("Block", ObjectFactory::Create<Transform>(tmpPos, Vector3::Zero, scale));
+				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
 			}
 		}
 	}

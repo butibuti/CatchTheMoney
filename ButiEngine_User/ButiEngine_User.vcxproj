@@ -164,6 +164,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MobiusLoop.cpp" />
+    <ClCompile Include="Panel.cpp" />
+    <ClCompile Include="ParentPanel.cpp" />
     <ClCompile Include="PauseManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="StageManager.cpp" />
@@ -182,6 +184,8 @@
     <ClInclude Include="HitChecker.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MobiusLoop.h" />
+    <ClInclude Include="Panel.h" />
+    <ClInclude Include="ParentPanel.h" />
     <ClInclude Include="PauseManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerController.h" />
