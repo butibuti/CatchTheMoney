@@ -26,13 +26,14 @@ void ButiEngine::Player::Start()
 	wkp_screenScroll = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
 
 	velocity = Vector3::Zero;
-	speed = 1.0f;
+	speed = 3.0f;
 	grounded = false;
-	gravity = 0.6f;
+	gravity = -0.2f;
+	jumpForce = 2.5f;
 
 	wkp_bottom = GetManager().lock()->AddObject(ObjectFactory::Create<Transform>(), "Player_Bottom");
 	wkp_bottom.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-	wkp_bottom.lock()->transform->SetLocalPosition(Vector3(0.0f, 24.0f / GameSettings::blockSize, 0.0f));
+	wkp_bottom.lock()->transform->SetLocalPosition(Vector3(0.0f, -0.75f, 0.0f));
 	wkp_bottom.lock()->transform->SetLocalScale(Vector3(1.0f, 0.5f, 1.0f));
 	
 	shp_bottomAABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 1.0f, 1.0f), wkp_bottom.lock()->transform);
@@ -55,7 +56,8 @@ void ButiEngine::Player::OnCollisionEnd(std::weak_ptr<GameObject> arg_other)
 
 void ButiEngine::Player::OnShowUI()
 {
-	GUI::SliderFloat("gravity", &gravity, 0.0f, 1.0f);
+	GUI::SliderFloat("gravity", &gravity, -1.0f, 1.0f);
+	GUI::SliderFloat("jumpForce", &jumpForce, -10.0f, 10.0f);
 	GUI::SliderFloat("speed", &speed, 0.0f, 50.0f);
 }
 
@@ -78,9 +80,9 @@ void ButiEngine::Player::Controll()
 
 	if (grounded)
 	{
-		if (GameDevice::GetInput()->TriggerKey(Keys::Space))
+		if (GameDevice::GetInput()->TriggerKey(Keys::W))
 		{
-			velocity.y = -10.0f;
+			velocity.y = jumpForce;
 			grounded = false;
 		}
 	}
@@ -92,6 +94,12 @@ void ButiEngine::Player::Controll()
 
 void ButiEngine::Player::Move()
 {
+	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
+	auto scroll = (position.x / GameSettings::windowWidth);
+	float dist = (scroll - wkp_screenScroll.lock()->Get().lightDir.x);
+	wkp_screenScroll.lock()->Get().lightDir.x = scroll;
+	//wkp_screenScroll.lock()->Get().lightDir.x +=abs( dist) * dist;
+
 	velocity.x *= speed;
 
 	if (fabsf(velocity.x) > fabsf(velocity.y))
@@ -114,52 +122,6 @@ void ButiEngine::Player::Move()
 		grounded = false;
 	}
 
-	OnOutScreen();
-
-
-	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
-
-	auto scroll =( position.x / GameSettings::windowWidth)- 0.0675;
-	float dist = (scroll - wkp_screenScroll.lock()->Get().lightDir.x);
-	wkp_screenScroll.lock()->Get().lightDir.x = scroll;
-	//wkp_screenScroll.lock()->Get().lightDir.x +=abs( dist)*dist ;
-}
-
-void ButiEngine::Player::OnOutScreen()
-{
-	bool outScreen = false;
-	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
-	float tmp = GameSettings::blockSize / 2.0f;
-	Vector2 sizeHalf = Vector2(tmp, tmp);
-
-	/*if (position.x +- sizeHalf.x < -GameSettings::windowWidth / 2)
-	{
-		position.x =- GameSettings::windowWidth / 2 + sizeHalf.x;
-		outScreen = true;
-	}
-	else if (position.x + sizeHalf.x > GameSettings::windowWidth/2)
-	{
-		position.x = GameSettings::windowWidth/2 - sizeHalf.x;
-		outScreen = true;
-	}*/
-	if (position.y - sizeHalf.y < -GameSettings::windowHeight/2)
-	{
-		position.y = -GameSettings::windowHeight/2 + sizeHalf.y + 0.1f;
-		outScreen = true;
-		velocity.y = 0;
-	}
-	else if (position.y + sizeHalf.y > GameSettings::windowHeight / 2)
-	{
-		position.y = -sizeHalf.y+ GameSettings::windowHeight / 2;
-		outScreen = true;
-		grounded = true;
-		velocity.y = 0;
-	}
-
-	if (outScreen)
-	{
-		gameObject.lock()->transform->SetWorldPosition(Vector3(position.x, position.y, -0.1f));
-	}
 }
 
 void ButiEngine::Player::MoveX()
@@ -246,6 +208,7 @@ void ButiEngine::Player::BackY()
 				gameObject.lock()->transform->TranslateY(backLength);
 				shp_AABB->Update();
 				shp_bottomAABB->Update();
+				grounded = true;
 			}
 		}
 		velocity.y = 0;
