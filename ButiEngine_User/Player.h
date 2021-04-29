@@ -27,7 +27,6 @@ namespace ButiEngine {
 	private:
 		void Controll();
 		void Move();
-		void OnOutScreen();
 		void MoveX();
 		void MoveY();
 		void BackX();
@@ -47,6 +46,7 @@ namespace ButiEngine {
 
 		bool grounded;
 		float gravity;
+		float jumpForce;
 	};
 
 }
