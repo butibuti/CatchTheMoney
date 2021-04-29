@@ -38,8 +38,30 @@ void ButiEngine::Map::PutBlock()
 	offset.x += GameSettings::blockSize * 0.5f;
 	offset.y += GameSettings::blockSize * 1.5f;
 
+	const int panelWidth = GameSettings::windowWidth / 8;
+	const int panelHeight = GameSettings::windowHeight;
+	Vector3 frameScale = Vector3(panelWidth, GameSettings::blockSize, 1.0f);
+
 	for (unsigned int x = 0; x < mapSize.x; x++)
 	{
+
+		if (x % 5 == 0 && x != 0)
+		{
+			Vector3 framePos;
+			framePos.x = -GameSettings::windowWidth * 0.5f + x * GameSettings::blockSize;
+			framePos.y = -panelHeight * 0.5f + GameSettings::blockSize * 0.5f;
+			gameObject = GetManager().lock()->AddObjectFromCereal("Floor", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
+
+			framePos.y *= -1.0f;
+			gameObject = GetManager().lock()->AddObjectFromCereal("Ceiling", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
+
+			framePos.x += GameSettings::windowWidth * 0.5f;
+			gameObject = GetManager().lock()->AddObjectFromCereal("Floor", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
+
+			framePos.y *= -1.0f;
+			gameObject = GetManager().lock()->AddObjectFromCereal("Ceiling", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
+		}
+
 		for (unsigned int y = 0; y < mapSize.y; y++)
 		{
 			Vector3 position(x, y, 0);
@@ -62,9 +84,10 @@ void ButiEngine::Map::PutBlock()
 			else if (mapChipID == GameSettings::block)
 			{
 				gameObject = GetManager().lock()->AddObjectFromCereal("Block", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
-				position.x += GameSettings::windowWidth * 0.5f;
-				position.y *= -1.0f;
-				gameObject = GetManager().lock()->AddObjectFromCereal("Block", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
+				Vector3 tmpPos = position;
+				tmpPos.x += GameSettings::windowWidth * 0.5f;
+				tmpPos.y *= -1.0f;
+				gameObject = GetManager().lock()->AddObjectFromCereal("Block", ObjectFactory::Create<Transform>(tmpPos, Vector3::Zero, scale));
 			}
 		}
 	}
@@ -93,7 +116,7 @@ ButiEngine::MapData::MapData(unsigned short arg_stageNum)
 			{2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,},
 			{2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,},
 			{2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,},
-			{2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,},
+			{0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,},
 		};
 	}
 }

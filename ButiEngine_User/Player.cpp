@@ -80,7 +80,7 @@ void ButiEngine::Player::Controll()
 
 	if (grounded)
 	{
-		if (GameDevice::GetInput()->TriggerKey(Keys::Space))
+		if (GameDevice::GetInput()->TriggerKey(Keys::W))
 		{
 			velocity.y = jumpForce;
 			grounded = false;
@@ -97,8 +97,8 @@ void ButiEngine::Player::Move()
 	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
 	auto scroll = (position.x / GameSettings::windowWidth);
 	float dist = (scroll - wkp_screenScroll.lock()->Get().lightDir.x);
-	//wkp_screenScroll.lock()->Get().lightDir.x = scroll;
-	wkp_screenScroll.lock()->Get().lightDir.x +=abs( dist) * dist * 3.0f ;
+	wkp_screenScroll.lock()->Get().lightDir.x = scroll;
+	//wkp_screenScroll.lock()->Get().lightDir.x +=abs( dist) * dist;
 
 	velocity.x *= speed;
 
