@@ -31,6 +31,9 @@ void ButiEngine::Map::PutBlock()
 
 	MapData mapData = MapData(stageNum);
 
+	std::weak_ptr<GameObject> mapChip = std::shared_ptr<GameObject>();
+	std::weak_ptr<GameObject> panel = std::shared_ptr<GameObject>();
+
 	Vector3 mapSize = mapData.GetSize();
 	Vector3 offset;
 	offset.x = -GameSettings::windowWidth * 0.5f;
@@ -38,28 +41,34 @@ void ButiEngine::Map::PutBlock()
 	offset.x += GameSettings::blockSize * 0.5f;
 	offset.y += GameSettings::blockSize * 1.5f;
 
-	const int panelWidth = GameSettings::windowWidth / 8;
-	const int panelHeight = GameSettings::windowHeight;
-	Vector3 frameScale = Vector3(panelWidth, GameSettings::blockSize, 1.0f);
+	Vector3 frameScale = Vector3(GameSettings::panelWidth, GameSettings::blockSize, 1.0f);
+
+	const int panelWidthBlock = GameSettings::panelWidth / GameSettings::blockSize;
 
 	for (unsigned int x = 0; x < mapSize.x; x++)
 	{
-
-		if (x % 5 == 0 && x != 0)
+		if (x % panelWidthBlock == 0)
 		{
-			Vector3 framePos;
-			framePos.x = -GameSettings::windowWidth * 0.5f + x * GameSettings::blockSize;
-			framePos.y = -panelHeight * 0.5f + GameSettings::blockSize * 0.5f;
-			gameObject = GetManager().lock()->AddObjectFromCereal("Floor", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
+			Vector3 panelPos;
+			panelPos.x = -GameSettings::windowWidth * 0.5f + (x + panelWidthBlock * 0.5f) * GameSettings::blockSize;
+			panel = GetManager().lock()->AddObjectFromCereal("Panel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
+
+			Vector3 framePos = panelPos;
+			framePos.y = -GameSettings::panelHeight * 0.5f + GameSettings::blockSize * 0.5f;
+			mapChip = GetManager().lock()->AddObjectFromCereal("Floor", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
+			mapChip.lock()->transform->SetBaseTransform(panel.lock()->transform);
 
 			framePos.y *= -1.0f;
-			gameObject = GetManager().lock()->AddObjectFromCereal("Ceiling", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
+			mapChip = GetManager().lock()->AddObjectFromCereal("Ceiling", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
+			mapChip.lock()->transform->SetBaseTransform(panel.lock()->transform);
 
 			framePos.x += GameSettings::windowWidth * 0.5f;
-			gameObject = GetManager().lock()->AddObjectFromCereal("Floor", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
+			mapChip = GetManager().lock()->AddObjectFromCereal("Floor", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
+			mapChip.lock()->transform->SetBaseTransform(panel.lock()->transform);
 
 			framePos.y *= -1.0f;
-			gameObject = GetManager().lock()->AddObjectFromCereal("Ceiling", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
+			mapChip = GetManager().lock()->AddObjectFromCereal("Ceiling", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
+			mapChip.lock()->transform->SetBaseTransform(panel.lock()->transform);
 		}
 
 		for (unsigned int y = 0; y < mapSize.y; y++)
@@ -70,7 +79,6 @@ void ButiEngine::Map::PutBlock()
 			position.y *= -1.0f;
 			Vector3 scale(GameSettings::blockSize);
 			scale.z = 1.0f;
-			std::weak_ptr<GameObject> gameObject = std::shared_ptr<GameObject>();
 
 			int mapChipID = mapData.data[y][x];
 
@@ -79,15 +87,17 @@ void ButiEngine::Map::PutBlock()
 			}
 			else if (mapChipID == GameSettings::player)
 			{
-				gameObject = GetManager().lock()->AddObjectFromCereal("Player", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
+				mapChip = GetManager().lock()->AddObjectFromCereal("Player", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
 			}
 			else if (mapChipID == GameSettings::block)
 			{
-				gameObject = GetManager().lock()->AddObjectFromCereal("Block", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
+				mapChip = GetManager().lock()->AddObjectFromCereal("Block", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
+				mapChip.lock()->transform->SetBaseTransform(panel.lock()->transform);
 				Vector3 tmpPos = position;
 				tmpPos.x += GameSettings::windowWidth * 0.5f;
 				tmpPos.y *= -1.0f;
-				gameObject = GetManager().lock()->AddObjectFromCereal("Block", ObjectFactory::Create<Transform>(tmpPos, Vector3::Zero, scale));
+				mapChip = GetManager().lock()->AddObjectFromCereal("Block", ObjectFactory::Create<Transform>(tmpPos, Vector3::Zero, scale));
+				mapChip.lock()->transform->SetBaseTransform(panel.lock()->transform);
 			}
 		}
 	}
