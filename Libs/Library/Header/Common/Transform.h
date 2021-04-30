@@ -487,7 +487,8 @@ namespace ButiEngine {
 			if (localMatrix) {
 				localMatrix = nullptr;
 			}
-			return  scale = arg_scale;
+			scale = arg_scale;
+			return  scale;
 		}
 		inline Vector3& SetLocalScale() {
 			if (localMatrix) {

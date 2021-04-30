@@ -296,11 +296,21 @@ namespace ButiEngine {
 			}
 		}
 
-		inline Vector2& operator=(const DirectX::XMVECTOR other)
+		inline Vector2& operator=(const DirectX::XMVECTOR& other)
 		{
 			DirectX::XMVECTOR temp = other;
 			DirectX::XMStoreFloat2(this, temp);
 			return *this;
+		}
+		inline bool operator==(const Vector2& other)
+		{
+
+			return (x == other.x && y == other.y);
+		}
+		inline bool operator!=(const Vector2& other)
+		{
+
+			return !(*this  == other);
 		}
 
 		inline Vector2& operator +=(const Vector2& vec)
@@ -531,7 +541,7 @@ namespace ButiEngine {
 		{
 			return &x;
 		}
-		inline Vector3& operator=(const DirectX::XMVECTOR other)
+		inline Vector3& operator=(const DirectX::XMVECTOR& other)
 		{
 			DirectX::XMVECTOR temp = other;
 			DirectX::XMStoreFloat3(this, temp);

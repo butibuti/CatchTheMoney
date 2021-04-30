@@ -18,6 +18,7 @@ namespace ButiEngine {
 		void LoadScene(const std::string& arg_sceneName, std::shared_ptr<SceneInformation> shp_scene = nullptr) override;
 		void LoadScene_Init(const std::string& arg_sceneName, std::shared_ptr<SceneInformation> shp_scene = nullptr) override;
 		void Release()override;
+		void Reload();
 	private:
 		void CreateScreenDrawData();
 		bool isActive = false;

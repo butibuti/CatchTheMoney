@@ -13,9 +13,10 @@ namespace ButiEngine {
 	};
 	struct Pose {
 		Pose(){}
-		Pose(const Vector3& arg_position, const Vector3& arg_rotation);
+		Pose(const Vector3& arg_position, const Vector3& arg_rotation,const Vector3& arg_scale);
 		Vector3 position;
 		Quat rotation;
+		Vector3 scale;
 	};
 
 	struct IKActive {
@@ -25,13 +26,14 @@ namespace ButiEngine {
 
 	struct MotionKeyFrameData {
 		MotionKeyFrameData(){}
-		MotionKeyFrameData( const UINT arg_endFrame, const Vector3& arg_position, const Vector3& arg_rotation);
+		MotionKeyFrameData( const UINT arg_endFrame, const Vector3& arg_position, const Vector3& arg_rotation,const Vector3& arg_scale=Vector3(1,1,1));
 		MotionKeyFrameData(const UINT arg_endFrame, const Pose& arg_pose);
 
 		UINT endFrame=0;
 		Pose pose;
 		LarpData larp;
 	};
+
 
 	class IMotionTimeLine :public IObject {
 	public:

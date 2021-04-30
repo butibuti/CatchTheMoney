@@ -71,7 +71,7 @@ namespace ButiEngine
 		virtual void SetShadowTexture(TextureTag arg_textureTag) = 0;
 
 		virtual void Rendering() = 0;
-
+		virtual void CommandSet() = 0;
 		virtual void ShadowRendering() = 0;
 		virtual std::shared_ptr<Collision::CollisionLayer<IDrawObject>> GetCollisionLayer() = 0;
 		virtual std::shared_ptr<ICamera> GetShadowCamera() = 0;

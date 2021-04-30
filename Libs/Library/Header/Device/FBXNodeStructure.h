@@ -1,5 +1,6 @@
 #pragma once
 #include"stdafx.h"
+#include"Header/Resources/ModelAnimation.h"
 namespace ButiEngine {
 	namespace FBXAnalyze {
 		enum class FBXPropertyDataType {
@@ -19,6 +20,10 @@ namespace ButiEngine {
 			char coordAxis = 0;
 			char coordAxisSign = -1;
 			float frameRate=30.0f;
+			int timeMode = 0;
+			long long int timeSpanStart = 0;
+			long long int timeSpanStop = 0;
+			long long int timeStep = 0;
 		};
 		struct FBXNodeStructure :public IObject
 		{
@@ -38,6 +43,7 @@ namespace ButiEngine {
 			Vector2 GetVector2();
 			virtual void NodeInitialize() {}
 			float GetFloat();
+			virtual long long int GetNodeTag();
 			std::weak_ptr< FBXNodeStructure>parent;
 			std::multimap<FBXPropertyDataType,std::shared_ptr<FBXProperty>> multimap_properties;
 			std::vector < std::shared_ptr<FBXNodeStructure>> SerchChildNode(const std::string& arg_nodeName);
@@ -69,6 +75,9 @@ namespace ButiEngine {
 
 		enum class LinkType {
 			OO, OP, PP
+		};
+		enum class AnimationType {
+			rotate,translate,scaling
 		};
 
 		struct FBXNodeLinkInfo :public IObject {
@@ -129,12 +138,18 @@ namespace ButiEngine {
 			std::weak_ptr<FBXGeometryNode> geometryNode;
 			Matrix4x4 GetTransform(const FBXGlobalSettings& settings);
 		};
+		struct PoseNode :public FBXNodeStructure {
+			long long int GetNodeTag()override;
+			Matrix4x4 GetMatrix();
+		};
 		struct FBXBoneNode :public FBXNodeStructure {
 			std::string GetName();
 			Vector3 GetPosition(const std::vector<std::shared_ptr<FBXBoneNode>>& arg_bones, const FBXGlobalSettings& settings);
-			Matrix4x4 GetRotation(const std::vector<std::shared_ptr<FBXBoneNode>>& arg_bones, const FBXGlobalSettings& settings);
+			Vector3 GetRotation(const std::vector<std::shared_ptr<FBXBoneNode>>& arg_bones, const FBXGlobalSettings& settings);
+			Matrix4x4 GetMatrix(const std::vector<std::shared_ptr<FBXBoneNode>>& arg_bones, const FBXGlobalSettings& settings);
 			int parentBoneIndex = -1;
 			int boneIndex = -1;
+			std::shared_ptr<PoseNode> shp_poseNode;
 		};
 		struct FBXDeformerNode :public FBXNodeStructure {
 			std::vector<double> GetWeight();
@@ -165,6 +180,36 @@ namespace ButiEngine {
 
 			std::vector<int>& CreateTriPolygonIndexByPolyMaterial(const std::vector<int>& arg_vec_materialIndex, const UINT arg_materialCount, std::vector<int>& arg_materialIndexSize);
 			std::vector<int>& CreateTriPolygonIndexByMonoMaterial();
+		};
+
+
+		struct FBXAnimationCurveData :FBXNodeStructure {
+			void GetTimes(std::vector<int>& arg_ref_vec_time,const long long arg_timeStep);
+		};
+		struct FBXAnimationCurveNode :FBXNodeStructure {
+			std::shared_ptr< FBXBoneNode> shp_boneNode;
+			std::shared_ptr<FBXAnimationCurveData> shp_animCurve_x;
+			std::shared_ptr<FBXAnimationCurveData> shp_animCurve_y;
+			std::shared_ptr<FBXAnimationCurveData> shp_animCurve_z;
+			void GetCurveData(std::vector<Vector3*>& arg_vec_p_value,const FBXGlobalSettings& arg_globalSettings,const int arg_localStop);
+			AnimationType type;
+		};
+		struct TRSCurves {
+			std::shared_ptr< FBXAnimationCurveNode> shp_transCurve;
+			std::shared_ptr< FBXAnimationCurveNode> shp_rotateCurve;
+			std::shared_ptr< FBXAnimationCurveNode> shp_scaleCurve;
+		};
+		struct FBXAnimationLayer :FBXNodeStructure {
+
+			void CreateMotionData(std::map<std::wstring, std::vector< MotionKeyFrameData>>& arg_ref_map_motionDatas, const FBXGlobalSettings& arg_ref_globalSettings, const long long int arg_localStop, const long long int arg_refStop);
+			std::map<std::string, TRSCurves> map_curves;
+		};
+
+		struct FBXAnimationStack :FBXNodeStructure {
+			std::string GetAnimationName();
+			long long int GetLocalStop();
+			long long int GetRefStop();
+			std::vector<std::shared_ptr<FBXAnimationLayer>> vec_shp_animLayer;
 		};
 
 		struct FBXNode_IntProperty :public FBXProperty {
@@ -301,7 +346,31 @@ namespace ButiEngine {
 			std::vector < std::shared_ptr< FBXNodeStructure>> SerchNode(const std::string& arg_serchNodeName);
 			std::vector < std::shared_ptr< FBXNodeStructure>> SerchNode(const std::string& arg_serchNodeName,const UINT searchPropertyCount);
 			std::vector < std::shared_ptr<FBXNodeStructure>> SerchNodeWithStringProperty(const std::string& arg_nodeName, const std::string& arg_stringProp, const UINT arg_propertyIndex = 0);
-			
+
+			template <typename T>
+			std::vector < std::shared_ptr< T>> SerchNode(const std::string& arg_serchNodeName) {
+				std::vector<std::shared_ptr<T>> output;
+				auto serch = SerchNode(arg_serchNodeName);
+				output.reserve(serch.size());
+
+				auto endItr = serch.end();
+				for (auto itr = serch.begin(); itr != endItr; itr++) {
+					output.push_back((*itr)->GetThis<T>());
+				}
+				return output;
+			}
+			template <typename T>
+			std::vector < std::shared_ptr< T>> SerchNode(const std::string& arg_nodeName, const std::string& arg_stringProp, const UINT arg_propertyIndex = 0) {
+				std::vector<std::shared_ptr<T>> output;
+				auto serch = SerchNodeWithStringProperty(arg_nodeName,arg_stringProp,arg_propertyIndex);
+				output.reserve(serch.size());
+
+				auto endItr = serch.end();
+				for (auto itr = serch.begin(); itr != endItr; itr++) {
+					output.push_back((*itr)->GetThis<T>());
+				}
+				return output;
+			}
 
 		private:
 			std::unordered_multimap<std::string, std::shared_ptr< FBXNodeStructure>> multimap_nodeRecords;
@@ -459,7 +528,7 @@ inline std::shared_ptr<ButiEngine::FBXAnalyze::FBXNodeStructure> ButiEngine::FBX
 {
 	long long int key = GetProperty<FBXNode_LongProperty>()->nodeProperty;
 	for (auto itr = arg_toNode.begin(); itr != arg_toNode.end(); itr++) {
-		if ((*itr)->GetProperty<FBXNode_LongProperty>()->nodeProperty == key) {
+		if ((*itr)->GetNodeTag()== key) {
 			return (*itr);
 		}
 	}
@@ -472,7 +541,7 @@ std::shared_ptr<ButiEngine::FBXAnalyze::FBXNodeStructure> ButiEngine::FBXAnalyze
 {
 	long long int key = GetProperty<FBXNode_LongProperty>(1)->nodeProperty;
 	for (auto itr = arg_byNodes.begin(); itr != arg_byNodes.end(); itr++) {
-		if ((*itr)->GetProperty<FBXNode_LongProperty>()->nodeProperty == key) {
+		if ((*itr)->GetNodeTag() == key) {
 			return (*itr);
 		}
 	}

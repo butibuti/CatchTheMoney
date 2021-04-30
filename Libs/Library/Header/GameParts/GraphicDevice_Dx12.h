@@ -67,7 +67,7 @@ namespace ButiEngine {
 
 		void ClearWindow() override;
 
-		void SetCommandList(ID3D12GraphicsCommandList* arg_currentCommandList);
+		void SetCommandList(ID3D12GraphicsCommandList* arg_currentCommandList,const int index=0);
 		void SetDefaultRenderTarget()override;
 		void CommandList_SetScissorRect();
 
@@ -132,7 +132,7 @@ namespace ButiEngine {
 		std::shared_ptr<PipelineStateManager> shp_pipelineStateManager;
 
 
-		ID3D12GraphicsCommandList* currentCommandList; 
+		ID3D12GraphicsCommandList* ary_currentCommandList; 
 		ID3D12PipelineState* currentPipelineState;
 
 		std::vector< ID3D12CommandList*> vec_drawCommandLists;
