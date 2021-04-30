@@ -12,13 +12,14 @@ void ButiEngine::Player::OnUpdate()
 	{
 		if (!gameObject.lock()->transform->GetBaseTransform())
 		{
+			//‚È‚ñ‚©”÷–­‚É‚¸‚ê‚é
 			gameObject.lock()->transform->SetBaseTransform(wkp_closestPanel.lock()->transform);
 		}
 		return;
 	}
 	else
 	{
-		gameObject.lock()->transform->SetBaseTransform(nullptr, true);
+		gameObject.lock()->transform->SetBaseTransform(nullptr);
 	}
 	Controll();
 	Move();

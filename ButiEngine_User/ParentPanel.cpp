@@ -21,7 +21,7 @@ void ButiEngine::ParentPanel::OnSet()
 
 void ButiEngine::ParentPanel::Start()
 {
-	scale = Vector3(0.99f, 1.0f, 1.0f);
+	scale = Vector3(1.0f, 1.0f, 1.0f);
 }
 
 void ButiEngine::ParentPanel::OnShowUI()

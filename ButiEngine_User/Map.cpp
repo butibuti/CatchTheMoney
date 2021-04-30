@@ -105,7 +105,9 @@ void ButiEngine::Map::PutTile()
 			}
 			else if (mapChipID == GameSettings::player)
 			{
-				tile = GetManager().lock()->AddObjectFromCereal("Player", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
+				Vector3 playerPos = position;
+				playerPos.z = -0.2f;
+				tile = GetManager().lock()->AddObjectFromCereal("Player", ObjectFactory::Create<Transform>(playerPos, Vector3::Zero, scale));
 			}
 			else if (mapChipID == GameSettings::block)
 			{

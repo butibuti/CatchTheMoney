@@ -14,6 +14,8 @@ void ButiEngine::MobiusLoop::OnUpdate()
 	{
 		gameObject.lock()->transform->SetWorldPosition(wkp_left.lock()->transform->GetWorldPosition());
 	}
+
+	//GetManager().lock()->GetApplication().lock()->GetGUIController()->SetGUIObject(GetThis<MobiusLoop>());
 }
 
 void ButiEngine::MobiusLoop::OnSet()
@@ -46,6 +48,14 @@ void ButiEngine::MobiusLoop::Start()
 
 void ButiEngine::MobiusLoop::OnCollision(std::weak_ptr<GameObject> arg_other)
 {
+}
+
+void ButiEngine::MobiusLoop::ShowGUI()
+{
+	//GUI::Begin("MobiusLoop");
+	//GUI::Text("Right:%f", wkp_right.lock()->transform->GetWorldPosition().x);
+	//GUI::Text("Left:%f", wkp_left.lock()->transform->GetWorldPosition().x);
+	//GUI::End();
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::MobiusLoop::Clone()
