@@ -157,6 +157,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Block.cpp" />
+    <ClCompile Include="ContorolByStick.cpp" />
     <ClCompile Include="DebugController.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
     <ClCompile Include="GameSettings.cpp" />
@@ -168,6 +169,7 @@
     <ClCompile Include="ParentPanel.cpp" />
     <ClCompile Include="PauseManager.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="ScrollManager.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -179,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />
+    <ClInclude Include="ContorolByStick.h" />
     <ClInclude Include="DebugController.h" />
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="HitChecker.h" />
@@ -189,6 +192,7 @@
     <ClInclude Include="PauseManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerController.h" />
+    <ClInclude Include="ScrollManager.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="StageSelect.h" />
     <ClInclude Include="stdafx_u.h" />

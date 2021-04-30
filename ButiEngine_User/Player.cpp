@@ -23,7 +23,7 @@ void ButiEngine::Player::Start()
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	shp_mobiusLoop = gameObject.lock()->GetGameComponent<MobiusLoop>();
 	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 1.0f), gameObject.lock()->transform);
-	wkp_screenScroll = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
+	//wkp_screenScroll = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
 
 	velocity = Vector3::Zero;
 	speed = 3.0f;
@@ -94,11 +94,11 @@ void ButiEngine::Player::Controll()
 
 void ButiEngine::Player::Move()
 {
-	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
-	auto scroll = (position.x / GameSettings::windowWidth);
-	float dist = (scroll - wkp_screenScroll.lock()->Get().lightDir.x);
-	wkp_screenScroll.lock()->Get().lightDir.x = scroll;
-	//wkp_screenScroll.lock()->Get().lightDir.x +=abs( dist) * dist;
+	//Vector3 position = gameObject.lock()->transform->GetWorldPosition();
+	//auto scroll = (position.x / GameSettings::windowWidth);
+	//float dist = (scroll - wkp_screenScroll.lock()->Get().lightDir.x);
+	//wkp_screenScroll.lock()->Get().lightDir.x = scroll;
+	////wkp_screenScroll.lock()->Get().lightDir.x +=abs( dist) * dist;
 
 	velocity.x *= speed;
 

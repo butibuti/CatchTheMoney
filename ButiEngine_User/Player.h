@@ -39,7 +39,6 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_bottom;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_bottomAABB;
 
-		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
 
 		Vector3 velocity;
 		float speed;
