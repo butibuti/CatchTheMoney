@@ -26,6 +26,7 @@ namespace ButiEngine {
 		}
 	private:
 		void Controll();
+		void Scroll();
 		void Move();
 		void MoveX();
 		void MoveY();

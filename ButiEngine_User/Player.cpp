@@ -6,6 +6,7 @@
 
 void ButiEngine::Player::OnUpdate()
 {
+	Scroll();
 	if (shp_pauseManager->GetPause())
 	{
 		return;
@@ -92,14 +93,17 @@ void ButiEngine::Player::Controll()
 	}
 }
 
-void ButiEngine::Player::Move()
+void ButiEngine::Player::Scroll()
 {
 	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
 	auto scroll = (position.x / GameSettings::windowWidth);
 	float dist = (scroll - wkp_screenScroll.lock()->Get().lightDir.x);
 	wkp_screenScroll.lock()->Get().lightDir.x = scroll;
 	//wkp_screenScroll.lock()->Get().lightDir.x +=abs( dist) * dist;
+}
 
+void ButiEngine::Player::Move()
+{
 	velocity.x *= speed;
 
 	if (fabsf(velocity.x) > fabsf(velocity.y))

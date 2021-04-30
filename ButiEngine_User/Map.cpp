@@ -26,7 +26,7 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Map::Clone()
 	return ObjectFactory::Create<Map>();
 }
 
-void ButiEngine::Map::PutBlock()
+void ButiEngine::Map::PutTile()
 {
 	DestoryBlock();
 

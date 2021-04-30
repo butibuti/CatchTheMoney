@@ -3,6 +3,13 @@
 namespace ButiEngine {
 
 	class Map;
+	class PauseManager;
+
+	enum GameMode
+	{
+		Action,
+		Edit,
+	};
 
 	class StageManager :public GameComponent
 	{
@@ -20,8 +27,14 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+		GameMode GetMode() { return mode; }
 	private:
 		std::shared_ptr<Map> shp_map;
+		std::shared_ptr<PauseManager> shp_pauseManager;
+
+		GameMode mode;
+
+		void ModeChange();
 	};
 
 }

@@ -20,6 +20,8 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 		bool GetPause() { return pause; }
+
+		void SwitchPause() { pause = !pause; }
 	private:
 		bool pause;
 	};
