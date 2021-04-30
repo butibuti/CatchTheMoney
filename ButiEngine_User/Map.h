@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class PanelManager;
+
 	class MapData
 	{
 	public:
@@ -41,6 +43,8 @@ namespace ButiEngine {
 		void DestoryBlock();
 	private:
 		static unsigned short stageNum;
+
+		std::shared_ptr<PanelManager> shp_panelManager;
 	};
 
 }

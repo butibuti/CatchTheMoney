@@ -3,6 +3,14 @@
 
 void ButiEngine::CameraController::OnUpdate()
 {
+    if (gameObject.lock()->GetGameComponent<TransformAnimation>())
+    {
+        animation = true;
+    }
+    else
+    {
+        animation = false;
+    }
 }
 
 void ButiEngine::CameraController::OnSet()
@@ -15,6 +23,7 @@ void ButiEngine::CameraController::Start()
     zoomOutFrame = 10.0f;
     moveLength = 100.0f;
     initCameraZ = -1000.0f;
+    animation = false;
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::CameraController::Clone()

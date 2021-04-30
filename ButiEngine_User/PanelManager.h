@@ -2,11 +2,11 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class CameraController :public GameComponent
+	class PanelManager :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "CameraController";
+			return "PanelManager";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -18,19 +18,13 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-		bool IsAnimation() { return animation; }
+		std::weak_ptr<GameObject> GetClosestPanel(float arg_otherX);
 
-		void ZoomIn();
-		void ZoomOut();
+		void AddPanel(std::weak_ptr<GameObject> arg_panel);
 	private:
-		float zoomInFrame;
-		float zoomOutFrame;
-		float moveLength;
-		float initCameraZ;
-
-		bool animation;
+		std::vector<std::weak_ptr<GameObject>> vec_panels;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(CameraController);
+BUTI_REGIST_GAMECOMPONENT(PanelManager);

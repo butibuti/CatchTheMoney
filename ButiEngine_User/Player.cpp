@@ -3,16 +3,26 @@
 #include"GameSettings.h"
 #include"PauseManager.h"
 #include"MobiusLoop.h"
+#include"PanelManager.h"
 
 void ButiEngine::Player::OnUpdate()
 {
 	Scroll();
 	if (shp_pauseManager->GetPause())
 	{
+		if (!gameObject.lock()->transform->GetBaseTransform())
+		{
+			gameObject.lock()->transform->SetBaseTransform(wkp_closestPanel.lock()->transform);
+		}
 		return;
+	}
+	else
+	{
+		gameObject.lock()->transform->SetBaseTransform(nullptr, true);
 	}
 	Controll();
 	Move();
+	StoreClosestPanel();
 }
 
 void ButiEngine::Player::OnSet()
@@ -22,6 +32,7 @@ void ButiEngine::Player::OnSet()
 void ButiEngine::Player::Start()
 {
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
+	shp_panelManager = GetManager().lock()->GetGameObject("PanelManager").lock()->GetGameComponent<PanelManager>();
 	shp_mobiusLoop = gameObject.lock()->GetGameComponent<MobiusLoop>();
 	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 1.0f), gameObject.lock()->transform);
 	wkp_screenScroll = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
@@ -100,6 +111,12 @@ void ButiEngine::Player::Scroll()
 	float dist = (scroll - wkp_screenScroll.lock()->Get().lightDir.x);
 	wkp_screenScroll.lock()->Get().lightDir.x = scroll;
 	//wkp_screenScroll.lock()->Get().lightDir.x +=abs( dist) * dist;
+}
+
+void ButiEngine::Player::StoreClosestPanel()
+{
+	float x = gameObject.lock()->transform->GetWorldPosition().x;
+	wkp_closestPanel = shp_panelManager->GetClosestPanel(x);
 }
 
 void ButiEngine::Player::Move()

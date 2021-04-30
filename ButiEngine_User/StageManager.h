@@ -4,6 +4,7 @@ namespace ButiEngine {
 
 	class Map;
 	class PauseManager;
+	class PanelManager;
 	class CameraController;
 
 	enum GameMode
@@ -33,9 +34,13 @@ namespace ButiEngine {
 		std::shared_ptr<Map> shp_map;
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<CameraController> shp_cameraController;
+		std::shared_ptr<PanelManager> shp_panelManager;
+
+		std::weak_ptr<GameObject> wkp_player;
 
 		GameMode mode;
 
+		void OnGoal();
 		void ModeChange();
 	};
 
