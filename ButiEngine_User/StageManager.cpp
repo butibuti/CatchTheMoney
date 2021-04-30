@@ -2,6 +2,7 @@
 #include "StageManager.h"
 #include"Map.h"
 #include"PauseManager.h"
+#include"CameraController.h"
 
 void ButiEngine::StageManager::OnUpdate()
 {
@@ -27,10 +28,11 @@ void ButiEngine::StageManager::Start()
 {
 	shp_map = GetManager().lock()->GetGameObject("Map").lock()->GetGameComponent<Map>();
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
+	shp_cameraController = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraController>();
 
 	shp_map->PutTile();
 
-	mode = GameMode::Action;
+	mode = GameMode::Normal;
 }
 
 void ButiEngine::StageManager::OnCollision(std::weak_ptr<GameObject> arg_other)
@@ -48,13 +50,15 @@ void ButiEngine::StageManager::ModeChange()
 	{
 		shp_pauseManager->SwitchPause();
 		
-		if (mode = GameMode::Action)
+		if (mode == GameMode::Normal)
 		{
 			mode = GameMode::Edit;
+			shp_cameraController->ZoomOut();
 		}
 		else
 		{
-			mode = GameMode::Action;
+			mode = GameMode::Normal;
+			shp_cameraController->ZoomIn();
 		}
 	}
 }

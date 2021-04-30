@@ -4,10 +4,11 @@ namespace ButiEngine {
 
 	class Map;
 	class PauseManager;
+	class CameraController;
 
 	enum GameMode
 	{
-		Action,
+		Normal,
 		Edit,
 	};
 
@@ -31,6 +32,7 @@ namespace ButiEngine {
 	private:
 		std::shared_ptr<Map> shp_map;
 		std::shared_ptr<PauseManager> shp_pauseManager;
+		std::shared_ptr<CameraController> shp_cameraController;
 
 		GameMode mode;
 
