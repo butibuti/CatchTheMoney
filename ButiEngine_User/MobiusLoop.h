@@ -12,6 +12,7 @@ namespace ButiEngine {
 		void OnSet()override;
 		void Start()override;
 		void OnCollision(std::weak_ptr<GameObject> arg_other)override;
+		void ShowGUI()override;
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)

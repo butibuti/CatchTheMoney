@@ -2,30 +2,35 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class PauseManager :public GameComponent
+	class CameraController :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "PauseManager";
+			return "CameraController";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
 		void OnShowUI()override;
-		void OnCollision(std::weak_ptr<GameObject> arg_other)override;
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
 			archive(isActive);
 		}
-		bool GetPause() { return pause; }
+		bool IsAnimation() { return animation; }
 
-		void SwitchPause() { pause = !pause; }
+		void ZoomIn();
+		void ZoomOut();
 	private:
-		bool pause;
+		float zoomInFrame;
+		float zoomOutFrame;
+		float moveLength;
+		float initCameraZ;
+
+		bool animation;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(PauseManager);
+BUTI_REGIST_GAMECOMPONENT(CameraController);

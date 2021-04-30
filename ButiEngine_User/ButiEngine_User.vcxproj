@@ -157,6 +157,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Block.cpp" />
+    <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="ContorolByStick.cpp" />
     <ClCompile Include="DebugController.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
@@ -166,6 +167,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MobiusLoop.cpp" />
     <ClCompile Include="Panel.cpp" />
+    <ClCompile Include="PanelManager.cpp" />
     <ClCompile Include="ParentPanel.cpp" />
     <ClCompile Include="PauseManager.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -188,6 +190,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="MobiusLoop.h" />
     <ClInclude Include="Panel.h" />
+    <ClInclude Include="PanelManager.h" />
     <ClInclude Include="ParentPanel.h" />
     <ClInclude Include="PauseManager.h" />
     <ClInclude Include="Player.h" />

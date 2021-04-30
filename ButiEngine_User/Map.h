@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class PanelManager;
+
 	class MapData
 	{
 	public:
@@ -37,10 +39,12 @@ namespace ButiEngine {
 		}
 		static unsigned short GetStageNum() { return stageNum; }
 		static void SetStageNum(unsigned short arg_stageNum) { stageNum = arg_stageNum; }
-		void PutBlock();
+		void PutTile();
 		void DestoryBlock();
 	private:
 		static unsigned short stageNum;
+
+		std::shared_ptr<PanelManager> shp_panelManager;
 	};
 
 }

@@ -2,6 +2,7 @@
 #include "Map.h"
 #include"GameSettings.h"
 #include"ParentPanel.h"
+#include"PanelManager.h"
 
 unsigned short ButiEngine::Map::stageNum = 0;
 
@@ -15,6 +16,7 @@ void ButiEngine::Map::OnSet()
 
 void ButiEngine::Map::Start()
 {
+	shp_panelManager = GetManager().lock()->GetGameObject("PanelManager").lock()->GetGameComponent<PanelManager>();
 }
 
 void ButiEngine::Map::OnCollision(std::weak_ptr<GameObject> arg_other)
@@ -26,7 +28,7 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Map::Clone()
 	return ObjectFactory::Create<Map>();
 }
 
-void ButiEngine::Map::PutBlock()
+void ButiEngine::Map::PutTile()
 {
 	DestoryBlock();
 
@@ -59,6 +61,7 @@ void ButiEngine::Map::PutBlock()
 			frontPanel = GetManager().lock()->AddObjectFromCereal("Panel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
 			frontPanel.lock()->SetObjectName("FrontPanel");
 			parentPanel.lock()->GetGameComponent<ParentPanel>()->SetFrontPanel(frontPanel);
+			shp_panelManager->AddPanel(frontPanel);
 
 
 			Vector3 framePos = panelPos;
@@ -75,6 +78,7 @@ void ButiEngine::Map::PutBlock()
 				->AddObjectFromCereal("Panel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
 			backPanel.lock()->SetObjectName("BackPanel");
 			parentPanel.lock()->GetGameComponent<ParentPanel>()->SetBackPanel(backPanel);
+			shp_panelManager->AddPanel(frontPanel);
 
 			framePos.x += GameSettings::windowWidth * 0.5f;
 			tile = GetManager().lock()->AddObjectFromCereal("Floor", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
@@ -101,7 +105,9 @@ void ButiEngine::Map::PutBlock()
 			}
 			else if (mapChipID == GameSettings::player)
 			{
-				tile = GetManager().lock()->AddObjectFromCereal("Player", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
+				Vector3 playerPos = position;
+				playerPos.z = -0.2f;
+				tile = GetManager().lock()->AddObjectFromCereal("Player", ObjectFactory::Create<Transform>(playerPos, Vector3::Zero, scale));
 			}
 			else if (mapChipID == GameSettings::block)
 			{
