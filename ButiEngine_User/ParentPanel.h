@@ -18,20 +18,20 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-		void SetFrontPanel(std::weak_ptr<GameObject> arg_frontPanel)
-		{ 
-			wkp_frontPanel = arg_frontPanel;
-			wkp_frontPanel.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-		}
-		void SetBackPanel(std::weak_ptr<GameObject> arg_backPanel)
-		{ 
-			wkp_backPanel = arg_backPanel;
-			wkp_backPanel.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-		}
+		void SetFrontPanel(std::weak_ptr<GameObject> arg_frontPanel);
+		void SetBackPanel(std::weak_ptr<GameObject> arg_backPanel);
+		void SetPanelNum(int arg_num);
+		int GetPanelNum() { return panelNum; }
 	private:
 		Vector3 scale;
 		std::weak_ptr<GameObject> wkp_frontPanel;
 		std::weak_ptr<GameObject> wkp_backPanel;
+
+		int panelNum;
+
+		void SetChildScale();
+		void SetChildPanelNum();
+		void AddTransformAnimation();
 	};
 
 }

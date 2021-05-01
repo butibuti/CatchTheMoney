@@ -21,8 +21,15 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> GetClosestPanel(float arg_otherX);
 
 		void AddPanel(std::weak_ptr<GameObject> arg_panel);
+		void AddParentPanel(std::weak_ptr<GameObject> arg_panel);
 	private:
 		std::vector<std::weak_ptr<GameObject>> vec_panels;
+		std::vector<std::weak_ptr<GameObject>> vec_parentPanels;
+
+		std::weak_ptr<GameObject> wkp_player;
+
+		void StorePlayer();
+		void SwapPanelNum(int arg_num1, int arg_num2);
 	};
 
 }

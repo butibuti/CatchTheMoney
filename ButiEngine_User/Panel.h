@@ -18,8 +18,12 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+		void SetPanelNum(int arg_num) { panelNum = arg_num; }
+		int GetPanelNum() { return panelNum; }
 	private:
 		std::weak_ptr<GameObject> wkp_drawObject;
+
+		int panelNum;
 	};
 
 }

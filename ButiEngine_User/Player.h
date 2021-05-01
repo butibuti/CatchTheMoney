@@ -18,6 +18,7 @@ namespace ButiEngine {
 		void OnCollisionEnter(std::weak_ptr<GameObject> arg_other)override;
 		void OnCollision(std::weak_ptr<GameObject> arg_other)override;
 		void OnCollisionEnd(std::weak_ptr<GameObject> arg_other)override;
+		void ShowGUI()override;
 		void OnShowUI()override;
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
@@ -25,9 +26,10 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+
+		std::weak_ptr<GameObject> GetClosestPanel() { return wkp_closestPanel; }
 	private:
 		void Controll();
-		void Scroll();
 		void StoreClosestPanel();
 		void Move();
 		void MoveX();

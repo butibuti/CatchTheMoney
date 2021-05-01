@@ -5,13 +5,16 @@
 #include"MobiusLoop.h"
 #include"PanelManager.h"
 
+#include"Panel.h"
+
 void ButiEngine::Player::OnUpdate()
 {
+	GetManager().lock()->GetApplication().lock()->GetGUIController()->SetGUIObject(GetThis<Player>());
 	if (shp_pauseManager->GetPause())
 	{
 		if (!gameObject.lock()->transform->GetBaseTransform())
 		{
-			//�Ȃ񂩔����ɂ����
+			//�Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ����
 			gameObject.lock()->transform->SetBaseTransform(wkp_closestPanel.lock()->transform);
 		}
 		return;
@@ -66,6 +69,13 @@ void ButiEngine::Player::OnCollisionEnd(std::weak_ptr<GameObject> arg_other)
 {
 }
 
+void ButiEngine::Player::ShowGUI()
+{
+	GUI::Begin("panelNum");
+	GUI::Text("%d", wkp_closestPanel.lock()->GetGameComponent<Panel>()->GetPanelNum());
+	GUI::End();
+}
+
 void ButiEngine::Player::OnShowUI()
 {
 	GUI::SliderFloat("gravity", &gravity, -1.0f, 1.0f);
@@ -102,15 +112,6 @@ void ButiEngine::Player::Controll()
 	{
 		velocity.y += gravity;
 	}
-}
-
-void ButiEngine::Player::Scroll()
-{
-	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
-	auto scroll = (position.x / GameSettings::windowWidth);
-	float dist = (scroll - wkp_screenScroll.lock()->Get().lightDir.x);
-	wkp_screenScroll.lock()->Get().lightDir.x = scroll;
-	//wkp_screenScroll.lock()->Get().lightDir.x +=abs( dist) * dist;
 }
 
 void ButiEngine::Player::StoreClosestPanel()
