@@ -81,12 +81,6 @@ void ButiEngine::PanelManager::AddBackPanel(std::weak_ptr<GameObject> arg_panel)
 	}
 }
 
-void ButiEngine::PanelManager::AddParentPanel(std::weak_ptr<GameObject> arg_panel)
-{
-	arg_panel.lock()->GetGameComponent<ParentPanel>()->SetPanelNum(vec_parentPanels.size(), false);
-	vec_parentPanels.push_back(arg_panel);
-}
-
 void ButiEngine::PanelManager::StorePlayer()
 {
 	if (!wkp_player.lock())

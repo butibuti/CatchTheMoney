@@ -22,12 +22,10 @@ namespace ButiEngine {
 
 		void AddFrontPanel(std::weak_ptr<GameObject> arg_panel);
 		void AddBackPanel(std::weak_ptr<GameObject> arg_panel);
-		void AddParentPanel(std::weak_ptr<GameObject> arg_panel);
 	private:
 		std::vector<std::weak_ptr<GameObject>> vec_frontPanels;
 		std::vector<std::weak_ptr<GameObject>> vec_backPanels;
 		std::vector<std::weak_ptr<GameObject>> vec_panels;
-		std::vector<std::weak_ptr<GameObject>> vec_parentPanels;
 
 		std::weak_ptr<GameObject> wkp_player;
 

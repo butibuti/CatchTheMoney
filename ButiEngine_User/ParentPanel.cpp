@@ -41,28 +41,6 @@ void ButiEngine::ParentPanel::SetBackPanel(std::weak_ptr<GameObject> arg_backPan
 	wkp_backPanel.lock()->GetGameComponent<Panel>()->SetParentPanelNum(panelNum);
 }
 
-void ButiEngine::ParentPanel::SetPanelNum(int arg_num, bool arg_addAnimation)
-{
-	return;
-	panelNum = arg_num;
-	SetChildPanelNum();
-	if (!arg_addAnimation) { return; }
-	AddTransformAnimation();
-}
-
-void ButiEngine::ParentPanel::SetChildPanelNum()
-{
-	return;
-	if (wkp_frontPanel.lock())
-	{
-		wkp_frontPanel.lock()->GetGameComponent<Panel>()->SetParentPanelNum(panelNum);
-	}
-	if (wkp_backPanel.lock())
-	{
-		wkp_backPanel.lock()->GetGameComponent<Panel>()->SetParentPanelNum(panelNum);
-	}
-}
-
 void ButiEngine::ParentPanel::SetChildScale()
 {
 	gameObject.lock()->transform->SetLocalScale(1.0f);
@@ -75,17 +53,4 @@ void ButiEngine::ParentPanel::SetChildScale()
 	{
 		wkp_backPanel.lock()->transform->SetLocalScale(scale);
 	}
-}
-
-void ButiEngine::ParentPanel::AddTransformAnimation()
-{
-	return;
-	Vector3 targetPos;
-	targetPos.x = (panelNum - GameSettings::panelCount / 2) * GameSettings::panelWidth + GameSettings::panelWidth * 0.5f;
-
-	auto anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
-	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-	anim->GetTargetTransform()->SetWorldPosition(targetPos);
-	anim->SetSpeed(1.0f / 120.0f);
-	anim->SetEaseType(Easing::EasingType::EaseOutQuart);
 }

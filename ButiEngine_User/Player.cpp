@@ -14,9 +14,9 @@ void ButiEngine::Player::OnUpdate()
 		if (!gameObject.lock()->transform->GetBaseTransform())
 		{
 			StoreClosestPanel();
-			Vector3 panelPos = wkp_closestPanel.lock()->transform->GetWorldPosition();
-			panelPos.z = -5.0f;
-			wkp_closestPanel.lock()->transform->SetWorldPosition(panelPos);
+			//Vector3 panelPos = wkp_closestPanel.lock()->transform->GetWorldPosition();
+			//panelPos.z = -5.0f;
+			//wkp_closestPanel.lock()->transform->SetWorldPosition(panelPos);
 			//�Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ����
 			gameObject.lock()->transform->SetBaseTransform(wkp_closestPanel.lock()->transform);
 		}

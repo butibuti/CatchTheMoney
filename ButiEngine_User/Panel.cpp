@@ -4,11 +4,6 @@
 
 void ButiEngine::Panel::OnUpdate()
 {
-	auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
-	if (!anim)
-	{
-		//panelNum = (gameObject.lock()->transform->GetWorldPosition().x + (GameSettings::windowWidth * 0.5f - GameSettings::panelWidth * 0.5f)) / GameSettings::panelWidth + 0.5f;
-	}
 }
 
 void ButiEngine::Panel::OnSet()
@@ -46,7 +41,7 @@ void ButiEngine::Panel::AddTransformAnimation()
 	auto anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
 	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
 	anim->GetTargetTransform()->SetWorldPosition(targetPos);
-	anim->SetSpeed(1.0f / 300.0f);
+	anim->SetSpeed(1.0f / 120.0f);
 	anim->SetEaseType(Easing::EasingType::EaseOutQuart);
 
 	if (panelNum < 0)
