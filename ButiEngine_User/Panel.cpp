@@ -4,6 +4,11 @@
 
 void ButiEngine::Panel::OnUpdate()
 {
+	auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
+	if (!anim)
+	{
+		//panelNum = (gameObject.lock()->transform->GetWorldPosition().x + (GameSettings::windowWidth * 0.5f - GameSettings::panelWidth * 0.5f)) / GameSettings::panelWidth + 0.5f;
+	}
 }
 
 void ButiEngine::Panel::OnSet()
@@ -23,9 +28,33 @@ void ButiEngine::Panel::Start()
 
 void ButiEngine::Panel::OnShowUI()
 {
+	GUI::Text("x:%f", gameObject.lock()->transform->GetWorldPosition().x);
+	GUI::Text("y:%f", gameObject.lock()->transform->GetWorldPosition().y);
+	GUI::Text("panelNum:%d", panelNum);
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Panel::Clone()
 {
 	return ObjectFactory::Create<Panel>();
+}
+
+void ButiEngine::Panel::AddTransformAnimation()
+{
+	Vector3 targetPos;
+	targetPos.x = (panelNum - GameSettings::panelCount / 2) * GameSettings::panelWidth + GameSettings::panelWidth * 0.5f;
+
+	auto anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+	anim->GetTargetTransform()->SetWorldPosition(targetPos);
+	anim->SetSpeed(1.0f / 300.0f);
+	anim->SetEaseType(Easing::EasingType::EaseOutQuart);
+
+	if (panelNum < 0)
+	{
+		panelNum = GameSettings::panelCount + panelNum;
+	}
+	else if (panelNum >= GameSettings::panelCount)
+	{
+		panelNum -= GameSettings::panelCount;
+	}
 }

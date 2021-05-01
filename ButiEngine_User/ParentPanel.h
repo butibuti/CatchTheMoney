@@ -20,7 +20,7 @@ namespace ButiEngine {
 		}
 		void SetFrontPanel(std::weak_ptr<GameObject> arg_frontPanel);
 		void SetBackPanel(std::weak_ptr<GameObject> arg_backPanel);
-		void SetPanelNum(int arg_num);
+		void SetPanelNum(int arg_num, bool arg_addAnimation);
 		int GetPanelNum() { return panelNum; }
 	private:
 		Vector3 scale;

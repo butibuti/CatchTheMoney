@@ -9,11 +9,14 @@
 
 void ButiEngine::Player::OnUpdate()
 {
-	GetManager().lock()->GetApplication().lock()->GetGUIController()->SetGUIObject(GetThis<Player>());
 	if (shp_pauseManager->GetPause())
 	{
 		if (!gameObject.lock()->transform->GetBaseTransform())
 		{
+			StoreClosestPanel();
+			Vector3 panelPos = wkp_closestPanel.lock()->transform->GetWorldPosition();
+			panelPos.z = -5.0f;
+			wkp_closestPanel.lock()->transform->SetWorldPosition(panelPos);
 			//�Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ����
 			gameObject.lock()->transform->SetBaseTransform(wkp_closestPanel.lock()->transform);
 		}
@@ -25,7 +28,6 @@ void ButiEngine::Player::OnUpdate()
 	}
 	Controll();
 	Move();
-	StoreClosestPanel();
 }
 
 void ButiEngine::Player::OnSet()
@@ -71,9 +73,6 @@ void ButiEngine::Player::OnCollisionEnd(std::weak_ptr<GameObject> arg_other)
 
 void ButiEngine::Player::ShowGUI()
 {
-	GUI::Begin("panelNum");
-	GUI::Text("%d", wkp_closestPanel.lock()->GetGameComponent<Panel>()->GetPanelNum());
-	GUI::End();
 }
 
 void ButiEngine::Player::OnShowUI()
@@ -81,6 +80,12 @@ void ButiEngine::Player::OnShowUI()
 	GUI::SliderFloat("gravity", &gravity, -1.0f, 1.0f);
 	GUI::SliderFloat("jumpForce", &jumpForce, -10.0f, 10.0f);
 	GUI::SliderFloat("speed", &speed, 0.0f, 50.0f);
+	if (wkp_closestPanel.lock())
+	{
+		auto panel = wkp_closestPanel.lock()->GetGameComponent<Panel>();
+		GUI::Text("panelNum: %d", panel->GetPanelNum());
+		GUI::Text("parentPanelNum: %d", panel->GetParentPanelNum());
+	}
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()

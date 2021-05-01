@@ -5,11 +5,6 @@
 
 void ButiEngine::MobiusLoop::OnUpdate()
 {
-	if (shp_pauseManager->GetPause())
-	{
-		return;
-	}
-
 	SwitchPosition();
 
 	//GetManager().lock()->GetApplication().lock()->GetGUIController()->SetGUIObject(GetThis<MobiusLoop>());
