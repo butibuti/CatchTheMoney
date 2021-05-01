@@ -13,6 +13,7 @@ public:
 	static const int air = 0;
 	static const int player = 1;
 	static const int block = 2;
+	static const int goal = 3;
 private:
 	GameSettings();
 };

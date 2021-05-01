@@ -45,6 +45,8 @@ namespace ButiEngine {
 
 		std::weak_ptr<GameObject> wkp_closestPanel;
 
+		std::weak_ptr<GameObject> wkp_predictionLine;
+
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
 
 		Vector3 velocity;

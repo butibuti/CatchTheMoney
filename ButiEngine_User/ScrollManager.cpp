@@ -5,33 +5,30 @@
 
 void ButiEngine::ScrollManager::OnUpdate()
 {
-	if (!weak_player.lock())
+	if (!wkp_player.lock())
 	{
-		weak_player = GetManager().lock()->GetGameObject("Player");
+		wkp_player = GetManager().lock()->GetGameObject("Player");
+		return;
+	}
+
+	if (GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_START))
+	{
+		mode = !mode;
+		scrollPosition = wkp_player.lock()->transform->GetWorldPosition();
+	}
+	if (!mode)
+	{
+		Vector3 position = wkp_player.lock()->transform->GetWorldPosition();
+		auto scroll = (position.x / GameSettings::windowWidth);
+		float dist = (scroll - wkp_screenScroll.lock()->Get().lightDir.x);
+		wkp_screenScroll.lock()->Get().lightDir.x = scroll;
+		//wkp_screenScroll.lock()->Get().lightDir.x +=abs( dist) * dist;
 	}
 	else
 	{
-		if (GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_START))
-		{
-			mode = !mode;
-			scrollPosition = weak_player.lock()->transform->GetWorldPosition();
-		}
-		if (!mode)
-		{
-			Vector3 position = weak_player.lock()->transform->GetWorldPosition();
-			auto scroll = (position.x / GameSettings::windowWidth);
-			float dist = (scroll - wkp_screenScroll.lock()->Get().lightDir.x);
-			wkp_screenScroll.lock()->Get().lightDir.x = scroll;
-			//wkp_screenScroll.lock()->Get().lightDir.x +=abs( dist) * dist;
-		}
-		else
-		{
-			MoveScroll();
-			auto scroll = (scrollPosition.x / GameSettings::windowWidth);
-			float dist = (scroll - wkp_screenScroll.lock()->Get().lightDir.x);
-			wkp_screenScroll.lock()->Get().lightDir.x = scroll;
-			//wkp_screenScroll.lock()->Get().lightDir.x +=abs( dist) * dist;
-		}
+		MoveScroll();
+		auto scroll = (scrollPosition.x / GameSettings::windowWidth);
+		wkp_screenScroll.lock()->Get().lightDir.x = scroll;
 	}
 }
 

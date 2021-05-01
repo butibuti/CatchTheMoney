@@ -1,6 +1,7 @@
 #include "stdafx_u.h"
 #include "MobiusLoop.h"
 #include"GameSettings.h"
+#include "PredictionLine.h"
 
 void ButiEngine::MobiusLoop::OnUpdate()
 {
@@ -15,7 +16,7 @@ void ButiEngine::MobiusLoop::OnUpdate()
 		gameObject.lock()->transform->SetWorldPosition(wkp_left.lock()->transform->GetWorldPosition());
 	}
 
-	//GetManager().lock()->GetApplication().lock()->GetGUIController()->SetGUIObject(GetThis<MobiusLoop>());
+	GetManager().lock()->GetApplication().lock()->GetGUIController()->SetGUIObject(GetThis<MobiusLoop>());
 }
 
 void ButiEngine::MobiusLoop::OnSet()
@@ -29,9 +30,10 @@ void ButiEngine::MobiusLoop::Start()
 	auto tag = GetTagManager()->GetObjectTag("MapChip");
 	auto meshDraw = gameObject.lock()->GetGameComponent<MeshDrawComponent>();
 
+	auto scaleX = gameObject.lock()->transform->GetWorldScale().x;
 	wkp_right = GetManager().lock()->AddObject(std::make_shared<Transform>(), name + "_Right");
 	wkp_right.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-	localPosition.x = GameSettings::windowWidth / GameSettings::blockSize;
+	localPosition.x = GameSettings::windowWidth / scaleX;
 	wkp_right.lock()->transform->SetLocalPosition(localPosition);
 	wkp_right.lock()->SetGameObjectTag(tag);
 	wkp_right.lock()->AddGameComponent(meshDraw->Clone());
@@ -39,7 +41,7 @@ void ButiEngine::MobiusLoop::Start()
 
 	wkp_left = GetManager().lock()->AddObject(std::make_shared<Transform>(), name + "_Left");
 	wkp_left.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-	localPosition.x = -GameSettings::windowWidth / GameSettings::blockSize;
+	localPosition.x = -GameSettings::windowWidth / scaleX;
 	wkp_left.lock()->transform->SetLocalPosition(localPosition);
 	wkp_left.lock()->SetGameObjectTag(tag);
 	wkp_left.lock()->AddGameComponent(meshDraw->Clone());
@@ -52,10 +54,10 @@ void ButiEngine::MobiusLoop::OnCollision(std::weak_ptr<GameObject> arg_other)
 
 void ButiEngine::MobiusLoop::ShowGUI()
 {
-	//GUI::Begin("MobiusLoop");
-	//GUI::Text("Right:%f", wkp_right.lock()->transform->GetWorldPosition().x);
-	//GUI::Text("Left:%f", wkp_left.lock()->transform->GetWorldPosition().x);
-	//GUI::End();
+	GUI::Begin("MobiusLoop");
+	GUI::Text("Right:%f", wkp_right.lock()->transform->GetWorldPosition().x);
+	GUI::Text("Left:%f", wkp_left.lock()->transform->GetWorldPosition().x);
+	GUI::End();
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::MobiusLoop::Clone()

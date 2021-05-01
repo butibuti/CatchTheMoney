@@ -2,11 +2,11 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class ScrollManager :public GameComponent
+	class Goal :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "ScrollManager";
+			return "Goal";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -19,15 +19,9 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
-		void MoveScroll();
 
-		std::weak_ptr<GameObject> wkp_player;
-		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
-		bool mode;
-		float scrollSpeed;
-		Vector3 scrollPosition;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(ScrollManager);
+BUTI_REGIST_GAMECOMPONENT(Goal);

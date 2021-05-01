@@ -28,6 +28,8 @@ namespace ButiEngine {
 	private:
 		std::weak_ptr<GameObject> wkp_right;
 		std::weak_ptr<GameObject> wkp_left;
+		std::weak_ptr<GameObject> wkp_rightPredictionLine;
+		std::weak_ptr<GameObject> wkp_leftPredictionLine;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB_right;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB_left;
 	};

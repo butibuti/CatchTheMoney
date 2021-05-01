@@ -43,6 +43,9 @@ void ButiEngine::Player::Start()
 	gravity = -0.2f;
 	jumpForce = 2.5f;
 
+	wkp_predictionLine = GetManager().lock()->GetGameObject("PredictionLine");
+	wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+
 	wkp_bottom = GetManager().lock()->AddObject(ObjectFactory::Create<Transform>(), "Player_Bottom");
 	wkp_bottom.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
 	wkp_bottom.lock()->transform->SetLocalPosition(Vector3(0.0f, -0.75f, 0.0f));
@@ -56,6 +59,10 @@ void ButiEngine::Player::Start()
 
 void ButiEngine::Player::OnCollisionEnter(std::weak_ptr<GameObject> arg_other)
 {
+	if (arg_other.lock()->GetGameObjectName() == "Goal")
+	{
+
+	}
 }
 
 void ButiEngine::Player::OnCollision(std::weak_ptr<GameObject> arg_other)

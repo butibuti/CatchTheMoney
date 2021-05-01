@@ -119,6 +119,16 @@ void ButiEngine::Map::PutTile()
 				tile = GetManager().lock()->AddObjectFromCereal("Block", ObjectFactory::Create<Transform>(tmpPos, Vector3::Zero, scale));
 				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
 			}
+			else if (mapChipID == GameSettings::goal)
+			{
+				tile = GetManager().lock()->AddObjectFromCereal("Goal", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
+				tile.lock()->transform->SetBaseTransform(frontPanel.lock()->transform);
+				Vector3 tmpPos = position;
+				tmpPos.x += GameSettings::windowWidth * 0.5f;
+				tmpPos.y *= -1.0f;
+				tile = GetManager().lock()->AddObjectFromCereal("Goal", ObjectFactory::Create<Transform>(tmpPos, Vector3::Zero, scale));
+				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
+			}
 		}
 	}
 }
@@ -146,7 +156,7 @@ ButiEngine::MapData::MapData(unsigned short arg_stageNum)
 			{2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,},
 			{2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,},
 			{2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,},
-			{0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,},
+			{0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,},
 		};
 	}
 }
