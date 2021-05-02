@@ -3,7 +3,6 @@
 #include"Map.h"
 #include"PauseManager.h"
 #include"CameraController.h"
-#include"PanelManager.h"
 
 void ButiEngine::StageManager::OnUpdate()
 {

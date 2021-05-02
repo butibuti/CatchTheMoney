@@ -57,11 +57,12 @@ void ButiEngine::Map::PutTile()
 			Vector3 panelPos;
 			panelPos.x = -GameSettings::windowWidth * 0.5f + (x + panelWidthBlock * 0.5f) * GameSettings::blockSize;
 			parentPanel = GetManager().lock()->AddObjectFromCereal("ParentPanel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
+			auto parentPanelComponent = parentPanel.lock()->GetGameComponent<ParentPanel>();
 
 			frontPanel = GetManager().lock()->AddObjectFromCereal("Panel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
 			frontPanel.lock()->SetObjectName("FrontPanel");
-			parentPanel.lock()->GetGameComponent<ParentPanel>()->SetFrontPanel(frontPanel);
-			shp_panelManager->AddPanel(frontPanel);
+			parentPanelComponent->SetFrontPanel(frontPanel);
+			shp_panelManager->AddFrontPanel(frontPanel);
 
 
 			Vector3 framePos = panelPos;
@@ -77,8 +78,8 @@ void ButiEngine::Map::PutTile()
 			backPanel = GetManager().lock()
 				->AddObjectFromCereal("Panel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
 			backPanel.lock()->SetObjectName("BackPanel");
-			parentPanel.lock()->GetGameComponent<ParentPanel>()->SetBackPanel(backPanel);
-			shp_panelManager->AddPanel(frontPanel);
+			parentPanelComponent->SetBackPanel(backPanel);
+			shp_panelManager->AddBackPanel(backPanel);
 
 			framePos.x += GameSettings::windowWidth * 0.5f;
 			tile = GetManager().lock()->AddObjectFromCereal("Floor", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
@@ -106,7 +107,6 @@ void ButiEngine::Map::PutTile()
 			else if (mapChipID == GameSettings::player)
 			{
 				Vector3 playerPos = position;
-				playerPos.z = -0.2f;
 				tile = GetManager().lock()->AddObjectFromCereal("Player", ObjectFactory::Create<Transform>(playerPos, Vector3::Zero, scale));
 			}
 			else if (mapChipID == GameSettings::block)
@@ -151,12 +151,26 @@ ButiEngine::MapData::MapData(unsigned short arg_stageNum)
 	{
 		data =
 		{
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,},
-			{2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,},
-			{2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,},
-			{2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,},
-			{2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,2,},
-			{0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,},
+			{0,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,2, 2,2,2,0,0,0,0,0,0,0, 2,0,0,0,0,0,0,0,0,0,},
+			{0,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,2, 2,2,0,0,0,0,0,0,0,0, 2,0,0,0,0,0,0,0,0,0,},
+			{0,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,2, 2,0,0,0,0,0,0,0,0,0, 2,0,0,0,0,0,0,0,0,0,},
+			{2,0,0,0,0,0,0,0,0,0, 2,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,0,},
+			{2,0,0,0,0,0,0,0,0,0, 2,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,0,},
+			{2,1,0,0,0,0,0,0,0,0, 2,0,0,0,0,0,0,2,0,2, 0,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,0,},
+
+			//{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
+			//{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
+			//{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
+			//{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
+			//{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
+			//{0,1,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
+
+			//{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
+			//{0,0,0,0,2,0,0,0,0,0, 0,0,0,2,2,2,0,0,0,0, 0,0,0,2,2,2,0,0,0,0, 0,0,0,2,0,2,0,0,0,0,},
+			//{0,0,0,0,2,0,0,0,0,0, 0,0,0,0,0,2,0,0,0,0, 0,0,0,0,0,2,0,0,0,0, 0,0,0,2,0,2,0,0,0,0,},
+			//{0,0,0,0,2,0,0,0,0,0, 0,0,0,2,2,2,0,0,0,0, 0,0,0,2,2,2,0,0,0,0, 0,0,0,2,2,2,0,0,0,0,},
+			//{0,0,0,0,2,0,0,0,0,0, 0,0,0,2,0,0,0,0,0,0, 0,0,0,0,0,2,0,0,0,0, 0,0,0,0,0,2,0,0,0,0,},
+			//{0,1,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
 		};
 	}
 }

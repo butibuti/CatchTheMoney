@@ -156,7 +156,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Block.cpp" />
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="ContorolByStick.cpp" />
     <ClCompile Include="DebugController.cpp" />
@@ -186,7 +185,6 @@
     <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Block.h" />
     <ClInclude Include="ContorolByStick.h" />
     <ClInclude Include="DebugController.h" />
     <ClInclude Include="GameSettings.h" />

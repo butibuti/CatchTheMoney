@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class PauseManager;
+
 	class MobiusLoop :public GameComponent
 	{
 	public:
@@ -20,12 +22,18 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		std::weak_ptr<GameObject> GetRight() { return wkp_right; }
+		std::weak_ptr<GameObject> GetLeft() { return wkp_left; }
+
+		void SwitchPosition();
 		void UpdateAABB();
 		void BackXRight(Vector3& arg_velocity);
 		void BackYRight(Vector3& arg_velocity);
 		void BackXLeft(Vector3& arg_velocity);
 		void BackYLeft(Vector3& arg_velocity);
 	private:
+		std::shared_ptr<PauseManager> shp_pauseManager;
+
 		std::weak_ptr<GameObject> wkp_right;
 		std::weak_ptr<GameObject> wkp_left;
 		std::weak_ptr<GameObject> wkp_rightPredictionLine;
