@@ -22,6 +22,7 @@ namespace ButiEngine {
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
+		void ShowGUI() override;
 		void OnCollision(std::weak_ptr<GameObject> arg_other)override;
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
@@ -39,6 +40,8 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_player;
 
 		GameMode mode;
+
+		int clearAnimationFrame;
 
 		void OnGoal();
 		void ModeChange();

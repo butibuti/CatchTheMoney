@@ -94,3 +94,15 @@ bool ButiEngine::InputManager::OnPushLeftScrollKey()
 {
 	return (GameDevice::GetInput()->GetPadButton(PadButtons::XBOX_BUTTON_LEFT));
 }
+
+bool ButiEngine::InputManager::OnTriggerDecisionKey()
+{
+	return (GameDevice::GetInput()->TriggerKey(Keys::Z) ||
+		GameDevice::GetInput()->TriggerKey(Keys::Enter) ||
+		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_A));
+}
+
+bool ButiEngine::InputManager::OnGameStartKey()
+{
+	return GameDevice::GetInput()->GetAnyButtonTrigger();
+}

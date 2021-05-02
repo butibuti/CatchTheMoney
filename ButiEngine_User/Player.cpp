@@ -25,6 +25,7 @@ void ButiEngine::Player::OnUpdate()
 	{
 		gameObject.lock()->transform->SetBaseTransform(nullptr);
 	}
+
 	Controll();
 	Move();
 }
@@ -93,6 +94,9 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 void ButiEngine::Player::Controll()
 {
 	velocity.x = 0.0f;
+
+	if (isClear) return;
+
 	if (InputManager::OnPushRightKey())
 	{
 		velocity.x = 1.0f;

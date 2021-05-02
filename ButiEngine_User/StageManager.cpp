@@ -14,8 +14,16 @@ void ButiEngine::StageManager::OnUpdate()
 		wkp_player = GetManager().lock()->GetGameObject("Player");
 		return;
 	}
+
+	if (wkp_player.lock()->GetGameComponent<Player>()->IsClear())
+	{
+		clearAnimationFrame--;
+	}
+
 	OnGoal();
 	ModeChange();
+
+	GetManager().lock()->GetApplication().lock()->GetGUIController()->SetGUIObject(GetThis<StageManager>());
 }
 
 void ButiEngine::StageManager::OnSet()
@@ -31,7 +39,16 @@ void ButiEngine::StageManager::Start()
 
 	shp_map->PutTile();
 
+	clearAnimationFrame = 180;
+
 	mode = GameMode::Normal;
+}
+
+void ButiEngine::StageManager::ShowGUI()
+{
+	GUI::Begin("ClearAnimationTime");
+	GUI::Text(clearAnimationFrame);
+	GUI::End();
 }
 
 void ButiEngine::StageManager::OnCollision(std::weak_ptr<GameObject> arg_other)
@@ -46,7 +63,7 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::StageManager::Clone()
 void ButiEngine::StageManager::OnGoal()
 {
 	//ƒNƒŠƒA‚µ‚½‚ç
-	if (wkp_player.lock()->GetGameComponent<Player>()->IsClear())
+	if (clearAnimationFrame < 0)
 	{
 		shp_map->DestoryBlock();
 		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();

@@ -42,7 +42,7 @@ void ButiEngine::StageSelect::OnUpdate()
 		intervalFrame++;
 	}
 
-	if (GameDevice::GetInput()->TriggerKey(Keys::Enter))
+	if (InputManager::OnTriggerDecisionKey())
 	{
 		OnDecision();
 	}
@@ -151,6 +151,6 @@ void ButiEngine::StageSelect::SelectRotation()
 		anim->SetTargetTransform(wkp_parentSelectPanel.lock()->transform->Clone());
 		anim->GetTargetTransform()->SetLocalRotation(preParentRotation);
 		anim->SetSpeed(0.1f);
-		anim->SetEaseType(Easing::EasingType::EaseIn);
+		anim->SetEaseType(Easing::EasingType::EaseOut);
 	}
 }

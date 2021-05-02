@@ -57,7 +57,7 @@ void ButiEngine::ParentSelectPanel::ChildRotation(float arg_rotateX)
 			anim->SetTargetTransform((*itr)->transform->Clone());
 			anim->GetTargetTransform()->RollLocalRotationX_Degrees(arg_rotateX);
 			anim->SetSpeed(0.1f);
-			anim->SetEaseType(Easing::EasingType::EaseOut);
+			anim->SetEaseType(Easing::EasingType::EaseIn);
 		}
 	}
 }

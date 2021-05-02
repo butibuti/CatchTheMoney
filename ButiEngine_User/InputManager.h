@@ -35,6 +35,11 @@ namespace ButiEngine {
 		//EditMode
 		static bool OnPushRightScrollKey();
 		static bool OnPushLeftScrollKey();
+
+		//anotherScene
+		static bool OnTriggerDecisionKey();
+		static bool OnGameStartKey();
+
 	private:
 		static const float DEADZONE;
 		static Vector2 previousLeftStick;
