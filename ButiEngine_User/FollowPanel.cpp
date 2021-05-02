@@ -5,7 +5,6 @@
 
 void ButiEngine::FollowPanel::OnUpdate()
 {
-	StoreClosestPanel();
 	if (shp_pauseManager->GetPause())
 	{
 		if (!gameObject.lock()->transform->GetBaseTransform())
@@ -17,10 +16,9 @@ void ButiEngine::FollowPanel::OnUpdate()
 		}
 		return;
 	}
-	else
-	{
-		gameObject.lock()->transform->SetBaseTransform(nullptr);
-	}
+
+	gameObject.lock()->transform->SetBaseTransform(nullptr);
+	StoreClosestPanel();
 }
 
 void ButiEngine::FollowPanel::OnSet()

@@ -106,6 +106,7 @@ void ButiEngine::PanelManager::SwapPanelNum(int arg_num1, int arg_num2)
 	{
 		(*itr).lock()->GetGameComponent<MobiusLoop>()->SwitchPosition();
 	}
+	wkp_player.lock()->GetGameComponent<MobiusLoop>()->SwitchPosition();
 
 
 	int index1 = arg_num1;
