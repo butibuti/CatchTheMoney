@@ -20,7 +20,7 @@ void ButiEngine::Panel::Start()
 	wkp_drawObject = GetManager().lock()->AddObjectFromCereal("PanelForDraw", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
 	wkp_drawObject.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 
-	gravity = -0.2f;
+	gravity = 0.0f;
 }
 
 void ButiEngine::Panel::OnShowUI()
@@ -36,6 +36,38 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Panel::Clone()
 	return ObjectFactory::Create<Panel>();
 }
 
+void ButiEngine::Panel::AddGravityCore(int arg_num, float arg_gravity)
+{
+	if (ContainsGravityCore(arg_num))
+	{
+		return;
+	}
+	vec_gravityCoreNums.push_back(arg_num);
+	AddGravity(arg_gravity);
+}
+
+void ButiEngine::Panel::RemoveGravityCore(int arg_num, float arg_gravity)
+{
+	auto find = std::find(vec_gravityCoreNums.begin(), vec_gravityCoreNums.end(), arg_num);
+	if (find == vec_gravityCoreNums.end())
+	{
+		return;
+	}
+	vec_gravityCoreNums.erase(find);
+	AddGravity(-arg_gravity);
+}
+
+bool ButiEngine::Panel::ContainsGravityCore(int arg_num)
+{
+	auto find = std::find(vec_gravityCoreNums.begin(), vec_gravityCoreNums.end(), arg_num);
+	return find != vec_gravityCoreNums.end();
+}
+
+void ButiEngine::Panel::ResetGravityCores()
+{
+	vec_gravityCoreNums.clear();
+}
+
 void ButiEngine::Panel::AddTransformAnimation()
 {
 	Vector3 targetPos;
@@ -44,7 +76,7 @@ void ButiEngine::Panel::AddTransformAnimation()
 	auto anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
 	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
 	anim->GetTargetTransform()->SetWorldPosition(targetPos);
-	anim->SetSpeed(1.0f / 120.0f);
+	anim->SetSpeed(1.0f / 30.0f);
 	anim->SetEaseType(Easing::EasingType::EaseOutQuart);
 
 	if (panelNum < 0)

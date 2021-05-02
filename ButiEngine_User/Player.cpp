@@ -34,6 +34,7 @@ void ButiEngine::Player::Start()
 	velocity = Vector3::Zero;
 	speed = 3.0f;
 	grounded = false;
+	gravity = -0.2f;
 
 	wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 	wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
@@ -111,7 +112,11 @@ void ButiEngine::Player::CheckGravity()
 	float previousGravity = gravity;
 	if (closestPanel.lock())
 	{
-		gravity = closestPanel.lock()->GetGameComponent<Panel>()->GetGravity();
+		auto panelComponent = closestPanel.lock()->GetGameComponent<Panel>();
+		if (panelComponent->GetGravityCoreCount() > 0)
+		{
+			gravity = panelComponent->GetGravity();
+		}
 	}
 
 	if ((gravity > 0) != (previousGravity > 0))
@@ -184,7 +189,7 @@ void ButiEngine::Player::BackX()
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == gameObject.lock()) { continue; }
-			if ((*itr)->GetGameObjectName() == "Goal") 
+			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos)
 			{
 				//ゴール時処理
 				continue; 
@@ -220,7 +225,7 @@ void ButiEngine::Player::BackY()
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == gameObject.lock()) { continue; }
-			if ((*itr)->GetGameObjectName() == "Goal") 
+			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos)
 			{
 				//ゴール時処理
 				continue; 

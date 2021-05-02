@@ -15,6 +15,8 @@ public:
 	static const int player = 1;
 	static const int block = 2;
 	static const int goal = 3;
+	static const int coreUp = 4;
+	static const int coreDown = 5;
 
 private:
 	GameSettings();

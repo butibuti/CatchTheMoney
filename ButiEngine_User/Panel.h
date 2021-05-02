@@ -29,6 +29,12 @@ namespace ButiEngine {
 		int GetParentPanelNum() { return parentPanelNum; }
 
 		float GetGravity() { return gravity; }
+
+		void AddGravityCore(int arg_num, float arg_gravity);
+		void RemoveGravityCore(int arg_num, float arg_gravity);
+		bool ContainsGravityCore(int arg_num);
+		void ResetGravityCores();
+		int GetGravityCoreCount() { return vec_gravityCoreNums.size(); }
 	private:
 		std::weak_ptr<GameObject> wkp_drawObject;
 
@@ -36,6 +42,9 @@ namespace ButiEngine {
 		int parentPanelNum;
 		float gravity;
 
+		std::vector<int> vec_gravityCoreNums;
+
+		void AddGravity(float arg_gravity) { gravity += arg_gravity; }
 		void AddTransformAnimation();
 	};
 

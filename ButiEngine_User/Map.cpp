@@ -3,6 +3,7 @@
 #include"GameSettings.h"
 #include"ParentPanel.h"
 #include"PanelManager.h"
+#include"GravityCore.h"
 
 unsigned short ButiEngine::Map::stageNum = 0;
 
@@ -49,6 +50,8 @@ void ButiEngine::Map::PutTile()
 	Vector3 frameScale = Vector3(GameSettings::panelWidth, GameSettings::blockSize, 1.0f);
 
 	const int panelWidthBlock = GameSettings::panelWidth / GameSettings::blockSize;
+
+	int coreCount = 0;
 
 	for (unsigned int x = 0; x < mapSize.x; x++)
 	{
@@ -131,6 +134,22 @@ void ButiEngine::Map::PutTile()
 				tile = GetManager().lock()->AddObjectFromCereal("Goal", ObjectFactory::Create<Transform>(tmpPos, Vector3::Zero, scale));
 				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
 			}
+			else if (mapChipID == GameSettings::coreUp)
+			{
+				tile = GetManager().lock()->AddObjectFromCereal("GravityCore", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
+				auto core = tile.lock()->GetGameComponent<GravityCore>();
+				core->SetGravity(0.2f);
+				core->SetCoreNum(coreCount);
+				coreCount++;
+			}
+			else if (mapChipID == GameSettings::coreDown)
+			{
+				tile = GetManager().lock()->AddObjectFromCereal("GravityCore", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
+				auto core = tile.lock()->GetGameComponent<GravityCore>();
+				core->SetGravity(-0.2f);
+				core->SetCoreNum(coreCount);
+				coreCount++;
+			}
 		}
 	}
 }
@@ -160,11 +179,11 @@ ButiEngine::MapData::MapData(unsigned short arg_stageNum)
 			//{2,0,0,0,0,0,0,0,0,0, 2,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,0,},
 			//{2,1,0,0,0,0,0,0,0,0, 2,0,0,0,0,0,0,2,0,2, 0,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,0,},
 
+			{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,5,0,0,0,0,0,0,},
 			{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
 			{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
 			{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
-			{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
-			{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
+			{0,0,0,0,0,0,0,0,0,0, 0,0,0,4,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
 			{0,1,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,3,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
 
 			//{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},

@@ -82,6 +82,15 @@ void ButiEngine::PanelManager::AddBackPanel(std::weak_ptr<GameObject> arg_panel)
 	}
 }
 
+void ButiEngine::PanelManager::RemoveGravityCores(int arg_num, float arg_gravity)
+{
+	auto end = vec_panels.end();
+	for (auto itr = vec_panels.begin(); itr != end; ++itr)
+	{
+		(*itr).lock()->GetGameComponent<Panel>()->RemoveGravityCore(arg_num, arg_gravity);
+	}
+}
+
 void ButiEngine::PanelManager::StorePlayer()
 {
 	if (!wkp_player.lock())

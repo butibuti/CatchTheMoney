@@ -22,6 +22,7 @@ namespace ButiEngine {
 
 		void AddFrontPanel(std::weak_ptr<GameObject> arg_panel);
 		void AddBackPanel(std::weak_ptr<GameObject> arg_panel);
+		void RemoveGravityCores(int arg_num, float arg_gravity);
 	private:
 		std::vector<std::weak_ptr<GameObject>> vec_frontPanels;
 		std::vector<std::weak_ptr<GameObject>> vec_backPanels;
