@@ -24,17 +24,11 @@ void ButiEngine::StageSelect::OnUpdate()
 			OnPushLeft();
 			parentSelectPanel->ChildRotation(childAngle);
 		}
-		if (GameDevice::GetInput()->TriggerKey(Keys::E))
+		if (InputManager::OnSkipKey())
 		{
 			intervalFrame = 0;
-			OnPushSkipRight();
+			OnPushSkip();
 			parentSelectPanel->ChildRotation(-childAngle * ((maxStageNum + 1) / 2));
-		}
-		else if (GameDevice::GetInput()->TriggerKey(Keys::Q))
-		{
-			intervalFrame = 0;
-			OnPushSkipLeft();
-			parentSelectPanel->ChildRotation(childAngle * ((maxStageNum + 1) / 2));
 		}
 	}
 	else
@@ -109,7 +103,7 @@ void ButiEngine::StageSelect::OnPushLeft()
 	}
 }
 
-void ButiEngine::StageSelect::OnPushSkipRight()
+void ButiEngine::StageSelect::OnPushSkip()
 {
 	float angle = 360.0f / (float)(maxStageNum + 1) * 2.0f;
 	preParentRotation.y += angle * ((maxStageNum + 1) / 2);
@@ -118,18 +112,6 @@ void ButiEngine::StageSelect::OnPushSkipRight()
 	if (stageNum > maxStageNum)
 	{
 		stageNum = stageNum - maxStageNum - 1;
-	}
-}
-
-void ButiEngine::StageSelect::OnPushSkipLeft()
-{
-	float angle = 360.0f / (float)(maxStageNum + 1) * 2.0f;
-	preParentRotation.y -= angle * ((maxStageNum + 1) / 2);
-
-	stageNum -= (maxStageNum + 1) / 2;
-	if (stageNum < 0)
-	{
-		stageNum = maxStageNum + 1 + stageNum;
 	}
 }
 

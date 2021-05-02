@@ -39,11 +39,12 @@ namespace ButiEngine {
 		//anotherScene
 		static bool OnTriggerDecisionKey();
 		static bool OnGameStartKey();
+		static bool OnSkipKey();
 
 	private:
 		static const float DEADZONE;
 		static Vector2 previousLeftStick;
-		static Vector2 currentLeftSrick;
+		static Vector2 currentLeftStick;
 		static Vector2 previousRightStick;
 		static Vector2 currentRightSrick;
 	};

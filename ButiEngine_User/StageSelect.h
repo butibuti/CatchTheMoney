@@ -26,8 +26,7 @@ namespace ButiEngine {
 
 		void OnPushRight();
 		void OnPushLeft();
-		void OnPushSkipRight();
-		void OnPushSkipLeft();
+		void OnPushSkip();
 		void OnDecision();
 		void SelectRotation();
 

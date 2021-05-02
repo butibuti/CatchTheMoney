@@ -2,16 +2,16 @@
 #include "InputManager.h"
 
 ButiEngine::Vector2 ButiEngine::InputManager::previousLeftStick;
-ButiEngine::Vector2 ButiEngine::InputManager::currentLeftSrick;
+ButiEngine::Vector2 ButiEngine::InputManager::currentLeftStick;
 ButiEngine::Vector2 ButiEngine::InputManager::previousRightStick;
 ButiEngine::Vector2 ButiEngine::InputManager::currentRightSrick;
 const float ButiEngine::InputManager::DEADZONE = 0.5f;
 
 void ButiEngine::InputManager::OnUpdate()
 {
-	previousLeftStick = currentLeftSrick;
+	previousLeftStick = currentLeftStick;
 	previousRightStick = currentRightSrick;
-	currentLeftSrick = GameDevice::GetInput()->GetLeftStick();
+	currentLeftStick = GameDevice::GetInput()->GetLeftStick();
 	currentRightSrick = GameDevice::GetInput()->GetRightStick();
 }
 
@@ -22,7 +22,7 @@ void ButiEngine::InputManager::OnSet()
 void ButiEngine::InputManager::Start()
 {
 	previousLeftStick = Vector2();
-	currentLeftSrick = Vector2();
+	currentLeftStick = Vector2();
 	previousRightStick = Vector2();
 	currentRightSrick = Vector2();
 }
@@ -36,34 +36,35 @@ bool ButiEngine::InputManager::OnPushRightKey()
 {
 	return (GameDevice::GetInput()->CheckKey(Keys::D) ||
 		GameDevice::GetInput()->GetPadButton(PadButtons::XBOX_RIGHT) ||
-		currentLeftSrick.x >= DEADZONE);
+		currentLeftStick.x >= DEADZONE);
 }
 
 bool ButiEngine::InputManager::OnPushLeftKey()
 {
 	return (GameDevice::GetInput()->CheckKey(Keys::A) ||
 		GameDevice::GetInput()->GetPadButton(PadButtons::XBOX_LEFT) ||
-		currentLeftSrick.x <= -DEADZONE);
+		currentLeftStick.x <= -DEADZONE);
 }
 
 bool ButiEngine::InputManager::OnTriggerRightKey()
 {
 	return (GameDevice::GetInput()->TriggerKey(Keys::D) ||
 		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_RIGHT) ||
-		(currentLeftSrick.x >= DEADZONE && previousLeftStick.x < DEADZONE));
+		(currentLeftStick.x >= DEADZONE && previousLeftStick.x < DEADZONE));
 }
 
 bool ButiEngine::InputManager::OnTriggerLeftKey()
 {
 	return (GameDevice::GetInput()->TriggerKey(Keys::A) ||
 		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_LEFT) ||
-		(currentLeftSrick.x <= -DEADZONE && previousLeftStick.x > -DEADZONE));
+		(currentLeftStick.x <= -DEADZONE && previousLeftStick.x > -DEADZONE));
 }
 
 bool ButiEngine::InputManager::OnTriggerMobiusRotateResetKey()
 {
 	return (GameDevice::GetInput()->TriggerKey(Keys::R) ||
-		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_STICK_RIGHT));
+		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_STICK_RIGHT) ||
+		GameDevice::GetInput()->GetMouseTrigger(MouseButtons::RightClick));
 }
 
 bool ButiEngine::InputManager::OnTriggerModeChangeKey()
@@ -105,4 +106,14 @@ bool ButiEngine::InputManager::OnTriggerDecisionKey()
 bool ButiEngine::InputManager::OnGameStartKey()
 {
 	return GameDevice::GetInput()->GetAnyButtonTrigger();
+}
+
+bool ButiEngine::InputManager::OnSkipKey()
+{
+	return (GameDevice::GetInput()->TriggerKey(Keys::W) ||
+		GameDevice::GetInput()->TriggerKey(Keys::S) ||
+		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_UP) ||
+		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_DOWN) ||
+		(currentLeftStick.y >= DEADZONE && previousLeftStick.y < DEADZONE) ||
+		(currentLeftStick.y <= -DEADZONE && previousLeftStick.y > -DEADZONE));
 }

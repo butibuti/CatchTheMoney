@@ -24,10 +24,14 @@ namespace ButiEngine {
 	private:
 		Vector3 initAxis;
 		Vector3 rotation;
+		Vector2 preMousePos;
+		Vector2 currMousePos;
 		float rotationLimit;
 		float rotationSpeed;
 		float returnSpeed;
 		int cameraResetFrame;
+
+		void Control();
 	};
 
 }
