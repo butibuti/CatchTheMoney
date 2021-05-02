@@ -175,6 +175,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ScrollManager.cpp" />
     <ClCompile Include="SelectPanel.cpp" />
+    <ClCompile Include="ShakeComponent.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -202,6 +203,7 @@
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="ScrollManager.h" />
     <ClInclude Include="SelectPanel.h" />
+    <ClInclude Include="ShakeComponent.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="StageSelect.h" />
     <ClInclude Include="stdafx_u.h" />

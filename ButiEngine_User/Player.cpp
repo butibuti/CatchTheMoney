@@ -95,20 +95,21 @@ void ButiEngine::Player::Controll()
 {
 	velocity.x = 0.0f;
 
-	if (isClear) return;
-
-	if (InputManager::OnPushRightKey())
+	if (!isClear)
 	{
-		velocity.x = 1.0f;
-	}
-	else if (InputManager::OnPushLeftKey())
-	{
-		velocity.x = -1.0f;
+		if (InputManager::OnPushRightKey())
+		{
+			velocity.x = 1.0f;
+		}
+		else if (InputManager::OnPushLeftKey())
+		{
+			velocity.x = -1.0f;
+		}
 	}
 
 	if (grounded)
 	{
-		if (InputManager::OnTriggerJumpKey())
+		if (InputManager::OnTriggerJumpKey() && !isClear)
 		{
 			velocity.y = jumpForce;
 			grounded = false;

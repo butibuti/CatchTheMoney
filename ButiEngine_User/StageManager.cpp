@@ -6,6 +6,7 @@
 #include"ScrollManager.h"
 #include"InputManager.h"
 #include "Player.h"
+#include "ShakeComponent.h"
 
 void ButiEngine::StageManager::OnUpdate()
 {
@@ -19,6 +20,11 @@ void ButiEngine::StageManager::OnUpdate()
 	{
 		clearAnimationFrame--;
 	}
+
+	/*if (GameDevice::GetInput()->TriggerKey(Keys::Q))
+	{
+		GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
+	}*/
 
 	OnGoal();
 	ModeChange();
