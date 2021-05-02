@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class PauseManager;
+
 	class PanelManager :public GameComponent
 	{
 	public:
@@ -24,6 +26,8 @@ namespace ButiEngine {
 		void AddBackPanel(std::weak_ptr<GameObject> arg_panel);
 		void RemoveGravityCores(int arg_num, float arg_gravity);
 	private:
+		std::shared_ptr<PauseManager> shp_pauseManager;
+
 		std::vector<std::weak_ptr<GameObject>> vec_frontPanels;
 		std::vector<std::weak_ptr<GameObject>> vec_backPanels;
 		std::vector<std::weak_ptr<GameObject>> vec_panels;

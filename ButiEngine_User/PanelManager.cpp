@@ -6,17 +6,23 @@
 #include"GameSettings.h"
 #include"MobiusLoop.h"
 #include"FollowPanel.h"
+#include"PauseManager.h"
+#include"InputManager.h"
 
 void ButiEngine::PanelManager::OnUpdate()
 {
 	StorePlayer();
-	if (GameDevice::GetInput()->TriggerKey(Keys::U))
+	if (!shp_pauseManager->GetPause())
+	{
+		return;
+	}
+	if (InputManager::OnTriggerRightKey())
 	{
 		auto currentParentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 		int currentParentIndex = currentParentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
 		SwapPanelNum(currentParentIndex, currentParentIndex + 1);
 	}
-	else if (GameDevice::GetInput()->TriggerKey(Keys::Y))
+	else if (InputManager::OnTriggerLeftKey())
 	{
 		auto currentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 		int currentIndex = currentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
@@ -30,6 +36,7 @@ void ButiEngine::PanelManager::OnSet()
 
 void ButiEngine::PanelManager::Start()
 {
+	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 }
 
 void ButiEngine::PanelManager::OnShowUI()

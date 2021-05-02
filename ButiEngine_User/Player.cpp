@@ -194,6 +194,11 @@ void ButiEngine::Player::BackX()
 				//ゴール時処理
 				continue; 
 			}
+			if ((*itr)->GetGameObjectName().find("GravityCore") != std::string::npos)
+			{
+				//重力コア処理
+				continue;
+			}
 
 			float widthHalf = (*itr)->transform->GetWorldScale().x * 0.5f;
 			if (velocity.x > 0)
@@ -229,6 +234,11 @@ void ButiEngine::Player::BackY()
 			{
 				//ゴール時処理
 				continue; 
+			}
+			if ((*itr)->GetGameObjectName().find("GravityCore") != std::string::npos)
+			{
+				//重力コア処理
+				continue;
 			}
 
 			if (velocity.y > 0)

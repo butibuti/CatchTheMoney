@@ -109,6 +109,7 @@ void ButiEngine::MobiusLoop::BackXRight(Vector3& arg_velocity)
 		{
 			if ((*itr) == wkp_right.lock()) { continue; }
 			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos) { continue; }
+			if ((*itr)->GetGameObjectName().find("GravityCore") != std::string::npos) { continue; }
 
 			if (arg_velocity.x > 0)
 			{
@@ -138,6 +139,7 @@ void ButiEngine::MobiusLoop::BackYRight(Vector3& arg_velocity)
 		{
 			if ((*itr) == wkp_right.lock()) { continue; }
 			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos) { continue; }
+			if ((*itr)->GetGameObjectName().find("GravityCore") != std::string::npos) { continue; }
 
 			if (arg_velocity.y > 0)
 			{
