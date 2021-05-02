@@ -1,9 +1,12 @@
 #include "stdafx_u.h"
 #include "BackDraw.h"
 #include"GameSettings.h"
+#include"GravityCore.h"
 
 void ButiEngine::BackDraw::OnUpdate()
 {
+	StorePlayer();
+
 	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
 	Vector3 clonePosition = Vector3::Zero;
 	Vector3 scale = gameObject.lock()->transform->GetWorldScale();
@@ -20,6 +23,31 @@ void ButiEngine::BackDraw::OnUpdate()
 	wkp_left.lock()->transform->SetLocalScale(scale);
 	wkp_left.lock()->transform->SetWorldRotation(rotation);
 	wkp_left.lock()->transform->RollLocalRotationX_Degrees(180.0f);
+
+	if (gameObject.lock()->GetGameObjectName().find("GravityCore") == std::string::npos)
+	{
+		return;
+	}
+	if (wkp_player.lock())
+	{
+		float playerX = wkp_player.lock()->transform->GetWorldPosition().x;
+		float rightX = wkp_right.lock()->transform->GetWorldPosition().x;
+		float leftX = wkp_left.lock()->transform->GetWorldPosition().x;
+		if (abs(playerX - rightX) <= GameSettings::panelWidth)
+		{
+			gameObject.lock()->transform->RollLocalRotationX_Degrees(180.0f);
+			gameObject.lock()->transform->SetWorldPosition(wkp_right.lock()->transform->GetWorldPosition());
+			gameObject.lock()->GetGameComponent<GravityCore>()->RemoveGravity();
+			gameObject.lock()->GetGameComponent<GravityCore>()->ReverseGravity();
+		}
+		else if (abs(playerX - leftX) <= GameSettings::panelWidth)
+		{
+			gameObject.lock()->transform->RollLocalRotationX_Degrees(180.0f);
+			gameObject.lock()->transform->SetWorldPosition(wkp_left.lock()->transform->GetWorldPosition());
+			gameObject.lock()->GetGameComponent<GravityCore>()->RemoveGravity();
+			gameObject.lock()->GetGameComponent<GravityCore>()->ReverseGravity();
+		}
+	}
 }
 
 void ButiEngine::BackDraw::OnSet()
@@ -74,4 +102,12 @@ void ButiEngine::BackDraw::OnCollision(std::weak_ptr<GameObject> arg_other)
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::BackDraw::Clone()
 {
 	return ObjectFactory::Create<BackDraw>();
+}
+
+void ButiEngine::BackDraw::StorePlayer()
+{
+	if (!wkp_player.lock())
+	{
+		wkp_player = GetManager().lock()->GetGameObject("Player");
+	}
 }

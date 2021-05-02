@@ -49,6 +49,7 @@ namespace ButiEngine {
 		float gravity;
 		bool pushGrabKeyFrame;
 		int delay;
+		float rotationX;
 
 		void Controll();
 		void CheckGravity();

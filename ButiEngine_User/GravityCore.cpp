@@ -11,14 +11,8 @@ void ButiEngine::GravityCore::OnUpdate()
 	{
 		return;
 	}
-
-	shp_panelManager->RemoveGravityCores(coreNum, gravity);
-	auto closestPanel = shp_followPanel->GetClosestPanel();
-	if (closestPanel.lock())
-	{
-		auto panelComponent = closestPanel.lock()->GetGameComponent<Panel>();
-		panelComponent->AddGravityCore(coreNum, gravity);
-	}
+	RemoveGravity();
+	AddGravity();
 }
 
 void ButiEngine::GravityCore::OnSet()
@@ -39,4 +33,28 @@ void ButiEngine::GravityCore::OnCollision(std::weak_ptr<GameObject> arg_other)
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::GravityCore::Clone()
 {
 	return ObjectFactory::Create<GravityCore>();
+}
+
+void ButiEngine::GravityCore::SetGravity(float arg_gravity)
+{
+	gravity = arg_gravity;
+	if (gravity > 0)
+	{
+		gameObject.lock()->transform->RollLocalRotationX_Degrees(180.0f);
+	}
+}
+
+void ButiEngine::GravityCore::RemoveGravity()
+{
+	shp_panelManager->RemoveGravityCores(coreNum, gravity);
+}
+
+void ButiEngine::GravityCore::AddGravity()
+{
+	auto closestPanel = shp_followPanel->GetClosestPanel();
+	if (closestPanel.lock())
+	{
+		auto panelComponent = closestPanel.lock()->GetGameComponent<Panel>();
+		panelComponent->AddGravityCore(coreNum, gravity);
+	}
 }

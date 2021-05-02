@@ -42,7 +42,9 @@ namespace ButiEngine {
 
 		GameMode mode;
 
+		void ResetStage();
 		void OnGoal();
+		void ChangeScene(const std::string& arg_sceneName);
 		void ModeChange();
 	};
 

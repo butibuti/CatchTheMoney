@@ -6,9 +6,11 @@
 #include"ScrollManager.h"
 #include"InputManager.h"
 #include"PanelManager.h"
+#include"StageSelect.h"
 
 void ButiEngine::StageManager::OnUpdate()
 {
+	ResetStage();
 	OnGoal();
 	ModeChange();
 }
@@ -39,18 +41,31 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::StageManager::Clone()
 	return ObjectFactory::Create<StageManager>();
 }
 
+void ButiEngine::StageManager::ResetStage()
+{
+	if (InputManager::OnTriggerOpenMenuKey())
+	{
+		shp_map->DestoryBlock();
+		ChangeScene("Stage" + std::to_string(StageSelect::GetStageNum()));
+	}
+}
+
 void ButiEngine::StageManager::OnGoal()
 {
 	//ƒNƒŠƒA‚µ‚½‚ç
 	if (GameDevice::GetInput()->TriggerKey(Keys::C))
 	{
 		shp_map->DestoryBlock();
-		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
-		std::string nextSceneName = "StageSelect";
-		sceneManager->RemoveScene(nextSceneName);
-		sceneManager->LoadScene(nextSceneName);
-		sceneManager->ChangeScene(nextSceneName);
+		ChangeScene("StageSelect");
 	}
+}
+
+void ButiEngine::StageManager::ChangeScene(const std::string& arg_sceneName)
+{
+	auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
+	sceneManager->RemoveScene(arg_sceneName);
+	sceneManager->LoadScene(arg_sceneName);
+	sceneManager->ChangeScene(arg_sceneName);
 }
 
 void ButiEngine::StageManager::ModeChange()

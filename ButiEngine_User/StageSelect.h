@@ -20,6 +20,7 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+		static int GetStageNum() { return stageNum; }
 	private:
 		static int stageNum;
 		static int maxStageNum;

@@ -37,7 +37,8 @@ void ButiEngine::Player::Start()
 	grounded = false;
 	gravity = -0.2f;
 	pushGrabKeyFrame = false;
-	delay = 3;
+	delay = 10;
+	rotationX = 0.0f;
 
 	wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 	wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
@@ -139,6 +140,11 @@ void ButiEngine::Player::CheckGravity()
 	if ((gravity > 0) != (previousGravity > 0))
 	{
 		gameObject.lock()->transform->RollLocalRotationX_Degrees(180.0f);
+		rotationX += 180.0f;
+		if (rotationX >= 360.0f)
+		{
+			rotationX = 0.0f;
+		}
 	}
 	delay = 10;
 }
@@ -308,6 +314,7 @@ void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
 			wkp_holdCore.lock()->transform->SetLocalPosition(Vector3(0.0f, 0.9f, 0.0f));
 			Vector3 scale = gameObject.lock()->transform->GetWorldScale();
 			wkp_holdCore.lock()->transform->SetLocalScale(Vector3(GameSettings::blockSize) / scale);
+			//wkp_holdCore.lock()->transform->RollLocalRotationX_Degrees(rotationX);
 			wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(true);
 		}
 	}

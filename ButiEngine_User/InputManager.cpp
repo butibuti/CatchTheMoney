@@ -73,6 +73,13 @@ bool ButiEngine::InputManager::OnTriggerModeChangeKey()
 		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_Y));
 }
 
+bool ButiEngine::InputManager::OnTriggerOpenMenuKey()
+{
+	return (GameDevice::GetInput()->TriggerKey(Keys::Tab) ||
+		//GameDevice::GetInput()->TriggerKey(Keys::Esc) ||
+		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_START));
+}
+
 bool ButiEngine::InputManager::OnTriggerJumpKey()
 {
 	return (GameDevice::GetInput()->TriggerKey(Keys::W) ||
