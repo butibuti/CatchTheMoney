@@ -37,7 +37,6 @@ void ButiEngine::ScrollManager::Start()
 {
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	scrollSpeed = 1.0f;
-	mode = false;
 	wkp_screenScroll = gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
 }
 

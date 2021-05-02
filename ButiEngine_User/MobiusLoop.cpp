@@ -108,6 +108,7 @@ void ButiEngine::MobiusLoop::BackXRight(Vector3& arg_velocity)
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == wkp_right.lock()) { continue; }
+			if ((*itr)->GetGameObjectName() == "Goal") { continue; }
 
 			if (arg_velocity.x > 0)
 			{
@@ -121,8 +122,8 @@ void ButiEngine::MobiusLoop::BackXRight(Vector3& arg_velocity)
 				gameObject.lock()->transform->TranslateX(backLength);
 				shp_AABB_right->Update();
 			}
+			arg_velocity.x = 0;
 		}
-		arg_velocity.x = 0;
 	}
 }
 
@@ -136,6 +137,7 @@ void ButiEngine::MobiusLoop::BackYRight(Vector3& arg_velocity)
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == wkp_right.lock()) { continue; }
+			if ((*itr)->GetGameObjectName() == "Goal") { continue; }
 
 			if (arg_velocity.y > 0)
 			{
@@ -149,8 +151,8 @@ void ButiEngine::MobiusLoop::BackYRight(Vector3& arg_velocity)
 				gameObject.lock()->transform->TranslateY(backLength);
 				shp_AABB_right->Update();
 			}
+			arg_velocity.y = 0;
 		}
-		arg_velocity.y = 0;
 	}
 }
 
@@ -164,6 +166,7 @@ void ButiEngine::MobiusLoop::BackXLeft(Vector3& arg_velocity)
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == wkp_left.lock()) { continue; }
+			if ((*itr)->GetGameObjectName() == "Goal") { continue; }
 
 			if (arg_velocity.x > 0)
 			{
@@ -192,6 +195,7 @@ void ButiEngine::MobiusLoop::BackYLeft(Vector3& arg_velocity)
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == wkp_left.lock()) { continue; }
+			if ((*itr)->GetGameObjectName() == "Goal") { continue; }
 
 			if (arg_velocity.y > 0)
 			{

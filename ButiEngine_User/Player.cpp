@@ -63,10 +63,6 @@ void ButiEngine::Player::Start()
 
 void ButiEngine::Player::OnCollisionEnter(std::weak_ptr<GameObject> arg_other)
 {
-	if (arg_other.lock()->GetGameObjectName() == "Goal")
-	{
-
-	}
 }
 
 void ButiEngine::Player::OnCollision(std::weak_ptr<GameObject> arg_other)
@@ -189,6 +185,11 @@ void ButiEngine::Player::BackX()
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == gameObject.lock()) { continue; }
+			if ((*itr)->GetGameObjectName() == "Goal") 
+			{
+				//ゴール時処理
+				continue; 
+			}
 
 			float widthHalf = (*itr)->transform->GetWorldScale().x * 0.5f;
 			if (velocity.x > 0)
@@ -205,8 +206,8 @@ void ButiEngine::Player::BackX()
 				shp_AABB->Update();
 				shp_bottomAABB->Update();
 			}
+			velocity.x = 0;
 		}
-		velocity.x = 0;
 	}
 }
 
@@ -220,6 +221,11 @@ void ButiEngine::Player::BackY()
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == gameObject.lock()) { continue; }
+			if ((*itr)->GetGameObjectName() == "Goal") 
+			{
+				//ゴール時処理
+				continue; 
+			}
 
 			if (velocity.y > 0)
 			{
@@ -237,7 +243,7 @@ void ButiEngine::Player::BackY()
 				shp_bottomAABB->Update();
 				grounded = true;
 			}
+			velocity.y = 0;
 		}
-		velocity.y = 0;
 	}
 }

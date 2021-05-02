@@ -26,7 +26,6 @@ namespace ButiEngine {
 
 		std::weak_ptr<GameObject> wkp_player;
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
-		bool mode;
 		float scrollSpeed;
 		Vector3 scrollPosition;
 
