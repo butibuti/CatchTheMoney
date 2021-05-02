@@ -27,11 +27,14 @@ namespace ButiEngine {
 		int GetPanelNum() { return panelNum; }
 		void SetParentPanelNum(int arg_num) { parentPanelNum = arg_num; }
 		int GetParentPanelNum() { return parentPanelNum; }
+
+		float GetGravity() { return gravity; }
 	private:
 		std::weak_ptr<GameObject> wkp_drawObject;
 
 		int panelNum;
 		int parentPanelNum;
+		float gravity;
 
 		void AddTransformAnimation();
 	};

@@ -5,28 +5,18 @@
 #include"MobiusLoop.h"
 #include"PanelManager.h"
 #include"InputManager.h"
+#include"Panel.h"
+#include"FollowPanel.h"
 
 void ButiEngine::Player::OnUpdate()
 {
 	if (shp_pauseManager->GetPause())
 	{
-		if (!gameObject.lock()->transform->GetBaseTransform())
-		{
-			StoreClosestPanel();
-			//Vector3 panelPos = wkp_closestPanel.lock()->transform->GetWorldPosition();
-			//panelPos.z = -5.0f;
-			//wkp_closestPanel.lock()->transform->SetWorldPosition(panelPos);
-			//�Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ����
-			gameObject.lock()->transform->SetBaseTransform(wkp_closestPanel.lock()->transform);
-		}
 		return;
-	}
-	else
-	{
-		gameObject.lock()->transform->SetBaseTransform(nullptr);
 	}
 	Controll();
 	Move();
+	CheckGravity();
 }
 
 void ButiEngine::Player::OnSet()
@@ -44,8 +34,6 @@ void ButiEngine::Player::Start()
 	velocity = Vector3::Zero;
 	speed = 3.0f;
 	grounded = false;
-	gravity = -0.2f;
-	jumpForce = 2.5f;
 
 	wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 	wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
@@ -79,8 +67,6 @@ void ButiEngine::Player::ShowGUI()
 
 void ButiEngine::Player::OnShowUI()
 {
-	GUI::SliderFloat("gravity", &gravity, -1.0f, 1.0f);
-	GUI::SliderFloat("jumpForce", &jumpForce, -10.0f, 10.0f);
 	GUI::SliderFloat("speed", &speed, 0.0f, 50.0f);
 }
 
@@ -105,7 +91,11 @@ void ButiEngine::Player::Controll()
 	{
 		if (InputManager::OnTriggerJumpKey())
 		{
-			velocity.y = jumpForce;
+			velocity.y = JUMP_FORCE;
+			if (gravity > 0)
+			{
+				velocity.y *= -1;
+			}
 			grounded = false;
 		}
 	}
@@ -115,10 +105,19 @@ void ButiEngine::Player::Controll()
 	}
 }
 
-void ButiEngine::Player::StoreClosestPanel()
+void ButiEngine::Player::CheckGravity()
 {
-	float x = gameObject.lock()->transform->GetWorldPosition().x;
-	wkp_closestPanel = shp_panelManager->GetClosestPanel(x);
+	auto closestPanel = gameObject.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
+	float previousGravity = gravity;
+	if (closestPanel.lock())
+	{
+		gravity = closestPanel.lock()->GetGameComponent<Panel>()->GetGravity();
+	}
+
+	if ((gravity > 0) != (previousGravity > 0))
+	{
+		gameObject.lock()->transform->RollLocalRotationX_Degrees(180.0f);
+	}
 }
 
 void ButiEngine::Player::Move()

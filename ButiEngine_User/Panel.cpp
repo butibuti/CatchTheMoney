@@ -19,10 +19,13 @@ void ButiEngine::Panel::Start()
 	scale.y = GameSettings::panelHeight;
 	wkp_drawObject = GetManager().lock()->AddObjectFromCereal("PanelForDraw", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
 	wkp_drawObject.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+
+	gravity = -0.2f;
 }
 
 void ButiEngine::Panel::OnShowUI()
 {
+	GUI::SliderFloat("gravity", &gravity, -0.5f, 0.5f);
 	GUI::Text("x:%f", gameObject.lock()->transform->GetWorldPosition().x);
 	GUI::Text("y:%f", gameObject.lock()->transform->GetWorldPosition().y);
 	GUI::Text("panelNum:%d", panelNum);

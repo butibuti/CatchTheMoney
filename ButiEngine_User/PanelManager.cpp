@@ -5,19 +5,20 @@
 #include"Panel.h"
 #include"GameSettings.h"
 #include"MobiusLoop.h"
+#include"FollowPanel.h"
 
 void ButiEngine::PanelManager::OnUpdate()
 {
 	StorePlayer();
 	if (GameDevice::GetInput()->TriggerKey(Keys::U))
 	{
-		auto currentParentPanel = wkp_player.lock()->GetGameComponent<Player>()->GetClosestPanel();
+		auto currentParentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 		int currentParentIndex = currentParentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
 		SwapPanelNum(currentParentIndex, currentParentIndex + 1);
 	}
 	else if (GameDevice::GetInput()->TriggerKey(Keys::Y))
 	{
-		auto currentPanel = wkp_player.lock()->GetGameComponent<Player>()->GetClosestPanel();
+		auto currentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 		int currentIndex = currentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
 		SwapPanelNum(currentIndex, currentIndex - 1);
 	}
