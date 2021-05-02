@@ -170,10 +170,12 @@
     <ClCompile Include="Panel.cpp" />
     <ClCompile Include="PanelManager.cpp" />
     <ClCompile Include="ParentPanel.cpp" />
+    <ClCompile Include="ParentSelectPanel.cpp" />
     <ClCompile Include="PauseManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PredictionLine.cpp" />
     <ClCompile Include="ScrollManager.cpp" />
+    <ClCompile Include="SelectPanel.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -195,11 +197,13 @@
     <ClInclude Include="Panel.h" />
     <ClInclude Include="PanelManager.h" />
     <ClInclude Include="ParentPanel.h" />
+    <ClInclude Include="ParentSelectPanel.h" />
     <ClInclude Include="PauseManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="PredictionLine.h" />
     <ClInclude Include="ScrollManager.h" />
+    <ClInclude Include="SelectPanel.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="StageSelect.h" />
     <ClInclude Include="stdafx_u.h" />
