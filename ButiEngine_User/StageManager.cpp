@@ -3,6 +3,8 @@
 #include"Map.h"
 #include"PauseManager.h"
 #include"CameraController.h"
+#include"ScrollManager.h"
+#include"InputManager.h"
 
 void ButiEngine::StageManager::OnUpdate()
 {
@@ -18,6 +20,7 @@ void ButiEngine::StageManager::Start()
 {
 	shp_map = GetManager().lock()->GetGameObject("Map").lock()->GetGameComponent<Map>();
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
+	shp_scrollManager = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ScrollManager>();
 	shp_cameraController = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraController>();
 
 	shp_map->PutTile();
@@ -51,9 +54,10 @@ void ButiEngine::StageManager::OnGoal()
 void ButiEngine::StageManager::ModeChange()
 {
 	if (shp_cameraController->IsAnimation()) { return; }
-	if (GameDevice::GetInput()->TriggerKey(Keys::Space))
+	if (InputManager::OnTriggerModeChangeKey())
 	{
 		shp_pauseManager->SwitchPause();
+		shp_scrollManager->ResetScroll();
 		
 		if (mode == GameMode::Normal)
 		{

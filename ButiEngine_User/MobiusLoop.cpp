@@ -6,8 +6,6 @@
 void ButiEngine::MobiusLoop::OnUpdate()
 {
 	SwitchPosition();
-
-	//GetManager().lock()->GetApplication().lock()->GetGUIController()->SetGUIObject(GetThis<MobiusLoop>());
 }
 
 void ButiEngine::MobiusLoop::OnSet()
@@ -19,6 +17,10 @@ void ButiEngine::MobiusLoop::Start()
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 
 	std::string name = gameObject.lock()->GetGameObjectName();
+	if (name == "PredictionLine")
+	{
+		int a = 0;
+	}
 	Vector3 localPosition = Vector3::Zero;
 	auto tag = GetTagManager()->GetObjectTag("MapChip");
 	auto meshDraw = gameObject.lock()->GetGameComponent<MeshDrawComponent>();
@@ -61,12 +63,14 @@ void ButiEngine::MobiusLoop::OnCollision(std::weak_ptr<GameObject> arg_other)
 {
 }
 
-void ButiEngine::MobiusLoop::ShowGUI()
+void ButiEngine::MobiusLoop::OnShowUI()
 {
-	GUI::Begin("MobiusLoop");
 	GUI::Text("Right:%f", wkp_right.lock()->transform->GetWorldPosition().x);
 	GUI::Text("Left:%f", wkp_left.lock()->transform->GetWorldPosition().x);
-	GUI::End();
+}
+
+void ButiEngine::MobiusLoop::ShowGUI()
+{
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::MobiusLoop::Clone()

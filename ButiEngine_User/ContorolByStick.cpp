@@ -1,5 +1,6 @@
 #include "stdafx_u.h"
 #include "ContorolByStick.h"
+#include"InputManager.h"
 
 void ButiEngine::ContorolByStick::OnUpdate()
 {
@@ -42,7 +43,7 @@ void ButiEngine::ContorolByStick::OnUpdate()
 	}
 
 	//カメラリセット
-	if (GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_STICK_RIGHT))
+	if (InputManager::OnTriggerMobiusRotateResetKey())
 	{
 		isChanged = true;
 		rotation = Vector3(0, 0, 0);

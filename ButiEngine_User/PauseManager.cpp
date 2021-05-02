@@ -3,10 +3,6 @@
 
 void ButiEngine::PauseManager::OnUpdate()
 {
-	if (GameDevice::GetInput()->TriggerKey(Keys::P))
-	{
-		pause = !pause;
-	}
 }
 
 void ButiEngine::PauseManager::OnSet()

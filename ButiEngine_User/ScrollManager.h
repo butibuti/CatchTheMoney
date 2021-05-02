@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class PauseManager;
+
 	class ScrollManager :public GameComponent
 	{
 	public:
@@ -18,14 +20,17 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+		void ResetScroll();
 	private:
-		void MoveScroll();
+		std::shared_ptr<PauseManager> shp_pauseManager;
 
 		std::weak_ptr<GameObject> wkp_player;
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
 		bool mode;
 		float scrollSpeed;
 		Vector3 scrollPosition;
+
+		void MoveScroll();
 	};
 
 }

@@ -2,6 +2,8 @@
 #include "ScrollManager.h"
 #include"GameSettings.h"
 #include "Player.h"
+#include"PauseManager.h"
+#include"InputManager.h"
 
 void ButiEngine::ScrollManager::OnUpdate()
 {
@@ -11,12 +13,7 @@ void ButiEngine::ScrollManager::OnUpdate()
 		return;
 	}
 
-	if (GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_START))
-	{
-		mode = !mode;
-		scrollPosition = wkp_player.lock()->transform->GetWorldPosition();
-	}
-	if (!mode)
+	if (!shp_pauseManager->GetPause())
 	{
 		Vector3 position = wkp_player.lock()->transform->GetWorldPosition();
 		auto scroll = (position.x / GameSettings::windowWidth);
@@ -38,6 +35,7 @@ void ButiEngine::ScrollManager::OnSet()
 
 void ButiEngine::ScrollManager::Start()
 {
+	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	scrollSpeed = 1.0f;
 	mode = false;
 	wkp_screenScroll = gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
@@ -54,12 +52,17 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::ScrollManager::Clone()
 
 void ButiEngine::ScrollManager::MoveScroll()
 {
-	if (GameDevice::GetInput()->GetPadButton(PadButtons::XBOX_BUTTON_LEFT))
+	if (InputManager::OnPushLeftScrollKey())
 	{
 		scrollPosition.x -= scrollSpeed;
 	}
-	if (GameDevice::GetInput()->GetPadButton(PadButtons::XBOX_BUTTON_RIGHT))
+	if (InputManager::OnPushRightScrollKey())
 	{
 		scrollPosition.x += scrollSpeed;
 	}
+}
+
+void ButiEngine::ScrollManager::ResetScroll()
+{
+	scrollPosition = wkp_player.lock()->transform->GetWorldPosition();
 }

@@ -4,8 +4,7 @@
 #include"PauseManager.h"
 #include"MobiusLoop.h"
 #include"PanelManager.h"
-
-#include"Panel.h"
+#include"InputManager.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -48,7 +47,7 @@ void ButiEngine::Player::Start()
 	gravity = -0.2f;
 	jumpForce = 2.5f;
 
-	wkp_predictionLine = GetManager().lock()->GetGameObject("PredictionLine");
+	wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 	wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 
 	wkp_bottom = GetManager().lock()->AddObject(ObjectFactory::Create<Transform>(), "Player_Bottom");
@@ -87,12 +86,6 @@ void ButiEngine::Player::OnShowUI()
 	GUI::SliderFloat("gravity", &gravity, -1.0f, 1.0f);
 	GUI::SliderFloat("jumpForce", &jumpForce, -10.0f, 10.0f);
 	GUI::SliderFloat("speed", &speed, 0.0f, 50.0f);
-	if (wkp_closestPanel.lock())
-	{
-		auto panel = wkp_closestPanel.lock()->GetGameComponent<Panel>();
-		GUI::Text("panelNum: %d", panel->GetPanelNum());
-		GUI::Text("parentPanelNum: %d", panel->GetParentPanelNum());
-	}
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
@@ -103,18 +96,18 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 void ButiEngine::Player::Controll()
 {
 	velocity.x = 0.0f;
-	if (GameDevice::GetInput()->CheckKey(Keys::D))
+	if (InputManager::OnPushRightKey())
 	{
 		velocity.x = 1.0f;
 	}
-	else if (GameDevice::GetInput()->CheckKey(Keys::A))
+	else if (InputManager::OnPushLeftKey())
 	{
 		velocity.x = -1.0f;
 	}
 
 	if (grounded)
 	{
-		if (GameDevice::GetInput()->TriggerKey(Keys::W))
+		if (InputManager::OnTriggerJumpKey())
 		{
 			velocity.y = jumpForce;
 			grounded = false;
