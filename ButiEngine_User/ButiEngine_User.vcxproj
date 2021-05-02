@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BackDraw.cpp" />
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="ContorolByStick.cpp" />
     <ClCompile Include="DebugController.cpp" />
@@ -187,6 +188,7 @@
     <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BackDraw.h" />
     <ClInclude Include="ContorolByStick.h" />
     <ClInclude Include="DebugController.h" />
     <ClInclude Include="FollowPanel.h" />

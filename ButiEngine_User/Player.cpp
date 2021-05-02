@@ -122,19 +122,16 @@ void ButiEngine::Player::CheckGravity()
 	{
 		auto panelComponent = closestPanel.lock()->GetGameComponent<Panel>();
 		int coreCount = panelComponent->GetGravityCoreCount();
-		if (coreCount != 0)
+		gravity = panelComponent->GetGravity();
+		if (gravity == 0)
 		{
-			gravity = panelComponent->GetGravity();
-			if (gravity == 0)
+			if (previousGravity < 0)
 			{
-				if (previousGravity < 0)
-				{
-					gravity = -0.2f;
-				}
-				else if (previousGravity > 0)
-				{
-					gravity = 0.2f;
-				}
+				gravity = -0.2f;
+			}
+			else if (previousGravity > 0)
+			{
+				gravity = 0.2f;
 			}
 		}
 	}
@@ -294,7 +291,7 @@ void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
 {
 	if (InputManager::OnTriggerGrabKey())
 	{
-		if (wkp_holdCore.lock())
+		if (wkp_holdCore.lock() && grounded)
 		{
 			wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(false);
 			wkp_holdCore.lock()->transform->SetLocalPosition(Vector3(0.0f, 0.0f, 0.0f));
@@ -304,7 +301,7 @@ void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
 			wkp_holdCore.lock()->transform->SetLocalScale(Vector3(GameSettings::blockSize, GameSettings::blockSize, 1.0f));
 			wkp_holdCore = std::weak_ptr<GameObject>();
 		}
-		else
+		else if(!wkp_holdCore.lock())
 		{
 			wkp_holdCore = arg_core;
 			wkp_holdCore.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
