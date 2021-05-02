@@ -27,6 +27,7 @@ namespace ButiEngine {
 		float rotationLimit;
 		float rotationSpeed;
 		float returnSpeed;
+		int cameraResetFrame;
 	};
 
 }

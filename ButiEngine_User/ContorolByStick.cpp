@@ -4,6 +4,12 @@
 
 void ButiEngine::ContorolByStick::OnUpdate()
 {
+	if (cameraResetFrame < 10)
+	{
+		cameraResetFrame++;
+		return;
+	}
+
 	auto GetRightStick = GameDevice::GetInput()->GetRightStick();
 	auto transform = gameObject.lock()->transform;
 	bool isChanged = false;
@@ -42,16 +48,25 @@ void ButiEngine::ContorolByStick::OnUpdate()
 
 	}
 
-	//カメラリセット
-	if (InputManager::OnTriggerMobiusRotateResetKey())
-	{
-		isChanged = true;
-		rotation = Vector3(0, 0, 0);
-	}
-
 	if (isChanged)
 	{
 		transform->SetLocalRotation(rotation);
+	}
+
+	//カメラリセット
+	if (InputManager::OnTriggerMobiusRotateResetKey())
+	{
+		cameraResetFrame = 0;
+		rotation = Vector3(0, 0, 0);
+		auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
+		if (!anim)
+		{
+			anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+			anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+			anim->GetTargetTransform()->SetLocalRotation(rotation);
+			anim->SetSpeed(0.05f);
+			anim->SetEaseType(Easing::EasingType::EaseOutElastic);
+		}
 	}
 
 }
@@ -62,8 +77,9 @@ void ButiEngine::ContorolByStick::OnSet()
 
 void ButiEngine::ContorolByStick::Start()
 {
+	cameraResetFrame = 0;
 	rotationLimit = 60.0f;
-	rotationSpeed = 1.0f;
+	rotationSpeed = 2.0f;
 	returnSpeed = 1.0f;
 	initAxis = -gameObject.lock()->transform->GetUp();
 	rotation = Vector3(0, 0, 0);

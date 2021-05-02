@@ -27,6 +27,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		bool IsClear() { return isClear; }
 		std::weak_ptr<GameObject> GetClosestPanel() { return wkp_closestPanel; }
 	private:
 		void Controll();
@@ -54,6 +55,7 @@ namespace ButiEngine {
 		Vector3 velocity;
 		float speed;
 
+		bool isClear;
 		bool grounded;
 		float gravity;
 		float jumpForce;

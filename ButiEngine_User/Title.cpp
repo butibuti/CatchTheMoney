@@ -1,5 +1,6 @@
 #include "stdafx_u.h"
 #include "Title.h"
+#include "InputManager.h"
 
 void ButiEngine::Title::OnUpdate()
 {

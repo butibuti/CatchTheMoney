@@ -1,6 +1,7 @@
 #include "stdafx_u.h"
 #include "StageSelect.h"
 #include "ParentSelectPanel.h"
+#include "InputManager.h"
 
 int ButiEngine::StageSelect::stageNum = 0;
 int ButiEngine::StageSelect::maxStageNum = 19; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
@@ -11,13 +12,13 @@ void ButiEngine::StageSelect::OnUpdate()
 	auto parentSelectPanel = wkp_parentSelectPanel.lock()->GetGameComponent<ParentSelectPanel>();
 	if (intervalFrame > 10)
 	{
-		if (GameDevice::GetInput()->TriggerKey(Keys::D))
+		if (InputManager::OnTriggerRightKey())
 		{
 			intervalFrame = 0;
 			OnPushRight();
 			parentSelectPanel->ChildRotation(-childAngle);
 		}
-		else if (GameDevice::GetInput()->TriggerKey(Keys::A))
+		else if (InputManager::OnTriggerLeftKey())
 		{
 			intervalFrame = 0;
 			OnPushLeft();

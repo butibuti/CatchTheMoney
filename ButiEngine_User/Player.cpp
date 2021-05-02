@@ -46,6 +46,7 @@ void ButiEngine::Player::Start()
 	grounded = false;
 	gravity = -0.2f;
 	jumpForce = 2.5f;
+	isClear = false;
 
 	wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 	wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
@@ -188,6 +189,7 @@ void ButiEngine::Player::BackX()
 			if ((*itr)->GetGameObjectName() == "Goal") 
 			{
 				//ゴール時処理
+				isClear = true;
 				continue; 
 			}
 
@@ -224,6 +226,7 @@ void ButiEngine::Player::BackY()
 			if ((*itr)->GetGameObjectName() == "Goal") 
 			{
 				//ゴール時処理
+				isClear = true;
 				continue; 
 			}
 

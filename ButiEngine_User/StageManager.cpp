@@ -5,9 +5,15 @@
 #include"CameraController.h"
 #include"ScrollManager.h"
 #include"InputManager.h"
+#include "Player.h"
 
 void ButiEngine::StageManager::OnUpdate()
 {
+	if (!wkp_player.lock())
+	{
+		wkp_player = GetManager().lock()->GetGameObject("Player");
+		return;
+	}
 	OnGoal();
 	ModeChange();
 }
@@ -40,7 +46,7 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::StageManager::Clone()
 void ButiEngine::StageManager::OnGoal()
 {
 	//ƒNƒŠƒA‚µ‚½‚ç
-	if (GameDevice::GetInput()->TriggerKey(Keys::C))
+	if (wkp_player.lock()->GetGameComponent<Player>()->IsClear())
 	{
 		shp_map->DestoryBlock();
 		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
