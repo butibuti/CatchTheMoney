@@ -4,6 +4,14 @@
 
 void ButiEngine::Panel::OnUpdate()
 {
+	if (gameObject.lock()->GetGameComponent<TransformAnimation>())
+	{
+		animation = true;
+	}
+	else
+	{
+		animation = false;
+	}
 }
 
 void ButiEngine::Panel::OnSet()

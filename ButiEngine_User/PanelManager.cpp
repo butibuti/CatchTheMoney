@@ -98,6 +98,20 @@ void ButiEngine::PanelManager::RemoveGravityCores(int arg_num, float arg_gravity
 	}
 }
 
+bool ButiEngine::PanelManager::IsAnimation()
+{
+	bool result = false;
+	auto end = vec_panels.end();
+	for (auto itr = vec_panels.begin(); itr != end; ++itr)
+	{
+		if ((*itr).lock()->GetGameComponent<Panel>()->IsAnimation())
+		{
+			result = true;
+		}
+	}
+	return result;
+}
+
 void ButiEngine::PanelManager::StorePlayer()
 {
 	if (!wkp_player.lock())
