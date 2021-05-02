@@ -24,7 +24,10 @@ namespace ButiEngine {
 		}
 		void SetCoreNum(int arg_num) { coreNum = arg_num; }
 		int GetCoreNum() { return coreNum; }
+		float GetGravity() { return gravity; }
 		void SetGravity(float arg_gravity) { gravity = arg_gravity; }
+		bool GetGrabbed() { return grabbed; }
+		void SetGrabbed(bool arg_flag) { grabbed = arg_flag; }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<PanelManager> shp_panelManager;
@@ -32,6 +35,7 @@ namespace ButiEngine {
 
 		int coreNum;
 		float gravity;
+		bool grabbed;
 	};
 
 }

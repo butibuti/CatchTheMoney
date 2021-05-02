@@ -7,6 +7,7 @@
 #include"InputManager.h"
 #include"Panel.h"
 #include"FollowPanel.h"
+#include"GravityCore.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -35,6 +36,8 @@ void ButiEngine::Player::Start()
 	speed = 3.0f;
 	grounded = false;
 	gravity = -0.2f;
+	pushGrabKeyFrame = false;
+	delay = 3;
 
 	wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 	wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
@@ -108,14 +111,31 @@ void ButiEngine::Player::Controll()
 
 void ButiEngine::Player::CheckGravity()
 {
+	if (wkp_holdCore.lock() && delay > 0)
+	{
+		delay--;
+		return;
+	}
 	auto closestPanel = gameObject.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 	float previousGravity = gravity;
 	if (closestPanel.lock())
 	{
 		auto panelComponent = closestPanel.lock()->GetGameComponent<Panel>();
-		if (panelComponent->GetGravityCoreCount() > 0)
+		int coreCount = panelComponent->GetGravityCoreCount();
+		if (coreCount != 0)
 		{
 			gravity = panelComponent->GetGravity();
+			if (gravity == 0)
+			{
+				if (previousGravity < 0)
+				{
+					gravity = -0.2f;
+				}
+				else if (previousGravity > 0)
+				{
+					gravity = 0.2f;
+				}
+			}
 		}
 	}
 
@@ -123,10 +143,12 @@ void ButiEngine::Player::CheckGravity()
 	{
 		gameObject.lock()->transform->RollLocalRotationX_Degrees(180.0f);
 	}
+	delay = 10;
 }
 
 void ButiEngine::Player::Move()
 {
+	pushGrabKeyFrame = false;
 	velocity.x *= speed;
 
 	if (fabsf(velocity.x) > fabsf(velocity.y))
@@ -192,11 +214,13 @@ void ButiEngine::Player::BackX()
 			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos)
 			{
 				//ゴール時処理
+				OnCollisionGoal((*itr));
 				continue; 
 			}
 			if ((*itr)->GetGameObjectName().find("GravityCore") != std::string::npos)
 			{
 				//重力コア処理
+				OnCollisionCore((*itr));
 				continue;
 			}
 
@@ -233,11 +257,11 @@ void ButiEngine::Player::BackY()
 			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos)
 			{
 				//ゴール時処理
-				continue; 
+				OnCollisionGoal((*itr));
+				continue;
 			}
 			if ((*itr)->GetGameObjectName().find("GravityCore") != std::string::npos)
 			{
-				//重力コア処理
 				continue;
 			}
 
@@ -258,6 +282,36 @@ void ButiEngine::Player::BackY()
 				grounded = true;
 			}
 			velocity.y = 0;
+		}
+	}
+}
+
+void ButiEngine::Player::OnCollisionGoal(std::weak_ptr<GameObject> arg_goal)
+{
+}
+
+void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
+{
+	if (InputManager::OnTriggerGrabKey())
+	{
+		if (wkp_holdCore.lock())
+		{
+			wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(false);
+			wkp_holdCore.lock()->transform->SetLocalPosition(Vector3(0.0f, 0.0f, 0.0f));
+			wkp_holdCore.lock()->transform->SetBaseTransform(nullptr);
+			Vector3 pos = wkp_holdCore.lock()->transform->GetWorldPosition();
+			wkp_holdCore.lock()->transform->SetWorldPosition(pos);
+			wkp_holdCore.lock()->transform->SetLocalScale(Vector3(GameSettings::blockSize, GameSettings::blockSize, 1.0f));
+			wkp_holdCore = std::weak_ptr<GameObject>();
+		}
+		else
+		{
+			wkp_holdCore = arg_core;
+			wkp_holdCore.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
+			wkp_holdCore.lock()->transform->SetLocalPosition(Vector3(0.0f, 0.9f, 0.0f));
+			Vector3 scale = gameObject.lock()->transform->GetWorldScale();
+			wkp_holdCore.lock()->transform->SetLocalScale(Vector3(GameSettings::blockSize) / scale);
+			wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(true);
 		}
 	}
 }

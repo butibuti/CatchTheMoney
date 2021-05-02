@@ -2,6 +2,7 @@
 #include "FollowPanel.h"
 #include"PauseManager.h"
 #include"PanelManager.h"
+#include"GravityCore.h"
 
 void ButiEngine::FollowPanel::OnUpdate()
 {
@@ -16,8 +17,18 @@ void ButiEngine::FollowPanel::OnUpdate()
 		}
 		return;
 	}
-
-	gameObject.lock()->transform->SetBaseTransform(nullptr);
+	auto core = gameObject.lock()->GetGameComponent<GravityCore>();
+	if (core)
+	{
+		if (!core->GetGrabbed())
+		{
+			gameObject.lock()->transform->SetBaseTransform(nullptr);
+		}
+	}
+	else
+	{
+		gameObject.lock()->transform->SetBaseTransform(nullptr);
+	}
 	StoreClosestPanel();
 }
 
