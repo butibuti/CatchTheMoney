@@ -288,6 +288,7 @@ void ButiEngine::Player::BackY()
 
 void ButiEngine::Player::OnCollisionGoal(std::weak_ptr<GameObject> arg_goal)
 {
+	int a = 0;
 }
 
 void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
