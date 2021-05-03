@@ -23,10 +23,10 @@ void ButiEngine::StageManager::OnUpdate()
 		clearAnimationFrame--;
 	}
 
-	/*if (GameDevice::GetInput()->TriggerKey(Keys::Q))
+	if (GameDevice::GetInput()->TriggerKey(Keys::Q))
 	{
-		GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
-	}*/
+		GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(11.3f);
+	}
 
 	ResetStage();
 	OnGoal();

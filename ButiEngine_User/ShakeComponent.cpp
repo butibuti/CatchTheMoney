@@ -8,9 +8,9 @@ void ButiEngine::ShakeComponent::OnUpdate()
 		return;
 	}
 
-	float x = ButiRandom::GetRandom(-amplitude, amplitude, 100);
-	float y = ButiRandom::GetRandom(-amplitude, amplitude, 100);
-	float z = 0;
+	float x = 0;//ButiRandom::GetRandom(-amplitude, amplitude, 100);
+	float y = 0;//ButiRandom::GetRandom(-amplitude, amplitude, 100);
+	float z = ButiRandom::GetRandom(-amplitude, amplitude, 100);
 
 	if (amplitude > 0)
 	{
@@ -39,6 +39,12 @@ void ButiEngine::ShakeComponent::Start()
 
 void ButiEngine::ShakeComponent::ShakeStart(float arg_amplitude)
 {
+	if (start)
+	{
+		gameObject.lock()->transform->SetLocalRotation(defaultRotate);
+		amplitude = 0.0f;
+		subAmplitude = 0.0f;
+	}
 	amplitude = arg_amplitude;
 	subAmplitude = amplitude / 8.0f;
 	start = true;

@@ -2,6 +2,7 @@
 #include "StageSelect.h"
 #include "ParentSelectPanel.h"
 #include "InputManager.h"
+#include "SelectScreen.h"
 
 int ButiEngine::StageSelect::stageNum = 0;
 int ButiEngine::StageSelect::maxStageNum = 19; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
@@ -10,7 +11,7 @@ void ButiEngine::StageSelect::OnUpdate()
 {
 	auto childAngle = 180.0f / (maxStageNum + 1) * 2.0f;
 	auto parentSelectPanel = wkp_parentSelectPanel.lock()->GetGameComponent<ParentSelectPanel>();
-	if (intervalFrame > 10)
+	if (intervalFrame > 10 && !isAnimation)
 	{
 		if (InputManager::OnTriggerRightKey())
 		{
@@ -36,10 +37,7 @@ void ButiEngine::StageSelect::OnUpdate()
 		intervalFrame++;
 	}
 
-	if (InputManager::OnTriggerDecisionKey())
-	{
-		OnDecision();
-	}
+	DecisionAnimation();
 
 	SelectRotation();
 
@@ -52,6 +50,8 @@ void ButiEngine::StageSelect::OnSet()
 
 void ButiEngine::StageSelect::Start()
 {
+	isAnimation = false;
+	animationFrame = 90;
 	intervalFrame = 0;
 	wkp_parentSelectPanel = GetManager().lock()->GetGameObject("ParentSelectPanel");
 
@@ -76,6 +76,10 @@ void ButiEngine::StageSelect::ShowGUI()
 {
 	GUI::Begin("StageNum");
 	GUI::Text(stageNum);
+	GUI::End();
+
+	GUI::Begin("AnimationFrame");
+	GUI::Text(animationFrame);
 	GUI::End();
 }
 
@@ -131,6 +135,31 @@ void ButiEngine::StageSelect::OnDecision()
 	sceneManager->RemoveScene(sceneName);
 	sceneManager->LoadScene(sceneName);
 	sceneManager->ChangeScene(sceneName);
+}
+
+void ButiEngine::StageSelect::DecisionAnimation()
+{
+	if (InputManager::OnTriggerDecisionKey() && !isAnimation)
+	{
+		isAnimation = true;
+	}
+
+	if (!isAnimation) return;
+
+	if (animationFrame == screenRotateFrame)
+	{
+		GetManager().lock()->GetGameObject("SelectScreen").lock()->GetGameComponent<SelectScreen>()->StartAnimation();
+	}
+
+	if (animationFrame <= 0)
+	{
+		OnDecision();
+	}
+
+	if (animationFrame > 0)
+	{
+		animationFrame--;
+	}
 }
 
 void ButiEngine::StageSelect::SelectRotation()

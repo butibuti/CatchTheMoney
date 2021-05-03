@@ -29,13 +29,17 @@ namespace ButiEngine {
 		void OnPushLeft();
 		void OnPushSkip();
 		void OnDecision();
+		void DecisionAnimation();
 		void SelectRotation();
 
 		std::weak_ptr<GameObject> wkp_parentSelectPanel;
 
 		Vector3 preParentRotation;
 		float childAngle;
+		const int screenRotateFrame = 40;
 		int intervalFrame;
+		int animationFrame;
+		bool isAnimation;
 	};
 
 }
