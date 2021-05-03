@@ -31,6 +31,7 @@ namespace ButiEngine {
 		void OnDecision();
 		void DecisionAnimation();
 		void SelectRotation();
+		void Onece();
 
 		std::weak_ptr<GameObject> wkp_parentSelectPanel;
 
@@ -40,6 +41,7 @@ namespace ButiEngine {
 		int intervalFrame;
 		int animationFrame;
 		bool isAnimation;
+		bool isOnece;
 	};
 
 }
