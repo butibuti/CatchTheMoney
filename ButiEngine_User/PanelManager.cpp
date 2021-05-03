@@ -12,7 +12,7 @@
 void ButiEngine::PanelManager::OnUpdate()
 {
 	StorePlayer();
-	if (!shp_pauseManager->GetPause())
+	if (!shp_pauseManager->GetPause() || IsAnimation())
 	{
 		return;
 	}

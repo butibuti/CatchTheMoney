@@ -217,13 +217,11 @@ void ButiEngine::Player::BackX()
 			if ((*itr) == gameObject.lock()) { continue; }
 			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos)
 			{
-				//ゴール時処理
 				OnCollisionGoal((*itr));
 				continue; 
 			}
 			if ((*itr)->GetGameObjectName().find("GravityCore") != std::string::npos)
 			{
-				//重力コア処理
 				OnCollisionCore((*itr));
 				continue;
 			}
@@ -260,7 +258,6 @@ void ButiEngine::Player::BackY()
 			if ((*itr) == gameObject.lock()) { continue; }
 			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos)
 			{
-				//ゴール時処理
 				OnCollisionGoal((*itr));
 				continue;
 			}
