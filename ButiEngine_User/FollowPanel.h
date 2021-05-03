@@ -29,6 +29,7 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_closestPanel;
 
 		void StoreClosestPanel();
+		void Correction();
 	};
 
 }

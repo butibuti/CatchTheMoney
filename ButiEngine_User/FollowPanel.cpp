@@ -3,6 +3,7 @@
 #include"PauseManager.h"
 #include"PanelManager.h"
 #include"GravityCore.h"
+#include"GameSettings.h"
 
 void ButiEngine::FollowPanel::OnUpdate()
 {
@@ -14,6 +15,7 @@ void ButiEngine::FollowPanel::OnUpdate()
 			//panelPos.z = -5.0f;
 			//wkp_closestPanel.lock()->transform->SetWorldPosition(panelPos);
 			gameObject.lock()->transform->SetBaseTransform(wkp_closestPanel.lock()->transform);
+			Correction();
 		}
 		return;
 	}
@@ -55,4 +57,24 @@ void ButiEngine::FollowPanel::StoreClosestPanel()
 {
 	float x = gameObject.lock()->transform->GetWorldPosition().x;
 	wkp_closestPanel = shp_panelManager->GetClosestPanel(x);
+}
+
+void ButiEngine::FollowPanel::Correction()
+{
+	float localX = gameObject.lock()->transform->GetLocalPosition().x;
+	float movableRange = GameSettings::panelWidth * 0.5f - GameSettings::blockSize;
+	if (abs(localX) - movableRange > 0)
+	{
+		if (localX < 0)
+		{
+			movableRange *= -1;
+		}
+		float difference = movableRange - localX;
+
+		auto anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+		anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+		anim->GetTargetTransform()->TranslateX(difference);
+		anim->SetSpeed(1.0f / 10.0f);
+		anim->SetEaseType(Easing::EasingType::Liner);
+	}
 }
