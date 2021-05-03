@@ -16,13 +16,9 @@ void ButiEngine::BackDraw::OnUpdate()
 	clonePosition.z = position.z;
 	wkp_right.lock()->transform->SetWorldPosition(clonePosition);
 	wkp_right.lock()->transform->SetLocalScale(scale);
-	wkp_right.lock()->transform->SetWorldRotation(rotation);
-	wkp_right.lock()->transform->RollLocalRotationX_Degrees(180.0f);
 	clonePosition.x = position.x - GameSettings::windowWidth * 0.5f;
 	wkp_left.lock()->transform->SetWorldPosition(clonePosition);
 	wkp_left.lock()->transform->SetLocalScale(scale);
-	wkp_left.lock()->transform->SetWorldRotation(rotation);
-	wkp_left.lock()->transform->RollLocalRotationX_Degrees(180.0f);
 
 	if (gameObject.lock()->GetGameObjectName().find("GravityCore") == std::string::npos)
 	{
@@ -33,16 +29,20 @@ void ButiEngine::BackDraw::OnUpdate()
 		float playerX = wkp_player.lock()->transform->GetWorldPosition().x;
 		float rightX = wkp_right.lock()->transform->GetWorldPosition().x;
 		float leftX = wkp_left.lock()->transform->GetWorldPosition().x;
-		if (abs(playerX - rightX) <= GameSettings::panelWidth)
+		if (rightX < GameSettings::windowWidth / 2 && playerX > 0 == rightX > 0)
 		{
-			gameObject.lock()->transform->RollLocalRotationX_Degrees(180.0f);
+			Vector3 scale = gameObject.lock()->transform->GetLocalScale();
+			scale.y *= -1;
+			gameObject.lock()->transform->SetLocalScale(scale);
 			gameObject.lock()->transform->SetWorldPosition(wkp_right.lock()->transform->GetWorldPosition());
 			gameObject.lock()->GetGameComponent<GravityCore>()->RemoveGravity();
 			gameObject.lock()->GetGameComponent<GravityCore>()->ReverseGravity();
 		}
-		else if (abs(playerX - leftX) <= GameSettings::panelWidth)
+		else if (leftX > -GameSettings::windowWidth / 2 && playerX > 0 == leftX > 0)
 		{
-			gameObject.lock()->transform->RollLocalRotationX_Degrees(180.0f);
+			Vector3 scale = gameObject.lock()->transform->GetLocalScale();
+			scale.y *= -1;
+			gameObject.lock()->transform->SetLocalScale(scale);
 			gameObject.lock()->transform->SetWorldPosition(wkp_left.lock()->transform->GetWorldPosition());
 			gameObject.lock()->GetGameComponent<GravityCore>()->RemoveGravity();
 			gameObject.lock()->GetGameComponent<GravityCore>()->ReverseGravity();

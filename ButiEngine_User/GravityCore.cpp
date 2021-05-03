@@ -40,7 +40,9 @@ void ButiEngine::GravityCore::SetGravity(float arg_gravity)
 	gravity = arg_gravity;
 	if (gravity > 0)
 	{
-		gameObject.lock()->transform->RollLocalRotationX_Degrees(180.0f);
+		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
+		scale.y *= -1;
+		gameObject.lock()->transform->SetLocalScale(scale);
 	}
 }
 

@@ -139,12 +139,9 @@ void ButiEngine::Player::CheckGravity()
 
 	if ((gravity > 0) != (previousGravity > 0))
 	{
-		gameObject.lock()->transform->RollLocalRotationX_Degrees(180.0f);
-		rotationX += 180.0f;
-		if (rotationX >= 360.0f)
-		{
-			rotationX = 0.0f;
-		}
+		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
+		scale.y *= -1;
+		gameObject.lock()->transform->SetLocalScale(scale);
 	}
 	delay = 10;
 }
@@ -304,17 +301,25 @@ void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
 			wkp_holdCore.lock()->transform->SetBaseTransform(nullptr);
 			Vector3 pos = wkp_holdCore.lock()->transform->GetWorldPosition();
 			wkp_holdCore.lock()->transform->SetWorldPosition(pos);
-			wkp_holdCore.lock()->transform->SetLocalScale(Vector3(GameSettings::blockSize, GameSettings::blockSize, 1.0f));
+			float scaleY = 1.0f;
+			if (gameObject.lock()->transform->GetWorldScale().y < 0)
+			{
+				scaleY *= -1;
+			}
+			wkp_holdCore.lock()->transform->SetLocalScale(Vector3(GameSettings::blockSize, GameSettings::blockSize * scaleY, 1.0f));
 			wkp_holdCore = std::weak_ptr<GameObject>();
 		}
 		else if(!wkp_holdCore.lock())
 		{
+			Vector3 scale = gameObject.lock()->transform->GetWorldScale();
 			wkp_holdCore = arg_core;
 			wkp_holdCore.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
 			wkp_holdCore.lock()->transform->SetLocalPosition(Vector3(0.0f, 0.9f, 0.0f));
-			Vector3 scale = gameObject.lock()->transform->GetWorldScale();
+			if (scale.y < 0)
+			{
+				scale.y *= -1;
+			}
 			wkp_holdCore.lock()->transform->SetLocalScale(Vector3(GameSettings::blockSize) / scale);
-			//wkp_holdCore.lock()->transform->RollLocalRotationX_Degrees(rotationX);
 			wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(true);
 		}
 	}
