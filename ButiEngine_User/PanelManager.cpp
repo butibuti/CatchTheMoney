@@ -5,19 +5,26 @@
 #include"Panel.h"
 #include"GameSettings.h"
 #include"MobiusLoop.h"
+#include"FollowPanel.h"
+#include"PauseManager.h"
+#include"InputManager.h"
 
 void ButiEngine::PanelManager::OnUpdate()
 {
 	StorePlayer();
-	if (GameDevice::GetInput()->TriggerKey(Keys::U))
+	if (!shp_pauseManager->GetPause())
 	{
-		auto currentParentPanel = wkp_player.lock()->GetGameComponent<Player>()->GetClosestPanel();
+		return;
+	}
+	if (InputManager::OnTriggerRightKey())
+	{
+		auto currentParentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 		int currentParentIndex = currentParentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
 		SwapPanelNum(currentParentIndex, currentParentIndex + 1);
 	}
-	else if (GameDevice::GetInput()->TriggerKey(Keys::Y))
+	else if (InputManager::OnTriggerLeftKey())
 	{
-		auto currentPanel = wkp_player.lock()->GetGameComponent<Player>()->GetClosestPanel();
+		auto currentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 		int currentIndex = currentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
 		SwapPanelNum(currentIndex, currentIndex - 1);
 	}
@@ -29,6 +36,7 @@ void ButiEngine::PanelManager::OnSet()
 
 void ButiEngine::PanelManager::Start()
 {
+	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 }
 
 void ButiEngine::PanelManager::OnShowUI()
@@ -81,6 +89,29 @@ void ButiEngine::PanelManager::AddBackPanel(std::weak_ptr<GameObject> arg_panel)
 	}
 }
 
+void ButiEngine::PanelManager::RemoveGravityCores(int arg_num, float arg_gravity)
+{
+	auto end = vec_panels.end();
+	for (auto itr = vec_panels.begin(); itr != end; ++itr)
+	{
+		(*itr).lock()->GetGameComponent<Panel>()->RemoveGravityCore(arg_num, arg_gravity);
+	}
+}
+
+bool ButiEngine::PanelManager::IsAnimation()
+{
+	bool result = false;
+	auto end = vec_panels.end();
+	for (auto itr = vec_panels.begin(); itr != end; ++itr)
+	{
+		if ((*itr).lock()->GetGameComponent<Panel>()->IsAnimation())
+		{
+			result = true;
+		}
+	}
+	return result;
+}
+
 void ButiEngine::PanelManager::StorePlayer()
 {
 	if (!wkp_player.lock())
@@ -96,6 +127,7 @@ void ButiEngine::PanelManager::SwapPanelNum(int arg_num1, int arg_num2)
 	{
 		(*itr).lock()->GetGameComponent<MobiusLoop>()->SwitchPosition();
 	}
+	wkp_player.lock()->GetGameComponent<MobiusLoop>()->SwitchPosition();
 
 
 	int index1 = arg_num1;

@@ -28,16 +28,7 @@ namespace ButiEngine {
 		}
 
 		bool IsClear() { return isClear; }
-		std::weak_ptr<GameObject> GetClosestPanel() { return wkp_closestPanel; }
 	private:
-		void Controll();
-		void StoreClosestPanel();
-		void Move();
-		void MoveX();
-		void MoveY();
-		void BackX();
-		void BackY();
-		
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<PanelManager> shp_panelManager;
 		std::shared_ptr<MobiusLoop> shp_mobiusLoop;
@@ -46,11 +37,12 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_bottom;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_bottomAABB;
 
-		std::weak_ptr<GameObject> wkp_closestPanel;
-
 		std::weak_ptr<GameObject> wkp_predictionLine;
+		std::weak_ptr<GameObject> wkp_holdCore;
 
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
+
+		const float JUMP_FORCE = 2.5f;
 
 		Vector3 velocity;
 		float speed;
@@ -58,7 +50,19 @@ namespace ButiEngine {
 		bool isClear;
 		bool grounded;
 		float gravity;
-		float jumpForce;
+		bool pushGrabKeyFrame;
+		int delay;
+
+		void Controll();
+		void CheckGravity();
+		void Move();
+		void MoveX();
+		void MoveY();
+		void BackX();
+		void BackY();
+
+		void OnCollisionGoal(std::weak_ptr<GameObject> arg_goal);
+		void OnCollisionCore(std::weak_ptr<GameObject> arg_core);
 	};
 
 }

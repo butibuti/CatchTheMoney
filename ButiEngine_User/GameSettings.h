@@ -6,7 +6,7 @@ public:
 	~GameSettings();
 
 	static const int windowWidth = 1280;
-	static const int windowHeight = 128;
+	static const int windowHeight = 144;
 	static const int panelCount = 8;
 	static const int panelWidth = windowWidth / panelCount;
 	static const int panelHeight = windowHeight;
@@ -15,6 +15,8 @@ public:
 	static const int player = 1;
 	static const int block = 2;
 	static const int goal = 3;
+	static const int coreUp = 4;
+	static const int coreDown = 5;
 
 private:
 	GameSettings();

@@ -3,6 +3,7 @@
 #include"GameSettings.h"
 #include"ParentPanel.h"
 #include"PanelManager.h"
+#include"GravityCore.h"
 
 unsigned short ButiEngine::Map::stageNum = 0;
 
@@ -39,7 +40,7 @@ void ButiEngine::Map::PutTile()
 	std::weak_ptr<GameObject> frontPanel = std::shared_ptr<GameObject>();
 	std::weak_ptr<GameObject> backPanel = std::shared_ptr<GameObject>();
 
-	Vector3 mapSize = mapData.GetSize();
+	Vector2 mapSize = mapData.GetSize();
 	Vector3 offset;
 	offset.x = -GameSettings::windowWidth * 0.5f;
 	offset.y = -GameSettings::windowHeight * 0.5f;
@@ -49,6 +50,8 @@ void ButiEngine::Map::PutTile()
 	Vector3 frameScale = Vector3(GameSettings::panelWidth, GameSettings::blockSize, 1.0f);
 
 	const int panelWidthBlock = GameSettings::panelWidth / GameSettings::blockSize;
+
+	int coreCount = 0;
 
 	for (unsigned int x = 0; x < mapSize.x; x++)
 	{
@@ -100,7 +103,7 @@ void ButiEngine::Map::PutTile()
 			Vector3 scale(GameSettings::blockSize);
 			scale.z = 1.0f;
 
-			int mapChipID = mapData.data[y][x];
+			int mapChipID = mapData.shp_data->data[x][y];
 
 			if (mapChipID == GameSettings::air)
 			{
@@ -131,6 +134,22 @@ void ButiEngine::Map::PutTile()
 				tile = GetManager().lock()->AddObjectFromCereal("Goal", ObjectFactory::Create<Transform>(tmpPos, Vector3::Zero, scale));
 				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
 			}
+			else if (mapChipID == GameSettings::coreUp)
+			{
+				tile = GetManager().lock()->AddObjectFromCereal("GravityCore", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
+				auto core = tile.lock()->GetGameComponent<GravityCore>();
+				core->SetGravity(0.2f);
+				core->SetCoreNum(coreCount);
+				coreCount++;
+			}
+			else if (mapChipID == GameSettings::coreDown)
+			{
+				tile = GetManager().lock()->AddObjectFromCereal("GravityCore", ObjectFactory::Create<Transform>(position, Vector3::Zero, scale));
+				auto core = tile.lock()->GetGameComponent<GravityCore>();
+				core->SetGravity(-0.2f);
+				core->SetCoreNum(coreCount);
+				coreCount++;
+			}
 		}
 	}
 }
@@ -149,30 +168,5 @@ void ButiEngine::Map::DestoryBlock()
 
 ButiEngine::MapData::MapData(unsigned short arg_stageNum)
 {
-	if (arg_stageNum == 0)
-	{
-		data =
-		{
-			//{0,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,2, 2,2,2,0,0,0,0,0,0,0, 2,0,0,0,0,0,0,0,0,0,},
-			//{0,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,2, 2,2,0,0,0,0,0,0,0,0, 2,0,0,0,0,0,0,0,0,0,},
-			//{0,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,2, 2,0,0,0,0,0,0,0,0,0, 2,0,0,0,0,0,0,0,0,0,},
-			//{2,0,0,0,0,0,0,0,0,0, 2,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,0,},
-			//{2,0,0,0,0,0,0,0,0,0, 2,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,0,},
-			//{2,1,0,0,0,0,0,0,0,0, 2,0,0,0,0,0,0,2,0,2, 0,0,0,0,0,0,0,0,0,2, 0,0,0,0,0,0,0,0,0,0,},
-
-			{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
-			{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
-			{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
-			{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
-			{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
-			{0,1,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,3,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
-
-			//{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
-			//{0,0,0,0,2,0,0,0,0,0, 0,0,0,2,2,2,0,0,0,0, 0,0,0,2,2,2,0,0,0,0, 0,0,0,2,0,2,0,0,0,0,},
-			//{0,0,0,0,2,0,0,0,0,0, 0,0,0,0,0,2,0,0,0,0, 0,0,0,0,0,2,0,0,0,0, 0,0,0,2,0,2,0,0,0,0,},
-			//{0,0,0,0,2,0,0,0,0,0, 0,0,0,2,2,2,0,0,0,0, 0,0,0,2,2,2,0,0,0,0, 0,0,0,2,2,2,0,0,0,0,},
-			//{0,0,0,0,2,0,0,0,0,0, 0,0,0,2,0,0,0,0,0,0, 0,0,0,0,0,2,0,0,0,0, 0,0,0,0,0,2,0,0,0,0,},
-			//{0,1,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,},
-		};
-	}
+	shp_data = CSVReader::GetMatrix(GlobalSettings::GetResourceDirectory() + "MapData/Stage" + std::to_string(arg_stageNum) + ".csv");
 }

@@ -27,6 +27,7 @@ namespace ButiEngine {
 		//GameCommon
 		static bool OnTriggerMobiusRotateResetKey();
 		static bool OnTriggerModeChangeKey();
+		static bool OnTriggerOpenMenuKey();
 
 		//NormalMode
 		static bool OnTriggerJumpKey();

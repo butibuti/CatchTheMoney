@@ -5,6 +5,8 @@
 #include"CameraController.h"
 #include"ScrollManager.h"
 #include"InputManager.h"
+#include"PanelManager.h"
+#include"StageSelect.h"
 #include "Player.h"
 #include "ShakeComponent.h"
 
@@ -26,6 +28,7 @@ void ButiEngine::StageManager::OnUpdate()
 		GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
 	}*/
 
+	ResetStage();
 	OnGoal();
 	ModeChange();
 
@@ -40,6 +43,7 @@ void ButiEngine::StageManager::Start()
 {
 	shp_map = GetManager().lock()->GetGameObject("Map").lock()->GetGameComponent<Map>();
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
+	shp_panelManager = GetManager().lock()->GetGameObject("PanelManager").lock()->GetGameComponent<PanelManager>();
 	shp_scrollManager = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ScrollManager>();
 	shp_cameraController = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraController>();
 
@@ -66,23 +70,38 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::StageManager::Clone()
 	return ObjectFactory::Create<StageManager>();
 }
 
+void ButiEngine::StageManager::ResetStage()
+{
+	if (InputManager::OnTriggerOpenMenuKey())
+	{
+		shp_map->DestoryBlock();
+		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
+		sceneManager->ReloadScene();
+	}
+}
+
 void ButiEngine::StageManager::OnGoal()
 {
 	//ÉNÉäÉAÇµÇΩÇÁ
 	if (clearAnimationFrame < 0)
 	{
 		shp_map->DestoryBlock();
-		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
-		std::string nextSceneName = "StageSelect";
-		sceneManager->RemoveScene(nextSceneName);
-		sceneManager->LoadScene(nextSceneName);
-		sceneManager->ChangeScene(nextSceneName);
+		ChangeScene("StageSelect");
 	}
+}
+
+void ButiEngine::StageManager::ChangeScene(const std::string& arg_sceneName)
+{
+	auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
+	sceneManager->RemoveScene(arg_sceneName);
+	sceneManager->LoadScene(arg_sceneName);
+	sceneManager->ChangeScene(arg_sceneName);
 }
 
 void ButiEngine::StageManager::ModeChange()
 {
 	if (shp_cameraController->IsAnimation()) { return; }
+	if (shp_panelManager->IsAnimation()) { return; }
 	if (InputManager::OnTriggerModeChangeKey())
 	{
 		shp_pauseManager->SwitchPause();

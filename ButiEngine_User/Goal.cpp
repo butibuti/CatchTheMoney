@@ -3,7 +3,8 @@
 
 void ButiEngine::Goal::OnUpdate()
 {
-	gameObject.lock()->transform->RollLocalRotationZ_Degrees(3);
+	return;
+	gameObject.lock()->transform->RollLocalRotationZ_Degrees(16);
 }
 
 void ButiEngine::Goal::OnSet()

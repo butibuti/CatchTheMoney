@@ -5,29 +5,19 @@
 #include"MobiusLoop.h"
 #include"PanelManager.h"
 #include"InputManager.h"
+#include"Panel.h"
+#include"FollowPanel.h"
+#include"GravityCore.h"
 
 void ButiEngine::Player::OnUpdate()
 {
 	if (shp_pauseManager->GetPause())
 	{
-		if (!gameObject.lock()->transform->GetBaseTransform())
-		{
-			StoreClosestPanel();
-			//Vector3 panelPos = wkp_closestPanel.lock()->transform->GetWorldPosition();
-			//panelPos.z = -5.0f;
-			//wkp_closestPanel.lock()->transform->SetWorldPosition(panelPos);
-			//�Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ�����Ȃ񂩔����ɂ����
-			gameObject.lock()->transform->SetBaseTransform(wkp_closestPanel.lock()->transform);
-		}
 		return;
 	}
-	else
-	{
-		gameObject.lock()->transform->SetBaseTransform(nullptr);
-	}
-
 	Controll();
 	Move();
+	CheckGravity();
 }
 
 void ButiEngine::Player::OnSet()
@@ -46,7 +36,8 @@ void ButiEngine::Player::Start()
 	speed = 3.0f;
 	grounded = false;
 	gravity = -0.2f;
-	jumpForce = 2.5f;
+	pushGrabKeyFrame = false;
+	delay = 10;
 	isClear = false;
 
 	wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
@@ -81,8 +72,6 @@ void ButiEngine::Player::ShowGUI()
 
 void ButiEngine::Player::OnShowUI()
 {
-	GUI::SliderFloat("gravity", &gravity, -1.0f, 1.0f);
-	GUI::SliderFloat("jumpForce", &jumpForce, -10.0f, 10.0f);
 	GUI::SliderFloat("speed", &speed, 0.0f, 50.0f);
 }
 
@@ -111,7 +100,11 @@ void ButiEngine::Player::Controll()
 	{
 		if (InputManager::OnTriggerJumpKey() && !isClear)
 		{
-			velocity.y = jumpForce;
+			velocity.y = JUMP_FORCE;
+			if (gravity > 0)
+			{
+				velocity.y *= -1;
+			}
 			grounded = false;
 		}
 	}
@@ -121,14 +114,45 @@ void ButiEngine::Player::Controll()
 	}
 }
 
-void ButiEngine::Player::StoreClosestPanel()
+void ButiEngine::Player::CheckGravity()
 {
-	float x = gameObject.lock()->transform->GetWorldPosition().x;
-	wkp_closestPanel = shp_panelManager->GetClosestPanel(x);
+	if (wkp_holdCore.lock() && delay > 0)
+	{
+		delay--;
+		return;
+	}
+	auto closestPanel = gameObject.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
+	float previousGravity = gravity;
+	if (closestPanel.lock())
+	{
+		auto panelComponent = closestPanel.lock()->GetGameComponent<Panel>();
+		int coreCount = panelComponent->GetGravityCoreCount();
+		gravity = panelComponent->GetGravity();
+		if (gravity == 0)
+		{
+			if (previousGravity < 0)
+			{
+				gravity = -0.2f;
+			}
+			else if (previousGravity > 0)
+			{
+				gravity = 0.2f;
+			}
+		}
+	}
+
+	if ((gravity > 0) != (previousGravity > 0))
+	{
+		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
+		scale.y *= -1;
+		gameObject.lock()->transform->SetLocalScale(scale);
+	}
+	delay = 10;
 }
 
 void ButiEngine::Player::Move()
 {
+	pushGrabKeyFrame = false;
 	velocity.x *= speed;
 
 	if (fabsf(velocity.x) > fabsf(velocity.y))
@@ -191,11 +215,17 @@ void ButiEngine::Player::BackX()
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == gameObject.lock()) { continue; }
-			if ((*itr)->GetGameObjectName() == "Goal") 
+			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos)
 			{
 				//ゴール時処理
-				isClear = true;
+				OnCollisionGoal((*itr));
 				continue; 
+			}
+			if ((*itr)->GetGameObjectName().find("GravityCore") != std::string::npos)
+			{
+				//重力コア処理
+				OnCollisionCore((*itr));
+				continue;
 			}
 
 			float widthHalf = (*itr)->transform->GetWorldScale().x * 0.5f;
@@ -228,11 +258,15 @@ void ButiEngine::Player::BackY()
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == gameObject.lock()) { continue; }
-			if ((*itr)->GetGameObjectName() == "Goal") 
+			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos)
 			{
 				//ゴール時処理
-				isClear = true;
-				continue; 
+				OnCollisionGoal((*itr));
+				continue;
+			}
+			if ((*itr)->GetGameObjectName().find("GravityCore") != std::string::npos)
+			{
+				continue;
 			}
 
 			if (velocity.y > 0)
@@ -252,6 +286,46 @@ void ButiEngine::Player::BackY()
 				grounded = true;
 			}
 			velocity.y = 0;
+		}
+	}
+}
+
+void ButiEngine::Player::OnCollisionGoal(std::weak_ptr<GameObject> arg_goal)
+{
+	isClear = true;
+}
+
+void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
+{
+	if (InputManager::OnTriggerGrabKey())
+	{
+		if (wkp_holdCore.lock() && grounded)
+		{
+			wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(false);
+			wkp_holdCore.lock()->transform->SetLocalPosition(Vector3(0.0f, 0.0f, 0.0f));
+			wkp_holdCore.lock()->transform->SetBaseTransform(nullptr);
+			Vector3 pos = wkp_holdCore.lock()->transform->GetWorldPosition();
+			wkp_holdCore.lock()->transform->SetWorldPosition(pos);
+			float scaleY = 1.0f;
+			if (gameObject.lock()->transform->GetWorldScale().y < 0)
+			{
+				scaleY *= -1;
+			}
+			wkp_holdCore.lock()->transform->SetLocalScale(Vector3(GameSettings::blockSize, GameSettings::blockSize * scaleY, 1.0f));
+			wkp_holdCore = std::weak_ptr<GameObject>();
+		}
+		else if(!wkp_holdCore.lock())
+		{
+			Vector3 scale = gameObject.lock()->transform->GetWorldScale();
+			wkp_holdCore = arg_core;
+			wkp_holdCore.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
+			wkp_holdCore.lock()->transform->SetLocalPosition(Vector3(0.0f, 0.9f, 0.0f));
+			if (scale.y < 0)
+			{
+				scale.y *= -1;
+			}
+			wkp_holdCore.lock()->transform->SetLocalScale(Vector3(GameSettings::blockSize) / scale);
+			wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(true);
 		}
 	}
 }

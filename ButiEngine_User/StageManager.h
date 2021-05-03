@@ -4,6 +4,7 @@ namespace ButiEngine {
 
 	class Map;
 	class PauseManager;
+	class PanelManager;
 	class ScrollManager;
 	class CameraController;
 
@@ -34,6 +35,7 @@ namespace ButiEngine {
 	private:
 		std::shared_ptr<Map> shp_map;
 		std::shared_ptr<PauseManager> shp_pauseManager;
+		std::shared_ptr<PanelManager> shp_panelManager;
 		std::shared_ptr<ScrollManager> shp_scrollManager;
 		std::shared_ptr<CameraController> shp_cameraController;
 
@@ -41,9 +43,11 @@ namespace ButiEngine {
 
 		GameMode mode;
 
+		void ResetStage();
 		int clearAnimationFrame;
 
 		void OnGoal();
+		void ChangeScene(const std::string& arg_sceneName);
 		void ModeChange();
 	};
 
