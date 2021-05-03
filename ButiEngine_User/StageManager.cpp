@@ -23,11 +23,6 @@ void ButiEngine::StageManager::OnUpdate()
 		clearAnimationFrame--;
 	}
 
-	if (GameDevice::GetInput()->TriggerKey(Keys::Q))
-	{
-		GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(11.3f);
-	}
-
 	ResetStage();
 	OnGoal();
 	ModeChange();
@@ -82,7 +77,6 @@ void ButiEngine::StageManager::ResetStage()
 
 void ButiEngine::StageManager::OnGoal()
 {
-	//ÉNÉäÉAÇµÇΩÇÁ
 	if (clearAnimationFrame < 0)
 	{
 		shp_map->DestoryBlock();

@@ -4,8 +4,7 @@
 #include"ParentPanel.h"
 #include"PanelManager.h"
 #include"GravityCore.h"
-
-unsigned short ButiEngine::Map::stageNum = 0;
+#include"StageSelect.h"
 
 void ButiEngine::Map::OnUpdate()
 {
@@ -33,7 +32,7 @@ void ButiEngine::Map::PutTile()
 {
 	DestoryBlock();
 
-	MapData mapData = MapData(stageNum);
+	MapData mapData = MapData(StageSelect::GetStageNum());
 
 	std::weak_ptr<GameObject> tile = std::shared_ptr<GameObject>();
 	std::weak_ptr<GameObject> parentPanel = std::shared_ptr<GameObject>();

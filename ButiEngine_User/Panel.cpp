@@ -1,6 +1,7 @@
 #include "stdafx_u.h"
 #include "Panel.h"
 #include"GameSettings.h"
+#include"ShakeComponent.h"
 
 void ButiEngine::Panel::OnUpdate()
 {
@@ -8,8 +9,9 @@ void ButiEngine::Panel::OnUpdate()
 	{
 		animation = true;
 	}
-	else
+	else if(animation)
 	{
+		//GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
 		animation = false;
 	}
 }
@@ -84,8 +86,8 @@ void ButiEngine::Panel::AddTransformAnimation()
 	auto anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
 	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
 	anim->GetTargetTransform()->SetWorldPosition(targetPos);
-	anim->SetSpeed(1.0f / 30.0f);
-	anim->SetEaseType(Easing::EasingType::EaseOutQuart);
+	anim->SetSpeed(1.0f / 10.0f);
+	anim->SetEaseType(Easing::EasingType::Liner);
 
 	if (panelNum < 0)
 	{
