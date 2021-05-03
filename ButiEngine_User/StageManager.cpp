@@ -46,7 +46,8 @@ void ButiEngine::StageManager::ResetStage()
 	if (InputManager::OnTriggerOpenMenuKey())
 	{
 		shp_map->DestoryBlock();
-		ChangeScene("Stage" + std::to_string(StageSelect::GetStageNum()));
+		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
+		sceneManager->ReloadScene();
 	}
 }
 

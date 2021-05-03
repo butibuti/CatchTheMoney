@@ -13,6 +13,12 @@ void ButiEngine::GravityCore::OnUpdate()
 	}
 	RemoveGravity();
 	AddGravity();
+	//Vector3 scale = gameObject.lock()->transform->GetWorldScale();
+	//if (gravity > 0 == scale.y)
+	//{
+	//	scale.y *= -1;
+	//	gameObject.lock()->transform->SetLocalScale(scale);
+	//}
 }
 
 void ButiEngine::GravityCore::OnSet()
