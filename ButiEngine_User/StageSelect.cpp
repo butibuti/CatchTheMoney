@@ -54,8 +54,17 @@ void ButiEngine::StageSelect::Start()
 {
 	intervalFrame = 0;
 	wkp_parentSelectPanel = GetManager().lock()->GetGameObject("ParentSelectPanel");
-	
+
 	preParentRotation = Vector3::Zero;
+
+	auto childAngle = 180.0f / (maxStageNum + 1) * 2.0f;
+	auto angle = 360.0f / (float)(maxStageNum + 1) * 2.0f;
+	auto parentSelectPanel = wkp_parentSelectPanel.lock()->GetGameComponent<ParentSelectPanel>();
+	for (int i = 0; i < stageNum; i++)
+	{
+		preParentRotation.y += angle;
+		parentSelectPanel->ChildRotation(-childAngle * i);
+	}
 
 }
 
