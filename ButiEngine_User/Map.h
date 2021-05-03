@@ -9,16 +9,15 @@ namespace ButiEngine {
 	public:
 		MapData(){}
 		MapData(unsigned short arg_stageNum);
-		Vector3 GetSize()
+		Vector2 GetSize()
 		{
-			return Vector3(data[0].size(), data.size(), 0);
+			return Vector2(shp_data->size_x, shp_data->size_y);
 		}
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
-			archive(data);
 		}
-		std::vector<std::vector<int>> data;
+		std::shared_ptr<CSVData> shp_data;
 	};
 
 	class Map :public GameComponent
