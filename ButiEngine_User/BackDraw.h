@@ -24,6 +24,8 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_left;
 
 		void StorePlayer();
+		void Correction();
+		void SwitchGravityCore();
 	};
 
 }

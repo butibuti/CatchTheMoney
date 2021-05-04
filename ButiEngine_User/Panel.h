@@ -36,6 +36,8 @@ namespace ButiEngine {
 		void ResetGravityCores();
 		int GetGravityCoreCount() { return vec_gravityCoreNums.size(); }
 		bool IsAnimation() { return animation; }
+
+		void SetDrawObject();
 	private:
 		std::weak_ptr<GameObject> wkp_drawObject;
 

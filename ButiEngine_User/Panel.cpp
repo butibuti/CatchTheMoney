@@ -14,21 +14,7 @@ void ButiEngine::Panel::OnUpdate()
 		//GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
 		animation = false;
 	}
-
-	if (gravity != 0)
-	{
-		wkp_drawObject.lock()->transform->SetLocalPosition(Vector3(0, 0, 0.5f));
-		Vector3 scale = wkp_drawObject.lock()->transform->GetLocalScale();
-		if (scale.y > 0 == gravity > 0)
-		{
-			scale.y *= -1;
-			wkp_drawObject.lock()->transform->SetLocalScale(scale);
-		}
-	}
-	else
-	{
-		wkp_drawObject.lock()->transform->SetLocalPosition(Vector3(0, 0, 1000));
-	}
+	SetDrawObject();
 }
 
 void ButiEngine::Panel::OnSet()
@@ -40,7 +26,7 @@ void ButiEngine::Panel::Start()
 	Vector3 scale;
 	scale.x = GameSettings::panelWidth;
 	scale.y = GameSettings::panelHeight;
-	wkp_drawObject = GetManager().lock()->AddObjectFromCereal("PanelForDraw", ObjectFactory::Create<Transform>(Vector3(0, 0, 0.5f), Vector3::Zero, scale));
+	wkp_drawObject = GetManager().lock()->AddObjectFromCereal("PanelForDraw", ObjectFactory::Create<Transform>(Vector3(0, 0, 0.3f), Vector3::Zero, scale));
 	wkp_drawObject.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 	gravity = 0.0f;
 }
@@ -88,6 +74,24 @@ bool ButiEngine::Panel::ContainsGravityCore(int arg_num)
 void ButiEngine::Panel::ResetGravityCores()
 {
 	vec_gravityCoreNums.clear();
+}
+
+void ButiEngine::Panel::SetDrawObject()
+{
+	if (gravity != 0)
+	{
+		wkp_drawObject.lock()->transform->SetLocalPosition(Vector3(0, 0, 0.5f));
+		Vector3 scale = wkp_drawObject.lock()->transform->GetLocalScale();
+		if (scale.y > 0 == gravity > 0)
+		{
+			scale.y *= -1;
+			wkp_drawObject.lock()->transform->SetLocalScale(scale);
+		}
+	}
+	else
+	{
+		wkp_drawObject.lock()->transform->SetLocalPosition(Vector3(0, 0, 1000));
+	}
 }
 
 void ButiEngine::Panel::AddTransformAnimation()

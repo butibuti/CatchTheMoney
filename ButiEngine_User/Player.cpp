@@ -47,7 +47,7 @@ void ButiEngine::Player::Start()
 	wkp_bottom.lock()->transform->SetLocalPosition(Vector3(0.0f, -0.75f, 0.0f));
 	wkp_bottom.lock()->transform->SetLocalScale(Vector3(1.0f, 0.5f, 1.0f));
 	
-	shp_bottomAABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 1.0f, 1.0f), wkp_bottom.lock()->transform);
+	shp_bottomAABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 1.0f), wkp_bottom.lock()->transform);
 	
 
 	gameObject.lock()->RegistReactionComponent(GetThis<GameComponent>());
@@ -306,29 +306,18 @@ void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
 		if (wkp_holdCore.lock() && grounded)
 		{
 			wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(false);
-			wkp_holdCore.lock()->transform->SetLocalPosition(Vector3(0.0f, 0.0f, 0.0f));
-			wkp_holdCore.lock()->transform->SetBaseTransform(nullptr);
-			Vector3 pos = wkp_holdCore.lock()->transform->GetWorldPosition();
-			wkp_holdCore.lock()->transform->SetWorldPosition(pos);
-			float scaleY = 1.0f;
-			if (gameObject.lock()->transform->GetWorldScale().y < 0)
-			{
-				scaleY *= -1;
-			}
-			wkp_holdCore.lock()->transform->SetLocalScale(Vector3(GameSettings::blockSize, GameSettings::blockSize * scaleY, 1.0f));
+			wkp_holdCore.lock()->transform->SetWorldPosition(gameObject.lock()->transform->GetWorldPosition());
 			wkp_holdCore = std::weak_ptr<GameObject>();
 		}
 		else if(!wkp_holdCore.lock())
 		{
-			Vector3 scale = gameObject.lock()->transform->GetWorldScale();
+			int closestPanelNum = gameObject.lock()->GetGameComponent<FollowPanel>()
+				->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
+			int coreClosestPanelNum = arg_core.lock()->GetGameComponent<FollowPanel>()
+				->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
+
+			if (closestPanelNum != coreClosestPanelNum) { return; }
 			wkp_holdCore = arg_core;
-			wkp_holdCore.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-			wkp_holdCore.lock()->transform->SetLocalPosition(Vector3(0.0f, 0.9f, 0.0f));
-			if (scale.y < 0)
-			{
-				scale.y *= -1;
-			}
-			wkp_holdCore.lock()->transform->SetLocalScale(Vector3(GameSettings::blockSize) / scale);
 			wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(true);
 		}
 	}

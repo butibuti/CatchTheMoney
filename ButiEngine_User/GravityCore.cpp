@@ -4,21 +4,18 @@
 #include"PanelManager.h"
 #include"FollowPanel.h"
 #include"Panel.h"
+#include"Player.h"
 
 void ButiEngine::GravityCore::OnUpdate()
 {
+	StorePlayer();
+	FollowPlayer();
 	if (shp_pauseManager->GetPause())
 	{
 		return;
 	}
 	RemoveGravity();
 	AddGravity();
-	//Vector3 scale = gameObject.lock()->transform->GetWorldScale();
-	//if (gravity > 0 == scale.y)
-	//{
-	//	scale.y *= -1;
-	//	gameObject.lock()->transform->SetLocalScale(scale);
-	//}
 }
 
 void ButiEngine::GravityCore::OnSet()
@@ -65,4 +62,29 @@ void ButiEngine::GravityCore::AddGravity()
 		auto panelComponent = closestPanel.lock()->GetGameComponent<Panel>();
 		panelComponent->AddGravityCore(coreNum, gravity);
 	}
+}
+
+void ButiEngine::GravityCore::StorePlayer()
+{
+	if (!wkp_player.lock())
+	{
+		wkp_player = GetManager().lock()->GetGameObject("Player");
+	}
+}
+
+void ButiEngine::GravityCore::FollowPlayer()
+{
+	if (!grabbed) { return; }
+
+	Vector3 playerPos = wkp_player.lock()->transform->GetWorldPosition();
+	float playerGravity = wkp_player.lock()->GetGameComponent<Player>()->GetGravity();
+	float difference = 15.9f;
+
+	if (playerGravity > 0)
+	{
+		difference *= -1;
+	}
+
+	playerPos.y += difference;
+	gameObject.lock()->transform->SetWorldPosition(playerPos);
 }

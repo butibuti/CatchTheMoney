@@ -11,9 +11,6 @@ void ButiEngine::FollowPanel::OnUpdate()
 	{
 		if (!gameObject.lock()->transform->GetBaseTransform())
 		{
-			//Vector3 panelPos = wkp_closestPanel.lock()->transform->GetWorldPosition();
-			//panelPos.z = -5.0f;
-			//wkp_closestPanel.lock()->transform->SetWorldPosition(panelPos);
 			gameObject.lock()->transform->SetBaseTransform(wkp_closestPanel.lock()->transform);
 			Correction();
 		}
@@ -62,7 +59,7 @@ void ButiEngine::FollowPanel::StoreClosestPanel()
 void ButiEngine::FollowPanel::Correction()
 {
 	float localX = gameObject.lock()->transform->GetLocalPosition().x;
-	float movableRange = GameSettings::panelWidth * 0.5f - GameSettings::blockSize;
+	float movableRange = GameSettings::panelWidth * 0.5f - GameSettings::blockSize * 0.5f;
 	if (abs(localX) - movableRange > 0)
 	{
 		if (localX < 0)
