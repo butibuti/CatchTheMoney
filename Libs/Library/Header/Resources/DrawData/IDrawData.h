@@ -18,6 +18,7 @@ namespace ButiEngine {
 			transform = nullptr;
 		}
 		virtual void WorldMatrixUpdate() = 0;
+		void TransformUpdate();
 	protected:
 		std::shared_ptr < CBuffer<ShaderVariable>> cbuffer;
 		std::shared_ptr<Transform> transform;

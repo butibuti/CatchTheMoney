@@ -426,24 +426,6 @@ namespace ButiEngine {
 	class ModelAnimation;
 
 	class ModelDrawData;
-	class SimpleBoneAnimatorComponent :public GameComponent {
-	public:
-		SimpleBoneAnimatorComponent(std::shared_ptr< ModelDrawData > arg_shp_modelData);
-		SimpleBoneAnimatorComponent() {}
-		void OnUpdate()override;
-		void AddAnimation(std::shared_ptr<ModelAnimation> arg_shp_animation);
-		void AddAnimation(MotionTag arg_motionTag);
-		void SetLoop(const bool arg_isLoop);
-		void OnShowUI()override;
-		std::string GetGameComponentName()override {
-			return "SimpleBoneAnimatorComponent";
-		}
-		std::shared_ptr<GameComponent> Clone()override;
-	private:
-		std::shared_ptr<ModelAnimation> shp_animation;
-		std::shared_ptr< ModelDrawData > shp_modelData;
-	};
-
 	class MeshDrawComponent :public GameComponent
 	{
 	public:
@@ -494,6 +476,8 @@ namespace ButiEngine {
 			archive(shp_drawInfo);
 		}
 	protected:
+		void ShowDrawSettingsUI();
+		void ShowExCBufferUI();
 		std::shared_ptr< MeshDrawData > data;
 		virtual void CreateData();
 		UINT* index;
@@ -539,7 +523,6 @@ namespace ButiEngine {
 
 
 BUTI_REGIST_GAMECOMPONENT(UIComponent)
-BUTI_REGIST_GAMECOMPONENT(SimpleBoneAnimatorComponent)
 
 BUTI_REGIST_GAMECOMPONENT(MeshDrawComponent)
 BUTI_REGIST_GAMECOMPONENT(MeshDrawComponent_Static)

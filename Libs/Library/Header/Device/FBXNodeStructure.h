@@ -144,9 +144,11 @@ namespace ButiEngine {
 		};
 		struct FBXBoneNode :public FBXNodeStructure {
 			std::string GetName();
-			Vector3 GetPosition(const std::vector<std::shared_ptr<FBXBoneNode>>& arg_bones, const FBXGlobalSettings& settings);
-			Vector3 GetRotation(const std::vector<std::shared_ptr<FBXBoneNode>>& arg_bones, const FBXGlobalSettings& settings);
+			Vector3 GetPosition( const FBXGlobalSettings& settings);
+			Vector3 GetRotation( const FBXGlobalSettings& settings);
 			Matrix4x4 GetMatrix(const std::vector<std::shared_ptr<FBXBoneNode>>& arg_bones, const FBXGlobalSettings& settings);
+			Matrix4x4 GetMatrix();
+			Matrix4x4 GetLocalMatrix(const std::vector<std::shared_ptr<FBXBoneNode>>& arg_bones, const FBXGlobalSettings& settings);
 			int parentBoneIndex = -1;
 			int boneIndex = -1;
 			std::shared_ptr<PoseNode> shp_poseNode;
@@ -201,7 +203,7 @@ namespace ButiEngine {
 		};
 		struct FBXAnimationLayer :FBXNodeStructure {
 
-			void CreateMotionData(std::map<std::wstring, std::vector< MotionKeyFrameData>>& arg_ref_map_motionDatas, const FBXGlobalSettings& arg_ref_globalSettings, const long long int arg_localStop, const long long int arg_refStop);
+			void CreateMotionData(const std::vector<std::shared_ptr<FBXBoneNode>>& arg_bones, std::map<std::wstring, std::vector< MotionKeyFrameData>>& arg_ref_map_motionDatas, const FBXGlobalSettings& arg_ref_globalSettings, const long long int arg_localStop, const long long int arg_refStop);
 			std::map<std::string, TRSCurves> map_curves;
 		};
 

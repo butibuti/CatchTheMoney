@@ -61,6 +61,7 @@ namespace ButiEngine {
 		void UnLoadVertexShader(VertexShaderTag arg_shaderTag)override;
 		void UnLoadGeometryShader(GeometryShaderTag arg_shaderTag)override;
 		void UnLoadSound(SoundTag arg_soundTag)override;
+		void UnLoadMotion(MotionTag arg_motionTag)override;
 		void UnLoadModel(ModelTag arg_modelTag)override;
 		void UnLoadMaterial(MaterialTag arg_materialTag)override;
 		

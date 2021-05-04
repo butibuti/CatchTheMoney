@@ -29,6 +29,14 @@ namespace ButiEngine {
 		UINT startCount = 0;
 		TextureTag screenTextureTag;
 		MaterialTag screenMaterialTag;
+
+		std::timespec befUpdateTs;
+		std::timespec nowUpdateTs;
+		long long int befUpdateTime;
+
+		std::timespec befDrawTs;
+		std::timespec nowDrawTs;
+		long long int befDrawTime;
 	};
 }
 #endif // !_SceneManager_Edit_H_

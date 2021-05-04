@@ -40,7 +40,7 @@ namespace ButiEngine {
 		void Initialize()override {}
 		void PreInitialize()override {}
 		virtual void Start() = 0;
-		virtual void FrameSet(const UINT) = 0;
+		virtual void FrameSet(const float) = 0;
 		virtual void Reset() = 0;
 		virtual UINT GetEndFrame() = 0;
 		virtual void PreStart() = 0;
@@ -48,6 +48,7 @@ namespace ButiEngine {
 		virtual void SetMotionData(const MotionKeyFrameData& arg_motionData) = 0;
 		virtual void SetMotionData(const std::vector<MotionKeyFrameData>& arg_motionDatas)=0;
 		virtual void LocalPoseSet(std::shared_ptr<Transform> arg_parentBone) = 0;
+		virtual std::string GetContentsName() = 0;
 	};
 	class BoneMotionTimeLine :public IMotionTimeLine {
 	public:
@@ -59,9 +60,11 @@ namespace ButiEngine {
 		void SetMotionData(const MotionKeyFrameData& arg_motionData) override;
 		void SetMotionData(const std::vector<MotionKeyFrameData>& arg_motionDatas) override;
 		void Start() override;
-		void FrameSet(const UINT frame)override;
+		void FrameSet(const float frame)override;
 		UINT GetEndFrame() override;
 		void LocalPoseSet(std::shared_ptr<Transform> arg_parentBone)override;
+		void SetBoneName(const std::string& arg_name);
+		std::string GetContentsName()override;
 	private:
 		bool isActive=false;
 		Quat initRotate;
@@ -70,26 +73,26 @@ namespace ButiEngine {
 		std::vector< MotionKeyFrameData >::iterator nowMotionItr;
 		std::vector< MotionKeyFrameData >::iterator befMotionItr;
 		std::shared_ptr<Bone> bone;
+		std::string boneName;
 	};
 	class ModelAnimation :public IObject
 	{
 	public:
 		void Initialize() override {}
 		void PreInitialize() override {}
-		void Motion();
+		void Update(const float arg_frame);
 		void IKTest();
 		void Reset();
 		void PreMotionStart(std::shared_ptr<Transform> arg_parentBoneTransform);
-		std::shared_ptr<IMotionTimeLine> AddMotionTimeLine(const std::string& arg_name, std::shared_ptr<IMotionTimeLine> arg_motion);
+		std::shared_ptr<IMotionTimeLine> AddMotionTimeLine( std::shared_ptr<IMotionTimeLine> arg_motion);
 		bool SetLoop(const bool arg_isLoop);
 		void SetBoneDrawObj(std::shared_ptr<IBoneObject> arg_shp_boneDrawObj);
 	private:
 		bool isActive = true;
 		bool isRoop = false;
-		UINT frame = 1;
+		float frame = 0.0f;
 		UINT endFrame = 0;
 		
-		std::map<std::string, std::shared_ptr<IMotionTimeLine>> map_motionTimeLine;
 
 		std::vector<std::shared_ptr<IMotionTimeLine>> vec_timeLines;
 		std::shared_ptr<IBoneObject> shp_boneDrawObj;

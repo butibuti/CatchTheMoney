@@ -26,7 +26,7 @@ namespace ButiEngine {
 
 		D3D12_RASTERIZER_DESC rasterizerStateDesc;
 		D3D12_ROOT_SIGNATURE_DESC rootdesc;
-		SamplerState samplerState;
+		int samplerState=(int)SamplerState::LinearClamp;
 		std::weak_ptr<GraphicDevice_Dx12> wkp_graphicDevice;
 		int textureRegion;
 	};

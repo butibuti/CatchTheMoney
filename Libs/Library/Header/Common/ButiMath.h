@@ -164,7 +164,7 @@ namespace ButiEngine {
 		}
 
 		inline Vector3 GetPosition()const;
-
+		inline void RemovePosition();
 		static inline Matrix4x4 Scale(const Vector3& arg_scale);
 
 		static inline Matrix4x4 RollX(const float Angle) {
@@ -1507,16 +1507,30 @@ namespace ButiEngine {
 			*this = rotationMatrix.ToQuat();
 			return *this;
 		}
-		inline Quat& CreateFromEular_deg(const Vector3& arg_eular) {
+		inline Quat& CreateFromEular_local_deg(const Vector3& arg_eular) {
 
 			Matrix4x4 rotationMatrix = DirectX::XMMatrixRotationZ(
-				XMConvertToRadians( arg_eular.z)
+				XMConvertToRadians(arg_eular.z)
 			) *
 				DirectX::XMMatrixRotationY(
 					XMConvertToRadians(arg_eular.y)
 				) *
 				DirectX::XMMatrixRotationX(
 					XMConvertToRadians(arg_eular.x)
+				);
+			*this = rotationMatrix.ToQuat();
+			return *this;
+		}
+		inline Quat& CreateFromEular_deg(const Vector3& arg_eular) {
+
+			Matrix4x4 rotationMatrix = DirectX::XMMatrixRotationX(
+				XMConvertToRadians(arg_eular.x)
+			) *
+				DirectX::XMMatrixRotationY(
+					XMConvertToRadians(arg_eular.y)
+				) *
+				DirectX::XMMatrixRotationZ(
+					XMConvertToRadians(arg_eular.z)
 				);
 			*this = rotationMatrix.ToQuat();
 			return *this;
@@ -1916,7 +1930,7 @@ namespace ButiEngine {
 				}
 
 
-				return CatmullRom((t - itr * unit) / unit, vec_points[itr], vec_points[itr + 1], vec_points[itr + 2], vec_points[itr + 3]);
+				return CatmullRom((t - itr * unit) / unit, vec_points[itr], vec_points[(unsigned long long int)itr + 1], vec_points[(unsigned long long int)itr + 2], vec_points[(unsigned long long int)itr + 3]);
 
 			}
 			t += 0.01f;
@@ -1990,7 +2004,13 @@ namespace ButiEngine {
 	}
 	inline ButiEngine::Vector3 ButiEngine::Matrix4x4::GetPosition()const
 	{
-		return Vector3(_41,_42,_43);
+		return Vector3(_41, _42, _43);
+	}
+	inline void  ButiEngine::Matrix4x4::RemovePosition()
+	{
+		_41 = 0;
+		_42 = 0;
+		_43 = 0;
 	}
 	inline Matrix4x4 ButiEngine::Matrix4x4::Scale(const Vector3& arg_scale)
 	{
@@ -2162,9 +2182,6 @@ namespace ButiEngine {
 			return out;
 		}
 
-		inline void GetVertecies(Point2D* out) {
-			out = GetVertecies().data();
-		}
 
 		inline bool IsContain(Point2D arg_point2D) {
 			if (arg_point2D.x >= position.x - width / 2 && arg_point2D.x <= position.x + width / 2

@@ -869,6 +869,9 @@ namespace ButiEngine {
 		void LabelText(const std::string& label, const std::string& fmt, ...);
 		void LabelTextV(const std::string& label, const std::string& fmt, va_list args);
 		void BulletText(const std::string& fmt, ...);
+		void BulletText(const int fmt, ...);
+		void BulletText(const float fmt, ...);
+		void BulletText(const std::string& fmt, ...);
 		void BulletTextV(const std::string& fmt, va_list args);
 
 		bool Button(const std::string& label, const Vector2& size = Vector2(0, 0));

@@ -12,7 +12,6 @@ namespace ButiEngine {
 	class Util
 	{
 	public:
-
 		static inline bool GetBitFlag(const int arg_flag, const int arg_bitIndex) {
 			if (arg_bitIndex >= 16 || arg_bitIndex < 0) {
 				return false;
@@ -38,6 +37,7 @@ namespace ButiEngine {
 
 			return std::abs(out);
 		}
+
 		static void WStringtoMultiByte(const std::wstring & src, std::string& dest);
 		static std::string WStringToString(std::wstring oWString);
 		static std::wstring StringToWString(std::string oString);
@@ -55,7 +55,7 @@ namespace ButiEngine {
 			delete[] WCstr;
 		}
 
-		static	std::string ToUTF8(const std::string& srcSjis) {
+		static std::string ToUTF8(const std::string& srcSjis) {
 			//Unicode‚Ö•ÏŠ·Œã‚Ì•¶Žš—ñ’·‚ð“¾‚é
 			int lenghtUnicode = MultiByteToWideChar(CP_THREAD_ACP, 0, srcSjis.c_str(), srcSjis.size() + 1, NULL, 0);
 
@@ -81,7 +81,7 @@ namespace ButiEngine {
 
 			return strUTF8;
 		}
-		static	std::string UTF8ToMultiByte(const std::string& srcUTF8) {
+		static std::string UTF8ToMultiByte(const std::string& srcUTF8) {
 			//Unicode‚Ö•ÏŠ·Œã‚Ì•¶Žš—ñ’·‚ð“¾‚é
 			int lenghtUnicode = MultiByteToWideChar(CP_UTF8, 0, srcUTF8.c_str(), srcUTF8.size() + 1, NULL, 0);
 
@@ -125,8 +125,21 @@ namespace ButiEngine {
 			return typeid(T).name();
 		}
 
-		static bool IsFileExistence(const std::string& arg_filePath);
+		static int BitRemoveLeft(const int arg_bit, const int arg_slideSize) {
+
+			int ret = arg_bit;
+			ret <<= arg_slideSize;
+			ret >>= arg_slideSize;
+			return ret;
+		}
+		static int BitRemoveRight(const int arg_bit, const int arg_slideSize) {
+			int ret = arg_bit;
+			ret >>= arg_slideSize;
+			ret <<= arg_slideSize;
+			return ret;
+		}
 	};
+
 	const unsigned int LEVEL_FLAG[]{ (111 << 0),(111 << 3),(111 << 6),(111 << 9),(111 << 12),(111 << 15),(111 << 18),(111 << 21),(111<< 24),(111 << 27), };
 	class OctreeHelper {
 	public:

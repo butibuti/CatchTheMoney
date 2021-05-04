@@ -26,6 +26,7 @@ namespace ButiEngine {
 		int Run()override;
 		void InitLoadResources()override;
 		void Exit()override;
+		long long int GetBefFrame()const override;
 	private:
 		std::shared_ptr<GraphicDevice>shp_graphicDevice;
 		std::unique_ptr<IWindow> unq_window;
@@ -36,6 +37,7 @@ namespace ButiEngine {
 		std::shared_ptr<GameObjectTagManager> shp_gameObjTagManager;
 		std::timespec befTs;
 		std::timespec nowTs;
+		long long int befFrameTime;
 	};
 
 }

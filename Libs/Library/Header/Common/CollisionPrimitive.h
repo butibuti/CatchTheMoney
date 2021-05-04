@@ -257,7 +257,7 @@ namespace ButiEngine {
 				wkp_transform = arg_weak_transform;
 				length = arg_segment.velocity.y;
 			}
-			CollisionPrimitive_Capsule() {}
+			CollisionPrimitive_Capsule() :Geometry::Capsule(Segment(), 0) {}
 			inline void Update()override {
 				auto pos =  wkp_transform.lock()->GetWorldPosition();
 				auto rotation = wkp_transform.lock()->GetWorldRotation();
@@ -472,7 +472,7 @@ namespace ButiEngine {
 
 				if (GUI::TreeNode("Box_AABB")) {
 					GUI::BulletText("Length");
-					GUI::DragFloat3("##length", &initLengthes.x, 0.01, 0, 500);
+					GUI::DragFloat3("##length", &initLengthes.x, 0.01f, 0.0f, 500.0f);
 					GUI::TreePop();
 				}
 			}
@@ -533,7 +533,7 @@ namespace ButiEngine {
 
 				if (GUI::TreeNode("Box_OBB")) {
 					GUI::BulletText("Length");
-					GUI::DragFloat3("##length", &initLengthes.x, 0.01, 0, 500);
+					GUI::DragFloat3("##length", &initLengthes.x, 0.01f, 0.0f, 500.0f);
 					GUI::TreePop();
 				}
 			}

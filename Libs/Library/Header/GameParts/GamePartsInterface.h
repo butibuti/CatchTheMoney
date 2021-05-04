@@ -260,6 +260,7 @@ namespace ButiEngine
 		virtual void UnLoadSound(SoundTag arg_soundTag)=0;
 		virtual void UnLoadModel(ModelTag arg_modelTag)=0;
 		virtual void UnLoadMaterial(MaterialTag arg_materialTag)=0;
+		virtual void UnLoadMotion(MotionTag arg_motionTag) = 0;
 
 		virtual std::string GetTagNameMesh(MeshTag arg_meshTag)=0;
 		virtual std::string GetTagNameTexture(TextureTag arg_textureTag)=0;
@@ -317,6 +318,7 @@ namespace ButiEngine
 		virtual int Run()=0;
 		virtual void InitLoadResources()=0;
 		virtual void Exit()=0;
+		virtual long long int GetBefFrame()const = 0;
 	};
 
 	struct CameraProjProperty {

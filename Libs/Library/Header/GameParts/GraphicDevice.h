@@ -49,7 +49,7 @@ namespace ButiEngine {
 		CullMode cullMode = CullMode::back;
 		FillMode isFill = FillMode::solid;
 		BlendMode blendMode = BlendMode::AlphaBlend;
-		BillBoardMode billboardMode = BillBoardMode::none;
+		int billboardMode =(int) BillBoardMode::none;
 		TopologyType topologyType = TopologyType::triangleList;
 		bool isShadowMap = false;
 
