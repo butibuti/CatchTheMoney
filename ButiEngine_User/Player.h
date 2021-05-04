@@ -28,6 +28,7 @@ namespace ButiEngine {
 		}
 
 		bool IsClear() { return isClear; }
+		float GetGravity() { return gravity; }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<PanelManager> shp_panelManager;

@@ -17,10 +17,6 @@ void ButiEngine::MobiusLoop::Start()
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 
 	std::string name = gameObject.lock()->GetGameObjectName();
-	if (name == "PredictionLine")
-	{
-		int a = 0;
-	}
 	Vector3 localPosition = Vector3::Zero;
 	auto tag = GetTagManager()->GetObjectTag("MapChip");
 	auto meshDraw = gameObject.lock()->GetGameComponent<MeshDrawComponent>();
@@ -81,14 +77,21 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::MobiusLoop::Clone()
 void ButiEngine::MobiusLoop::SwitchPosition()
 {
 	float x = gameObject.lock()->transform->GetWorldPosition().x;
+	auto right = wkp_right;
+	auto left = wkp_left;
+	if (gameObject.lock()->transform->GetWorldScale().x < 0)
+	{
+		right = wkp_left;
+		left = wkp_right;
+	}
 
 	if (x < -GameSettings::windowWidth * 0.5f)
 	{
-		gameObject.lock()->transform->SetWorldPosition(wkp_right.lock()->transform->GetWorldPosition());
+		gameObject.lock()->transform->SetWorldPosition(right.lock()->transform->GetWorldPosition());
 	}
 	else if (x > GameSettings::windowWidth * 0.5f)
 	{
-		gameObject.lock()->transform->SetWorldPosition(wkp_left.lock()->transform->GetWorldPosition());
+		gameObject.lock()->transform->SetWorldPosition(left.lock()->transform->GetWorldPosition());
 	}
 }
 
