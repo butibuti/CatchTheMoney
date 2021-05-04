@@ -77,14 +77,21 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::MobiusLoop::Clone()
 void ButiEngine::MobiusLoop::SwitchPosition()
 {
 	float x = gameObject.lock()->transform->GetWorldPosition().x;
+	auto right = wkp_right;
+	auto left = wkp_left;
+	if (gameObject.lock()->transform->GetWorldScale().x < 0)
+	{
+		right = wkp_left;
+		left = wkp_right;
+	}
 
 	if (x < -GameSettings::windowWidth * 0.5f)
 	{
-		gameObject.lock()->transform->SetWorldPosition(wkp_right.lock()->transform->GetWorldPosition());
+		gameObject.lock()->transform->SetWorldPosition(right.lock()->transform->GetWorldPosition());
 	}
 	else if (x > GameSettings::windowWidth * 0.5f)
 	{
-		gameObject.lock()->transform->SetWorldPosition(wkp_left.lock()->transform->GetWorldPosition());
+		gameObject.lock()->transform->SetWorldPosition(left.lock()->transform->GetWorldPosition());
 	}
 }
 

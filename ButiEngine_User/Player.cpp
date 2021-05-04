@@ -93,6 +93,12 @@ void ButiEngine::Player::Controll()
 		{
 			velocity.x = -1.0f;
 		}
+		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
+		if (velocity.x != 0 && scale.x > 0 != velocity.x > 0)
+		{
+			scale.x *= -1;
+		}
+		gameObject.lock()->transform->SetLocalScale(scale);
 	}
 
 	if (grounded)
