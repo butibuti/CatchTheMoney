@@ -81,6 +81,8 @@ void ButiEngine::StageManager::OnGoal()
 	{
 		shp_map->DestoryBlock();
 		ChangeScene("StageSelect");
+		int nextStageNum = StageSelect::GetStageNum() + 1;
+		StageSelect::SetStageNum(nextStageNum);
 	}
 }
 

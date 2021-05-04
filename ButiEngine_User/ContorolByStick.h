@@ -26,6 +26,7 @@ namespace ButiEngine {
 		Vector3 rotation;
 		Vector2 preMousePos;
 		Vector2 currMousePos;
+		const float deadZone = 0.3f;
 		float rotationLimit;
 		float rotationSpeed;
 		float returnSpeed;

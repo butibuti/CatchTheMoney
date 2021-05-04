@@ -21,6 +21,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 		static int GetStageNum() { return stageNum; }
+		static void SetStageNum(int arg_stageNum);
 	private:
 		static int stageNum;
 		static int maxStageNum;

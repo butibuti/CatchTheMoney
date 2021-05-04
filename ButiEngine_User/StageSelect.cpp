@@ -13,16 +13,16 @@ void ButiEngine::StageSelect::OnUpdate()
 	Onece();
 	auto childAngle = 180.0f / (maxStageNum + 1) * 2.0f;
 	auto parentSelectPanel = wkp_parentSelectPanel.lock()->GetGameComponent<ParentSelectPanel>();
-	if (intervalFrame > 10 && !isAnimation)
+	if (intervalFrame > 20 && !isAnimation)
 	{
-		if (InputManager::OnTriggerRightKey())
+		if (InputManager::OnPushRightKey())
 		{
 			intervalFrame = 0;
 			OnPushRight();
 			parentSelectPanel->ChildRotation(-childAngle);
 			GetManager().lock()->GetGameObject("SelectScreen").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
 		}
-		else if (InputManager::OnTriggerLeftKey())
+		else if (InputManager::OnPushLeftKey())
 		{
 			intervalFrame = 0;
 			OnPushLeft();
@@ -70,12 +70,12 @@ void ButiEngine::StageSelect::OnShowUI()
 
 void ButiEngine::StageSelect::ShowGUI()
 {
-	GUI::Begin("StageNum");
-	GUI::Text(stageNum);
-	GUI::End();
-
 	GUI::Begin("AnimationFrame");
 	GUI::Text(animationFrame);
+	GUI::End();
+
+	GUI::Begin("StageNum");
+	GUI::Text(stageNum);
 	GUI::End();
 }
 
@@ -86,6 +86,15 @@ void ButiEngine::StageSelect::OnCollision(std::weak_ptr<GameObject> arg_other)
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::StageSelect::Clone()
 {
 	return ObjectFactory::Create<StageSelect>();
+}
+
+void ButiEngine::StageSelect::SetStageNum(int arg_stageNum)
+{
+	stageNum = arg_stageNum;
+	if (stageNum > maxStageNum)
+	{
+		stageNum = 0;
+	}
 }
 
 void ButiEngine::StageSelect::OnPushRight()

@@ -104,7 +104,7 @@ void ButiEngine::ContorolByStick::Control()
 		return;
 	}
 
-	if (GetRightStick.x != 0)
+	if (GetRightStick.x >= deadZone || GetRightStick.x <= -deadZone)
 	{
 		isChanged = true;
 		float moveRotation = -GetRightStick.x * rotationSpeed;
@@ -120,7 +120,7 @@ void ButiEngine::ContorolByStick::Control()
 		}
 
 	}
-	if (GetRightStick.y != 0)
+	if (GetRightStick.y >= deadZone || GetRightStick.y <= -deadZone)
 	{
 		isChanged = true;
 
