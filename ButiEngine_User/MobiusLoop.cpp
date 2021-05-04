@@ -17,10 +17,6 @@ void ButiEngine::MobiusLoop::Start()
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 
 	std::string name = gameObject.lock()->GetGameObjectName();
-	if (name == "PredictionLine")
-	{
-		int a = 0;
-	}
 	Vector3 localPosition = Vector3::Zero;
 	auto tag = GetTagManager()->GetObjectTag("MapChip");
 	auto meshDraw = gameObject.lock()->GetGameComponent<MeshDrawComponent>();
