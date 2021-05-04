@@ -4,6 +4,7 @@
 #include"GravityCore.h"
 #include"FollowPanel.h"
 #include"Panel.h"
+#include"PauseManager.h"
 
 void ButiEngine::BackDraw::OnUpdate()
 {
@@ -18,6 +19,7 @@ void ButiEngine::BackDraw::OnSet()
 
 void ButiEngine::BackDraw::Start()
 {
+	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	std::string name = gameObject.lock()->GetGameObjectName();
 	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
 	Vector3 clonePosition = Vector3::Zero;
@@ -92,7 +94,15 @@ void ButiEngine::BackDraw::Correction()
 
 void ButiEngine::BackDraw::SwitchGravityCore()
 {
+	if (shp_pauseManager->GetPause())
+	{
+		return;
+	}
 	if (!StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "GravityCore"))
+	{
+		return;
+	}
+	if (gameObject.lock()->GetGameComponent<GravityCore>()->GetGrabbed())
 	{
 		return;
 	}
