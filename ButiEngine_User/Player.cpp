@@ -38,7 +38,7 @@ void ButiEngine::Player::Start()
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	shp_panelManager = GetManager().lock()->GetGameObject("PanelManager").lock()->GetGameComponent<PanelManager>();
 	shp_mobiusLoop = gameObject.lock()->GetGameComponent<MobiusLoop>();
-	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 1.0f), gameObject.lock()->transform);
+	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 10.0f), gameObject.lock()->transform);
 	//wkp_screenScroll = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
 
 	velocity = Vector3::Zero;
@@ -343,7 +343,10 @@ void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
 		{
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_orosu, 1.0f);
 			wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(false);
-			wkp_holdCore.lock()->transform->SetWorldPosition(gameObject.lock()->transform->GetWorldPosition());
+			Vector3 corePos = gameObject.lock()->transform->GetWorldPosition();
+			int coreNum = wkp_holdCore.lock()->GetGameComponent<GravityCore>()->GetCoreNum();
+			corePos.z = -0.3f - 0.001f * coreNum;
+			wkp_holdCore.lock()->transform->SetWorldPosition(corePos);
 			wkp_holdCore = std::weak_ptr<GameObject>();
 		}
 		else if(!wkp_holdCore.lock())
