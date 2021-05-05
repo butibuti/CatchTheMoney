@@ -76,6 +76,10 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::MobiusLoop::Clone()
 
 void ButiEngine::MobiusLoop::SwitchPosition()
 {
+	if (StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "PredictionLine"))
+	{
+		return;
+	}
 	float x = gameObject.lock()->transform->GetWorldPosition().x;
 	auto right = wkp_right;
 	auto left = wkp_left;

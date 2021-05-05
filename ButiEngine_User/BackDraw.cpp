@@ -59,6 +59,12 @@ void ButiEngine::BackDraw::Start()
 	}
 }
 
+void ButiEngine::BackDraw::OnShowUI()
+{
+	GUI::Text("Right:%f", wkp_right.lock()->transform->GetWorldPosition().x);
+	GUI::Text("Left:%f", wkp_left.lock()->transform->GetWorldPosition().x);
+}
+
 void ButiEngine::BackDraw::OnCollision(std::weak_ptr<GameObject> arg_other)
 {
 }
