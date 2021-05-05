@@ -11,6 +11,11 @@
 
 void ButiEngine::Player::OnUpdate()
 {
+	progressFrame++;
+	if (progressFrame < FREEZE_FRAME)
+	{
+		return;
+	}
 	if (shp_pauseManager->GetPause())
 	{
 		return;
@@ -34,10 +39,11 @@ void ButiEngine::Player::Start()
 
 	velocity = Vector3::Zero;
 	speed = 3.0f;
-	grounded = false;
+	grounded = true;
 	gravity = -0.2f;
 	pushGrabKeyFrame = false;
 	isClear = false;
+	progressFrame = 0;
 
 	wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 	wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
@@ -297,7 +303,7 @@ void ButiEngine::Player::BackY()
 				gameObject.lock()->transform->TranslateY(backLength);
 				shp_AABB->Update();
 				shp_bottomAABB->Update();
-				if (velocity.y > 0 == gravity > 0)
+				if (velocity.y >= 0 == gravity >= 0)
 				{
 					GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 1.0f);
 					grounded = true;
@@ -309,7 +315,7 @@ void ButiEngine::Player::BackY()
 				gameObject.lock()->transform->TranslateY(backLength);
 				shp_AABB->Update();
 				shp_bottomAABB->Update();
-				if (velocity.y > 0 == gravity > 0)
+				if (velocity.y >= 0 == gravity >= 0)
 				{
 					GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 1.0f);
 					grounded = true;

@@ -44,6 +44,7 @@ namespace ButiEngine {
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
 
 		const float JUMP_FORCE = 2.5f;
+		const int FREEZE_FRAME = 60;
 
 		SoundTag se_dash;
 		SoundTag se_grab;
@@ -56,6 +57,7 @@ namespace ButiEngine {
 		Vector3 velocity;
 		float speed;
 
+		int progressFrame;
 		bool isClear;
 		bool grounded;
 		float gravity;
