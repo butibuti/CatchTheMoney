@@ -49,6 +49,17 @@ void ButiEngine::GravityCore::SetGravity(float arg_gravity)
 	}
 }
 
+void ButiEngine::GravityCore::SetGrabbed(bool arg_flag)
+{
+	grabbed = arg_flag;
+	if (grabbed)
+	{
+	}
+	else
+	{
+	}
+}
+
 void ButiEngine::GravityCore::RemoveGravity()
 {
 	shp_panelManager->RemoveGravityCores(coreNum, gravity);
