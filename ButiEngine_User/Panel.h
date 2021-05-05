@@ -37,12 +37,16 @@ namespace ButiEngine {
 		int GetGravityCoreCount() { return vec_gravityCoreNums.size(); }
 		bool IsAnimation() { return animation; }
 
-		void SetDrawObject();
+		void OnChangeGravity();
 	private:
 		std::weak_ptr<GameObject> wkp_drawObject;
 
+		SoundTag se_cancel;
+
 		int panelNum;
 		int parentPanelNum;
+		float prevGravity;
+		float currentGravity;
 		float gravity;
 		bool animation;
 

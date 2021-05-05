@@ -45,6 +45,14 @@ namespace ButiEngine {
 
 		const float JUMP_FORCE = 2.5f;
 
+		SoundTag se_dash;
+		SoundTag se_grab;
+		SoundTag se_jump;
+		SoundTag se_orosu;
+		SoundTag se_land;
+		SoundTag se_reverse;
+		SoundTag se_powerUp;
+
 		Vector3 velocity;
 		float speed;
 

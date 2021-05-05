@@ -14,7 +14,9 @@ void ButiEngine::Panel::OnUpdate()
 		//GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
 		animation = false;
 	}
-	SetDrawObject();
+	prevGravity = currentGravity;
+	currentGravity = gravity;
+	OnChangeGravity();
 }
 
 void ButiEngine::Panel::OnSet()
@@ -29,6 +31,8 @@ void ButiEngine::Panel::Start()
 	wkp_drawObject = GetManager().lock()->AddObjectFromCereal("PanelForDraw", ObjectFactory::Create<Transform>(Vector3(0, 0, 0.3f), Vector3::Zero, scale));
 	wkp_drawObject.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 	gravity = 0.0f;
+
+	se_cancel = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/GravityCancel.wav");
 }
 
 void ButiEngine::Panel::OnShowUI()
@@ -76,7 +80,7 @@ void ButiEngine::Panel::ResetGravityCores()
 	vec_gravityCoreNums.clear();
 }
 
-void ButiEngine::Panel::SetDrawObject()
+void ButiEngine::Panel::OnChangeGravity()
 {
 	if (gravity != 0)
 	{
@@ -91,6 +95,15 @@ void ButiEngine::Panel::SetDrawObject()
 	else
 	{
 		wkp_drawObject.lock()->transform->SetLocalPosition(Vector3(0, 0, 1000));
+	}
+
+	if (prevGravity != currentGravity)
+	{
+		if (vec_gravityCoreNums.size() >= 2 && currentGravity == 0)
+		{
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_cancel, 1.0f);
+		}
+		prevGravity = currentGravity;
 	}
 }
 
