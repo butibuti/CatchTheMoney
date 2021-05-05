@@ -120,6 +120,9 @@ void ButiEngine::BackDraw::SwitchGravityCore()
 			gameObject.lock()->transform->SetWorldPosition(wkp_right.lock()->transform->GetWorldPosition());
 			gameObject.lock()->GetGameComponent<GravityCore>()->RemoveGravity();
 			gameObject.lock()->GetGameComponent<GravityCore>()->ReverseGravity();
+			gameObject.lock()->GetGameComponent<FollowPanel>()->StoreClosestPanel();
+			gameObject.lock()->GetGameComponent<GravityCore>()->RemoveGravity();
+			gameObject.lock()->GetGameComponent<GravityCore>()->AddGravity();
 		}
 		else if (leftX > -GameSettings::windowWidth * 0.5f && playerX > 0 == leftX > 0)
 		{
@@ -128,6 +131,9 @@ void ButiEngine::BackDraw::SwitchGravityCore()
 			gameObject.lock()->transform->SetWorldPosition(wkp_left.lock()->transform->GetWorldPosition());
 			gameObject.lock()->GetGameComponent<GravityCore>()->RemoveGravity();
 			gameObject.lock()->GetGameComponent<GravityCore>()->ReverseGravity();
+			gameObject.lock()->GetGameComponent<FollowPanel>()->StoreClosestPanel();
+			gameObject.lock()->GetGameComponent<GravityCore>()->RemoveGravity();
+			gameObject.lock()->GetGameComponent<GravityCore>()->AddGravity();
 		}
 	}
 }

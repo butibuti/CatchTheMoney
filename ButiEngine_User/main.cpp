@@ -18,13 +18,13 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
 
 
-	auto app = CreateDefaultApplicationInstance("CollisionTest", WindowPopType::max, 1080, 700, false);
-	//auto app = CreateEditorApplicationInstance("Editor", WindowPopType::max,1080,700, false);
+	//auto app = CreateDefaultApplicationInstance("CollisionTest", WindowPopType::max, 1080, 700, false);
+	auto app = CreateEditorApplicationInstance("Editor", WindowPopType::max,1080,700, false);
 	GameDevice::Initialize();
 	GameDevice::GetInput()->Initialize(app);
 
 	app->InitLoadResources();
-	app->GetSceneManager()->LoadScene_Init("Title");
+	app->GetSceneManager()->LoadScene_Init("Stage0");
 
 	app->GetGraphicDevice()->SetClearColor(Vector4(0.5,0.5,0.8, 1));
 	int returnCode = app->Run();

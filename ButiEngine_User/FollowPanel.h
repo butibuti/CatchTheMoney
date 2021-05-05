@@ -22,13 +22,13 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 		std::weak_ptr<GameObject> GetClosestPanel() { return wkp_closestPanel; }
+		void StoreClosestPanel();
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<PanelManager> shp_panelManager;
 
 		std::weak_ptr<GameObject> wkp_closestPanel;
 
-		void StoreClosestPanel();
 		void Correction();
 	};
 
