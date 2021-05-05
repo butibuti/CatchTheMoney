@@ -164,6 +164,7 @@ namespace ButiEngine {
 		}
 
 		inline Vector3 GetPosition()const;
+		inline Vector3 GetPosition_Transpose()const;
 		inline void RemovePosition();
 		static inline Matrix4x4 Scale(const Vector3& arg_scale);
 
@@ -2005,6 +2006,10 @@ namespace ButiEngine {
 	inline ButiEngine::Vector3 ButiEngine::Matrix4x4::GetPosition()const
 	{
 		return Vector3(_41, _42, _43);
+	}
+	inline ButiEngine::Vector3 ButiEngine::Matrix4x4::GetPosition_Transpose()const
+	{
+		return Vector3(_14, _24, _34);
 	}
 	inline void  ButiEngine::Matrix4x4::RemovePosition()
 	{

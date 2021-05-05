@@ -103,7 +103,7 @@ namespace ButiEngine {
 		void SetDepthStencil(D3D12_CPU_DESCRIPTOR_HANDLE*  arg_dsv);
 		D3D12_CPU_DESCRIPTOR_HANDLE* GetDepthStencil();
 		void DisSetDepthStencil();
-
+		void ResetPipeLine()override;
 	private:
 		D3D12_CPU_DESCRIPTOR_HANDLE* nowDSV = nullptr;
 		D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle;

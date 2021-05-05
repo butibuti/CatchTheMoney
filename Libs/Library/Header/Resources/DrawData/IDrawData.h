@@ -138,7 +138,7 @@ namespace ButiEngine {
 
 		inline float GetMaxZ(const Matrix4x4& arg_viewMatrix){
 			
-			auto viewPos =transform.GetPosition()  * arg_viewMatrix;
+			auto viewPos =transform.GetPosition_Transpose()  * arg_viewMatrix;
 
 			return viewPos.z;
 		}

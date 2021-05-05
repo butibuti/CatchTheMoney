@@ -127,7 +127,7 @@ namespace ButiEngine {
 		void SetViewMatrix_billBoardX(const Matrix4x4& arg_viewMatrix);
 		void SetViewMatrix_billBoardY(const Matrix4x4& arg_viewMatrix);
 		void SetViewMatrix_billBoardZ(const Matrix4x4& arg_viewMatrix);
-
+		virtual void ResetPipeLine()=0;
 
 		const Matrix4x4& GetViewMatrixBillBoard() {
 			return viewMatrix_billBoard;
