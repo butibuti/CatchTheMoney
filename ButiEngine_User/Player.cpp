@@ -301,9 +301,9 @@ void ButiEngine::Player::OnCollisionGoal(std::weak_ptr<GameObject> arg_goal)
 
 void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
 {
-	if (InputManager::OnTriggerGrabKey())
+	if (InputManager::OnTriggerGrabKey() && grounded)
 	{
-		if (wkp_holdCore.lock() && grounded)
+		if (wkp_holdCore.lock())
 		{
 			wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(false);
 			wkp_holdCore.lock()->transform->SetWorldPosition(gameObject.lock()->transform->GetWorldPosition());

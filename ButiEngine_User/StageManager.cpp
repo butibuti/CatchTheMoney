@@ -44,7 +44,7 @@ void ButiEngine::StageManager::Start()
 
 	shp_map->PutTile();
 
-	clearAnimationFrame = 180;
+	clearAnimationFrame = 90;
 
 	mode = GameMode::Normal;
 }
