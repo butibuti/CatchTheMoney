@@ -11,6 +11,10 @@
 
 void ButiEngine::Player::OnUpdate()
 {
+	if (GameDevice::GetInput()->TriggerKey(Keys::Colon))
+	{
+		isClear = true;
+	}
 	if (shp_pauseManager->GetPause())
 	{
 		return;
