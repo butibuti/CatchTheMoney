@@ -5,6 +5,7 @@ namespace ButiEngine {
 	class PauseManager;
 	class PanelManager;
 	class MobiusLoop;
+	class SpliteAnimationComponent;
 
 	class Player :public GameComponent
 	{
@@ -43,8 +44,18 @@ namespace ButiEngine {
 
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
 
+		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
+
 		const float JUMP_FORCE = 2.5f;
 		const int FREEZE_FRAME = 60;
+		const int ANIMATION_RATE = 5;
+		enum Animation
+		{
+			IDLE,
+			WALK,
+			JUMP,
+		};
+
 
 		SoundTag se_dash;
 		SoundTag se_grab;
@@ -54,14 +65,16 @@ namespace ButiEngine {
 		SoundTag se_reverse;
 		SoundTag se_powerUp;
 
+		Animation animation;
+
 		Vector3 velocity;
 		float speed;
 
 		int progressFrame;
+		int animationFrame;
 		bool isClear;
 		bool grounded;
 		float gravity;
-		bool pushGrabKeyFrame;
 
 		void Controll();
 		void CheckGravity();
@@ -70,6 +83,7 @@ namespace ButiEngine {
 		void MoveY();
 		void BackX();
 		void BackY();
+		void Animation();
 
 		void OnCollisionGoal(std::weak_ptr<GameObject> arg_goal);
 		void OnCollisionCore(std::weak_ptr<GameObject> arg_core);

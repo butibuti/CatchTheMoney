@@ -62,6 +62,19 @@ void ButiEngine::StageSelect::Start()
 	wkp_parentSelectPanel = GetManager().lock()->GetGameObject("ParentSelectPanel");
 
 	preParentRotation = Vector3::Zero;
+
+	auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
+	if (stageNum <= 0)
+	{
+		std::string sceneName = "Stage" + std::to_string(maxStageNum);
+		sceneManager->RemoveScene(sceneName);
+	}
+	else
+	{
+		int preStageNum = stageNum - 1;
+		std::string sceneName = "Stage" + std::to_string(preStageNum);
+		sceneManager->RemoveScene(sceneName);
+	}
 }
 
 void ButiEngine::StageSelect::OnShowUI()

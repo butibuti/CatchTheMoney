@@ -3,6 +3,7 @@
 #define _SceneManager_Edit_H_
 
 #include"SceneManager.h"
+#include<thread>
 namespace ButiEngine {
 	class IApplication;
 	class SceneInformation;
@@ -33,7 +34,7 @@ namespace ButiEngine {
 		std::timespec befUpdateTs;
 		std::timespec nowUpdateTs;
 		long long int befUpdateTime;
-
+		std::thread updateThread;
 		std::timespec befDrawTs;
 		std::timespec nowDrawTs;
 		long long int befDrawTime;

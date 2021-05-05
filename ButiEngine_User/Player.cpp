@@ -8,6 +8,7 @@
 #include"Panel.h"
 #include"FollowPanel.h"
 #include"GravityCore.h"
+#include "Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -19,14 +20,11 @@ void ButiEngine::Player::OnUpdate()
 	{
 		return;
 	}
-	progressFrame++;
-	if (progressFrame < FREEZE_FRAME)
-	{
-		return;
-	}
+
 	Controll();
 	Move();
 	CheckGravity();
+	Animation();
 }
 
 void ButiEngine::Player::OnSet()
@@ -37,6 +35,7 @@ void ButiEngine::Player::Start()
 {
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	shp_panelManager = GetManager().lock()->GetGameObject("PanelManager").lock()->GetGameComponent<PanelManager>();
+	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 	shp_mobiusLoop = gameObject.lock()->GetGameComponent<MobiusLoop>();
 	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 1.0f), gameObject.lock()->transform);
 	//wkp_screenScroll = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
@@ -45,9 +44,10 @@ void ButiEngine::Player::Start()
 	speed = 3.0f;
 	grounded = true;
 	gravity = -0.2f;
-	pushGrabKeyFrame = false;
 	isClear = false;
 	progressFrame = 0;
+	animationFrame = 0;
+	animation = ButiEngine::Player::IDLE;
 
 	wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 	wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
@@ -99,6 +99,13 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 
 void ButiEngine::Player::Controll()
 {
+	animation = ButiEngine::Player::IDLE;
+	progressFrame++;
+	if (progressFrame < FREEZE_FRAME)
+	{
+		return;
+	}
+
 	velocity.x = 0.0f;
 
 	if (!isClear)
@@ -109,10 +116,12 @@ void ButiEngine::Player::Controll()
 		}
 		if (InputManager::OnPushRightKey())
 		{
+			animation = ButiEngine::Player::WALK;
 			velocity.x = 1.0f;
 		}
 		else if (InputManager::OnPushLeftKey())
 		{
+			animation = ButiEngine::Player::WALK;
 			velocity.x = -1.0f;
 		}
 		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
@@ -138,7 +147,8 @@ void ButiEngine::Player::Controll()
 	}
 	else
 	{
-		velocity.y += gravity;
+		shp_spriteAnimation->SetHorizontalAnim(0);
+		animation = ButiEngine::Player::JUMP;
 	}
 }
 
@@ -187,7 +197,10 @@ void ButiEngine::Player::CheckGravity()
 
 void ButiEngine::Player::Move()
 {
-	pushGrabKeyFrame = false;
+	if(!grounded)
+	{
+		velocity.y += gravity;
+	}
 	velocity.x *= speed;
 
 	if (fabsf(velocity.x) > fabsf(velocity.y))
@@ -327,6 +340,30 @@ void ButiEngine::Player::BackY()
 			}
 			velocity.y = 0;
 		}
+	}
+}
+
+void ButiEngine::Player::Animation()
+{
+	animationFrame++;
+	shp_spriteAnimation->SetVarticalAnim(animation); //jump
+	if (animationFrame < ANIMATION_RATE) return;
+
+	animationFrame = 0;
+
+	switch (animation)
+	{
+	case ButiEngine::Player::IDLE:
+		shp_spriteAnimation->UpdateHorizontalAnim(1);
+		break;
+	case ButiEngine::Player::WALK:
+		shp_spriteAnimation->UpdateHorizontalAnim(1);
+		break;
+	case ButiEngine::Player::JUMP:
+		shp_spriteAnimation->UpdateHorizontalAnim(0);
+		break;
+	default:
+		break;
 	}
 }
 
