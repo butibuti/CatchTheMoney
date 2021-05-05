@@ -70,6 +70,8 @@ namespace ButiEngine {
 		void MoveY();
 		void BackX();
 		void BackY();
+		void GrabGravityCore(std::weak_ptr<GameObject> arg_core);
+		void ReleaseGravityCore();
 
 		void OnCollisionGoal(std::weak_ptr<GameObject> arg_goal);
 		void OnCollisionCore(std::weak_ptr<GameObject> arg_core);
