@@ -11,12 +11,12 @@
 
 void ButiEngine::Player::OnUpdate()
 {
-	progressFrame++;
-	if (progressFrame < FREEZE_FRAME)
+	if (shp_pauseManager->GetPause())
 	{
 		return;
 	}
-	if (shp_pauseManager->GetPause())
+	progressFrame++;
+	if (progressFrame < FREEZE_FRAME)
 	{
 		return;
 	}
