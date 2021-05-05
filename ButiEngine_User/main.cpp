@@ -26,7 +26,7 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	app->InitLoadResources();
 	app->GetSceneManager()->LoadScene_Init("StageSelect");
 
-	app->GetGraphicDevice()->SetClearColor(Vector4(0.5,0.5,0.8, 1));
+	app->GetGraphicDevice()->SetClearColor(Vector4(1.0,1.0,1.0, 1));
 	int returnCode = app->Run();
 
 
