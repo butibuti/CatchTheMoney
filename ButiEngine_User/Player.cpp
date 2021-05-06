@@ -12,7 +12,7 @@
 
 void ButiEngine::Player::OnUpdate()
 {
-	if (GameDevice::GetInput()->TriggerKey(Keys::Colon))
+	if (GameDevice::GetInput()->TriggerKey(Keys::C))
 	{
 		isClear = true;
 	}
