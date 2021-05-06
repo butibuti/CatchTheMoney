@@ -21,6 +21,7 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+		void SwitchGravityCore(bool arg_scroll);
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 
@@ -30,7 +31,6 @@ namespace ButiEngine {
 
 		void StorePlayer();
 		void Correction();
-		void SwitchGravityCore();
 	};
 
 }

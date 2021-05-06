@@ -9,7 +9,7 @@
 void ButiEngine::BackDraw::OnUpdate()
 {
 	StorePlayer();
-	SwitchGravityCore();
+	SwitchGravityCore(false);
 	Correction();
 }
 
@@ -98,7 +98,7 @@ void ButiEngine::BackDraw::Correction()
 	wkp_left.lock()->transform->SetLocalScale(scale);
 }
 
-void ButiEngine::BackDraw::SwitchGravityCore()
+void ButiEngine::BackDraw::SwitchGravityCore(bool arg_scroll)
 {
 	if (shp_pauseManager->GetPause())
 	{
@@ -108,7 +108,7 @@ void ButiEngine::BackDraw::SwitchGravityCore()
 	{
 		return;
 	}
-	if (gameObject.lock()->GetGameComponent<GravityCore>()->GetGrabbed())
+	if (!arg_scroll && gameObject.lock()->GetGameComponent<GravityCore>()->GetGrabbed())
 	{
 		return;
 	}

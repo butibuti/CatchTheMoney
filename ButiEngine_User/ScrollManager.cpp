@@ -4,6 +4,7 @@
 #include "Player.h"
 #include"PauseManager.h"
 #include"InputManager.h"
+#include"BackDraw.h"
 
 void ButiEngine::ScrollManager::OnUpdate()
 {
@@ -168,22 +169,22 @@ void ButiEngine::ScrollManager::BackScroll()
 			auto scale = wkp_player.lock()->transform->GetLocalScale();
 			scale.y = -scale.y;
 			//プレイヤーをワープさせる
-			if (!isRight)
+			Vector3 position = Vector3(positionX - 640.0f, -positionY, positionZ);
+			if (isRight)
 			{
-				Vector3 position = Vector3(positionX - 640.0f, -positionY, positionZ);
-				wkp_player.lock()->transform->SetWorldPosition(position);
-				wkp_player.lock()->GetGameComponent<Player>()->ReverseGravity();
-				wkp_player.lock()->transform->SetLocalScale(scale);
+				position = Vector3(positionX + 640.0f, -positionY, positionZ);
 			}
-			else
+			wkp_player.lock()->transform->SetWorldPosition(position);
+			wkp_player.lock()->GetGameComponent<Player>()->ReverseGravity();
+			wkp_player.lock()->transform->SetLocalScale(scale);
+			auto holdCore = wkp_player.lock()->GetGameComponent<Player>()->GetHoldCore();
+			if (holdCore.lock())
 			{
-				Vector3 position = Vector3(positionX + 640.0f, -positionY, positionZ);
-				wkp_player.lock()->transform->SetWorldPosition(position);
-				wkp_player.lock()->GetGameComponent<Player>()->ReverseGravity();
-				wkp_player.lock()->transform->SetLocalScale(scale);
+				holdCore.lock()->GetGameComponent<BackDraw>()->SwitchGravityCore(true);
 			}
-			Vector3 position = wkp_player.lock()->transform->GetWorldPosition();
-			currentScroll = (position.x / GameSettings::windowWidth);
+			
+			Vector3 playerPosition_ = wkp_player.lock()->transform->GetWorldPosition();
+			currentScroll = (playerPosition_.x / GameSettings::windowWidth);
 		}
 	}
 }
