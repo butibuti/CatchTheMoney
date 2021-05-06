@@ -2,9 +2,11 @@
 #include "Panel.h"
 #include"GameSettings.h"
 #include"ShakeComponent.h"
+#include"Player.h"
 
 void ButiEngine::Panel::OnUpdate()
 {
+	StorePlayer();
 	if (gameObject.lock()->GetGameComponent<TransformAnimation>())
 	{
 		animation = true;
@@ -14,9 +16,8 @@ void ButiEngine::Panel::OnUpdate()
 		//GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
 		animation = false;
 	}
-	prevGravity = currentGravity;
-	currentGravity = gravity;
-	OnChangeGravity();
+	OnChangeGravity(false);
+	scroll = false;
 }
 
 void ButiEngine::Panel::OnSet()
@@ -80,8 +81,16 @@ void ButiEngine::Panel::ResetGravityCores()
 	vec_gravityCoreNums.clear();
 }
 
-void ButiEngine::Panel::OnChangeGravity()
+void ButiEngine::Panel::OnChangeGravity(bool arg_scroll)
 {
+	if (arg_scroll)
+	{
+		scroll = true; 
+	}
+	
+	if (scroll) { return; }
+	prevGravity = currentGravity;
+	currentGravity = gravity;
 	if (gravity != 0)
 	{
 		wkp_drawObject.lock()->transform->SetLocalPosition(Vector3(0, 0, 0.5f));
@@ -97,7 +106,12 @@ void ButiEngine::Panel::OnChangeGravity()
 		wkp_drawObject.lock()->transform->SetLocalPosition(Vector3(0, 0, 1000));
 	}
 
-	if (prevGravity != currentGravity)
+	bool playerGrab = false;
+	if (wkp_player.lock() && wkp_player.lock()->GetGameComponent<Player>()->GetHoldCore().lock())
+	{
+		playerGrab = true;
+	}
+	if (prevGravity != currentGravity && playerGrab && !arg_scroll)
 	{
 		if (vec_gravityCoreNums.size() >= 2 && currentGravity == 0)
 		{
@@ -125,5 +139,13 @@ void ButiEngine::Panel::AddTransformAnimation()
 	else if (panelNum >= GameSettings::panelCount)
 	{
 		panelNum -= GameSettings::panelCount;
+	}
+}
+
+void ButiEngine::Panel::StorePlayer()
+{
+	if (!wkp_player.lock())
+	{
+		wkp_player = GetManager().lock()->GetGameObject("Player");
 	}
 }

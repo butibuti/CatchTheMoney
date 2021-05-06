@@ -37,9 +37,10 @@ namespace ButiEngine {
 		int GetGravityCoreCount() { return vec_gravityCoreNums.size(); }
 		bool IsAnimation() { return animation; }
 
-		void OnChangeGravity();
+		void OnChangeGravity(bool arg_scroll);
 	private:
 		std::weak_ptr<GameObject> wkp_drawObject;
+		std::weak_ptr<GameObject> wkp_player;
 
 		SoundTag se_cancel;
 
@@ -49,11 +50,13 @@ namespace ButiEngine {
 		float currentGravity;
 		float gravity;
 		bool animation;
+		bool scroll;
 
 		std::vector<int> vec_gravityCoreNums;
 
 		void AddGravity(float arg_gravity) { gravity += arg_gravity; }
 		void AddTransformAnimation();
+		void StorePlayer();
 	};
 
 }

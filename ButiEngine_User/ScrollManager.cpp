@@ -5,6 +5,8 @@
 #include"PauseManager.h"
 #include"InputManager.h"
 #include"BackDraw.h"
+#include"FollowPanel.h"
+#include"Panel.h"
 
 void ButiEngine::ScrollManager::OnUpdate()
 {
@@ -181,6 +183,7 @@ void ButiEngine::ScrollManager::BackScroll()
 			if (holdCore.lock())
 			{
 				holdCore.lock()->GetGameComponent<BackDraw>()->SwitchGravityCore(true);
+				holdCore.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->OnChangeGravity(true);
 			}
 			
 			Vector3 playerPosition_ = wkp_player.lock()->transform->GetWorldPosition();
