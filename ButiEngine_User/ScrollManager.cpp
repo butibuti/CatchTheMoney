@@ -24,15 +24,20 @@ void ButiEngine::ScrollManager::OnUpdate()
 	}
 	else
 	{
+		//Vector3 position = wkp_player.lock()->transform->GetWorldPosition();
+		//currentScroll = (position.x / GameSettings::windowWidth);
+		//scrollPosition.x = position.x;
 		MoveScroll();
 		currentScroll = (scrollPosition.x / GameSettings::windowWidth);
 	}
 
 	float* distance = LoopDistance(previousScroll, currentScroll);
+	float* distanceRight = LoopDistance(previousScroll + 0.5f, currentScroll);
+	float* distanceLeft = LoopDistance(previousScroll - 0.5f, currentScroll);
 
 	if (distance[0] < distance[1])
 	{
-		previousScroll -= distance[0] * 0.2f;
+		previousScroll -= distance[0] * 0.075f;
 		distance = LoopDistance(previousScroll, currentScroll);
 		if (distance[1] < distance[0])
 		{
@@ -41,7 +46,7 @@ void ButiEngine::ScrollManager::OnUpdate()
 	}
 	else if (distance[1] < distance[0])
 	{
-		previousScroll += distance[1] * 0.2f;
+		previousScroll += distance[1] * 0.075f;
 		distance = LoopDistance(previousScroll, currentScroll);
 		if (distance[0] < distance[1])
 		{
