@@ -13,7 +13,7 @@ namespace ButiEngine {
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
-		void OnCollision(std::weak_ptr<GameObject> arg_other)override;
+		void OnShowUI() override;
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)
@@ -29,10 +29,15 @@ namespace ButiEngine {
 		float scrollSpeed;
 		float previousScroll;
 		float currentScroll;
+		float currentScrollRight;
+		float currentScrollLeft;
+		bool isPreviousEdit;
+		bool isCurrentEdit;
 		Vector3 scrollPosition;
 
 		void MoveScroll();
-		float* LoopDistance(float arg_prev, float arg_curr);
+		void BackScroll();
+		float* LoopDistance(const float arg_prev, const float arg_curr);
 	};
 
 }

@@ -46,8 +46,6 @@ void ButiEngine::Map::PutTile()
 	offset.x += GameSettings::blockSize * 0.5f;
 	offset.y += GameSettings::blockSize * 1.5f;
 
-	Vector3 frameScale = Vector3(GameSettings::panelWidth, GameSettings::blockSize, 1.0f);
-
 	const int panelWidthBlock = GameSettings::panelWidth / GameSettings::blockSize;
 
 	int coreCount = 0;
@@ -67,6 +65,7 @@ void ButiEngine::Map::PutTile()
 			parentPanelComponent->SetFrontPanel(frontPanel);
 			shp_panelManager->AddFrontPanel(frontPanel);
 
+			Vector3 frameScale = Vector3(GameSettings::panelWidth, GameSettings::blockSize, 1.0f);
 
 			Vector3 framePos = panelPos;
 			framePos.y = -GameSettings::panelHeight * 0.5f + GameSettings::blockSize * 0.5f;

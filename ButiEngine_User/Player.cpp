@@ -93,6 +93,11 @@ void ButiEngine::Player::OnShowUI()
 	GUI::SliderFloat("speed", &speed, 0.0f, 50.0f);
 }
 
+void ButiEngine::Player::ReverseGravity()
+{
+	gravity = -gravity;
+}
+
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 {
 	return ObjectFactory::Create<Player>();
