@@ -91,6 +91,8 @@ void ButiEngine::Player::ShowGUI()
 void ButiEngine::Player::OnShowUI()
 {
 	GUI::SliderFloat("speed", &speed, 0.0f, 50.0f);
+	GUI::Text("velY    : %f", velocity.y);
+	GUI::Text("gravity : %f", gravity);
 }
 
 void ButiEngine::Player::ReverseGravity()
@@ -112,6 +114,7 @@ void ButiEngine::Player::Controll()
 		return;
 	}
 
+	pushGrabKeyFrame = false;
 	velocity.x = 0.0f;
 
 	if (!isClear)
