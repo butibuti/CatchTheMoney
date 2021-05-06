@@ -27,7 +27,7 @@ namespace ButiEngine {
 		float GetGravity() { return gravity; }
 		void SetGravity(float arg_gravity);
 		bool GetGrabbed() { return grabbed; }
-		void SetGrabbed(bool arg_flag) { grabbed = arg_flag; }
+		void SetGrabbed(bool arg_flag);
 		void ReverseGravity() { gravity = -gravity; }
 		void RemoveGravity();
 		void AddGravity();

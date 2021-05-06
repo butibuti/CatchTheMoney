@@ -37,13 +37,14 @@ void ButiEngine::Player::Start()
 	shp_panelManager = GetManager().lock()->GetGameObject("PanelManager").lock()->GetGameComponent<PanelManager>();
 	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 	shp_mobiusLoop = gameObject.lock()->GetGameComponent<MobiusLoop>();
-	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 1.0f), gameObject.lock()->transform);
+	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 10.0f), gameObject.lock()->transform);
 	//wkp_screenScroll = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
 
 	velocity = Vector3::Zero;
 	speed = 3.0f;
 	grounded = true;
 	gravity = -0.2f;
+	pushGrabKeyFrame = false;
 	isClear = false;
 	progressFrame = 0;
 	animationFrame = 0;
@@ -143,6 +144,10 @@ void ButiEngine::Player::Controll()
 				velocity.y *= -1;
 			}
 			grounded = false;
+		}
+		if (InputManager::OnTriggerGrabKey())
+		{
+			ReleaseGravityCore();
 		}
 	}
 	else
@@ -367,6 +372,37 @@ void ButiEngine::Player::Animation()
 	}
 }
 
+void ButiEngine::Player::GrabGravityCore(std::weak_ptr<GameObject> arg_core)
+{
+	if (!wkp_holdCore.lock() && !pushGrabKeyFrame)
+	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, 1.0f);
+		int closestPanelNum = gameObject.lock()->GetGameComponent<FollowPanel>()
+			->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
+		int coreClosestPanelNum = arg_core.lock()->GetGameComponent<FollowPanel>()
+			->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
+
+		if (closestPanelNum != coreClosestPanelNum) { return; }
+		wkp_holdCore = arg_core;
+		wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(true);
+	}
+}
+
+void ButiEngine::Player::ReleaseGravityCore()
+{
+	if (wkp_holdCore.lock())
+	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_orosu, 1.0f);
+		wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(false);
+		Vector3 corePos = gameObject.lock()->transform->GetWorldPosition();
+		int coreNum = wkp_holdCore.lock()->GetGameComponent<GravityCore>()->GetCoreNum();
+		corePos.z = GameSettings::coreZ - 0.001f * coreNum;
+		wkp_holdCore.lock()->transform->SetWorldPosition(corePos);
+		wkp_holdCore = std::weak_ptr<GameObject>();
+		pushGrabKeyFrame = true;
+	}
+}
+
 void ButiEngine::Player::OnCollisionGoal(std::weak_ptr<GameObject> arg_goal)
 {
 	isClear = true;
@@ -376,24 +412,6 @@ void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
 {
 	if (InputManager::OnTriggerGrabKey() && grounded)
 	{
-		if (wkp_holdCore.lock())
-		{
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_orosu, 1.0f);
-			wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(false);
-			wkp_holdCore.lock()->transform->SetWorldPosition(gameObject.lock()->transform->GetWorldPosition());
-			wkp_holdCore = std::weak_ptr<GameObject>();
-		}
-		else if(!wkp_holdCore.lock())
-		{
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, 1.0f);
-			int closestPanelNum = gameObject.lock()->GetGameComponent<FollowPanel>()
-				->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
-			int coreClosestPanelNum = arg_core.lock()->GetGameComponent<FollowPanel>()
-				->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
-
-			if (closestPanelNum != coreClosestPanelNum) { return; }
-			wkp_holdCore = arg_core;
-			wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(true);
-		}
+		GrabGravityCore(arg_core);
 	}
 }

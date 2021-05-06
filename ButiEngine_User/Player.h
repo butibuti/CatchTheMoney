@@ -75,6 +75,7 @@ namespace ButiEngine {
 		bool isClear;
 		bool grounded;
 		float gravity;
+		bool pushGrabKeyFrame;
 
 		void Controll();
 		void CheckGravity();
@@ -83,6 +84,8 @@ namespace ButiEngine {
 		void MoveY();
 		void BackX();
 		void BackY();
+		void GrabGravityCore(std::weak_ptr<GameObject> arg_core);
+		void ReleaseGravityCore();
 		void Animation();
 
 		void OnCollisionGoal(std::weak_ptr<GameObject> arg_goal);

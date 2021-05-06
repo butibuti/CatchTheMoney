@@ -49,6 +49,17 @@ void ButiEngine::GravityCore::SetGravity(float arg_gravity)
 	}
 }
 
+void ButiEngine::GravityCore::SetGrabbed(bool arg_flag)
+{
+	grabbed = arg_flag;
+	if (grabbed)
+	{
+	}
+	else
+	{
+	}
+}
+
 void ButiEngine::GravityCore::RemoveGravity()
 {
 	shp_panelManager->RemoveGravityCores(coreNum, gravity);
@@ -77,14 +88,16 @@ void ButiEngine::GravityCore::FollowPlayer()
 	if (!grabbed) { return; }
 
 	Vector3 playerPos = wkp_player.lock()->transform->GetWorldPosition();
+	Vector3 targetPos = playerPos;
 	float playerGravity = wkp_player.lock()->GetGameComponent<Player>()->GetGravity();
-	float difference = 15.9f;
+	float difference = 32.0f;
 
 	if (playerGravity > 0)
 	{
 		difference *= -1;
 	}
 
-	playerPos.y += difference;
-	gameObject.lock()->transform->SetWorldPosition(playerPos);
+	targetPos.y += difference;
+	targetPos.z = gameObject.lock()->transform->GetWorldPosition().z;
+	gameObject.lock()->transform->SetWorldPosition(targetPos);
 }
