@@ -104,9 +104,13 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 void ButiEngine::Player::Controll()
 {
 	animation = ButiEngine::Player::IDLE;
-	progressFrame++;
-	if (progressFrame < FREEZE_FRAME)
+	if (freeze)
 	{
+		progressFrame++;
+		if (progressFrame >= FREEZE_FRAME)
+		{
+			freeze = false;
+		}
 		return;
 	}
 
@@ -206,6 +210,7 @@ void ButiEngine::Player::CheckGravity()
 
 void ButiEngine::Player::Move()
 {
+	if (freeze) { return; }
 	if(!grounded)
 	{
 		velocity.y += gravity;

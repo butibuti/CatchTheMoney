@@ -78,6 +78,7 @@ namespace ButiEngine {
 		bool grounded;
 		float gravity;
 		bool pushGrabKeyFrame;
+		bool freeze = true;
 
 		void Controll();
 		void CheckGravity();
