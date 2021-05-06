@@ -115,7 +115,7 @@ void ButiEngine::Panel::AddTransformAnimation()
 	auto anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
 	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
 	anim->GetTargetTransform()->SetWorldPosition(targetPos);
-	anim->SetSpeed(1.0f / 120.0f);
+	anim->SetSpeed(1.0f / 10.0f);
 	anim->SetEaseType(Easing::EasingType::Liner);
 
 	if (panelNum < 0)

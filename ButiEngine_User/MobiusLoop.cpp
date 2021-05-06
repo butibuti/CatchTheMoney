@@ -57,9 +57,10 @@ void ButiEngine::MobiusLoop::Start()
 	if (StringHelper::Contains(name, "Panel"))
 	{
 		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
-		scale.y = -scale.y;
-		wkp_right.lock()->transform->SetLocalScale(scale);
-		wkp_left.lock()->transform->SetLocalScale(scale);
+		Vector3 cloneScale = scale;
+		cloneScale.y = -cloneScale.y;
+		wkp_right.lock()->transform->SetLocalScale(cloneScale / scale);
+		wkp_left.lock()->transform->SetLocalScale(cloneScale / scale);
 	}
 }
 

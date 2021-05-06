@@ -48,7 +48,6 @@ void ButiEngine::Map::PutTile()
 
 	const int panelWidthBlock = GameSettings::panelWidth / GameSettings::blockSize;
 
-	int panelCount = 0;
 	int coreCount = 0;
 
 	for (unsigned int x = 0; x < mapSize.x; x++)
@@ -57,9 +56,8 @@ void ButiEngine::Map::PutTile()
 		{
 			Vector3 panelPos;
 			panelPos.x = -GameSettings::windowWidth * 0.5f + (x + panelWidthBlock * 0.5f) * GameSettings::blockSize;
-			panelPos.z = GameSettings::panelZ + 0.001f * panelCount;
+			panelPos.z = GameSettings::panelZ;
 			parentPanel = GetManager().lock()->AddObjectFromCereal("ParentPanel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
-			panelCount++;
 			auto parentPanelComponent = parentPanel.lock()->GetGameComponent<ParentPanel>();
 
 			frontPanel = GetManager().lock()->AddObjectFromCereal("Panel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
