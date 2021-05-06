@@ -53,6 +53,14 @@ void ButiEngine::MobiusLoop::Start()
 	{
 		shp_AABB_left = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 1.0f), wkp_left.lock()->transform);
 	}
+
+	if (StringHelper::Contains(name, "Panel"))
+	{
+		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
+		scale.y = -scale.y;
+		wkp_right.lock()->transform->SetLocalScale(scale);
+		wkp_left.lock()->transform->SetLocalScale(scale);
+	}
 }
 
 void ButiEngine::MobiusLoop::OnCollision(std::weak_ptr<GameObject> arg_other)
@@ -61,8 +69,8 @@ void ButiEngine::MobiusLoop::OnCollision(std::weak_ptr<GameObject> arg_other)
 
 void ButiEngine::MobiusLoop::OnShowUI()
 {
-	GUI::Text("Right:%f", wkp_right.lock()->transform->GetWorldPosition().x);
-	GUI::Text("Left:%f", wkp_left.lock()->transform->GetWorldPosition().x);
+	GUI::Text("Right:%f", wkp_right.lock()->transform->GetWorldPosition().z);
+	GUI::Text("Left:%f", wkp_left.lock()->transform->GetWorldPosition().z);
 }
 
 void ButiEngine::MobiusLoop::ShowGUI()

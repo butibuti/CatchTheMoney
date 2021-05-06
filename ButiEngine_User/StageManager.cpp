@@ -77,7 +77,7 @@ void ButiEngine::StageManager::ResetStage()
 
 void ButiEngine::StageManager::OnGoal()
 {
-	if (clearAnimationFrame < 0)
+	if (clearAnimationFrame < 0 || GameDevice::GetInput()->TriggerKey(Keys::C))
 	{
 		shp_map->DestoryBlock();
 		ChangeScene("StageSelect");
