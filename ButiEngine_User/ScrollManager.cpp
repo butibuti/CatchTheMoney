@@ -19,10 +19,7 @@ void ButiEngine::ScrollManager::OnUpdate()
 	{
 		Vector3 position = wkp_player.lock()->transform->GetWorldPosition();
 		currentScroll = (position.x / GameSettings::windowWidth);
-		currentScrollRight = ((position.x + 640.0f) / GameSettings::windowWidth);
-		currentScrollLeft = ((position.x - 640.0f) / GameSettings::windowWidth);
 		scrollPosition.x = position.x;
-
 	}
 	else
 	{
@@ -121,6 +118,9 @@ void ButiEngine::ScrollManager::MoveScroll()
 
 void ButiEngine::ScrollManager::BackScroll()
 {
+	Vector3 playerPosition = wkp_player.lock()->transform->GetWorldPosition();
+	currentScrollRight = ((playerPosition.x + 640.0f) / GameSettings::windowWidth);
+	currentScrollLeft = ((playerPosition.x - 640.0f) / GameSettings::windowWidth);
 	if (isPreviousEdit && !isCurrentEdit)
 	{
 		float minDistance = 0;
@@ -137,12 +137,12 @@ void ButiEngine::ScrollManager::BackScroll()
 			minDistance = distance[1];
 		}
 
-		if (currentScrollRight < 1.0f && currentScrollRight > 0.0f)
+		if (currentScrollRight < 0.5f && currentScrollRight > -0.5f)
 		{
 			isRight = true;
 			distanceBack = LoopDistance(previousScroll, currentScrollRight);
 		}
-		else if (currentScrollLeft < 1.0f && currentScrollLeft > 0.0f)
+		else if (currentScrollLeft < 0.5f && currentScrollLeft > -0.5f)
 		{
 			distanceBack = LoopDistance(previousScroll, currentScrollLeft);
 		}
@@ -151,16 +151,16 @@ void ButiEngine::ScrollManager::BackScroll()
 			return;
 		}
 
-		if (abs(distanceBack[1]) > abs(distanceBack[0]))
+		if (distanceBack[1] > distanceBack[0])
 		{
-			backDistance = abs(distanceBack[0]);
+			backDistance = distanceBack[0];
 		}
-		else if (abs(distanceBack[1]) < abs(distanceBack[0]))
+		else if (distanceBack[1] < distanceBack[0])
 		{
-			backDistance = abs(distanceBack[1]);
+			backDistance = distanceBack[1];
 		}
 
-		if (minDistance > backDistance)
+		if (abs(minDistance) > abs(backDistance))
 		{
 			float positionX = wkp_player.lock()->transform->GetWorldPosition().x;
 			float positionY = wkp_player.lock()->transform->GetWorldPosition().y;
@@ -184,10 +184,6 @@ void ButiEngine::ScrollManager::BackScroll()
 			}
 			Vector3 position = wkp_player.lock()->transform->GetWorldPosition();
 			currentScroll = (position.x / GameSettings::windowWidth);
-		}
-		else if(minDistance < backDistance)
-		{
-
 		}
 	}
 }
