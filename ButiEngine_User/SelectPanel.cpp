@@ -14,6 +14,11 @@ void ButiEngine::SelectPanel::Start()
 {
 	wkp_parentSelectPanel = GetManager().lock()->GetGameObject("ParentSelectPanel");
 	gameObject.lock()->transform->SetBaseTransform(wkp_parentSelectPanel.lock()->transform);
+	Vector3 scale = Vector3(3.0f, 3.0f, 0.1f);
+	gameObject.lock()->transform->SetLocalScale(scale);
+
+	//numbers create!!!!
+	//GetManager().lock()->AddObjectFromCereal("NumberComponent", ObjectFactory::Create<Transform>(position, childRotation, scale)).lock();
 }
 
 void ButiEngine::SelectPanel::OnCollision(std::weak_ptr<GameObject> arg_other)

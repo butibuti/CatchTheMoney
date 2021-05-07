@@ -170,6 +170,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MobiusLoop.cpp" />
+    <ClCompile Include="NumberComponent.cpp" />
     <ClCompile Include="Panel.cpp" />
     <ClCompile Include="PanelManager.cpp" />
     <ClCompile Include="ParentPanel.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="HitChecker.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MobiusLoop.h" />
+    <ClInclude Include="NumberComponent.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="PanelManager.h" />
     <ClInclude Include="ParentPanel.h" />

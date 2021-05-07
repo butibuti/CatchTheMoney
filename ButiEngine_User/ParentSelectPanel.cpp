@@ -26,7 +26,7 @@ void ButiEngine::ParentSelectPanel::Start()
 		Vector3 result = Vector3(cos(radian), 0, sin(radian));
 		result.Normalize();
 
-		Vector3 position = result * 10.0f;
+		Vector3 position = result * 8.5f;
 		Vector3 scale = Vector3(1, 1, 0.1f);
 		Vector3 childRotation = Vector3(mobiusAngle * (float)i, -angle * (float)i, 0);
 		
