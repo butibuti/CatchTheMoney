@@ -45,6 +45,8 @@ void ButiEngine::Player::Start()
 	progressFrame = 0;
 	animationFrame = 0;
 	animation = ButiEngine::Player::IDLE;
+	freeze = true;
+	jump = false;
 
 	wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 	wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
@@ -152,6 +154,7 @@ void ButiEngine::Player::Controll()
 				velocity.y *= -1;
 			}
 			grounded = false;
+			jump = true;
 		}
 		if (InputManager::OnTriggerGrabKey())
 		{
@@ -338,6 +341,7 @@ void ButiEngine::Player::BackY()
 				{
 					GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 1.0f);
 					grounded = true;
+					jump = false;
 				}
 			}
 			else if (velocity.y < 0)
@@ -350,6 +354,7 @@ void ButiEngine::Player::BackY()
 				{
 					GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 1.0f);
 					grounded = true;
+					jump = false;
 				}
 			}
 			velocity.y = 0;
