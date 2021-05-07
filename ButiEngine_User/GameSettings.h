@@ -17,6 +17,7 @@ public:
 	static const int goal = 3;
 	static const int coreUp = 4;
 	static const int coreDown = 5;
+	static const int fill = 6;
 	static const float panelZ;
 	static const float playerZ;
 	static const float blockZ;
