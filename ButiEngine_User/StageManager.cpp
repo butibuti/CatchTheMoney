@@ -77,12 +77,17 @@ void ButiEngine::StageManager::ResetStage()
 
 void ButiEngine::StageManager::OnGoal()
 {
-	if (clearAnimationFrame < 0 || GameDevice::GetInput()->TriggerKey(Keys::C))
+	if (clearAnimationFrame < 0)
 	{
 		shp_map->DestoryBlock();
 		ChangeScene("StageSelect");
 		int nextStageNum = StageSelect::GetStageNum() + 1;
 		StageSelect::SetStageNum(nextStageNum);
+	}
+	if (GameDevice::GetInput()->TriggerKey(Keys::C))
+	{
+		shp_map->DestoryBlock();
+		ChangeScene("StageSelect");
 	}
 }
 
