@@ -48,9 +48,10 @@ namespace ButiEngine {
 
 		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 
-		const float JUMP_FORCE = 2.7f;
+		const float JUMP_FORCE = 3.8f;
 		const int FREEZE_FRAME = 60;
 		const int ANIMATION_RATE = 5;
+		const int FLOATING_FRAME = 6;
 		enum Animation
 		{
 			IDLE,
@@ -72,16 +73,19 @@ namespace ButiEngine {
 		Vector3 velocity;
 		float speed;
 
-		int progressFrame;
+		int freezeProgressFrame;
 		int animationFrame;
+		int jumpFrame;
 		bool isClear;
 		bool grounded;
 		float gravity;
 		bool pushGrabKeyFrame;
-		bool freeze = true;
+		bool freeze;
+		bool jump;
 
 		void Controll();
 		void CheckGravity();
+		void OnJump();
 		void Move();
 		void MoveX();
 		void MoveY();

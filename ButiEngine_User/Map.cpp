@@ -142,7 +142,7 @@ void ButiEngine::Map::PutTile()
 				corePos.z = GameSettings::coreZ - 0.001f * coreCount;
 				tile = GetManager().lock()->AddObjectFromCereal("GravityCore", ObjectFactory::Create<Transform>(corePos, Vector3::Zero, scale));
 				auto core = tile.lock()->GetGameComponent<GravityCore>();
-				core->SetGravity(0.2f);
+				core->SetGravity(GameSettings::gravity);
 				core->SetCoreNum(coreCount);
 				coreCount++;
 			}
@@ -152,9 +152,29 @@ void ButiEngine::Map::PutTile()
 				corePos.z = GameSettings::coreZ - 0.001f * coreCount;
 				tile = GetManager().lock()->AddObjectFromCereal("GravityCore", ObjectFactory::Create<Transform>(corePos, Vector3::Zero, scale));
 				auto core = tile.lock()->GetGameComponent<GravityCore>();
-				core->SetGravity(-0.2f);
+				core->SetGravity(-GameSettings::gravity);
 				core->SetCoreNum(coreCount);
 				coreCount++;
+			}
+			else if (mapChipID == GameSettings::fill)
+			{
+				Vector3 blockPos = position;
+				blockPos.x += GameSettings::panelWidth * 0.5f - GameSettings::blockSize * 0.5f;
+				blockPos.y += -GameSettings::panelHeight * 0.5f + GameSettings::blockSize * 1.5f;
+				blockPos.z = GameSettings::blockZ;
+
+				Vector3 blockScale = Vector3::Zero;
+				blockScale.x = GameSettings::panelWidth;
+				blockScale.y = GameSettings::panelHeight - GameSettings::blockSize * 2.0f;
+				blockScale.z = 1.0f;
+
+				tile = GetManager().lock()->AddObjectFromCereal("FillBlock", ObjectFactory::Create<Transform>(blockPos, Vector3::Zero, blockScale));
+				tile.lock()->transform->SetBaseTransform(frontPanel.lock()->transform);
+
+				blockPos.x += GameSettings::windowWidth * 0.5f;
+				blockPos.y *= -1.0f;
+				tile = GetManager().lock()->AddObjectFromCereal("FillBlock", ObjectFactory::Create<Transform>(blockPos, Vector3::Zero, blockScale));
+				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
 			}
 		}
 	}

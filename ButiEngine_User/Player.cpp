@@ -39,12 +39,15 @@ void ButiEngine::Player::Start()
 	velocity = Vector3::Zero;
 	speed = 3.0f;
 	grounded = true;
-	gravity = -0.2f;
+	gravity = -0.4f;
 	pushGrabKeyFrame = false;
 	isClear = false;
-	progressFrame = 0;
+	freezeProgressFrame = 0;
+	jumpFrame = 0;
 	animationFrame = 0;
 	animation = ButiEngine::Player::IDLE;
+	freeze = true;
+	jump = false;
 
 	wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 	wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
@@ -106,8 +109,8 @@ void ButiEngine::Player::Controll()
 	animation = ButiEngine::Player::IDLE;
 	if (freeze)
 	{
-		progressFrame++;
-		if (progressFrame >= FREEZE_FRAME)
+		freezeProgressFrame++;
+		if (freezeProgressFrame >= FREEZE_FRAME)
 		{
 			freeze = false;
 		}
@@ -152,6 +155,7 @@ void ButiEngine::Player::Controll()
 				velocity.y *= -1;
 			}
 			grounded = false;
+			jump = true;
 		}
 		if (InputManager::OnTriggerGrabKey())
 		{
@@ -186,11 +190,11 @@ void ButiEngine::Player::CheckGravity()
 		{
 			if (previousGravity < 0)
 			{
-				gravity = -0.2f;
+				gravity = -GameSettings::gravity;
 			}
 			else if (previousGravity > 0)
 			{
-				gravity = 0.2f;
+				gravity = GameSettings::gravity;
 			}
 		}
 	}
@@ -208,13 +212,34 @@ void ButiEngine::Player::CheckGravity()
 	}
 }
 
-void ButiEngine::Player::Move()
+void ButiEngine::Player::OnJump()
 {
-	if (freeze) { return; }
-	if(!grounded)
+	if (jumpFrame != 0)
+	{
+		jumpFrame--;
+	}
+	float prevVelY = velocity.y;
+	if (!grounded && jumpFrame == 0)
 	{
 		velocity.y += gravity;
 	}
+	if (jump && jumpFrame == 0)
+	{
+		if ((gravity < 0 && ((prevVelY > 0) != (velocity.y > 0))) ||
+			(gravity > 0 && ((prevVelY < 0) != (velocity.y < 0))))
+		{
+			velocity.y = 0;
+			jumpFrame = FLOATING_FRAME;
+		}
+	}
+}
+
+void ButiEngine::Player::Move()
+{
+	if (freeze) { return; }
+	
+	OnJump();
+
 	velocity.x *= speed;
 
 	if (fabsf(velocity.x) > fabsf(velocity.y))
@@ -338,6 +363,7 @@ void ButiEngine::Player::BackY()
 				{
 					GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 1.0f);
 					grounded = true;
+					jump = false;
 				}
 			}
 			else if (velocity.y < 0)
@@ -350,6 +376,7 @@ void ButiEngine::Player::BackY()
 				{
 					GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 1.0f);
 					grounded = true;
+					jump = false;
 				}
 			}
 			velocity.y = 0;
