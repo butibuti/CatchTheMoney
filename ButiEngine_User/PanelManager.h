@@ -26,6 +26,7 @@ namespace ButiEngine {
 		void AddBackPanel(std::weak_ptr<GameObject> arg_panel);
 		void RemoveGravityCores(int arg_num, float arg_gravity);
 		bool IsAnimation();
+		void ResetMoveNum() { moveNum = 0; }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 
@@ -34,6 +35,8 @@ namespace ButiEngine {
 		std::vector<std::weak_ptr<GameObject>> vec_panels;
 
 		std::weak_ptr<GameObject> wkp_player;
+
+		int moveNum;
 
 		void StorePlayer();
 		void SwapPanelNum(int arg_num1, int arg_num2);

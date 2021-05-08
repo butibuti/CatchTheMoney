@@ -16,17 +16,19 @@ void ButiEngine::PanelManager::OnUpdate()
 	{
 		return;
 	}
-	if (InputManager::OnTriggerRightKey())
+	if (InputManager::OnTriggerRightKey() && moveNum < 4)
 	{
 		auto currentParentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 		int currentParentIndex = currentParentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
 		SwapPanelNum(currentParentIndex, currentParentIndex + 1);
+		moveNum++;
 	}
-	else if (InputManager::OnTriggerLeftKey())
+	else if (InputManager::OnTriggerLeftKey() && moveNum > -4)
 	{
 		auto currentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 		int currentIndex = currentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
 		SwapPanelNum(currentIndex, currentIndex - 1);
+		moveNum--;
 	}
 }
 
@@ -37,6 +39,7 @@ void ButiEngine::PanelManager::OnSet()
 void ButiEngine::PanelManager::Start()
 {
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
+	moveNum = 0;
 }
 
 void ButiEngine::PanelManager::OnShowUI()
