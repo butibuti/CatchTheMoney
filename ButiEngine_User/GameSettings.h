@@ -23,6 +23,7 @@ public:
 	static const float blockZ;
 	static const float goalZ;
 	static const float coreZ;
+	static const float gravity;
 
 private:
 	GameSettings();

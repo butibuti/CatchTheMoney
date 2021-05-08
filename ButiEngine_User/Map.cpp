@@ -142,7 +142,7 @@ void ButiEngine::Map::PutTile()
 				corePos.z = GameSettings::coreZ - 0.001f * coreCount;
 				tile = GetManager().lock()->AddObjectFromCereal("GravityCore", ObjectFactory::Create<Transform>(corePos, Vector3::Zero, scale));
 				auto core = tile.lock()->GetGameComponent<GravityCore>();
-				core->SetGravity(0.2f);
+				core->SetGravity(GameSettings::gravity);
 				core->SetCoreNum(coreCount);
 				coreCount++;
 			}
@@ -152,7 +152,7 @@ void ButiEngine::Map::PutTile()
 				corePos.z = GameSettings::coreZ - 0.001f * coreCount;
 				tile = GetManager().lock()->AddObjectFromCereal("GravityCore", ObjectFactory::Create<Transform>(corePos, Vector3::Zero, scale));
 				auto core = tile.lock()->GetGameComponent<GravityCore>();
-				core->SetGravity(-0.2f);
+				core->SetGravity(-GameSettings::gravity);
 				core->SetCoreNum(coreCount);
 				coreCount++;
 			}
