@@ -159,6 +159,7 @@
     <ClCompile Include="BackDraw.cpp" />
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="ContorolByStick.cpp" />
+    <ClCompile Include="CorrectToInt.cpp" />
     <ClCompile Include="DebugController.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
     <ClCompile Include="FollowPanel.cpp" />
@@ -192,6 +193,7 @@
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
     <ClInclude Include="ContorolByStick.h" />
+    <ClInclude Include="CorrectToInt.h" />
     <ClInclude Include="DebugController.h" />
     <ClInclude Include="FollowPanel.h" />
     <ClInclude Include="GravityCore.h" />
