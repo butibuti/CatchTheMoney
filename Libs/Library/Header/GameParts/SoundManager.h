@@ -28,6 +28,7 @@ namespace ButiEngine {
 		IXAudio2MasteringVoice* p_masterVoice;
 		Microsoft::WRL::ComPtr< IXAudio2> cmp_pXAudio2;
 		std::vector<IXAudio2SourceVoice*> vec_seVoices;
+		std::vector<IXAudio2SourceVoice*> vec_controlleableSEVoices;
 		std::shared_ptr<Timer> shp_clearCheckTimer; 
 		std::weak_ptr<IApplication> wkp_app;
 	};

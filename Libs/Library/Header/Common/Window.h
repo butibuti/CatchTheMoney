@@ -19,7 +19,6 @@ namespace ButiEngine {
 	private:
 		HWND handle;
 
-		static LRESULT CALLBACK ProceedMessage(HWND window,
-			UINT message, WPARAM wParam, LPARAM lParam);
+		static LRESULT CALLBACK ProceedMessage(HWND window,	UINT message, WPARAM wParam, LPARAM lParam);
 	};
 }

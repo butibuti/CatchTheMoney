@@ -153,8 +153,6 @@ namespace ButiEngine {
 		D3D12_CPU_DESCRIPTOR_HANDLE rtv_handle[FrameCount];
 
 
-		Microsoft::WRL::ComPtr<ID3D12RootSignature>  rootSignature;
-		Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState;
 
 
 		Microsoft::WRL::ComPtr<IDXGISwapChain3> swapChain3;

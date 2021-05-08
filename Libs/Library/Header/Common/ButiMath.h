@@ -478,6 +478,17 @@ namespace ButiEngine {
 			return i;
 		}
 
+		inline const Vector2& ToRadian() {
+			x = XMConvertToRadians(x);
+			y = XMConvertToRadians(y);
+
+			return *this;
+		}
+
+		inline Vector2 GetRadian() const {
+			return Vector2(XMConvertToRadians(x), XMConvertToRadians(y));
+
+		}
 		inline void Normalize()
 		{
 			*this = DirectX::XMVector2Normalize(DirectX::XMVECTOR(*this));
@@ -844,6 +855,10 @@ namespace ButiEngine {
 			return *this;
 		}
 
+		inline Vector3 GetRadian() const {
+			return Vector3(XMConvertToRadians(x), XMConvertToRadians(y), XMConvertToRadians(z));
+
+		}
 		inline const Vector3& SetLimit(const Vector3& arg_max, const Vector3& arg_min) {
 			x = max(arg_min.x, x);
 			y = max(arg_min.y, y);

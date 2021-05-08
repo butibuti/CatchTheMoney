@@ -121,7 +121,7 @@ namespace ButiEngine {
 
 		}
 
-		std::shared_ptr<Transform> Clone() {
+		std::shared_ptr<Transform> Clone()const {
 			auto output = ObjectFactory::Create<Transform>(localPosition,rotation,scale);
 			if(baseTransform)
 			output->SetBaseTransform(baseTransform, true);
@@ -130,7 +130,8 @@ namespace ButiEngine {
 
 		inline Vector3 GetWorldPosition()
 		{
-			return Vector3(GetMatrix()._41, GetMatrix()._42, GetMatrix()._43);
+			auto output = GetMatrix();
+			return Vector3(output._41, output._42, output._43);
 		}
 		inline const Matrix4x4& GetLocalRotation()const
 		{
