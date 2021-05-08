@@ -127,15 +127,16 @@ void ButiEngine::MobiusLoop::BackXRight(Vector3& arg_velocity)
 			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos) { continue; }
 			if ((*itr)->GetGameObjectName().find("GravityCore") != std::string::npos) { continue; }
 
+			float widthHalf = (*itr)->transform->GetWorldScale().x * 0.5f;
 			if (arg_velocity.x > 0)
 			{
-				float backLength = (*itr)->transform->GetWorldPosition().x - GameSettings::blockSize - wkp_right.lock()->transform->GetWorldPosition().x;
+				float backLength = (*itr)->transform->GetWorldPosition().x - widthHalf - GameSettings::blockSize * 0.5f - wkp_right.lock()->transform->GetWorldPosition().x;
 				gameObject.lock()->transform->TranslateX(backLength);
 				shp_AABB_right->Update();
 			}
 			else if (arg_velocity.x < 0)
 			{
-				float backLength = (*itr)->transform->GetWorldPosition().x + GameSettings::blockSize - wkp_right.lock()->transform->GetWorldPosition().x;
+				float backLength = (*itr)->transform->GetWorldPosition().x + widthHalf + GameSettings::blockSize * 0.5f - wkp_right.lock()->transform->GetWorldPosition().x;
 				gameObject.lock()->transform->TranslateX(backLength);
 				shp_AABB_right->Update();
 			}
@@ -186,15 +187,16 @@ void ButiEngine::MobiusLoop::BackXLeft(Vector3& arg_velocity)
 			if ((*itr) == wkp_left.lock()) { continue; }
 			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos) { continue; }
 
+			float widthHalf = (*itr)->transform->GetWorldScale().x * 0.5f;
 			if (arg_velocity.x > 0)
 			{
-				float backLength = (*itr)->transform->GetWorldPosition().x - GameSettings::blockSize - wkp_left.lock()->transform->GetWorldPosition().x;
+				float backLength = (*itr)->transform->GetWorldPosition().x - widthHalf - GameSettings::blockSize * 0.5f - wkp_left.lock()->transform->GetWorldPosition().x;
 				gameObject.lock()->transform->TranslateX(backLength);
 				shp_AABB_left->Update();
 			}
 			else if (arg_velocity.x < 0)
 			{
-				float backLength = (*itr)->transform->GetWorldPosition().x + GameSettings::blockSize - wkp_left.lock()->transform->GetWorldPosition().x;
+				float backLength = (*itr)->transform->GetWorldPosition().x + widthHalf + GameSettings::blockSize * 0.5f - wkp_left.lock()->transform->GetWorldPosition().x;
 				gameObject.lock()->transform->TranslateX(backLength);
 				shp_AABB_left->Update();
 			}
