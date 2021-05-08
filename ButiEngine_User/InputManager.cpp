@@ -112,7 +112,8 @@ bool ButiEngine::InputManager::OnTriggerDecisionKey()
 
 bool ButiEngine::InputManager::OnGameStartKey()
 {
-	return GameDevice::GetInput()->GetAnyButtonTrigger();
+	return GameDevice::GetInput()->GetAnyButtonTrigger() ||
+		GameDevice::GetInput()->TriggerKey(Keys::Z);
 }
 
 bool ButiEngine::InputManager::OnSkipKey()
