@@ -36,10 +36,16 @@ namespace ButiEngine {
 
 		std::weak_ptr<GameObject> wkp_player;
 
+		const bool RIGHT = true;
+		const bool LEFT = false;
 		int moveNum;
+		std::vector<bool> vec_histories;
 
 		void StorePlayer();
 		void SwapPanelNum(int arg_num1, int arg_num2);
+		void SwapRight();
+		void SwapLeft();
+		void Undo();
 	};
 
 }

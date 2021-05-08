@@ -115,7 +115,7 @@ void ButiEngine::Panel::OnChangeGravity(bool arg_scroll)
 	{
 		if (vec_gravityCoreNums.size() >= 2 && currentGravity == 0)
 		{
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_cancel, 1.0f);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_cancel, 0.1f);
 		}
 		prevGravity = currentGravity;
 	}

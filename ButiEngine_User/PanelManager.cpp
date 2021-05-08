@@ -18,18 +18,15 @@ void ButiEngine::PanelManager::OnUpdate()
 	}
 	if (InputManager::OnTriggerRightKey() && moveNum < 4)
 	{
-		auto currentParentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
-		int currentParentIndex = currentParentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
-		SwapPanelNum(currentParentIndex, currentParentIndex + 1);
-		moveNum++;
+		SwapRight();
+		vec_histories.push_back(RIGHT);
 	}
 	else if (InputManager::OnTriggerLeftKey() && moveNum > -4)
 	{
-		auto currentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
-		int currentIndex = currentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
-		SwapPanelNum(currentIndex, currentIndex - 1);
-		moveNum--;
+		SwapLeft();
+		vec_histories.push_back(LEFT);
 	}
+	Undo();
 }
 
 void ButiEngine::PanelManager::OnSet()
@@ -178,4 +175,37 @@ void ButiEngine::PanelManager::SwapPanelNum(int arg_num1, int arg_num2)
 	vec_panels[index3].lock()->GetGameComponent<Panel>()->SetPanelNum(num4, true);
 	vec_panels[index4].lock()->GetGameComponent<Panel>()->SetPanelNum(num3, true);
 	std::iter_swap(vec_panels.begin() + index3, vec_panels.begin() + index4);
+}
+
+void ButiEngine::PanelManager::SwapRight()
+{
+	auto currentParentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
+	int currentParentIndex = currentParentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
+	SwapPanelNum(currentParentIndex, currentParentIndex + 1);
+	moveNum++;
+}
+
+void ButiEngine::PanelManager::SwapLeft()
+{
+	auto currentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
+	int currentIndex = currentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
+	SwapPanelNum(currentIndex, currentIndex - 1);
+	moveNum--;
+}
+
+void ButiEngine::PanelManager::Undo()
+{
+	if (InputManager::OnTriggerUndoKey() && vec_histories.size() != 0)
+	{
+		int lastIndex = vec_histories.size() - 1;
+		if (vec_histories[lastIndex] == RIGHT)
+		{
+			SwapLeft();
+		}
+		else
+		{
+			SwapRight();
+		}
+		vec_histories.erase(vec_histories.begin() + lastIndex);
+	}
 }

@@ -62,8 +62,7 @@ bool ButiEngine::InputManager::OnTriggerLeftKey()
 
 bool ButiEngine::InputManager::OnTriggerMobiusRotateResetKey()
 {
-	return (GameDevice::GetInput()->TriggerKey(Keys::R) ||
-		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_STICK_RIGHT) ||
+	return (GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_STICK_RIGHT) ||
 		GameDevice::GetInput()->GetMouseTrigger(MouseButtons::RightClick));
 }
 
@@ -101,6 +100,13 @@ bool ButiEngine::InputManager::OnPushRightScrollKey()
 bool ButiEngine::InputManager::OnPushLeftScrollKey()
 {
 	return (GameDevice::GetInput()->GetPadButton(PadButtons::XBOX_BUTTON_LEFT));
+}
+
+bool ButiEngine::InputManager::OnTriggerUndoKey()
+{
+	return (GameDevice::GetInput()->CheckKey(Keys::LeftCtrl) &&
+		GameDevice::GetInput()->CheckKey(Keys::Z)) ||
+		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_BACK);
 }
 
 bool ButiEngine::InputManager::OnTriggerDecisionKey()

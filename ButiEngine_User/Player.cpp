@@ -124,7 +124,7 @@ void ButiEngine::Player::Controll()
 	{
 		if (InputManager::OnTriggerRightKey() || InputManager::OnTriggerLeftKey())
 		{
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_dash, 1.0f);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_dash, 0.1f);
 		}
 		if (InputManager::OnPushRightKey())
 		{
@@ -148,7 +148,7 @@ void ButiEngine::Player::Controll()
 	{
 		if (InputManager::OnTriggerJumpKey() && !isClear)
 		{
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_jump, 1.0f);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_jump, 0.1f);
 			velocity.y = JUMP_FORCE;
 			if (gravity > 0)
 			{
@@ -204,11 +204,11 @@ void ButiEngine::Player::CheckGravity()
 		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
 		scale.y *= -1;
 		gameObject.lock()->transform->SetLocalScale(scale);
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_reverse, 1.0f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_reverse, 0.1f);
 	}
 	else if (abs(gravity) > abs(previousGravity))
 	{
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_powerUp, 1.0f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_powerUp, 0.1f);
 	}
 }
 
@@ -361,7 +361,7 @@ void ButiEngine::Player::BackY()
 				shp_bottomAABB->Update();
 				if (velocity.y >= 0 == gravity >= 0)
 				{
-					GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 1.0f);
+					GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 0.1f);
 					grounded = true;
 					jump = false;
 				}
@@ -374,7 +374,7 @@ void ButiEngine::Player::BackY()
 				shp_bottomAABB->Update();
 				if (velocity.y >= 0 == gravity >= 0)
 				{
-					GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 1.0f);
+					GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 0.1f);
 					grounded = true;
 					jump = false;
 				}
@@ -412,7 +412,7 @@ void ButiEngine::Player::GrabGravityCore(std::weak_ptr<GameObject> arg_core)
 {
 	if (!wkp_holdCore.lock() && !pushGrabKeyFrame)
 	{
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, 1.0f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, 0.1f);
 		int closestPanelNum = gameObject.lock()->GetGameComponent<FollowPanel>()
 			->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
 		int coreClosestPanelNum = arg_core.lock()->GetGameComponent<FollowPanel>()
@@ -428,7 +428,7 @@ void ButiEngine::Player::ReleaseGravityCore()
 {
 	if (wkp_holdCore.lock())
 	{
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_orosu, 1.0f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_orosu, 0.1f);
 		wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(false);
 		Vector3 corePos = gameObject.lock()->transform->GetWorldPosition();
 		int coreNum = wkp_holdCore.lock()->GetGameComponent<GravityCore>()->GetCoreNum();

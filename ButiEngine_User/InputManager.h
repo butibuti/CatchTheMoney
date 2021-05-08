@@ -36,6 +36,7 @@ namespace ButiEngine {
 		//EditMode
 		static bool OnPushRightScrollKey();
 		static bool OnPushLeftScrollKey();
+		static bool OnTriggerUndoKey();
 
 		//anotherScene
 		static bool OnTriggerDecisionKey();
