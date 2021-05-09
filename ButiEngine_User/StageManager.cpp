@@ -113,6 +113,7 @@ void ButiEngine::StageManager::ModeChange()
 			mode = GameMode::Edit;
 			shp_cameraController->ZoomOut();
 			shp_panelManager->ResetMoveNum();
+			shp_panelManager->ResetMoveHistories();
 		}
 		else
 		{

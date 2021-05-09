@@ -16,17 +16,8 @@ void ButiEngine::PanelManager::OnUpdate()
 	{
 		return;
 	}
-	if (InputManager::OnTriggerRightKey() && moveNum < 4)
-	{
-		SwapRight();
-		vec_histories.push_back(RIGHT);
-	}
-	else if (InputManager::OnTriggerLeftKey() && moveNum > -4)
-	{
-		SwapLeft();
-		vec_histories.push_back(LEFT);
-	}
-	Undo();
+	Contoroll();
+	Reset();
 }
 
 void ButiEngine::PanelManager::OnSet()
@@ -41,6 +32,21 @@ void ButiEngine::PanelManager::Start()
 
 void ButiEngine::PanelManager::OnShowUI()
 {
+	auto end = vec_histories.end();
+	for (auto itr = vec_histories.begin(); itr != end; ++itr)
+	{
+		int index = itr - vec_histories.begin();
+		int num = 1;
+		if (*itr == LEFT)
+		{
+			num = 0; 
+		}
+		GUI::Text(std::to_string(index) + ":%d", num);
+		if (index == currentIndex)
+		{
+			GUI::Text("Current!!");
+		}
+	}
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::PanelManager::Clone()
@@ -110,6 +116,42 @@ bool ButiEngine::PanelManager::IsAnimation()
 		}
 	}
 	return result;
+}
+
+void ButiEngine::PanelManager::Contoroll()
+{
+	if (InputManager::OnTriggerRightKey() && moveNum < MOVE_LIMIT)
+	{
+		SwapRight();
+		RemoveHistories();
+		vec_histories.push_back(RIGHT);
+		currentIndex = vec_histories.size() - 1;
+	}
+	else if (InputManager::OnTriggerLeftKey() && moveNum > -MOVE_LIMIT)
+	{
+		SwapLeft();
+		RemoveHistories();
+		vec_histories.push_back(LEFT);
+		currentIndex = vec_histories.size() - 1;
+	}
+
+	if (vec_histories.size() == 0)
+	{
+		return;
+	}
+	if (InputManager::OnTriggerUndoKey())
+	{
+		Undo();
+	}
+	else if (InputManager::OnTriggerRedoKey())
+	{
+		Redo();
+	}
+
+	if (InputManager::OnTriggerResetPanelKey())
+	{
+		reset = true;
+	}
 }
 
 void ButiEngine::PanelManager::StorePlayer()
@@ -195,17 +237,53 @@ void ButiEngine::PanelManager::SwapLeft()
 
 void ButiEngine::PanelManager::Undo()
 {
-	if (InputManager::OnTriggerUndoKey() && vec_histories.size() != 0)
+	if (currentIndex < 0) { return; }
+
+	if (vec_histories[currentIndex] == RIGHT)
 	{
-		int lastIndex = vec_histories.size() - 1;
-		if (vec_histories[lastIndex] == RIGHT)
-		{
-			SwapLeft();
-		}
-		else
-		{
-			SwapRight();
-		}
-		vec_histories.erase(vec_histories.begin() + lastIndex);
+		SwapLeft();
+	}
+	else
+	{
+		SwapRight();
+	}
+	currentIndex--;
+}
+
+void ButiEngine::PanelManager::Redo()
+{
+	if (currentIndex + 1 >= vec_histories.size()) { return; }
+
+	if (vec_histories[currentIndex + 1] == RIGHT)
+	{
+		SwapRight();
+	}
+	else
+	{
+		SwapLeft();
+	}
+	currentIndex++;
+}
+
+void ButiEngine::PanelManager::Reset()
+{
+	if (!reset) { return; }
+	Undo();
+	if (currentIndex == -1)
+	{
+		ResetMoveHistories();
+		reset = false;
+	}
+}
+
+void ButiEngine::PanelManager::RemoveHistories()
+{
+	int lastIndex = int(vec_histories.size() - 1);
+	int nextIndex = currentIndex + 1;
+	if (nextIndex <= lastIndex)
+	{
+		auto itr = vec_histories.begin() + nextIndex;
+		auto end = vec_histories.end();
+		vec_histories.erase(itr, end);
 	}
 }

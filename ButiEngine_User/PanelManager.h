@@ -27,6 +27,7 @@ namespace ButiEngine {
 		void RemoveGravityCores(int arg_num, float arg_gravity);
 		bool IsAnimation();
 		void ResetMoveNum() { moveNum = 0; }
+		void ResetMoveHistories() { vec_histories.clear(); }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 
@@ -36,16 +37,23 @@ namespace ButiEngine {
 
 		std::weak_ptr<GameObject> wkp_player;
 
+		const int MOVE_LIMIT = 3;
 		const bool RIGHT = true;
 		const bool LEFT = false;
 		int moveNum;
 		std::vector<bool> vec_histories;
+		int currentIndex;
+		bool reset;
 
+		void Contoroll();
 		void StorePlayer();
 		void SwapPanelNum(int arg_num1, int arg_num2);
 		void SwapRight();
 		void SwapLeft();
 		void Undo();
+		void Redo();
+		void Reset();
+		void RemoveHistories();
 	};
 
 }
