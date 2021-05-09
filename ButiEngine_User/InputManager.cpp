@@ -119,7 +119,8 @@ bool ButiEngine::InputManager::OnTriggerRedoKey()
 bool ButiEngine::InputManager::OnTriggerResetPanelKey()
 {
 	return (GameDevice::GetInput()->CheckKey(Keys::LeftCtrl) &&
-		GameDevice::GetInput()->CheckKey(Keys::R));
+		GameDevice::GetInput()->CheckKey(Keys::R)) ||
+		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_B);
 }
 
 bool ButiEngine::InputManager::OnTriggerDecisionKey()
