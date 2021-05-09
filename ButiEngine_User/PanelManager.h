@@ -39,6 +39,8 @@ namespace ButiEngine {
 
 		std::weak_ptr<GameObject> wkp_player;
 
+		SoundTag se_panelLimit;
+
 		const int MOVE_LIMIT = 3;
 		const bool RIGHT = true;
 		const bool LEFT = false;

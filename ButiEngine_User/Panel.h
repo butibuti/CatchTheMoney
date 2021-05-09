@@ -38,8 +38,10 @@ namespace ButiEngine {
 		bool IsAnimation() { return animation; }
 
 		void OnChangeGravity(bool arg_scroll);
+		void SetDrawObjectSky();
 	private:
-		std::weak_ptr<GameObject> wkp_drawObject;
+		std::weak_ptr<GameObject> wkp_drawObjectGravity;
+		std::weak_ptr<GameObject> wkp_drawObjectSky;
 		std::weak_ptr<GameObject> wkp_player;
 
 		SoundTag se_cancel;

@@ -29,8 +29,11 @@ void ButiEngine::Panel::Start()
 	Vector3 scale;
 	scale.x = GameSettings::panelWidth;
 	scale.y = GameSettings::panelHeight;
-	wkp_drawObject = GetManager().lock()->AddObjectFromCereal("PanelForDraw", ObjectFactory::Create<Transform>(Vector3(0, 0, 0.3f), Vector3::Zero, scale));
-	wkp_drawObject.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+	scale.z = 1.0f;
+
+	wkp_drawObjectGravity = GetManager().lock()->AddObjectFromCereal("Gravity", ObjectFactory::Create<Transform>(Vector3(0, 0, 0.3f), Vector3::Zero, scale));
+	wkp_drawObjectGravity.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+
 	gravity = 0.0f;
 
 	se_cancel = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/GravityCancel.wav");
@@ -93,17 +96,17 @@ void ButiEngine::Panel::OnChangeGravity(bool arg_scroll)
 	currentGravity = gravity;
 	if (gravity != 0)
 	{
-		wkp_drawObject.lock()->transform->SetLocalPosition(Vector3(0, 0, 0.5f));
-		Vector3 scale = wkp_drawObject.lock()->transform->GetLocalScale();
+		wkp_drawObjectGravity.lock()->transform->SetLocalPosition(Vector3(0, 0, 0.5f));
+		Vector3 scale = wkp_drawObjectGravity.lock()->transform->GetLocalScale();
 		if (scale.y > 0 == gravity > 0)
 		{
 			scale.y *= -1;
-			wkp_drawObject.lock()->transform->SetLocalScale(scale);
+			wkp_drawObjectGravity.lock()->transform->SetLocalScale(scale);
 		}
 	}
 	else
 	{
-		wkp_drawObject.lock()->transform->SetLocalPosition(Vector3(0, 0, 1000));
+		wkp_drawObjectGravity.lock()->transform->SetLocalPosition(Vector3(0, 0, 1000));
 	}
 
 	bool playerGrab = false;
@@ -115,10 +118,21 @@ void ButiEngine::Panel::OnChangeGravity(bool arg_scroll)
 	{
 		if (vec_gravityCoreNums.size() >= 2 && currentGravity == 0)
 		{
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_cancel, 0.1f);
+			//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_cancel, 0.1f);
 		}
 		prevGravity = currentGravity;
 	}
+}
+
+void ButiEngine::Panel::SetDrawObjectSky()
+{
+	Vector3 scale;
+	scale.x = GameSettings::panelWidth;
+	scale.y = GameSettings::panelHeight;
+	scale.z = 1.0f;
+
+	wkp_drawObjectSky = GetManager().lock()->AddObjectFromCereal("Sky", ObjectFactory::Create<Transform>(Vector3(0, 0, 1.0f), Vector3::Zero, scale));
+	wkp_drawObjectSky.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 }
 
 void ButiEngine::Panel::AddTransformAnimation(int arg_frame)

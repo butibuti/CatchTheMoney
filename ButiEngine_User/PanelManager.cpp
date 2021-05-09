@@ -30,6 +30,8 @@ void ButiEngine::PanelManager::Start()
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	shp_shake = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ShakeComponent>();
 	moveNum = 0;
+
+	se_panelLimit = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/PanelLimit.wav");
 }
 
 void ButiEngine::PanelManager::OnShowUI()
@@ -127,6 +129,7 @@ void ButiEngine::PanelManager::Contoroll()
 		if (moveNum >= MOVE_LIMIT)
 		{
 			shp_shake->ShakeStart(3.0);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, 0.1f);
 			return;
 		}
 		SwapRight();
@@ -139,6 +142,7 @@ void ButiEngine::PanelManager::Contoroll()
 		if (moveNum <= -MOVE_LIMIT)
 		{
 			shp_shake->ShakeStart(3.0);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, 0.1f);
 			return;
 		}
 		SwapLeft();
