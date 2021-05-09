@@ -79,13 +79,13 @@ std::weak_ptr<ButiEngine::GameObject> ButiEngine::PanelManager::GetClosestPanel(
 
 void ButiEngine::PanelManager::AddFrontPanel(std::weak_ptr<GameObject> arg_panel)
 {
-	arg_panel.lock()->GetGameComponent<Panel>()->SetPanelNum(vec_frontPanels.size(), false);
+	arg_panel.lock()->GetGameComponent<Panel>()->SetPanelNum(vec_frontPanels.size(), false, 10);
 	vec_frontPanels.push_back(arg_panel);
 }
 
 void ButiEngine::PanelManager::AddBackPanel(std::weak_ptr<GameObject> arg_panel)
 {
-	arg_panel.lock()->GetGameComponent<Panel>()->SetPanelNum(GameSettings::panelCount / 2 + vec_backPanels.size(), false);
+	arg_panel.lock()->GetGameComponent<Panel>()->SetPanelNum(GameSettings::panelCount / 2 + vec_backPanels.size(), false, 10);
 	vec_backPanels.push_back(arg_panel);
 
 	if (vec_backPanels.size() == GameSettings::panelCount / 2)
@@ -162,7 +162,7 @@ void ButiEngine::PanelManager::StorePlayer()
 	}
 }
 
-void ButiEngine::PanelManager::SwapPanelNum(int arg_num1, int arg_num2)
+void ButiEngine::PanelManager::SwapPanelNum(int arg_num1, int arg_num2, int arg_frame)
 {
 	auto end = vec_panels.end();
 	for (auto itr = vec_panels.begin(); itr != end; ++itr)
@@ -210,57 +210,57 @@ void ButiEngine::PanelManager::SwapPanelNum(int arg_num1, int arg_num2)
 		index2 = GameSettings::panelCount - 1;
 	}
 
-	vec_panels[index1].lock()->GetGameComponent<Panel>()->SetPanelNum(arg_num2, true);
-	vec_panels[index2].lock()->GetGameComponent<Panel>()->SetPanelNum(arg_num1, true);
+	vec_panels[index1].lock()->GetGameComponent<Panel>()->SetPanelNum(arg_num2, true, arg_frame);
+	vec_panels[index2].lock()->GetGameComponent<Panel>()->SetPanelNum(arg_num1, true, arg_frame);
 	std::iter_swap(vec_panels.begin() + index1, vec_panels.begin() + index2);
 
-	vec_panels[index3].lock()->GetGameComponent<Panel>()->SetPanelNum(num4, true);
-	vec_panels[index4].lock()->GetGameComponent<Panel>()->SetPanelNum(num3, true);
+	vec_panels[index3].lock()->GetGameComponent<Panel>()->SetPanelNum(num4, true, arg_frame);
+	vec_panels[index4].lock()->GetGameComponent<Panel>()->SetPanelNum(num3, true, arg_frame);
 	std::iter_swap(vec_panels.begin() + index3, vec_panels.begin() + index4);
 }
 
-void ButiEngine::PanelManager::SwapRight()
+void ButiEngine::PanelManager::SwapRight(int arg_frame)
 {
 	auto currentParentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 	int currentParentIndex = currentParentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
-	SwapPanelNum(currentParentIndex, currentParentIndex + 1);
+	SwapPanelNum(currentParentIndex, currentParentIndex + 1, arg_frame);
 	moveNum++;
 }
 
-void ButiEngine::PanelManager::SwapLeft()
+void ButiEngine::PanelManager::SwapLeft(int arg_frame)
 {
 	auto currentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 	int currentIndex = currentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
-	SwapPanelNum(currentIndex, currentIndex - 1);
+	SwapPanelNum(currentIndex, currentIndex - 1, arg_frame);
 	moveNum--;
 }
 
-void ButiEngine::PanelManager::Undo()
+void ButiEngine::PanelManager::Undo(int arg_frame)
 {
 	if (currentIndex < 0) { return; }
 
 	if (vec_histories[currentIndex] == RIGHT)
 	{
-		SwapLeft();
+		SwapLeft(arg_frame);
 	}
 	else
 	{
-		SwapRight();
+		SwapRight(arg_frame);
 	}
 	currentIndex--;
 }
 
-void ButiEngine::PanelManager::Redo()
+void ButiEngine::PanelManager::Redo(int arg_frame)
 {
 	if (currentIndex + 1 >= vec_histories.size()) { return; }
 
 	if (vec_histories[currentIndex + 1] == RIGHT)
 	{
-		SwapRight();
+		SwapRight(arg_frame);
 	}
 	else
 	{
-		SwapLeft();
+		SwapLeft(arg_frame);
 	}
 	currentIndex++;
 }
@@ -268,8 +268,16 @@ void ButiEngine::PanelManager::Redo()
 void ButiEngine::PanelManager::Reset()
 {
 	if (!reset) { return; }
-	Undo();
-	if (currentIndex == -1)
+	if (moveNum > 0)
+	{
+		SwapLeft(5);
+	}
+	else if (moveNum < 0)
+	{
+		SwapRight(5);
+	}
+
+	if (moveNum == 0)
 	{
 		ResetMoveHistories();
 		reset = false;

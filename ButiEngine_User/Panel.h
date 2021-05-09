@@ -18,11 +18,11 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-		void SetPanelNum(int arg_num, bool arg_addAnimation) 
+		void SetPanelNum(int arg_num, bool arg_addAnimation, int arg_frame) 
 		{
 			panelNum = arg_num; 
 			if (!arg_addAnimation) { return; }
-			AddTransformAnimation();
+			AddTransformAnimation(arg_frame);
 		}
 		int GetPanelNum() { return panelNum; }
 		void SetParentPanelNum(int arg_num) { parentPanelNum = arg_num; }
@@ -55,7 +55,7 @@ namespace ButiEngine {
 		std::vector<int> vec_gravityCoreNums;
 
 		void AddGravity(float arg_gravity) { gravity += arg_gravity; }
-		void AddTransformAnimation();
+		void AddTransformAnimation(int arg_frame);
 		void StorePlayer();
 	};
 

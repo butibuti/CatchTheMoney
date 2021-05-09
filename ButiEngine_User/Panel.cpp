@@ -121,7 +121,7 @@ void ButiEngine::Panel::OnChangeGravity(bool arg_scroll)
 	}
 }
 
-void ButiEngine::Panel::AddTransformAnimation()
+void ButiEngine::Panel::AddTransformAnimation(int arg_frame)
 {
 	Vector3 targetPos;
 	targetPos.x = (panelNum - GameSettings::panelCount / 2) * GameSettings::panelWidth + GameSettings::panelWidth * 0.5f;
@@ -129,7 +129,7 @@ void ButiEngine::Panel::AddTransformAnimation()
 	auto anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
 	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
 	anim->GetTargetTransform()->SetWorldPosition(targetPos);
-	anim->SetSpeed(1.0f / 10.0f);
+	anim->SetSpeed(1.0f / arg_frame);
 	anim->SetEaseType(Easing::EasingType::Liner);
 
 	if (panelNum < 0)

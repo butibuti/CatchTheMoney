@@ -47,11 +47,11 @@ namespace ButiEngine {
 
 		void Contoroll();
 		void StorePlayer();
-		void SwapPanelNum(int arg_num1, int arg_num2);
-		void SwapRight();
-		void SwapLeft();
-		void Undo();
-		void Redo();
+		void SwapPanelNum(int arg_num1, int arg_num2, int arg_frame);
+		void SwapRight(int arg_frame = 10);
+		void SwapLeft(int arg_frame = 10);
+		void Undo(int arg_frame = 10);
+		void Redo(int arg_frame = 10);
 		void Reset();
 		void RemoveHistories();
 	};
