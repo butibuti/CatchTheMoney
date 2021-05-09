@@ -2,36 +2,31 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class NumberComponent :public GameComponent
+	class SpliteAnimationComponent;
+
+	class ChildNumber :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "NumberComponent";
+			return "ChildNumber";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
 		std::shared_ptr<GameComponent> Clone()override;
-		void SetNumber(int arg_num);
-		void SetDigit(int arg_digit);
+		void SetNumber(int arg_number);
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
 			archive(isActive);
 		}
 	private:
-		std::vector<std::shared_ptr<GameObject>> childNumbers;
+		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 
 		int number;
 		int previousNumber;
-		unsigned int digit;
-		bool isOnce;
-
-		unsigned int GetDigit(unsigned int arg_number);
-		void CreateChildNum();
-		void SetChildNum();
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(NumberComponent);
+BUTI_REGIST_GAMECOMPONENT(ChildNumber);

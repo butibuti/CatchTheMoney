@@ -11,8 +11,8 @@ namespace ButiEngine {
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
-		void OnCollision(std::weak_ptr<GameObject> arg_other)override;
 		std::shared_ptr<GameComponent> Clone()override;
+		void SetStageNumbers(const int arg_front, const int arg_back);
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
@@ -20,6 +20,14 @@ namespace ButiEngine {
 		}
 	private:
 		std::weak_ptr<GameObject> wkp_parentSelectPanel;
+		std::weak_ptr<GameObject> wkp_frontNumber;
+		std::weak_ptr<GameObject> wkp_backNumber;
+
+		int frontStageNum;
+		int backStageNum;
+		bool isOnce;
+
+		void CreateNumber();
 	};
 
 }
