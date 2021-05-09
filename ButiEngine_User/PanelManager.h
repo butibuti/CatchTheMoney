@@ -3,6 +3,7 @@
 namespace ButiEngine {
 
 	class PauseManager;
+	class ShakeComponent;
 
 	class PanelManager :public GameComponent
 	{
@@ -30,6 +31,7 @@ namespace ButiEngine {
 		void ResetMoveHistories() { vec_histories.clear(); }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
+		std::shared_ptr<ShakeComponent> shp_shake;
 
 		std::vector<std::weak_ptr<GameObject>> vec_frontPanels;
 		std::vector<std::weak_ptr<GameObject>> vec_backPanels;

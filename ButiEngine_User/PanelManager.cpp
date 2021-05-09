@@ -8,6 +8,7 @@
 #include"FollowPanel.h"
 #include"PauseManager.h"
 #include"InputManager.h"
+#include"ShakeComponent.h"
 
 void ButiEngine::PanelManager::OnUpdate()
 {
@@ -27,6 +28,7 @@ void ButiEngine::PanelManager::OnSet()
 void ButiEngine::PanelManager::Start()
 {
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
+	shp_shake = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ShakeComponent>();
 	moveNum = 0;
 }
 
@@ -120,15 +122,25 @@ bool ButiEngine::PanelManager::IsAnimation()
 
 void ButiEngine::PanelManager::Contoroll()
 {
-	if (InputManager::OnTriggerRightKey() && moveNum < MOVE_LIMIT)
+	if (InputManager::OnTriggerRightKey())
 	{
+		if (moveNum >= MOVE_LIMIT)
+		{
+			shp_shake->ShakeStart(3.0);
+			return;
+		}
 		SwapRight();
 		RemoveHistories();
 		vec_histories.push_back(RIGHT);
 		currentIndex = vec_histories.size() - 1;
 	}
-	else if (InputManager::OnTriggerLeftKey() && moveNum > -MOVE_LIMIT)
+	else if (InputManager::OnTriggerLeftKey())
 	{
+		if (moveNum <= -MOVE_LIMIT)
+		{
+			shp_shake->ShakeStart(3.0);
+			return;
+		}
 		SwapLeft();
 		RemoveHistories();
 		vec_histories.push_back(LEFT);
