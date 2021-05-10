@@ -4,6 +4,7 @@ namespace ButiEngine {
 
 	class PauseManager;
 	class ShakeComponent;
+	class ReverseText;
 
 	class PanelManager :public GameComponent
 	{
@@ -32,6 +33,7 @@ namespace ButiEngine {
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<ShakeComponent> shp_shake;
+		std::shared_ptr<ReverseText> shp_reverseText;
 
 		std::vector<std::weak_ptr<GameObject>> vec_frontPanels;
 		std::vector<std::weak_ptr<GameObject>> vec_backPanels;
@@ -48,14 +50,15 @@ namespace ButiEngine {
 		std::vector<bool> vec_histories;
 		int currentIndex;
 		bool reset;
+		bool reverse;
 
 		void Contoroll();
 		void StorePlayer();
 		void SwapPanelNum(int arg_num1, int arg_num2, int arg_frame);
-		void SwapRight(int arg_frame = 10);
-		void SwapLeft(int arg_frame = 10);
-		void Undo(int arg_frame = 10);
-		void Redo(int arg_frame = 10);
+		void SwapRight(int arg_frame = 15);
+		void SwapLeft(int arg_frame = 15);
+		void Undo(int arg_frame = 15);
+		void Redo(int arg_frame = 15);
 		void Reset();
 		void RemoveHistories();
 	};
