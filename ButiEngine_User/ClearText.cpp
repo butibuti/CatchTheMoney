@@ -4,7 +4,7 @@
 
 void ButiEngine::ClearText::OnUpdate()
 {
-	bool isAnimation = horizontalNum < 3;
+	bool isAnimation = horizontalNum < 2;
 	if (!isAnimation) return;
 
 	Animation();
@@ -22,10 +22,6 @@ void ButiEngine::ClearText::Start()
 
 	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 	shp_spriteAnimation->SetHorizontalAnim(horizontalNum);
-
-	auto transform = gameObject.lock()->transform;
-	transform->SetLocalPosition(Vector3(-14.5f, 0, -980.0f));
-	transform->SetLocalScale(Vector3(5.0f, 5.0f, 1.0f));
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::ClearText::Clone()
@@ -35,8 +31,9 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::ClearText::Clone()
 
 void ButiEngine::ClearText::Animation()
 {
-	if (animationCount > 60)
+	if (animationCount > 4)
 	{
+		animationCount = 0;
 		horizontalNum++;
 		shp_spriteAnimation->SetHorizontalAnim(horizontalNum);
 	}

@@ -28,7 +28,16 @@ void ButiEngine::ScrollManager::OnUpdate()
 	}
 	Vector3 position = wkp_player.lock()->transform->GetWorldPosition();
 	currentScroll = (position.x / GameSettings::windowWidth);
-	scrollPosition.x = position.x;
+	//scrollPosition.x = position.x;
+
+	if (currentScroll > 1.0f)
+	{
+		currentScroll -= 1.0f;
+	}
+	else if (currentScroll < -1.0f)
+	{
+		currentScroll += 1.0f;
+	}
 
 	//BackScroll();
 
@@ -53,11 +62,11 @@ void ButiEngine::ScrollManager::OnUpdate()
 	}
 
 	//スクロールループ処理
-	if (previousScroll > 1.0f)
+	if (previousScroll > 0.5f)
 	{
 		previousScroll -= 1.0f;
 	}
-	else if (previousScroll < 0.0f)
+	else if (previousScroll < -0.5f)
 	{
 		previousScroll += 1.0f;
 	}
@@ -88,6 +97,7 @@ void ButiEngine::ScrollManager::OnShowUI()
 	auto playerUvPos = (position.x / GameSettings::windowWidth);
 	GUI::Text("PlayerPositionX   : %f ", playerUvPos);
 	GUI::Text("currentScroll     : %f ", currentScroll);
+	GUI::Text("previousScroll    : %f ", previousScroll);
 	GUI::Text("currentScrollRight: %f ", currentScrollRight);
 	GUI::Text("currentScrollLeft : %f ", currentScrollLeft);
 }

@@ -2,8 +2,7 @@
 #include "ClearBand.h"
 
 void ButiEngine::ClearBand::OnUpdate()
-{ 
-
+{ 	
 }
 
 void ButiEngine::ClearBand::OnSet()
@@ -12,9 +11,16 @@ void ButiEngine::ClearBand::OnSet()
 
 void ButiEngine::ClearBand::Start()
 {
-	auto transform = gameObject.lock()->transform;
-	transform->SetLocalPosition(Vector3(-14.5f,0,-979.0f));
-	transform->SetLocalScale(Vector3(72.0f, 5.5f, 1.0f));
+	gameObject.lock()->transform->SetLocalScale(Vector3(2000.0f, 0.0f, 1.0f));
+	auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
+	if (!anim)
+	{
+		anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+		anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+		anim->GetTargetTransform()->SetLocalScale(Vector3(2000.0f, 200.0f, 1.0f));
+		anim->SetSpeed(0.06f);
+		anim->SetEaseType(Easing::EasingType::EaseInOutExpo);
+	}
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::ClearBand::Clone()

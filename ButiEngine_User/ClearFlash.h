@@ -19,6 +19,11 @@ namespace ButiEngine {
 		}
 	private:
 		bool isOnce;
+		int blinkingCount;
+		Vector3 initPos;
+		Vector3 awayPos;
+
+		void ScaleAnimation();
 	};
 
 }
