@@ -51,7 +51,7 @@ namespace ButiEngine {
 
 		void ResetStage();
 		int clearAnimationFrame;
-		const int CLEAR_FRAME = 3000;
+		const int CLEAR_FRAME = 90;
 
 		void OnGoal();
 		void ChangeScene(const std::string& arg_sceneName);

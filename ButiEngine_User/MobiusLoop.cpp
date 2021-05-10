@@ -70,8 +70,8 @@ void ButiEngine::MobiusLoop::OnCollision(std::weak_ptr<GameObject> arg_other)
 
 void ButiEngine::MobiusLoop::OnShowUI()
 {
-	GUI::Text("Right:%f", wkp_right.lock()->transform->GetWorldPosition().z);
-	GUI::Text("Left:%f", wkp_left.lock()->transform->GetWorldPosition().z);
+	//GUI::Text("Right:%f", wkp_right.lock()->transform->GetWorldPosition().z);
+	//GUI::Text("Left:%f", wkp_left.lock()->transform->GetWorldPosition().z);
 }
 
 void ButiEngine::MobiusLoop::ShowGUI()

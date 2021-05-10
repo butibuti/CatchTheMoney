@@ -124,14 +124,20 @@ void ButiEngine::Panel::OnChangeGravity(bool arg_scroll)
 	}
 }
 
-void ButiEngine::Panel::SetDrawObjectSky()
+void ButiEngine::Panel::SetDrawObjectSky(bool arg_back)
 {
 	Vector3 scale;
 	scale.x = GameSettings::panelWidth;
 	scale.y = GameSettings::panelHeight;
 	scale.z = 1.0f;
 
-	wkp_drawObjectSky = GetManager().lock()->AddObjectFromCereal("Sky", ObjectFactory::Create<Transform>(Vector3(0, 0, 1.0f), Vector3::Zero, scale));
+	std::string name = "FrontSky";
+	if (arg_back)
+	{
+		name = "BackSky";
+	}
+
+	wkp_drawObjectSky = GetManager().lock()->AddObjectFromCereal(name, ObjectFactory::Create<Transform>(Vector3(0, 0, 1.0f), Vector3::Zero, scale));
 	wkp_drawObjectSky.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 }
 

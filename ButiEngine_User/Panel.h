@@ -38,7 +38,7 @@ namespace ButiEngine {
 		bool IsAnimation() { return animation; }
 
 		void OnChangeGravity(bool arg_scroll);
-		void SetDrawObjectSky();
+		void SetDrawObjectSky(bool arg_back);
 	private:
 		std::weak_ptr<GameObject> wkp_drawObjectGravity;
 		std::weak_ptr<GameObject> wkp_drawObjectSky;
