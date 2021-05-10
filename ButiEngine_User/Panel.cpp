@@ -33,6 +33,8 @@ void ButiEngine::Panel::Start()
 
 	wkp_drawObjectGravity = GetManager().lock()->AddObjectFromCereal("Gravity", ObjectFactory::Create<Transform>(Vector3(0, 0, 0.3f), Vector3::Zero, scale));
 	wkp_drawObjectGravity.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+	wkp_drawObjectFrame = GetManager().lock()->AddObjectFromCereal("PanelFrame", ObjectFactory::Create<Transform>(Vector3(0, 0, -1.0f), Vector3::Zero, scale));
+	wkp_drawObjectFrame.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 
 	gravity = 0.0f;
 

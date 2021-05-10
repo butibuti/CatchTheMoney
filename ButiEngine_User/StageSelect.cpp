@@ -6,7 +6,7 @@
 #include "ShakeComponent.h"
 
 int ButiEngine::StageSelect::stageNum = 0;
-int ButiEngine::StageSelect::maxStageNum = 19; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
+int ButiEngine::StageSelect::maxStageNum = 9; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
 
 void ButiEngine::StageSelect::OnUpdate()
 {

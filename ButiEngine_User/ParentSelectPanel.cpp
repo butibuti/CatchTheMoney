@@ -13,7 +13,7 @@ void ButiEngine::ParentSelectPanel::OnSet()
 void ButiEngine::ParentSelectPanel::Start()
 {
 	rotation = Vector3(0, 270, 0);
-	int stageCount = 10; //LastStageNum * 0.5  "rewrite to StageSelect::maxStageNum"
+	int stageCount = 5; //LastStageNum * 0.5  "rewrite to StageSelect::maxStageNum"
 
 	const float M_PI = 3.1415f;
 	float angle = 360.0f / (float)stageCount;

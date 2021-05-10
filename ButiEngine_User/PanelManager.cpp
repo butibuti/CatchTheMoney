@@ -9,6 +9,7 @@
 #include"PauseManager.h"
 #include"InputManager.h"
 #include"ShakeComponent.h"
+#include"ReverseText.h"
 
 void ButiEngine::PanelManager::OnUpdate()
 {
@@ -29,7 +30,9 @@ void ButiEngine::PanelManager::Start()
 {
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	shp_shake = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ShakeComponent>();
+	shp_reverseText = GetManager().lock()->GetGameObject("ParentReverseText").lock()->GetGameComponent<ReverseText>();
 	moveNum = 0;
+	reverse = false;
 
 	se_panelLimit = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/PanelLimit.wav");
 }
@@ -241,6 +244,16 @@ void ButiEngine::PanelManager::SwapRight(int arg_frame)
 	int currentParentIndex = currentParentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
 	SwapPanelNum(currentParentIndex, currentParentIndex + 1, arg_frame);
 	moveNum++;
+	if (moveNum == MOVE_LIMIT && !reverse)
+	{
+		reverse = true;
+		shp_reverseText->PlayAnimation();
+	}
+	else if (moveNum == 0 && reverse)
+	{
+		reverse = false;
+		shp_reverseText->PlayAnimation();
+	}
 }
 
 void ButiEngine::PanelManager::SwapLeft(int arg_frame)
@@ -249,6 +262,16 @@ void ButiEngine::PanelManager::SwapLeft(int arg_frame)
 	int currentIndex = currentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
 	SwapPanelNum(currentIndex, currentIndex - 1, arg_frame);
 	moveNum--;
+	if (moveNum == -MOVE_LIMIT && !reverse)
+	{
+		reverse = true;
+		shp_reverseText->PlayAnimation();
+	}
+	else if (moveNum == 0 && reverse)
+	{
+		reverse = false;
+		shp_reverseText->PlayAnimation();
+	}
 }
 
 void ButiEngine::PanelManager::Undo(int arg_frame)

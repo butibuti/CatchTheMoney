@@ -42,6 +42,7 @@ namespace ButiEngine {
 	private:
 		std::weak_ptr<GameObject> wkp_drawObjectGravity;
 		std::weak_ptr<GameObject> wkp_drawObjectSky;
+		std::weak_ptr<GameObject> wkp_drawObjectFrame;
 		std::weak_ptr<GameObject> wkp_player;
 
 		SoundTag se_cancel;

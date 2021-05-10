@@ -44,7 +44,7 @@ void ButiEngine::ScrollManager::OnUpdate()
 	float* distance = LoopDistance(previousScroll, currentScroll);
 	if (distance[0] < distance[1])
 	{
-		previousScroll -= distance[0] * 0.1f;
+		previousScroll -= distance[0] * 0.2f;
 		distance = LoopDistance(previousScroll, currentScroll);
 		if (distance[1] < distance[0])
 		{
@@ -53,7 +53,7 @@ void ButiEngine::ScrollManager::OnUpdate()
 	}
 	else if (distance[1] < distance[0])
 	{
-		previousScroll += distance[1] * 0.1f;
+		previousScroll += distance[1] * 0.2f;
 		distance = LoopDistance(previousScroll, currentScroll);
 		if (distance[0] < distance[1])
 		{

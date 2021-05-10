@@ -23,7 +23,7 @@ void ButiEngine::StageManager::OnUpdate()
 	{
 		if (clearAnimationFrame >= CLEAR_FRAME)
 		{
-			GetManager().lock()->AddObjectFromCereal("ClearFlash");
+			GetManager().lock()->AddObjectFromCereal("ClearFlash", ObjectFactory::Create<Transform>(Vector3(0.0f,0.0f,1000.0f)));
 		}
 		else if (clearAnimationFrame == CLEAR_FRAME - 10)
 		{
