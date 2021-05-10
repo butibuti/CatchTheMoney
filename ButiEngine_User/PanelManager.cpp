@@ -244,14 +244,8 @@ void ButiEngine::PanelManager::SwapRight(int arg_frame)
 	int currentParentIndex = currentParentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
 	SwapPanelNum(currentParentIndex, currentParentIndex + 1, arg_frame);
 	moveNum++;
-	if (moveNum == MOVE_LIMIT && !reverse)
+	if (moveNum == MOVE_LIMIT || moveNum == 0)
 	{
-		reverse = true;
-		shp_reverseText->PlayAnimation();
-	}
-	else if (moveNum == 0 && reverse)
-	{
-		reverse = false;
 		shp_reverseText->PlayAnimation();
 	}
 }
@@ -262,14 +256,8 @@ void ButiEngine::PanelManager::SwapLeft(int arg_frame)
 	int currentIndex = currentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
 	SwapPanelNum(currentIndex, currentIndex - 1, arg_frame);
 	moveNum--;
-	if (moveNum == -MOVE_LIMIT && !reverse)
+	if (moveNum == -MOVE_LIMIT || moveNum == 0)
 	{
-		reverse = true;
-		shp_reverseText->PlayAnimation();
-	}
-	else if (moveNum == 0 && reverse)
-	{
-		reverse = false;
 		shp_reverseText->PlayAnimation();
 	}
 }
