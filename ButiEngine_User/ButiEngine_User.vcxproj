@@ -158,6 +158,10 @@
   <ItemGroup>
     <ClCompile Include="BackDraw.cpp" />
     <ClCompile Include="CameraController.cpp" />
+    <ClCompile Include="ChildNumber.cpp" />
+    <ClCompile Include="ClearBand.cpp" />
+    <ClCompile Include="ClearFlash.cpp" />
+    <ClCompile Include="ClearText.cpp" />
     <ClCompile Include="ContorolByStick.cpp" />
     <ClCompile Include="CorrectToInt.cpp" />
     <ClCompile Include="DebugController.cpp" />
@@ -171,6 +175,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MobiusLoop.cpp" />
+    <ClCompile Include="NumberComponent.cpp" />
     <ClCompile Include="Panel.cpp" />
     <ClCompile Include="PanelManager.cpp" />
     <ClCompile Include="ParentPanel.cpp" />
@@ -192,6 +197,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
+    <ClInclude Include="ChildNumber.h" />
+    <ClInclude Include="ClearBand.h" />
+    <ClInclude Include="ClearFlash.h" />
+    <ClInclude Include="ClearText.h" />
     <ClInclude Include="ContorolByStick.h" />
     <ClInclude Include="CorrectToInt.h" />
     <ClInclude Include="DebugController.h" />
@@ -203,6 +212,7 @@
     <ClInclude Include="HitChecker.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MobiusLoop.h" />
+    <ClInclude Include="NumberComponent.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="PanelManager.h" />
     <ClInclude Include="ParentPanel.h" />

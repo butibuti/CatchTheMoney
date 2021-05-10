@@ -2,34 +2,33 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class SelectPanel :public GameComponent
+	class SpliteAnimationComponent;
+
+	class ClearText :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "SelectPanel";
+			return "ClearText";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
 		std::shared_ptr<GameComponent> Clone()override;
-		void SetStageNumbers(const int arg_front, const int arg_back);
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
 			archive(isActive);
 		}
 	private:
-		std::weak_ptr<GameObject> wkp_parentSelectPanel;
-		std::weak_ptr<GameObject> wkp_frontNumber;
-		std::weak_ptr<GameObject> wkp_backNumber;
+		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 
-		int frontStageNum;
-		int backStageNum;
 		bool isOnce;
+		int horizontalNum;
+		int animationCount;
 
-		void CreateNumber();
+		void Animation();
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(SelectPanel);
+BUTI_REGIST_GAMECOMPONENT(ClearText);

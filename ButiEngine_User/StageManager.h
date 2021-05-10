@@ -7,6 +7,7 @@ namespace ButiEngine {
 	class PanelManager;
 	class ScrollManager;
 	class CameraController;
+	class ClearBand;
 
 	enum GameMode
 	{
@@ -39,12 +40,18 @@ namespace ButiEngine {
 		std::shared_ptr<ScrollManager> shp_scrollManager;
 		std::shared_ptr<CameraController> shp_cameraController;
 
+		std::shared_ptr<GameObject> shp_clearBand;
+		std::shared_ptr<GameObject> shp_clearZanzo;
+		std::shared_ptr<GameObject> shp_clearZanzoText;
+		std::shared_ptr<GameObject> shp_clearText;
+
 		std::weak_ptr<GameObject> wkp_player;
 
 		GameMode mode;
 
 		void ResetStage();
 		int clearAnimationFrame;
+		const int CLEAR_FRAME = 3000;
 
 		void OnGoal();
 		void ChangeScene(const std::string& arg_sceneName);

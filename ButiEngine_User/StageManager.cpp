@@ -9,6 +9,7 @@
 #include"StageSelect.h"
 #include "Player.h"
 #include "ShakeComponent.h"
+#include "ClearBand.h"
 
 void ButiEngine::StageManager::OnUpdate()
 {
@@ -20,6 +21,12 @@ void ButiEngine::StageManager::OnUpdate()
 
 	if (wkp_player.lock()->GetGameComponent<Player>()->IsClear())
 	{
+		if (clearAnimationFrame >= CLEAR_FRAME)
+		{
+			GetManager().lock()->AddObjectFromCereal("ClearFlash");
+
+			//shp_clearBand = GetManager().lock()->AddObjectFromCereal("ClearBand").lock();
+		}
 		clearAnimationFrame--;
 	}
 
@@ -44,7 +51,7 @@ void ButiEngine::StageManager::Start()
 
 	shp_map->PutTile();
 
-	clearAnimationFrame = 90;
+	clearAnimationFrame = CLEAR_FRAME;
 
 	mode = GameMode::Normal;
 }
