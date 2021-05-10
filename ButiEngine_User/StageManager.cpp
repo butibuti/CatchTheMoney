@@ -51,8 +51,8 @@ void ButiEngine::StageManager::Start()
 
 void ButiEngine::StageManager::ShowGUI()
 {
-	GUI::Begin("ClearAnimationTime");
-	GUI::Text(clearAnimationFrame);
+	GUI::Begin("StageNum");
+	GUI::Text(StageSelect::GetStageNum());
 	GUI::End();
 }
 
