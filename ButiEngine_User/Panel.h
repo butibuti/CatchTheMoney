@@ -18,11 +18,11 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-		void SetPanelNum(int arg_num, bool arg_addAnimation) 
+		void SetPanelNum(int arg_num, bool arg_addAnimation, int arg_frame) 
 		{
 			panelNum = arg_num; 
 			if (!arg_addAnimation) { return; }
-			AddTransformAnimation();
+			AddTransformAnimation(arg_frame);
 		}
 		int GetPanelNum() { return panelNum; }
 		void SetParentPanelNum(int arg_num) { parentPanelNum = arg_num; }
@@ -38,8 +38,10 @@ namespace ButiEngine {
 		bool IsAnimation() { return animation; }
 
 		void OnChangeGravity(bool arg_scroll);
+		void SetDrawObjectSky();
 	private:
-		std::weak_ptr<GameObject> wkp_drawObject;
+		std::weak_ptr<GameObject> wkp_drawObjectGravity;
+		std::weak_ptr<GameObject> wkp_drawObjectSky;
 		std::weak_ptr<GameObject> wkp_player;
 
 		SoundTag se_cancel;
@@ -55,7 +57,7 @@ namespace ButiEngine {
 		std::vector<int> vec_gravityCoreNums;
 
 		void AddGravity(float arg_gravity) { gravity += arg_gravity; }
-		void AddTransformAnimation();
+		void AddTransformAnimation(int arg_frame);
 		void StorePlayer();
 	};
 

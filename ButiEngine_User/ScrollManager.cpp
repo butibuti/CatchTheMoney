@@ -20,17 +20,17 @@ void ButiEngine::ScrollManager::OnUpdate()
 	isCurrentEdit = shp_pauseManager->GetPause();
 	if (!shp_pauseManager->GetPause())
 	{
-		Vector3 position = wkp_player.lock()->transform->GetWorldPosition();
-		currentScroll = (position.x / GameSettings::windowWidth);
-		scrollPosition.x = position.x;
 	}
 	else
 	{
-		MoveScroll();
-		currentScroll = (scrollPosition.x / GameSettings::windowWidth);
+		//MoveScroll();
+		//currentScroll = (scrollPosition.x / GameSettings::windowWidth);
 	}
+	Vector3 position = wkp_player.lock()->transform->GetWorldPosition();
+	currentScroll = (position.x / GameSettings::windowWidth);
+	scrollPosition.x = position.x;
 
-	BackScroll();
+	//BackScroll();
 
 	float* distance = LoopDistance(previousScroll, currentScroll);
 	if (distance[0] < distance[1])

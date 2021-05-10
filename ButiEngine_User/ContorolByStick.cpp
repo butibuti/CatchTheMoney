@@ -13,7 +13,7 @@ void ButiEngine::ContorolByStick::OnUpdate()
 	Control();
 
 	//カメラリセット
-	if (InputManager::OnTriggerMobiusRotateResetKey())
+	if (InputManager::OnTriggerMobiusResetRotationKey())
 	{
 		cameraResetFrame = 0;
 		rotation = Vector3(0, 0, 0);

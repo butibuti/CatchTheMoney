@@ -163,7 +163,6 @@
     <ClCompile Include="ClearFlash.cpp" />
     <ClCompile Include="ClearText.cpp" />
     <ClCompile Include="ContorolByStick.cpp" />
-    <ClCompile Include="CorrectToInt.cpp" />
     <ClCompile Include="DebugController.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
     <ClCompile Include="FollowPanel.cpp" />
@@ -202,7 +201,6 @@
     <ClInclude Include="ClearFlash.h" />
     <ClInclude Include="ClearText.h" />
     <ClInclude Include="ContorolByStick.h" />
-    <ClInclude Include="CorrectToInt.h" />
     <ClInclude Include="DebugController.h" />
     <ClInclude Include="FollowPanel.h" />
     <ClInclude Include="GravityCore.h" />

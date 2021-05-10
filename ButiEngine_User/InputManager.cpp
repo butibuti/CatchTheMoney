@@ -60,10 +60,9 @@ bool ButiEngine::InputManager::OnTriggerLeftKey()
 		(currentLeftStick.x <= -DEADZONE && previousLeftStick.x > -DEADZONE));
 }
 
-bool ButiEngine::InputManager::OnTriggerMobiusRotateResetKey()
+bool ButiEngine::InputManager::OnTriggerMobiusResetRotationKey()
 {
-	return (GameDevice::GetInput()->TriggerKey(Keys::R) ||
-		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_STICK_RIGHT) ||
+	return (GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_STICK_RIGHT) ||
 		GameDevice::GetInput()->GetMouseTrigger(MouseButtons::RightClick));
 }
 
@@ -101,6 +100,27 @@ bool ButiEngine::InputManager::OnPushRightScrollKey()
 bool ButiEngine::InputManager::OnPushLeftScrollKey()
 {
 	return (GameDevice::GetInput()->GetPadButton(PadButtons::XBOX_BUTTON_LEFT));
+}
+
+bool ButiEngine::InputManager::OnTriggerUndoKey()
+{
+	return (GameDevice::GetInput()->CheckKey(Keys::LeftCtrl) &&
+		GameDevice::GetInput()->CheckKey(Keys::Z));
+		//GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_LEFT);
+}
+
+bool ButiEngine::InputManager::OnTriggerRedoKey()
+{
+	return (GameDevice::GetInput()->CheckKey(Keys::LeftCtrl) &&
+		GameDevice::GetInput()->CheckKey(Keys::Y));
+		//GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_BACK);
+}
+
+bool ButiEngine::InputManager::OnTriggerResetPanelKey()
+{
+	return (GameDevice::GetInput()->CheckKey(Keys::LeftCtrl) &&
+		GameDevice::GetInput()->CheckKey(Keys::R)) ||
+		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_B);
 }
 
 bool ButiEngine::InputManager::OnTriggerDecisionKey()

@@ -5,6 +5,7 @@
 #include"PanelManager.h"
 #include"GravityCore.h"
 #include"StageSelect.h"
+#include"Panel.h"
 
 void ButiEngine::Map::OnUpdate()
 {
@@ -62,6 +63,7 @@ void ButiEngine::Map::PutTile()
 
 			frontPanel = GetManager().lock()->AddObjectFromCereal("Panel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
 			frontPanel.lock()->SetObjectName("FrontPanel");
+			frontPanel.lock()->GetGameComponent<Panel>()->SetDrawObjectSky();
 			parentPanelComponent->SetFrontPanel(frontPanel);
 			shp_panelManager->AddFrontPanel(frontPanel);
 

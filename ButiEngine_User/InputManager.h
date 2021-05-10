@@ -25,7 +25,7 @@ namespace ButiEngine {
 		static bool OnTriggerLeftKey();
 
 		//GameCommon
-		static bool OnTriggerMobiusRotateResetKey();
+		static bool OnTriggerMobiusResetRotationKey();
 		static bool OnTriggerModeChangeKey();
 		static bool OnTriggerOpenMenuKey();
 
@@ -36,6 +36,9 @@ namespace ButiEngine {
 		//EditMode
 		static bool OnPushRightScrollKey();
 		static bool OnPushLeftScrollKey();
+		static bool OnTriggerUndoKey();
+		static bool OnTriggerRedoKey();
+		static bool OnTriggerResetPanelKey();
 
 		//anotherScene
 		static bool OnTriggerDecisionKey();
