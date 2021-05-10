@@ -28,6 +28,11 @@ namespace ButiEngine {
 		virtual void OnCollisionEnd(std::weak_ptr<GameObject> arg_other){}
 		virtual std::string GetGameComponentName() = 0;
 		virtual std::shared_ptr<GameComponent> Clone() = 0;
+
+
+		std::weak_ptr<GameObject> AddObject(std::shared_ptr<Transform> arg_transform, std::string arg_objectName = "GameObject");
+		std::weak_ptr<GameObject> AddObject(std::shared_ptr<GameObject> arg_gameObject);
+		std::weak_ptr<GameObject>AddObjectFromCereal(std::string filePath, std::shared_ptr<Transform> arg_transform = nullptr);
 		bool IsRemove() {
 			return isRemove;
 		}

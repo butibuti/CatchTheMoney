@@ -64,7 +64,6 @@ namespace ButiEngine {
 				archive(isActive);
 			}
 		private:
-			UINT* p_index = nullptr;
 			UINT layerNum = 0;
 			std::shared_ptr<CollisionPrimitive> shp_collisionPrim;
 		};
@@ -480,7 +479,6 @@ namespace ButiEngine {
 		void ShowExCBufferUI();
 		std::shared_ptr< MeshDrawData > data;
 		virtual void CreateData();
-		UINT* index;
 		MeshTag meshTag;
 		ShaderTag shaderTag;
 		ModelTag modelTag;

@@ -87,6 +87,7 @@ namespace ButiEngine {
 		std::shared_ptr<IMotionTimeLine> AddMotionTimeLine( std::shared_ptr<IMotionTimeLine> arg_motion);
 		bool SetLoop(const bool arg_isLoop);
 		void SetBoneDrawObj(std::shared_ptr<IBoneObject> arg_shp_boneDrawObj);
+		float GetFrame()const;
 	private:
 		bool isActive = true;
 		bool isRoop = false;

@@ -157,24 +157,23 @@ namespace ButiEngine {
 				for (auto itr = vec_index.begin(); itr != vec_index.end(); itr++) {
 					delete (*itr);
 				}
-				for (int i = 0; i < maxCellNum; i++) {
+				for (UINT i = 0; i < maxCellNum; i++) {
 					if (ary_cells[i] )
 						delete ary_cells[i];
 				}
 				delete[] ary_cells;
 			}
-			unsigned int* RegistCollisionObj(std::shared_ptr< CollisionPrimitive> arg_primitive, std::shared_ptr< T> arg_collisionObj) {
+			void RegistCollisionObj(std::shared_ptr< CollisionPrimitive> arg_primitive, std::shared_ptr< T> arg_collisionObj) {
 
 				UINT* index = new UINT(vec_shp_collisionObjs.size());
 
-				vec_shp_collisionObjs.push_back(std::make_shared<OctRegistObj<T>>(ObjectFactory::Create<CollisionObject<T>>(arg_primitive,arg_collisionObj)));
+				vec_shp_collisionObjs.push_back(std::make_shared<OctRegistObj<T>>(ObjectFactory::Create<CollisionObject<T>>(arg_primitive, arg_collisionObj)));
 
 				vec_index.push_back(index);
-				return index;
-
+				map_objIndex.emplace(arg_collisionObj, index);
 			}
-			void UnRegistCollisionObj(unsigned int* arg_index) {
-				auto index = *arg_index;
+			void UnRegistCollisionObj(std::shared_ptr< T>  arg_index) {
+				auto index = *map_objIndex.at(arg_index);
 				if (index >= vec_shp_collisionObjs.size()) {
 					return;
 				}
@@ -183,7 +182,7 @@ namespace ButiEngine {
 				(*itr)->Remove();
 				vec_shp_collisionObjs.erase(itr);
 
-				delete arg_index;
+				delete map_objIndex.at(arg_index);
 				auto numItr = vec_index.begin() + index;
 				numItr = vec_index.erase(numItr);
 
@@ -191,9 +190,12 @@ namespace ButiEngine {
 					*(*numItr) -= 1;
 				}
 			}
-			void Initialize()override{}
+			void Initialize()override {
+			}
 			void PreInitialize()override{}
 			void Update() {
+
+
 				RegistOctree();
 			}
 			inline void RegistOctree() {
@@ -292,13 +294,12 @@ namespace ButiEngine {
 				{
 					auto rObjItr = objItr->shp_next;
 					while (rObjItr != nullptr) {
-						// 衝突リスト作成
 						arg_output.push_back(objItr->shp_collisionObject);
 						arg_output.push_back(rObjItr->shp_collisionObject);
 
 						rObjItr = rObjItr->shp_next;
 					}
-					// ② 衝突スタックとの衝突リスト作成
+					//  衝突スタックとの衝突リスト作成
 					for (auto itr = arg_stack.begin(); itr != arg_stack.end(); itr++) {
 						arg_output.push_back(objItr->shp_collisionObject);
 						arg_output.push_back(*itr);
@@ -307,7 +308,7 @@ namespace ButiEngine {
 				}
 
 				bool ChildFlag = false;
-				// ③ 子空間に移動
+				//  子空間に移動
 				DWORD ObjNum = 0;
 				DWORD i, nextCellNum;
 				for (i = 0; i < 8; i++) {
@@ -326,7 +327,6 @@ namespace ButiEngine {
 					}
 				}
 
-				// ⑤ スタックからオブジェクトを外す
 				if (ChildFlag) {
 					for (i = 0; i < ObjNum; i++)
 						arg_stack.pop_back();
@@ -343,7 +343,7 @@ namespace ButiEngine {
 					objItr = objItr->shp_next;
 				}
 
-				// ③ 子空間に移動
+				//  子空間に移動
 				DWORD ObjNum = 0;
 				DWORD i, nextCellNum;
 				for (i = 0; i < 8; i++) {
@@ -360,16 +360,18 @@ namespace ButiEngine {
 
 				while (!ary_cells[arg_cellNum])
 				{
-					// 指定の要素番号に空間を新規作成
 					ary_cells[arg_cellNum]= new OctCell<T>();
 
-					// 親空間にジャンプ
+					// 親空間へ移動
 					arg_cellNum = (arg_cellNum - 1) >> 3;
 					if (arg_cellNum >=maxCellNum) break;
 				}
 
 			}
 			std::vector<std::shared_ptr< OctRegistObj<T>>> vec_shp_collisionObjs;
+
+
+			std::unordered_map<std::shared_ptr<T>, UINT*> map_objIndex;
 			std::vector<UINT*>vec_index;
 			OctCell<T>** ary_cells;
 			UINT OctPow[MaxLevel + 1];

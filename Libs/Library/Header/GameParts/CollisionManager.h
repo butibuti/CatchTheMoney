@@ -30,8 +30,8 @@ namespace ButiEngine {
 			void Initialize()override {}
 			void PreInitialize()override {}
 			void Update()override;
-			UINT* RegistCollisionObject(const int layerNum, std::shared_ptr< Collision::CollisionPrimitive>arg_prim,std::shared_ptr<GameObject> arg_registObj)override;
-			void UnRegistCollisionObject(const int layerNum, UINT* registNum)override;
+			void RegistCollisionObject(const int layerNum, std::shared_ptr< Collision::CollisionPrimitive>arg_prim,std::shared_ptr<GameObject> arg_registObj)override;
+			void UnRegistCollisionObject(const int layerNum,  std::shared_ptr<GameObject> arg_registObj)override;
 			UINT GetLayerCount()override;
 			void AddLayer(const Vector3& size,const int level,bool isCheckSame)override;
 			void RemoveLayer(const int arg_layer)override;

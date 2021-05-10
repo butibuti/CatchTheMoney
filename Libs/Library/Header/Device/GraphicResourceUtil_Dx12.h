@@ -335,7 +335,7 @@ namespace ButiEngine {
 
 
 			std::vector< CD3DX12_DESCRIPTOR_RANGE> ranges;
-			for (int i = 0; i < srvCount; i++) {
+			for (UINT i = 0; i < srvCount; i++) {
 				CD3DX12_DESCRIPTOR_RANGE in;
 				ranges.push_back(in);
 				ranges[i].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, i);
@@ -355,7 +355,7 @@ namespace ButiEngine {
 			}
 
 			std::vector<CD3DX12_ROOT_PARAMETER> rootParameters;
-			for (int i = 0; i < srvCount; i++) {
+			for (UINT i = 0; i < srvCount; i++) {
 				CD3DX12_ROOT_PARAMETER in;
 				in.InitAsDescriptorTable(1, &ranges[i], D3D12_SHADER_VISIBILITY_PIXEL);
 				rootParameters.push_back(in);

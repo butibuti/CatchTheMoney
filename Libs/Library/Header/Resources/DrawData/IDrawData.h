@@ -25,46 +25,7 @@ namespace ButiEngine {
 		Matrix4x4* p_worldMatrix;
 		std::weak_ptr<GraphicDevice> wkp_graphicDevice;
 	};
-	class MatrixUpdater_default :public IMatrixUpdater {
-	public:
-		MatrixUpdater_default(std::shared_ptr < CBuffer<ShaderVariable>> arg_cbuffer, std::shared_ptr<Transform> arg_transform, std::weak_ptr<GraphicDevice> arg_wkp_graphicDevice,Matrix4x4& arg_mat) :IMatrixUpdater(arg_cbuffer, arg_transform, arg_wkp_graphicDevice,arg_mat) {
-
-		}
-
-		void WorldMatrixUpdate();
-	};
-	class MatrixUpdater_billBoard :public IMatrixUpdater {
-	public:
-		MatrixUpdater_billBoard(std::shared_ptr < CBuffer<ShaderVariable>> arg_cbuffer, std::shared_ptr<Transform> arg_transform, std::weak_ptr<GraphicDevice> arg_wkp_graphicDevice, Matrix4x4& arg_mat) :IMatrixUpdater(arg_cbuffer, arg_transform, arg_wkp_graphicDevice, arg_mat) {
-
-		}
-
-		void WorldMatrixUpdate();
-	};
-	class MatrixUpdater_billBoardX :public IMatrixUpdater {
-	public:
-		MatrixUpdater_billBoardX(std::shared_ptr < CBuffer<ShaderVariable>> arg_cbuffer, std::shared_ptr<Transform> arg_transform, std::weak_ptr<GraphicDevice> arg_wkp_graphicDevice, Matrix4x4& arg_mat) :IMatrixUpdater(arg_cbuffer, arg_transform, arg_wkp_graphicDevice, arg_mat) {
-
-		}
-
-		void WorldMatrixUpdate();
-	};
-	class MatrixUpdater_billBoardY :public IMatrixUpdater {
-	public:
-		MatrixUpdater_billBoardY(std::shared_ptr < CBuffer<ShaderVariable>> arg_cbuffer, std::shared_ptr<Transform> arg_transform, std::weak_ptr<GraphicDevice> arg_wkp_graphicDevice, Matrix4x4& arg_mat) :IMatrixUpdater(arg_cbuffer, arg_transform, arg_wkp_graphicDevice, arg_mat) {
-
-		}
-
-		void WorldMatrixUpdate();
-	};
-	class MatrixUpdater_billBoardZ :public IMatrixUpdater {
-	public:
-		MatrixUpdater_billBoardZ(std::shared_ptr < CBuffer<ShaderVariable>> arg_cbuffer, std::shared_ptr<Transform> arg_transform, std::weak_ptr<GraphicDevice> arg_wkp_graphicDevice, Matrix4x4& arg_mat) :IMatrixUpdater(arg_cbuffer, arg_transform, arg_wkp_graphicDevice, arg_mat) {
-
-		}
-
-		void WorldMatrixUpdate();
-	};
+	
 
 	struct DrawInformation :public IObject {
 		DrawInformation() {}
@@ -117,7 +78,7 @@ namespace ButiEngine {
 
 		std::shared_ptr< DrawInformation > Clone() {
 			auto output = ObjectFactory::Create<DrawInformation>();
-
+			output->layer = layer;
 			output->drawSettings = drawSettings;
 			output->isAlpha = isAlpha;
 			output->isDepth = isDepth;

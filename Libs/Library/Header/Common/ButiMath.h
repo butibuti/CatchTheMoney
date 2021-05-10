@@ -165,6 +165,10 @@ namespace ButiEngine {
 
 		inline Vector3 GetPosition()const;
 		inline Vector3 GetPosition_Transpose()const;
+		inline void PositionFloor();
+		inline Matrix4x4 GetPositionFloor()const;
+		inline void PositionFloor_transpose();
+		inline Matrix4x4 GetPositionFloor_transpose()const;
 		inline void RemovePosition();
 		static inline Matrix4x4 Scale(const Vector3& arg_scale);
 
@@ -373,10 +377,10 @@ namespace ButiEngine {
 			if (len <= 0) {
 				return *this;
 			}
-			*this *= std::pow(10, len - 1);
+			*this *= (float) std::pow(10, len - 1);
 			x = std::floor(x);
 			y = std::floor(y);
-			*this /= std::pow(10, len - 1);
+			*this /= (float) std::pow(10, len - 1);
 			return *this;
 		}
 
@@ -385,10 +389,10 @@ namespace ButiEngine {
 			if (len <= 0) {
 				return *this;
 			}
-			*this *= std::pow(10, len - 1);
+			*this *= (float) std::pow(10, len - 1);
 			x = std::round(x);
 			y = std::round(y);
-			*this /= std::pow(10, len - 1);
+			*this /= (float) std::pow(10, len - 1);
 			return *this;
 		}
 
@@ -397,10 +401,10 @@ namespace ButiEngine {
 			if (len <= 0) {
 				return *this;
 			}
-			*this *= std::pow(10, len - 1);
+			*this *= (float) std::pow(10, len - 1);
 			x = std::ceil(x);
 			y = std::ceil(y);
-			*this /= std::pow(10, len - 1);
+			*this /= (float) std::pow(10, len - 1);
 			return *this;
 		}
 
@@ -411,10 +415,10 @@ namespace ButiEngine {
 				return *this;
 			}
 			Vector2 output;
-			output *= std::pow(10, len - 1);
+			output *= (float) std::pow(10, len - 1);
 			output.x = std::round(x);
 			output.y = std::round(y);
-			output /= std::pow(10, len - 1);
+			output /= (float) std::pow(10, len - 1);
 			return output;
 		}
 		inline Vector2 GetFloor(int len = 1)const
@@ -423,10 +427,10 @@ namespace ButiEngine {
 				return *this;
 			}
 			Vector2 output;
-			output *= std::pow(10, len - 1);
+			output *= (float) std::pow(10, len - 1);
 			output.x = std::floor(x);
 			output.y = std::floor(y);
-			output /= std::pow(10, len - 1);
+			output /= (float) std::pow(10, len - 1);
 			return output;
 		}
 		inline Vector2 GetCeil(int len = 1)const
@@ -435,10 +439,10 @@ namespace ButiEngine {
 				return *this;
 			}
 			Vector2 output;
-			output *= std::pow(10, len - 1);
+			output *= (float) std::pow(10, len - 1);
 			output.x = std::ceil(x);
 			output.y = std::ceil(y);
-			output /= std::pow(10, len - 1);
+			output /= (float) std::pow(10, len - 1);
 			return output;
 		}
 
@@ -691,11 +695,11 @@ namespace ButiEngine {
 			if (len <= 0) {
 				return *this;
 			}
-			*this *= std::pow(10, len - 1);
+			*this *= (float) std::pow(10, len - 1);
 			x = std::floor(x);
 			y = std::floor(y);
 			z = std::floor(z);
-			*this /= std::pow(10, len - 1);
+			*this /= (float) std::pow(10, len - 1);
 			return *this;
 		}
 
@@ -704,11 +708,11 @@ namespace ButiEngine {
 			if (len <= 0) {
 				return *this;
 			}
-			*this *= std::pow( 10,len-1);
+			*this *= (float) std::pow( 10,len-1);
 			x = std::round(x);
 			y = std::round(y);
 			z = std::round(z);
-			*this /= std::pow(10, len - 1);
+			*this /= (float) std::pow(10, len - 1);
 			return *this;
 		}
 
@@ -717,11 +721,11 @@ namespace ButiEngine {
 			if (len <= 0) {
 				return *this;
 			}
-			*this *= std::pow(10, len - 1);
+			*this *= (float) std::pow(10, len - 1);
 			x= std::ceil(x);
 			y=std::ceil(y);
 			z=std::ceil(z);
-			*this /= std::pow(10, len - 1);
+			*this /= (float) std::pow(10, len - 1);
 			return *this;
 		}
 
@@ -732,11 +736,11 @@ namespace ButiEngine {
 				return *this;
 			}
 			Vector3 output;
-			output *= std::pow(10, len - 1);
+			output *= (float) std::pow(10, len - 1);
 			output.x = std::round(x);
 			output.y = std::round(y);
 			output.z = std::round(z);
-			output /= std::pow(10, len - 1);
+			output /= (float) std::pow(10, len - 1);
 			return output;
 		}
 		inline Vector3 GetFloor(int len = 1)const
@@ -745,11 +749,11 @@ namespace ButiEngine {
 				return *this;
 			}
 			Vector3 output;
-			output *= std::pow(10, len - 1);
+			output *= (float) std::pow(10, len - 1);
 			output.x = std::floor(x);
 			output.y = std::floor(y);
 			output.z = std::floor(z);
-			output /= std::pow(10, len - 1);
+			output /= (float) std::pow(10, len - 1);
 			return output;
 		}
 		inline Vector3 GetCeil(int len = 1)const
@@ -758,11 +762,11 @@ namespace ButiEngine {
 				return *this;
 			}
 			Vector3 output;
-			output *= std::pow(10, len - 1);
+			output *= (float) std::pow(10, len - 1);
 			output.x = std::ceil(x);
 			output.y = std::ceil(y);
 			output.z = std::ceil(z);
-			output /= std::pow(10, len - 1);
+			output /= (float) std::pow(10, len - 1);
 			return output;
 		}
 
@@ -2025,6 +2029,60 @@ namespace ButiEngine {
 	inline ButiEngine::Vector3 ButiEngine::Matrix4x4::GetPosition_Transpose()const
 	{
 		return Vector3(_14, _24, _34);
+	}
+	inline void Matrix4x4::PositionFloor()
+	{
+		if (_41 > 0) {
+			_41 = floor(_41);
+		}
+		else {
+			_41 = ceil(_41);
+		}
+		if (_42 > 0) {
+			_42 = floor(_42);
+		}
+		else {
+			_42 = ceil(_42);
+		}
+		if (_43 > 0) {
+			_43 = floor(_43);
+		}
+		else {
+			_43 = ceil(_43);
+		}
+	}
+	inline Matrix4x4 Matrix4x4::GetPositionFloor() const
+	{
+		Matrix4x4 output = *this;
+		output.PositionFloor();
+		return output;
+	}
+	inline void Matrix4x4::PositionFloor_transpose()
+	{
+		if (_14 > 0) {
+			_14 = floor(_14);
+		}
+		else {
+			_14 = ceil(_14);
+		}
+		if (_24 > 0) {
+			_24 = floor(_24);
+		}
+		else {
+			_24 = ceil(_24);
+		}
+		if (_34 > 0) {
+			_34 = floor(_34);
+		}
+		else {
+			_34 = ceil(_34);
+		}
+	}
+	inline Matrix4x4 Matrix4x4::GetPositionFloor_transpose() const
+	{
+		Matrix4x4 output = *this;
+		output.PositionFloor_transpose();
+		return output;
 	}
 	inline void  ButiEngine::Matrix4x4::RemovePosition()
 	{

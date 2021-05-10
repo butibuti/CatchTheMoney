@@ -11,8 +11,14 @@ namespace ButiEngine {
 		void StopCheck()override;
 		void Update()override;
 		void ClearCheck()override;
-		void PlaySE(SoundTag tag, float volume)override;
-		void PlayBGM(SoundTag tag,float volume)override;
+		void PlaySE(const SoundTag tag, const  float volume)override;
+		void PlayControllableSE(const SoundTag tag, const UINT index, const float volume, const bool isLoop)override;
+		void SetControllableSEVolume(const UINT index, const float volume)override;
+		void ExitControllableSELoop(const UINT index)override;
+		void DestroyControllableSE(const UINT index)override;
+		void StartontrollableSE(const UINT index)override;
+		void StopControllableSE(const UINT index)override;
+		void PlayBGM(const SoundTag tag, const float volume)override;
 		void Release()override;
 		void StopSE() override;
 		void StopBGM() override;
@@ -20,8 +26,10 @@ namespace ButiEngine {
 		void RestartBGM() override;
 		void DestroySE() override;
 		void DestroyBGM() override;
-		void SetBGMVolume(float volume) override;
-		SoundTag GetNowPlayBGM()override;
+		void SetBGMVolume(const float volume) override;
+		SoundTag GetNowPlayBGM()const override;
+		float GetBGMVolume()const ;
+		float GetControllableSEVolume(const int index)const;
 	private:
 		SoundTag nowBGM;
 		IXAudio2SourceVoice* cmp_bgm;

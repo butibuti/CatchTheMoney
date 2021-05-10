@@ -126,7 +126,7 @@ namespace ButiEngine {
 
 			void ShowUI() override {
 				GUI::BulletText("Ray");
-				if (GUI::DragFloat3("##rayVelocity", &initVelocity.x, 0.01f, -500, 500)); {
+				if (GUI::DragFloat3("##rayVelocity", &initVelocity.x, 0.01f, -500, 500)) {
 					initVelocity.Normalize();
 				}
 			}
@@ -184,7 +184,7 @@ namespace ButiEngine {
 
 			void ShowUI() override {
 				GUI::BulletText("Ray");
-				if (GUI::DragFloat3("##EndPoint", endPos, 0.01f, -500, 500)); {
+				if (GUI::DragFloat3("##EndPoint", endPos, 0.01f, -500, 500)) {
 				}
 			}
 
@@ -288,10 +288,10 @@ namespace ButiEngine {
 
 				if (GUI::TreeNode("Capsule")) {
 					GUI::BulletText("radius");
-					GUI::DragFloat("##radius", initR, 0.01, 0, 500);
+					GUI::DragFloat("##radius", initR, 0.01f, 0.0f, 500.0f);
 					GUI::BulletText("height");
 					
-					GUI::DragFloat("##length", length, 0.01, 0, 500);
+					GUI::DragFloat("##length", length, 0.01f, 0.0f, 500.0f);
 					GUI::TreePop();
 				}
 

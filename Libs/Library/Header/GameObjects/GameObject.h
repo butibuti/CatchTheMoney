@@ -132,8 +132,6 @@ namespace ButiEngine {
 		std::weak_ptr<IApplication> GetApplication();
 		std::shared_ptr<IResourceContainer> GetResourceContainer();
 		std::shared_ptr<GraphicDevice> GetGraphicDevice();
-
-
 		std::shared_ptr<GameObject> Clone();
 
 		template<class Archive>
@@ -147,7 +145,9 @@ namespace ButiEngine {
 		}
 		void Init_RegistGameComponents();
 
-
+		std::weak_ptr<GameObject> AddObject(std::shared_ptr<Transform> arg_transform,  std::string arg_objectName );
+		std::weak_ptr<GameObject> AddObject(std::shared_ptr<GameObject> arg_gameObject);
+		std::weak_ptr<GameObject>AddObjectFromCereal(std::string filePath, std::shared_ptr<Transform> arg_transform);
 	protected:
 		std::shared_ptr<GameComponent> RegisterGameComponent(std::shared_ptr<GameComponent> arg_shp_gameComponent);
 
@@ -173,6 +173,7 @@ namespace ButiEngine {
 		std::vector<std::shared_ptr<GameObject>> vec_befCollisionObject;
 
 		std::unordered_map<GameObjectTag, UINT> map_gameObjectTags;
+
 	};
 
 

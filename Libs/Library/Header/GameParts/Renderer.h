@@ -5,10 +5,10 @@ namespace ButiEngine {
 
 
 	struct RegistCommand {
-		UINT* p_index = nullptr;
 		bool isAfter;
 		bool isShadow;
 		std::shared_ptr< IDrawObject> shp_obj = nullptr;
+		bool isRegist=false;
 	};
 
 	class Renderer:public IRenderer
@@ -36,9 +36,9 @@ namespace ButiEngine {
 		TextureTag GetShadowTexture(const UINT arg_layer)override;
 		std::shared_ptr<ICamera> GetShadowCamera(const unsigned int arg_layer)override;
 		std::vector< std::shared_ptr<IDrawObject>> GetHitDrawObjects(std::shared_ptr<Collision::CollisionPrimitive> arg_prim,const int arg_layer)override;
-		UINT* RegistDrawObject(std::shared_ptr< IDrawObject> arg_wkp_drawObject, const bool arg_afterDraw,const UINT arg_layer=0,const bool isShadow=false)override;
 		void ShowUI()override;
-		void UnRegistDrawObject(UINT* arg_index, const bool arg_afterDraw, const UINT arg_layer = 0 ,const bool isShadow = false)override;
+		void RegistDrawObject(std::shared_ptr< IDrawObject> arg_wkp_drawObject, const bool arg_afterDraw,  const UINT arg_layer = 0, const bool isShadow = false)override;
+		void UnRegistDrawObject(std::shared_ptr< IDrawObject> arg_shp_drawObject, const bool arg_afterDraw,  const UINT arg_layer = 0 ,const bool isShadow = false)override;
 		void Release()override;
 		void ReleaseFogBuffer()override;
 		void UpdateFog(const Fog& arg_param)override;

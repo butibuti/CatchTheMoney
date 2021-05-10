@@ -61,7 +61,7 @@ namespace ButiEngine {
 				auto itrs= multimap_properties.find(type);
 
 				
-				for (int i = 0; i < arg_index; i++) {
+				for (UINT i = 0; i < arg_index; i++) {
 					itrs++;
 				}
 

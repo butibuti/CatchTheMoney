@@ -6,14 +6,12 @@ namespace ButiEngine {
 	public:
 
 		static void CreateInstance();
-		static void SaveInstance();
 
 		static  std::shared_ptr< ComponentsLoader> GetInstance();
 
 		void Initialize(){}
 		void PreInitialize(){}
 		void Release();
-		void CreateNameList();
 		void AddGameComponent(std::shared_ptr<GameComponent> arg_gamecomponent);
 
 		void RemoveComponent(const std::string& arg_name);
@@ -32,26 +30,13 @@ namespace ButiEngine {
 		}
 
 
-		template<class Archive>
-		void serialize(Archive& archive)
-		{
-			archive(addGameComponents);
-		}
 	private:
 		
-		std::vector<std::shared_ptr<GameComponent>> addGameComponents;
+		std::map<std::string, std::shared_ptr<GameComponent>> map_addGameComponents;
+		std::shared_ptr<GameComponent> shp_currentSelectObj;
 
-
-		char** componentNameList=nullptr;
-
-		int componentNameListSize;
-
-		int currentIndex_componentList = 0;
 		static std::shared_ptr< ComponentsLoader> instance;
 	};
 
 
-	void OutputCereal(const std::shared_ptr<ComponentsLoader>& v, const std::string& path);
-
-	void InputCereal(std::shared_ptr<ComponentsLoader>& v, const std::string& path);
 }

@@ -36,8 +36,8 @@ namespace ButiEngine
 		void Initialize()override {}
 		void PreInitialize()override {}
 		virtual void Update()= 0;
-		virtual UINT* RegistCollisionObject(const int layerNum, std::shared_ptr< Collision::CollisionPrimitive>arg_prim, std::shared_ptr<GameObject> arg_registObj)= 0;
-		virtual void UnRegistCollisionObject(const int layerNum, UINT* registNum)= 0;
+		virtual void RegistCollisionObject(const int layerNum,std::shared_ptr< Collision::CollisionPrimitive>arg_prim, std::shared_ptr<GameObject> arg_registObj)= 0;
+		virtual void UnRegistCollisionObject(const int layerNum,  std::shared_ptr<GameObject> arg_registObj)= 0;
 		virtual UINT GetLayerCount()= 0;
 		virtual void AddLayer(const Vector3& size, const int level, bool isCheckSame)= 0;
 		virtual void RemoveLayer(const int arg_layer)= 0;
@@ -63,9 +63,9 @@ namespace ButiEngine
 
 		virtual void Clear() = 0;
 		virtual void BefRendering() = 0;
-		virtual UINT* Regist(std::shared_ptr< IDrawObject> arg_wkp_drawObject, const bool arg_isAfterRendering, std::shared_ptr<Collision::CollisionPrimitive_Box_OBB> arg_ret_pim = nullptr, const bool arg_isShadow = false) = 0;
-		virtual void UnRegist(UINT* arg_path, const bool arg_isAfterRendering, const bool arg_isShadow = false) = 0;
-		virtual void DeleteDrawObj(UINT* arg_path, const bool arg_isAfterRendering) = 0;
+		virtual void Regist(std::shared_ptr< IDrawObject> arg_wkp_drawObject, const bool arg_isAfterRendering, std::shared_ptr<Collision::CollisionPrimitive_Box_OBB> arg_ret_pim = nullptr, const bool arg_isShadow = false) = 0;
+		virtual void UnRegist(std::shared_ptr< IDrawObject> arg_shp_drawObject, const bool arg_isAfterRendering,  const bool arg_isShadow = false) = 0;
+		virtual void DeleteDrawObj(std::shared_ptr< IDrawObject> arg_shp_drawObject, const bool arg_isAfterRendering) = 0;
 
 		virtual void SetShadowCamera(std::shared_ptr<ICamera> arg_shadowCamera) = 0;
 		virtual void SetShadowTexture(TextureTag arg_textureTag) = 0;
@@ -90,7 +90,7 @@ namespace ButiEngine
 		void PreInitialize()override {}
 		virtual void Update() = 0;
 		virtual void RenderingStart() = 0;
-		virtual virtual void BefRendering() = 0;
+		virtual void BefRendering() = 0;
 		virtual void AddLayer() = 0;
 		virtual UINT GetLayerCount() = 0;
 		virtual void Rendering(const UINT arg_layer) = 0;
@@ -103,10 +103,10 @@ namespace ButiEngine
 		virtual void TextureAttach(const TextureTag& arg_textureTag, const UINT arg_slot) = 0;
 		virtual void ShaderAttach(const ShaderTag& arg_shaderTag) = 0;
 		virtual void MaterialAttach(const UINT arg_slotOffset, const MaterialTag& arg_materialTag) = 0;
-		virtual UINT* RegistDrawObject(std::shared_ptr< IDrawObject> arg_shp_drawObject,const bool arg_afterDraw, const UINT arg_layer = 0, const bool isShadow = false) = 0;
 		virtual void SetShadowTexture(const UINT arg_layer, TextureTag arg_shadowTex) = 0;
 		virtual TextureTag GetShadowTexture(const UINT arg_layer) = 0;
-		virtual void UnRegistDrawObject(UINT* arg_index, const bool arg_afterDraw, const UINT arg_layer = 0, const bool isShadow = false) = 0;
+		virtual void RegistDrawObject(std::shared_ptr< IDrawObject> arg_shp_drawObject, const bool arg_afterDraw, const UINT arg_layer = 0, const bool isShadow = false) = 0;
+		virtual void UnRegistDrawObject(std::shared_ptr< IDrawObject> arg_shp_drawObject, const bool arg_afterDraw, const UINT arg_layer = 0, const bool isShadow = false) = 0;
 		virtual void ShowUI() = 0;
 		virtual void Release() = 0;
 		virtual void UpdateFog(const Fog& arg_param) = 0;
@@ -140,17 +140,25 @@ namespace ButiEngine
 		virtual void StopCheck() = 0;
 		virtual void Update() = 0;
 		virtual void ClearCheck() = 0;
-		virtual void PlaySE(SoundTag tag, float volume) = 0;
-		virtual void PlayBGM(SoundTag tag, float volume) = 0;
+		virtual void PlaySE(const SoundTag tag,const float volume) = 0;
+		virtual void PlayBGM(const SoundTag tag, const  float volume) = 0;
+		virtual void PlayControllableSE(const SoundTag tag, const UINT index, const float volume,const bool isLoop)=0;
+		virtual void SetControllableSEVolume(const UINT index, const float volume) = 0;
+		virtual void ExitControllableSELoop(const UINT index) = 0;
+		virtual void DestroyControllableSE(const UINT index) = 0;
+		virtual void StartontrollableSE(const UINT index) = 0;
+		virtual void StopControllableSE(const UINT index) = 0;
 		virtual void StopSE() = 0;
 		virtual void StopBGM() = 0;
 		virtual void RestartSE() = 0;
 		virtual void RestartBGM() = 0;
 		virtual void DestroySE() = 0;
 		virtual void DestroyBGM() = 0;
-		virtual void SetBGMVolume( float volume) = 0;
+		virtual void SetBGMVolume(const float volume) = 0;
 		virtual void Release() = 0;
-		virtual SoundTag GetNowPlayBGM() = 0;
+		virtual SoundTag GetNowPlayBGM()const = 0;
+		virtual float GetBGMVolume()const = 0;
+		virtual float GetControllableSEVolume(const int index)const = 0;
 	};
 
 	class ISceneManager :public IObject {
