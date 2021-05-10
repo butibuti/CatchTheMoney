@@ -159,6 +159,9 @@
     <ClCompile Include="BackDraw.cpp" />
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="ChildNumber.cpp" />
+    <ClCompile Include="ClearBand.cpp" />
+    <ClCompile Include="ClearFlash.cpp" />
+    <ClCompile Include="ClearText.cpp" />
     <ClCompile Include="ContorolByStick.cpp" />
     <ClCompile Include="DebugController.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
@@ -194,6 +197,9 @@
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
     <ClInclude Include="ChildNumber.h" />
+    <ClInclude Include="ClearBand.h" />
+    <ClInclude Include="ClearFlash.h" />
+    <ClInclude Include="ClearText.h" />
     <ClInclude Include="ContorolByStick.h" />
     <ClInclude Include="DebugController.h" />
     <ClInclude Include="FollowPanel.h" />
