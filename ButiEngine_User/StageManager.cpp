@@ -56,7 +56,7 @@ void ButiEngine::StageManager::Start()
 	shp_scrollManager = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ScrollManager>();
 	shp_cameraController = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraController>();
 
-	wkp_stageNumber = GetManager().lock()->AddObjectFromCereal("ParentNumber", ObjectFactory::Create<Transform>(Vector3(-600, 350, 0), Vector3::Zero, Vector3(80, 80, 0)));
+	wkp_stageNumber = GetManager().lock()->AddObjectFromCereal("ParentNumber", ObjectFactory::Create<Transform>(Vector3(-550, 350, 0), Vector3::Zero, Vector3(80, 80, 0)));
 	auto numComponent = wkp_stageNumber.lock()->GetGameComponent<NumberComponent>();
 	numComponent->SetNumber(StageSelect::GetStageNum());
 
