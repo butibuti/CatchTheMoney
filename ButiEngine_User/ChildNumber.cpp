@@ -4,8 +4,8 @@
 
 void ButiEngine::ChildNumber::OnUpdate()
 {
-	if (number == previousNumber) return;
-	previousNumber = number;
+	//if (number == previousNumber) return;
+	//previousNumber = number;
 
 	shp_spriteAnimation->SetHorizontalAnim(number);
 
@@ -18,7 +18,7 @@ void ButiEngine::ChildNumber::OnSet()
 void ButiEngine::ChildNumber::Start()
 {
 	previousNumber = 0;
-	number = 0;
+	//number = 0;
 
 	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 }

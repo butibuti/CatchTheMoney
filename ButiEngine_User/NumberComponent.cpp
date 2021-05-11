@@ -5,9 +5,6 @@
 void ButiEngine::NumberComponent::OnUpdate()
 {
 	CreateChildNum();
-	if (number == previousNumber) return;
-	previousNumber = number;
-
 	SetChildNum();
 }
 
@@ -18,8 +15,6 @@ void ButiEngine::NumberComponent::OnSet()
 void ButiEngine::NumberComponent::Start()
 {
 	isOnce = false;
-	number = 0;
-	previousNumber = 0;
 	digit = 1;
 }
 
@@ -56,16 +51,16 @@ void ButiEngine::NumberComponent::CreateChildNum()
 
 	auto parentTransform = gameObject.lock()->transform;
 
-	//digit = GetDigit(number);
+	digit = GetDigit(number);
 	for (unsigned int i = 0; i < digit; i++)
 	{
-		childNumbers.push_back(GetManager().lock()->AddObjectFromCereal("ChildNumber", ObjectFactory::Create<Transform>(parentTransform->GetLocalPosition())).lock());
+		childNumbers.push_back(GetManager().lock()->AddObjectFromCereal("ChildNumber", ObjectFactory::Create<Transform>(Vector3::Zero, Vector3::Zero, Vector3(1,1,1))));
 	}
 
 	auto end = childNumbers.end();
 	for (auto itr = childNumbers.begin(); itr != end; ++itr)
 	{
-		(*itr)->transform->SetBaseTransform(gameObject.lock()->transform);
+		(*itr).lock()->transform->SetBaseTransform(parentTransform);
 	}
 }
 
@@ -75,10 +70,13 @@ void ButiEngine::NumberComponent::SetChildNum()
 	int multiplier = pow(10, calcDigit);
 	int calcNumber = number;
 
-	auto childSize = childNumbers.size();
-	for (int i = 0; i < childSize; ++i)
+	auto position = gameObject.lock()->transform->GetLocalPosition();
+	auto childCount = childNumbers.size();
+	for (int i = 0; i < childCount; ++i)
 	{
-		childNumbers[i]->GetGameComponent<ChildNumber>()->SetNumber(calcNumber / multiplier);
+		int setNum = calcNumber / multiplier;
+		childNumbers[i].lock()->GetGameComponent<ChildNumber>()->SetNumber(setNum);
+		childNumbers[i].lock()->transform->SetLocalPosition(Vector3(i, 0, 0));
 		calcNumber = calcNumber % multiplier;
 		multiplier /= 10;
 	}

@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "ShakeComponent.h"
 #include "ClearBand.h"
+#include "NumberComponent.h"
 
 void ButiEngine::StageManager::OnUpdate()
 {
@@ -54,6 +55,10 @@ void ButiEngine::StageManager::Start()
 	shp_panelManager = GetManager().lock()->GetGameObject("PanelManager").lock()->GetGameComponent<PanelManager>();
 	shp_scrollManager = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ScrollManager>();
 	shp_cameraController = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraController>();
+
+	wkp_stageNumber = GetManager().lock()->AddObjectFromCereal("ParentNumber", ObjectFactory::Create<Transform>(Vector3(-600, 350, 0), Vector3::Zero, Vector3(80, 80, 0)));
+	auto numComponent = wkp_stageNumber.lock()->GetGameComponent<NumberComponent>();
+	numComponent->SetNumber(StageSelect::GetStageNum());
 
 	shp_map->PutTile();
 

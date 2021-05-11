@@ -24,10 +24,10 @@ void ButiEngine::SelectPanel::Start()
 	Vector3 scale = Vector3(1.0f, 1.0f, 0.1f);
 	gameObject.lock()->transform->SetLocalScale(scale);
 
-	wkp_frontNumber = GetManager().lock()->AddObjectFromCereal("ParentNumber", ObjectFactory::Create<Transform>(gameObject.lock()->transform->GetLocalPosition(), gameObject.lock()->transform->GetLocalRotation(), gameObject.lock()->transform->GetLocalScale()));
-	wkp_backNumber = GetManager().lock()->AddObjectFromCereal("ParentNumber", ObjectFactory::Create<Transform>(gameObject.lock()->transform->GetLocalPosition(), gameObject.lock()->transform->GetLocalRotation(), gameObject.lock()->transform->GetLocalScale()));
-	wkp_frontNumber.lock()->transform->SetBaseTransform(gameObject.lock()->transform->GetBaseTransform());
-	wkp_backNumber.lock()->transform->SetBaseTransform(gameObject.lock()->transform->GetBaseTransform());
+	//wkp_frontNumber = GetManager().lock()->AddObjectFromCereal("ParentNumber", ObjectFactory::Create<Transform>(gameObject.lock()->transform->GetLocalPosition(), gameObject.lock()->transform->GetLocalRotation(), gameObject.lock()->transform->GetLocalScale()));
+	//wkp_backNumber = GetManager().lock()->AddObjectFromCereal("ParentNumber", ObjectFactory::Create<Transform>(gameObject.lock()->transform->GetLocalPosition(), gameObject.lock()->transform->GetLocalRotation(), gameObject.lock()->transform->GetLocalScale()));
+	//wkp_frontNumber.lock()->transform->SetBaseTransform(gameObject.lock()->transform->GetBaseTransform());
+	//wkp_backNumber.lock()->transform->SetBaseTransform(gameObject.lock()->transform->GetBaseTransform());
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::SelectPanel::Clone()

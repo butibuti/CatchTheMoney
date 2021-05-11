@@ -20,10 +20,9 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
-		std::vector<std::shared_ptr<GameObject>> childNumbers;
+		std::vector<std::weak_ptr<GameObject>> childNumbers;
 
 		int number;
-		int previousNumber;
 		unsigned int digit;
 		bool isOnce;
 

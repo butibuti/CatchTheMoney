@@ -39,12 +39,8 @@ namespace ButiEngine {
 		std::shared_ptr<PanelManager> shp_panelManager;
 		std::shared_ptr<ScrollManager> shp_scrollManager;
 		std::shared_ptr<CameraController> shp_cameraController;
-
-		std::shared_ptr<GameObject> shp_clearBand;
-		std::shared_ptr<GameObject> shp_clearZanzo;
-		std::shared_ptr<GameObject> shp_clearZanzoText;
-		std::shared_ptr<GameObject> shp_clearText;
-
+		
+		std::weak_ptr<GameObject> wkp_stageNumber;
 		std::weak_ptr<GameObject> wkp_player;
 
 		GameMode mode;
