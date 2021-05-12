@@ -31,14 +31,14 @@ void ButiEngine::ParentPanel::SetFrontPanel(std::weak_ptr<GameObject> arg_frontP
 {
 	wkp_frontPanel = arg_frontPanel;
 	wkp_frontPanel.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-	wkp_frontPanel.lock()->GetGameComponent<Panel>()->SetParentPanelNum(panelNum);
+	wkp_frontPanel.lock()->GetGameComponent<Panel>()->SetParentPanel(gameObject);
 }
 
 void ButiEngine::ParentPanel::SetBackPanel(std::weak_ptr<GameObject> arg_backPanel)
 {
 	wkp_backPanel = arg_backPanel;
 	wkp_backPanel.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-	wkp_backPanel.lock()->GetGameComponent<Panel>()->SetParentPanelNum(panelNum);
+	wkp_backPanel.lock()->GetGameComponent<Panel>()->SetParentPanel(gameObject);
 }
 
 void ButiEngine::ParentPanel::SetChildScale()

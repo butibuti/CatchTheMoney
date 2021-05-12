@@ -18,6 +18,7 @@ public:
 	static const int coreUp = 4;
 	static const int coreDown = 5;
 	static const int fill = 6;
+	static const int lockPanel = 100;
 	static const float panelZ;
 	static const float playerZ;
 	static const float blockZ;

@@ -69,9 +69,6 @@ void ButiEngine::StageManager::Start()
 
 void ButiEngine::StageManager::ShowGUI()
 {
-	GUI::Begin("StageNum");
-	GUI::Text(StageSelect::GetStageNum());
-	GUI::End();
 }
 
 void ButiEngine::StageManager::OnCollision(std::weak_ptr<GameObject> arg_other)
@@ -135,6 +132,7 @@ void ButiEngine::StageManager::ModeChange()
 {
 	if (shp_cameraController->IsAnimation()) { return; }
 	if (shp_panelManager->IsAnimation()) { return; }
+	if (StageSelect::GetStageNum() == 0) { return; }
 	if (InputManager::OnTriggerModeChangeKey())
 	{
 		shp_pauseManager->SwitchPause();
@@ -143,6 +141,14 @@ void ButiEngine::StageManager::ModeChange()
 		if (mode == GameMode::Normal)
 		{
 			mode = GameMode::Edit;
+			//auto line = wkp_player.lock()->GetGameComponent<Player>()->GetPredictionLine();
+			//line.lock()->transform->SetBaseTransform(nullptr);
+
+			//Vector3 scale = line.lock()->transform->GetLocalScale();
+			//Vector3 playerScale = wkp_player.lock()->transform->GetWorldScale();
+			//scale *= playerScale;
+			//line.lock()->transform->SetLocalScale(scale);
+
 			shp_cameraController->ZoomOut();
 			shp_panelManager->ResetMoveNum();
 			shp_panelManager->ResetMoveHistories();
@@ -150,6 +156,16 @@ void ButiEngine::StageManager::ModeChange()
 		else
 		{
 			mode = GameMode::Normal;
+			//auto line = wkp_player.lock()->GetGameComponent<Player>()->GetPredictionLine();
+			//line.lock()->transform->SetBaseTransform(wkp_player.lock()->transform);
+			//Vector3 scale = line.lock()->transform->GetLocalScale();
+			//Vector3 playerScale = wkp_player.lock()->transform->GetWorldScale();
+			//scale.x /= playerScale.x;
+			//scale.y /= playerScale.y;
+			//scale.z /= playerScale.z;
+			//line.lock()->transform->SetLocalScale(scale);
+			//Vector3 position = Vector3(20, 0, -1);
+			//line.lock()->transform->SetLocalPosition(position);
 			shp_cameraController->ZoomIn();
 		}
 	}
