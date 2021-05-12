@@ -36,6 +36,8 @@
     <ClCompile Include="TestBehavior.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="ReverseText.cpp" />
+    <ClCompile Include="SelectPlayer.cpp" />
+    <ClCompile Include="SelectZanzo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
@@ -71,5 +73,7 @@
     <ClInclude Include="TestBehavior.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="ReverseText.h" />
+    <ClInclude Include="SelectPlayer.h" />
+    <ClInclude Include="SelectZanzo.h" />
   </ItemGroup>
 </Project>

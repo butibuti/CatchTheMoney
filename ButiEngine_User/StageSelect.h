@@ -35,6 +35,7 @@ namespace ButiEngine {
 		void Onece();
 
 		std::weak_ptr<GameObject> wkp_parentSelectPanel;
+		std::weak_ptr<GameObject> wkp_animationPlayer;
 
 		Vector3 preParentRotation;
 		float childAngle;

@@ -184,7 +184,9 @@
     <ClCompile Include="ReverseText.cpp" />
     <ClCompile Include="ScrollManager.cpp" />
     <ClCompile Include="SelectPanel.cpp" />
+    <ClCompile Include="SelectPlayer.cpp" />
     <ClCompile Include="SelectScreen.cpp" />
+    <ClCompile Include="SelectZanzo.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="StageSelect.cpp" />
@@ -222,7 +224,9 @@
     <ClInclude Include="ReverseText.h" />
     <ClInclude Include="ScrollManager.h" />
     <ClInclude Include="SelectPanel.h" />
+    <ClInclude Include="SelectPlayer.h" />
     <ClInclude Include="SelectScreen.h" />
+    <ClInclude Include="SelectZanzo.h" />
     <ClInclude Include="ShakeComponent.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="StageSelect.h" />

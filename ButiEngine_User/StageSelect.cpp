@@ -4,6 +4,7 @@
 #include "InputManager.h"
 #include "SelectScreen.h"
 #include "ShakeComponent.h"
+#include "SelectPlayer.h"
 
 int ButiEngine::StageSelect::stageNum = 0;
 int ButiEngine::StageSelect::maxStageNum = 9; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
@@ -60,6 +61,7 @@ void ButiEngine::StageSelect::Start()
 	animationFrame = 90;
 	intervalFrame = 0;
 	wkp_parentSelectPanel = GetManager().lock()->GetGameObject("ParentSelectPanel");
+	wkp_animationPlayer = GetManager().lock()->AddObjectFromCereal("AnimationPlayer");
 
 	preParentRotation = Vector3::Zero;
 
@@ -167,6 +169,15 @@ void ButiEngine::StageSelect::DecisionAnimation()
 	if (animationFrame == screenRotateFrame)
 	{
 		GetManager().lock()->GetGameObject("SelectScreen").lock()->GetGameComponent<SelectScreen>()->StartAnimation();
+	}
+
+	if (animationFrame == 89)
+	{
+		wkp_animationPlayer.lock()->GetGameComponent<SelectPlayer>()->IsDecision();
+	}
+	else if (animationFrame == 60)
+	{
+		GetManager().lock()->AddObjectFromCereal("SelectZanzo");
 	}
 
 	if (animationFrame <= 0)
