@@ -55,6 +55,7 @@ namespace ButiEngine {
 		void OnGoal();
 		void ChangeScene(const std::string& arg_sceneName);
 		void ModeChange();
+		void CreateUI();
 	};
 
 }

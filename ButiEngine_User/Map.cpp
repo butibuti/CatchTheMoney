@@ -144,7 +144,9 @@ void ButiEngine::Map::PutTile()
 				tile.lock()->transform->SetBaseTransform(frontPanel.lock()->transform);
 				goalPos.x += GameSettings::windowWidth * 0.5f;
 				goalPos.y *= -1.0f;
-				tile = GetManager().lock()->AddObjectFromCereal("Goal", ObjectFactory::Create<Transform>(goalPos, Vector3::Zero, scale));
+				Vector3 backScale = scale;
+				backScale.y *= -1;
+				tile = GetManager().lock()->AddObjectFromCereal("Goal", ObjectFactory::Create<Transform>(goalPos, Vector3::Zero, backScale));
 				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
 			}
 			else if (onceOfID == GameSettings::coreUp)

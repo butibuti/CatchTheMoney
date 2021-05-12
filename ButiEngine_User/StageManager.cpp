@@ -12,6 +12,8 @@
 #include "ClearBand.h"
 #include "NumberComponent.h"
 #include "SceneChangeAnimation.h"
+#include"FollowPanel.h"
+#include"Panel.h"
 
 void ButiEngine::StageManager::OnUpdate()
 {
@@ -59,6 +61,8 @@ void ButiEngine::StageManager::Start()
 	shp_panelManager = GetManager().lock()->GetGameObject("PanelManager").lock()->GetGameComponent<PanelManager>();
 	shp_scrollManager = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ScrollManager>();
 	shp_cameraController = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraController>();
+
+	CreateUI();
 
 	wkp_stageNumber = GetManager().lock()->AddObjectFromCereal("ParentNumber", ObjectFactory::Create<Transform>(Vector3(-550, 350, 0), Vector3::Zero, Vector3(80, 80, 0)));
 	auto numComponent = wkp_stageNumber.lock()->GetGameComponent<NumberComponent>();
@@ -151,6 +155,7 @@ void ButiEngine::StageManager::ModeChange()
 	if (shp_cameraController->IsAnimation()) { return; }
 	if (shp_panelManager->IsAnimation()) { return; }
 	if (StageSelect::GetStageNum() == 0) { return; }
+	if (wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock()) { return; }
 	if (InputManager::OnTriggerModeChangeKey())
 	{
 		shp_pauseManager->SwitchPause();
@@ -187,4 +192,13 @@ void ButiEngine::StageManager::ModeChange()
 			shp_cameraController->ZoomIn();
 		}
 	}
+}
+
+void ButiEngine::StageManager::CreateUI()
+{
+	GetManager().lock()->AddObjectFromCereal("Edit");
+	GetManager().lock()->AddObjectFromCereal("Chara");
+	GetManager().lock()->AddObjectFromCereal("X");
+	GetManager().lock()->AddObjectFromCereal("Grab");
+	GetManager().lock()->AddObjectFromCereal("Control");
 }
