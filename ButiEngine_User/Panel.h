@@ -25,8 +25,12 @@ namespace ButiEngine {
 			AddTransformAnimation(arg_frame);
 		}
 		int GetPanelNum() { return panelNum; }
-		void SetParentPanelNum(int arg_num) { parentPanelNum = arg_num; }
-		int GetParentPanelNum() { return parentPanelNum; }
+
+		void SetParentPanel(std::weak_ptr<GameObject> arg_parentPanel)
+		{
+			wkp_parentPanel = arg_parentPanel;
+		}
+		std::weak_ptr<GameObject> GetParentPanel() { return wkp_parentPanel; }
 
 		float GetGravity() { return gravity; }
 
@@ -47,11 +51,11 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_drawObjectFrame;
 		std::weak_ptr<GameObject> wkp_drawObjectLock;
 		std::weak_ptr<GameObject> wkp_player;
+		std::weak_ptr<GameObject> wkp_parentPanel;
 
 		SoundTag se_cancel;
 
 		int panelNum;
-		int parentPanelNum;
 		float prevGravity;
 		float currentGravity;
 		float gravity;

@@ -4,18 +4,33 @@
 #include"PanelManager.h"
 #include"GravityCore.h"
 #include"GameSettings.h"
+#include"Panel.h"
+#include"ParentPanel.h"
 
 void ButiEngine::FollowPanel::OnUpdate()
 {
 	if (shp_pauseManager->GetPause())
 	{
+		pause = true;
 		if (!gameObject.lock()->transform->GetBaseTransform())
 		{
 			gameObject.lock()->transform->SetBaseTransform(wkp_closestPanel.lock()->transform);
+			panelInitZ = wkp_closestPanel.lock()->transform->GetWorldPosition().z;
+			wkp_closestPanel.lock()->transform->TranslateZ(-3.0f);
 			Correction();
 		}
 		return;
 	}
+	else if (pause)
+	{
+		pause = false;
+		Vector3 pos = wkp_closestPanel.lock()->transform->GetWorldPosition();
+		pos.z = panelInitZ;
+		wkp_closestPanel.lock()->transform->SetWorldPosition(pos);
+	}
+
+	StoreClosestPanel();
+
 	auto core = gameObject.lock()->GetGameComponent<GravityCore>();
 	if (core)
 	{
@@ -28,7 +43,6 @@ void ButiEngine::FollowPanel::OnUpdate()
 	{
 		gameObject.lock()->transform->SetBaseTransform(nullptr);
 	}
-	StoreClosestPanel();
 }
 
 void ButiEngine::FollowPanel::OnSet()

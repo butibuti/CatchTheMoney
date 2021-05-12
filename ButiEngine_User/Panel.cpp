@@ -163,7 +163,7 @@ void ButiEngine::Panel::Lock(bool arg_back)
 
 void ButiEngine::Panel::AddTransformAnimation(int arg_frame)
 {
-	Vector3 targetPos;
+	Vector3 targetPos = gameObject.lock()->transform->GetWorldPosition();
 	targetPos.x = (panelNum - GameSettings::panelCount / 2) * GameSettings::panelWidth + GameSettings::panelWidth * 0.5f;
 
 	auto anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
