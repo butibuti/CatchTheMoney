@@ -39,6 +39,8 @@ namespace ButiEngine {
 
 		void OnChangeGravity(bool arg_scroll);
 		void SetDrawObjectSky(bool arg_back);
+		void Lock() { lock = true; }
+		bool IsLock() { return lock; }
 	private:
 		std::weak_ptr<GameObject> wkp_drawObjectGravity;
 		std::weak_ptr<GameObject> wkp_drawObjectSky;
@@ -54,6 +56,7 @@ namespace ButiEngine {
 		float gravity;
 		bool animation;
 		bool scroll;
+		bool lock;
 
 		std::vector<int> vec_gravityCoreNums;
 

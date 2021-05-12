@@ -86,6 +86,13 @@ void ButiEngine::Map::PutTile()
 			parentPanelComponent->SetBackPanel(backPanel);
 			shp_panelManager->AddBackPanel(backPanel);
 
+			int panelID = mapData.shp_data->data[x][0];
+			if (panelID >= GameSettings::lockPanel)
+			{
+				frontPanel.lock()->GetGameComponent<Panel>()->Lock();
+				backPanel.lock()->GetGameComponent<Panel>()->Lock();
+			}
+
 			framePos.x += GameSettings::windowWidth * 0.5f;
 			frameScale.y *= -1;
 			tile = GetManager().lock()->AddObjectFromCereal("Ground_Back", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));

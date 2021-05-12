@@ -240,9 +240,21 @@ void ButiEngine::PanelManager::SwapPanelNum(int arg_num1, int arg_num2, int arg_
 
 void ButiEngine::PanelManager::SwapRight(int arg_frame)
 {
-	auto currentParentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
-	int currentParentIndex = currentParentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
-	SwapPanelNum(currentParentIndex, currentParentIndex + 1, arg_frame);
+	auto currentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
+	int currentIndex = currentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
+	int rightPanelIndex = currentIndex + 1;
+	if (rightPanelIndex >= GameSettings::panelCount)
+	{
+		rightPanelIndex -= GameSettings::panelCount;
+	}
+	if (vec_panels[rightPanelIndex].lock()->GetGameComponent<Panel>()->IsLock())
+	{
+		shp_shake->ShakeStart(3.0);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, 0.1f);
+		return;
+	}
+
+	SwapPanelNum(currentIndex, currentIndex + 1, arg_frame);
 	moveNum++;
 	if (moveNum == MOVE_LIMIT)
 	{
@@ -254,6 +266,17 @@ void ButiEngine::PanelManager::SwapLeft(int arg_frame)
 {
 	auto currentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 	int currentIndex = currentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
+	int leftPanelIndex = currentIndex - 1;
+	if (leftPanelIndex < 0)
+	{
+		leftPanelIndex += GameSettings::panelCount;
+	}
+	if (vec_panels[leftPanelIndex].lock()->GetGameComponent<Panel>()->IsLock())
+	{
+		shp_shake->ShakeStart(3.0);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, 0.1f);
+		return;
+	}
 	SwapPanelNum(currentIndex, currentIndex - 1, arg_frame);
 	moveNum--;
 	if (moveNum == -MOVE_LIMIT)
