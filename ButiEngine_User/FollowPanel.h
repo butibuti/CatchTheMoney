@@ -29,6 +29,7 @@ namespace ButiEngine {
 
 		std::weak_ptr<GameObject> wkp_closestPanel;
 
+		int waitFrame;
 		float panelInitZ;
 		bool pause;
 

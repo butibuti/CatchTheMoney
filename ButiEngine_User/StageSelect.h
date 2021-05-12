@@ -38,6 +38,8 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_animationPlayer;
 		std::weak_ptr<GameObject> wkp_fadeObject;
 
+		SoundTag bgm;
+
 		Vector3 preParentRotation;
 		float childAngle;
 		const int screenRotateFrame = 40;

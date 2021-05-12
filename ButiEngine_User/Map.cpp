@@ -136,17 +136,21 @@ void ButiEngine::Map::PutTile()
 				tile = GetManager().lock()->AddObjectFromCereal("Block_Back", ObjectFactory::Create<Transform>(blockPos, Vector3::Zero, scale));
 				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
 			}
-			else if (onceOfID == GameSettings::goal)
+			else if (onceOfID == GameSettings::goalUp || onceOfID == GameSettings::goalDown)
 			{
 				Vector3 goalPos = position;
 				goalPos.z = GameSettings::goalZ;
-				tile = GetManager().lock()->AddObjectFromCereal("Goal", ObjectFactory::Create<Transform>(goalPos, Vector3::Zero, scale));
+				Vector3 tmpScale = scale;
+				if (onceOfID == GameSettings::goalDown)
+				{
+					tmpScale.y *= -1;
+				}
+				tile = GetManager().lock()->AddObjectFromCereal("Goal", ObjectFactory::Create<Transform>(goalPos, Vector3::Zero, tmpScale));
 				tile.lock()->transform->SetBaseTransform(frontPanel.lock()->transform);
 				goalPos.x += GameSettings::windowWidth * 0.5f;
 				goalPos.y *= -1.0f;
-				Vector3 backScale = scale;
-				backScale.y *= -1;
-				tile = GetManager().lock()->AddObjectFromCereal("Goal", ObjectFactory::Create<Transform>(goalPos, Vector3::Zero, backScale));
+				tmpScale.y *= -1;
+				tile = GetManager().lock()->AddObjectFromCereal("Goal", ObjectFactory::Create<Transform>(goalPos, Vector3::Zero, tmpScale));
 				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
 			}
 			else if (onceOfID == GameSettings::coreUp)

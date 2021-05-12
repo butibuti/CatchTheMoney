@@ -14,10 +14,11 @@ public:
 	static const int air = 0;
 	static const int player = 1;
 	static const int block = 2;
-	static const int goal = 3;
+	static const int goalUp = 3;
 	static const int coreUp = 4;
 	static const int coreDown = 5;
 	static const int fill = 6;
+	static const int goalDown = 7;
 	static const int lockPanel = 100;
 	static const float panelZ;
 	static const float playerZ;

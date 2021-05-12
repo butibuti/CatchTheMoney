@@ -11,18 +11,24 @@ void ButiEngine::FollowPanel::OnUpdate()
 {
 	if (shp_pauseManager->GetPause())
 	{
-		pause = true;
+		waitFrame++;
+		if (waitFrame == 3 && StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "Player"))
+		{
+			pause = true;
+			panelInitZ = wkp_closestPanel.lock()->transform->GetWorldPosition().z;
+			wkp_closestPanel.lock()->transform->TranslateZ(-3.0f);
+		}
+
 		if (!gameObject.lock()->transform->GetBaseTransform())
 		{
 			gameObject.lock()->transform->SetBaseTransform(wkp_closestPanel.lock()->transform);
-			panelInitZ = wkp_closestPanel.lock()->transform->GetWorldPosition().z;
-			wkp_closestPanel.lock()->transform->TranslateZ(-3.0f);
 			Correction();
 		}
 		return;
 	}
-	else if (pause)
+	else if (pause && StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "Player"))
 	{
+		waitFrame = 0;
 		pause = false;
 		Vector3 pos = wkp_closestPanel.lock()->transform->GetWorldPosition();
 		pos.z = panelInitZ;

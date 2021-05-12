@@ -81,6 +81,9 @@ void ButiEngine::StageSelect::Start()
 		std::string sceneName = "Stage" + std::to_string(preStageNum);
 		sceneManager->RemoveScene(sceneName);
 	}
+
+	bgm = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/BGM.wav");
+	GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
 }
 
 void ButiEngine::StageSelect::OnShowUI()

@@ -28,6 +28,7 @@ void ButiEngine::StageManager::OnUpdate()
 		if (clearAnimationFrame >= CLEAR_FRAME)
 		{
 			GetManager().lock()->AddObjectFromCereal("ClearFlash", ObjectFactory::Create<Transform>(Vector3(0.0f,0.0f,1000.0f)));
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_clear, 0.1f);
 		}
 		else if (clearAnimationFrame == CLEAR_FRAME - 10)
 		{
@@ -43,6 +44,7 @@ void ButiEngine::StageManager::OnUpdate()
 	ResetStage();
 	OnGoal();
 	ModeChange();
+	ChangeUIAlpha();
 
 	GetManager().lock()->GetApplication().lock()->GetGUIController()->SetGUIObject(GetThis<StageManager>());
 }
@@ -68,13 +70,20 @@ void ButiEngine::StageManager::Start()
 	auto numComponent = wkp_stageNumber.lock()->GetGameComponent<NumberComponent>();
 	numComponent->SetNumber(StageSelect::GetStageNum());
 
-	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 0, -0.1f), Vector3::Zero, Vector3(1920, 1080, 1)));
+	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 0, -0.5f), Vector3::Zero, Vector3(1920, 1080, 1)));
 
 	shp_map->PutTile();
 
 	clearAnimationFrame = CLEAR_FRAME;
 
 	mode = GameMode::Normal;
+
+	modeUIPosition = Vector3(750.0f, -410.0f, -0.1f);
+
+	bgm = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/BGM.wav");
+	se_clear = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Clear.wav");
+
+	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, 0.1f);
 }
 
 void ButiEngine::StageManager::ShowGUI()
@@ -112,7 +121,7 @@ void ButiEngine::StageManager::OnGoal()
 	}
 	if (fadeCount == 1)
 	{
-		GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 1080, -0.1f), Vector3::Zero, Vector3(1920, 1080, 1)));
+		GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 1080, -0.5f), Vector3::Zero, Vector3(1920, 1080, 1)));
 	}
 	if (fadeCount > 30)
 	{
@@ -152,25 +161,22 @@ void ButiEngine::StageManager::ChangeScene(const std::string& arg_sceneName)
 
 void ButiEngine::StageManager::ModeChange()
 {
-	if (shp_cameraController->IsAnimation()) { return; }
-	if (shp_panelManager->IsAnimation()) { return; }
-	if (StageSelect::GetStageNum() == 0) { return; }
-	if (wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock()) { return; }
 	if (InputManager::OnTriggerModeChangeKey())
 	{
+		if (shp_cameraController->IsAnimation()) { return; }
+		if (shp_panelManager->IsAnimation()) { return; }
+		if (StageSelect::GetStageNum() == 0) { return; }
+		if (wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock()) { return; }
+
 		shp_pauseManager->SwitchPause();
 		shp_scrollManager->ResetScroll();
 		
 		if (mode == GameMode::Normal)
 		{
 			mode = GameMode::Edit;
-			//auto line = wkp_player.lock()->GetGameComponent<Player>()->GetPredictionLine();
-			//line.lock()->transform->SetBaseTransform(nullptr);
 
-			//Vector3 scale = line.lock()->transform->GetLocalScale();
-			//Vector3 playerScale = wkp_player.lock()->transform->GetWorldScale();
-			//scale *= playerScale;
-			//line.lock()->transform->SetLocalScale(scale);
+			wkp_edit.lock()->transform->TranslateZ(1000);
+			wkp_chara.lock()->transform->SetWorldPosition(modeUIPosition);
 
 			shp_cameraController->ZoomOut();
 			shp_panelManager->ResetMoveNum();
@@ -179,16 +185,10 @@ void ButiEngine::StageManager::ModeChange()
 		else
 		{
 			mode = GameMode::Normal;
-			//auto line = wkp_player.lock()->GetGameComponent<Player>()->GetPredictionLine();
-			//line.lock()->transform->SetBaseTransform(wkp_player.lock()->transform);
-			//Vector3 scale = line.lock()->transform->GetLocalScale();
-			//Vector3 playerScale = wkp_player.lock()->transform->GetWorldScale();
-			//scale.x /= playerScale.x;
-			//scale.y /= playerScale.y;
-			//scale.z /= playerScale.z;
-			//line.lock()->transform->SetLocalScale(scale);
-			//Vector3 position = Vector3(20, 0, -1);
-			//line.lock()->transform->SetLocalPosition(position);
+
+			wkp_chara.lock()->transform->TranslateZ(1000);
+			wkp_edit.lock()->transform->SetWorldPosition(modeUIPosition);
+
 			shp_cameraController->ZoomIn();
 		}
 	}
@@ -196,9 +196,44 @@ void ButiEngine::StageManager::ModeChange()
 
 void ButiEngine::StageManager::CreateUI()
 {
-	GetManager().lock()->AddObjectFromCereal("Edit");
-	GetManager().lock()->AddObjectFromCereal("Chara");
-	GetManager().lock()->AddObjectFromCereal("X");
-	GetManager().lock()->AddObjectFromCereal("Grab");
-	GetManager().lock()->AddObjectFromCereal("Control");
+	int stageNum = StageSelect::GetStageNum();
+
+	if (stageNum == 0)
+	{
+		GetManager().lock()->AddObjectFromCereal("Control");
+	}
+	else
+	{
+		wkp_x = GetManager().lock()->AddObjectFromCereal("X");
+		wkp_edit = GetManager().lock()->AddObjectFromCereal("Edit");
+		wkp_chara = GetManager().lock()->AddObjectFromCereal("Chara");
+
+		shp_XMesh = wkp_x.lock()->GetGameComponent<MeshDrawComponent>();
+		shp_EditMesh = wkp_edit.lock()->GetGameComponent<MeshDrawComponent>();
+		shp_CharaMesh = wkp_chara.lock()->GetGameComponent<MeshDrawComponent>();
+
+		wkp_chara.lock()->transform->TranslateZ(1000);
+	}
+
+	if (stageNum == 9)
+	{
+		GetManager().lock()->AddObjectFromCereal("Grab");
+	}
+}
+
+void ButiEngine::StageManager::ChangeUIAlpha()
+{
+	bool isLock = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock();
+
+	float alpha = 1.0f;
+	if (isLock)
+	{
+		alpha = 0.5f;
+	}
+	if (shp_XMesh && shp_EditMesh && shp_CharaMesh)
+	{
+		shp_XMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = alpha;
+		shp_EditMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = alpha;
+		shp_CharaMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = alpha;
+	}
 }
