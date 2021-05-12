@@ -118,6 +118,7 @@ void ButiEngine::StageManager::ModeChange()
 {
 	if (shp_cameraController->IsAnimation()) { return; }
 	if (shp_panelManager->IsAnimation()) { return; }
+	if (StageSelect::GetStageNum() == 0) { return; }
 	if (InputManager::OnTriggerModeChangeKey())
 	{
 		shp_pauseManager->SwitchPause();
