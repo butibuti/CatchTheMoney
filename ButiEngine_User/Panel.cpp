@@ -143,6 +143,24 @@ void ButiEngine::Panel::SetDrawObjectSky(bool arg_back)
 	wkp_drawObjectSky.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 }
 
+void ButiEngine::Panel::Lock(bool arg_back)
+{
+	lock = true;
+
+	Vector3 scale;
+	scale.x = GameSettings::panelWidth;
+	scale.y = GameSettings::panelHeight;
+	scale.z = 1.0f;
+
+	if (arg_back)
+	{
+		scale.y *= -1;
+	}
+
+	wkp_drawObjectSky = GetManager().lock()->AddObjectFromCereal("Lock", ObjectFactory::Create<Transform>(Vector3(0, 0, -1.1f), Vector3::Zero, scale));
+	wkp_drawObjectSky.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+}
+
 void ButiEngine::Panel::AddTransformAnimation(int arg_frame)
 {
 	Vector3 targetPos;

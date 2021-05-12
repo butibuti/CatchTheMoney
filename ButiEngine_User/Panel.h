@@ -39,12 +39,13 @@ namespace ButiEngine {
 
 		void OnChangeGravity(bool arg_scroll);
 		void SetDrawObjectSky(bool arg_back);
-		void Lock() { lock = true; }
+		void Lock(bool arg_back);
 		bool IsLock() { return lock; }
 	private:
 		std::weak_ptr<GameObject> wkp_drawObjectGravity;
 		std::weak_ptr<GameObject> wkp_drawObjectSky;
 		std::weak_ptr<GameObject> wkp_drawObjectFrame;
+		std::weak_ptr<GameObject> wkp_drawObjectLock;
 		std::weak_ptr<GameObject> wkp_player;
 
 		SoundTag se_cancel;

@@ -89,8 +89,8 @@ void ButiEngine::Map::PutTile()
 			int panelID = mapData.shp_data->data[x][0];
 			if (panelID >= GameSettings::lockPanel)
 			{
-				frontPanel.lock()->GetGameComponent<Panel>()->Lock();
-				backPanel.lock()->GetGameComponent<Panel>()->Lock();
+				frontPanel.lock()->GetGameComponent<Panel>()->Lock(false);
+				backPanel.lock()->GetGameComponent<Panel>()->Lock(true);
 			}
 
 			framePos.x += GameSettings::windowWidth * 0.5f;
