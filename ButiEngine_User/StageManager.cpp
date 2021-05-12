@@ -103,8 +103,17 @@ void ButiEngine::StageManager::OnGoal()
 		//StageSelect::SetStageNum(nextStageNum);
 		
 		int nextStageNum = StageSelect::GetStageNum() + 1;
-		std::string sceneName = "Stage" + std::to_string(nextStageNum);
-		ChangeScene(sceneName);
+		if (nextStageNum > 9)
+		{
+			std::string sceneName = "StageSelect";
+			ChangeScene(sceneName);
+		}
+		else
+		{
+			std::string sceneName = "Stage" + std::to_string(nextStageNum);
+			ChangeScene(sceneName);
+		}
+
 		StageSelect::SetStageNum(nextStageNum);
 	}
 	if (GameDevice::GetInput()->TriggerKey(Keys::C))
