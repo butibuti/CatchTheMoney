@@ -7,10 +7,10 @@ void ButiEngine::SelectPlayer::OnUpdate()
 	if (isDecision)
 	{
 		DecisionAnimation();
-	}
+	}    
 	else
 	{
-		if (animationFrame < 5)
+		if (animationFrame < 4)
 		{
 			animationFrame++;
 		}

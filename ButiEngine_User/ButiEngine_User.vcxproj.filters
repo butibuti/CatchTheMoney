@@ -38,6 +38,7 @@
     <ClCompile Include="ReverseText.cpp" />
     <ClCompile Include="SelectPlayer.cpp" />
     <ClCompile Include="SelectZanzo.cpp" />
+    <ClCompile Include="SceneChangeAnimation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
@@ -75,5 +76,6 @@
     <ClInclude Include="ReverseText.h" />
     <ClInclude Include="SelectPlayer.h" />
     <ClInclude Include="SelectZanzo.h" />
+    <ClInclude Include="SceneChangeAnimation.h" />
   </ItemGroup>
 </Project>

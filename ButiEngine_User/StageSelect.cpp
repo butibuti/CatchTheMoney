@@ -5,6 +5,7 @@
 #include "SelectScreen.h"
 #include "ShakeComponent.h"
 #include "SelectPlayer.h"
+#include "SceneChangeAnimation.h"
 
 int ButiEngine::StageSelect::stageNum = 0;
 int ButiEngine::StageSelect::maxStageNum = 9; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
@@ -60,8 +61,11 @@ void ButiEngine::StageSelect::Start()
 	isAnimation = false;
 	animationFrame = 90;
 	intervalFrame = 0;
+	fadeCount = 0;
 	wkp_parentSelectPanel = GetManager().lock()->GetGameObject("ParentSelectPanel");
 	wkp_animationPlayer = GetManager().lock()->AddObjectFromCereal("AnimationPlayer");
+
+	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 0, 0), Vector3::Zero, Vector3(1920, 1080, 1)));
 
 	preParentRotation = Vector3::Zero;
 
@@ -181,6 +185,20 @@ void ButiEngine::StageSelect::DecisionAnimation()
 	}
 
 	if (animationFrame <= 0)
+	{
+		isNext = true;
+	}
+
+	if (isNext)
+	{
+		fadeCount++;
+	}
+	if (fadeCount == 1)
+	{
+		GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 1080, 0), Vector3::Zero, Vector3(1920, 1080, 1)));
+	}
+
+	if (fadeCount > 30)
 	{
 		OnDecision();
 	}

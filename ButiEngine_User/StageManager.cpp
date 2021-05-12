@@ -98,8 +98,13 @@ void ButiEngine::StageManager::OnGoal()
 	if (clearAnimationFrame < 0)
 	{
 		shp_map->DestoryBlock();
-		ChangeScene("StageSelect");
+		//ChangeScene("StageSelect");
+		//int nextStageNum = StageSelect::GetStageNum() + 1;
+		//StageSelect::SetStageNum(nextStageNum);
+		
 		int nextStageNum = StageSelect::GetStageNum() + 1;
+		std::string sceneName = "Stage" + std::to_string(nextStageNum);
+		ChangeScene(sceneName);
 		StageSelect::SetStageNum(nextStageNum);
 	}
 	if (GameDevice::GetInput()->TriggerKey(Keys::C))
