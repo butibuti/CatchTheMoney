@@ -131,7 +131,7 @@ void ButiEngine::StageManager::OnGoal()
 		//StageSelect::SetStageNum(nextStageNum);
 		
 		int nextStageNum = StageSelect::GetStageNum() + 1;
-		if (nextStageNum > 9)
+		if (nextStageNum > 11)
 		{
 			std::string sceneName = "StageSelect";
 			ChangeScene(sceneName);
