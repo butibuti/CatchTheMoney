@@ -17,7 +17,7 @@ void ButiEngine::Player::OnUpdate()
 		return;
 	}
 
-	Controll();
+	Control();
 	Move();
 	CheckGravity();
 	Animation();
@@ -104,7 +104,7 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 	return ObjectFactory::Create<Player>();
 }
 
-void ButiEngine::Player::Controll()
+void ButiEngine::Player::Control()
 {
 	animation = ButiEngine::Player::IDLE;
 	if (freeze)

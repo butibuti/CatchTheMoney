@@ -83,7 +83,7 @@ namespace ButiEngine {
 		bool freeze;
 		bool jump;
 
-		void Controll();
+		void Control();
 		void CheckGravity();
 		void OnJump();
 		void Move();

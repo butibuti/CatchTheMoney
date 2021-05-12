@@ -18,7 +18,7 @@ void ButiEngine::PanelManager::OnUpdate()
 	{
 		return;
 	}
-	Contoroll();
+	Control();
 	Reset();
 }
 
@@ -125,7 +125,7 @@ bool ButiEngine::PanelManager::IsAnimation()
 	return result;
 }
 
-void ButiEngine::PanelManager::Contoroll()
+void ButiEngine::PanelManager::Control()
 {
 	if (InputManager::OnTriggerRightKey())
 	{

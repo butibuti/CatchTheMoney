@@ -133,10 +133,10 @@ void ButiEngine::Panel::SetDrawObjectSky(bool arg_back)
 	scale.y = GameSettings::panelHeight;
 	scale.z = 1.0f;
 
-	std::string name = "FrontSky";
+	std::string name = "Sky_Front";
 	if (arg_back)
 	{
-		name = "BackSky";
+		name = "Sky_Back";
 	}
 
 	wkp_drawObjectSky = GetManager().lock()->AddObjectFromCereal(name, ObjectFactory::Create<Transform>(Vector3(0, 0, 1.0f), Vector3::Zero, scale));
