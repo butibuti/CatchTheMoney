@@ -8,7 +8,7 @@
 #include "SceneChangeAnimation.h"
 
 int ButiEngine::StageSelect::stageNum = 0;
-int ButiEngine::StageSelect::maxStageNum = 9; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
+int ButiEngine::StageSelect::maxStageNum = 11; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
 
 void ButiEngine::StageSelect::OnUpdate()
 {
