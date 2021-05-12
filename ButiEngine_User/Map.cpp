@@ -106,17 +106,18 @@ void ButiEngine::Map::PutTile()
 			scale.z = 1.0f;
 
 			int mapChipID = mapData.shp_data->data[x][y];
+			int onceOfID = mapChipID % GameSettings::lockPanel;
 
-			if (mapChipID == GameSettings::air)
+			if (onceOfID == GameSettings::air)
 			{
 			}
-			else if (mapChipID == GameSettings::player)
+			else if (onceOfID == GameSettings::player)
 			{
 				Vector3 playerPos = position;
 				playerPos.z = GameSettings::playerZ;
 				tile = GetManager().lock()->AddObjectFromCereal("Player", ObjectFactory::Create<Transform>(playerPos, Vector3::Zero, scale));
 			}
-			else if (mapChipID == GameSettings::block)
+			else if (onceOfID == GameSettings::block)
 			{
 				Vector3 blockPos = position;
 				blockPos.z = GameSettings::blockZ;
@@ -128,7 +129,7 @@ void ButiEngine::Map::PutTile()
 				tile = GetManager().lock()->AddObjectFromCereal("Block_Back", ObjectFactory::Create<Transform>(blockPos, Vector3::Zero, scale));
 				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
 			}
-			else if (mapChipID == GameSettings::goal)
+			else if (onceOfID == GameSettings::goal)
 			{
 				Vector3 goalPos = position;
 				goalPos.z = GameSettings::goalZ;
@@ -139,7 +140,7 @@ void ButiEngine::Map::PutTile()
 				tile = GetManager().lock()->AddObjectFromCereal("Goal", ObjectFactory::Create<Transform>(goalPos, Vector3::Zero, scale));
 				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
 			}
-			else if (mapChipID == GameSettings::coreUp)
+			else if (onceOfID == GameSettings::coreUp)
 			{
 				Vector3 corePos = position;
 				corePos.z = GameSettings::coreZ - 0.001f * coreCount;
@@ -149,7 +150,7 @@ void ButiEngine::Map::PutTile()
 				core->SetCoreNum(coreCount);
 				coreCount++;
 			}
-			else if (mapChipID == GameSettings::coreDown)
+			else if (onceOfID == GameSettings::coreDown)
 			{
 				Vector3 corePos = position;
 				corePos.z = GameSettings::coreZ - 0.001f * coreCount;
@@ -159,7 +160,7 @@ void ButiEngine::Map::PutTile()
 				core->SetCoreNum(coreCount);
 				coreCount++;
 			}
-			else if (mapChipID == GameSettings::fill)
+			else if (onceOfID == GameSettings::fill)
 			{
 				Vector3 blockPos = position;
 				blockPos.x += GameSettings::panelWidth * 0.5f - GameSettings::blockSize * 0.5f;
