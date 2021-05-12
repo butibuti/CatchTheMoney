@@ -11,6 +11,7 @@
 #include "ShakeComponent.h"
 #include "ClearBand.h"
 #include "NumberComponent.h"
+#include "SceneChangeAnimation.h"
 
 void ButiEngine::StageManager::OnUpdate()
 {
@@ -50,6 +51,9 @@ void ButiEngine::StageManager::OnSet()
 
 void ButiEngine::StageManager::Start()
 {
+	fadeCount = 0;
+	isNext = false;
+
 	shp_map = GetManager().lock()->GetGameObject("Map").lock()->GetGameComponent<Map>();
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	shp_panelManager = GetManager().lock()->GetGameObject("PanelManager").lock()->GetGameComponent<PanelManager>();
@@ -59,6 +63,8 @@ void ButiEngine::StageManager::Start()
 	wkp_stageNumber = GetManager().lock()->AddObjectFromCereal("ParentNumber", ObjectFactory::Create<Transform>(Vector3(-550, 350, 0), Vector3::Zero, Vector3(80, 80, 0)));
 	auto numComponent = wkp_stageNumber.lock()->GetGameComponent<NumberComponent>();
 	numComponent->SetNumber(StageSelect::GetStageNum());
+
+	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 0, -0.1f), Vector3::Zero, Vector3(1920, 1080, 1)));
 
 	shp_map->PutTile();
 
@@ -93,6 +99,18 @@ void ButiEngine::StageManager::ResetStage()
 void ButiEngine::StageManager::OnGoal()
 {
 	if (clearAnimationFrame < 0)
+	{
+		isNext = true;
+	}
+	if (isNext)
+	{
+		fadeCount++;
+	}
+	if (fadeCount == 1)
+	{
+		GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 1080, -0.1f), Vector3::Zero, Vector3(1920, 1080, 1)));
+	}
+	if (fadeCount > 30)
 	{
 		shp_map->DestoryBlock();
 		//ChangeScene("StageSelect");

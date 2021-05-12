@@ -30,7 +30,7 @@ void ButiEngine::PanelManager::Start()
 {
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	shp_shake = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ShakeComponent>();
-	shp_reverseText = GetManager().lock()->GetGameObject("ParentReverseText").lock()->GetGameComponent<ReverseText>();
+	//shp_reverseText = GetManager().lock()->GetGameObject("ParentReverseText").lock()->GetGameComponent<ReverseText>();
 	moveNum = 0;
 	reverse = false;
 
@@ -258,7 +258,7 @@ void ButiEngine::PanelManager::SwapRight(int arg_frame)
 	moveNum++;
 	if (moveNum == MOVE_LIMIT)
 	{
-		shp_reverseText->PlayAnimation();
+		//shp_reverseText->PlayAnimation();
 	}
 }
 
@@ -281,7 +281,7 @@ void ButiEngine::PanelManager::SwapLeft(int arg_frame)
 	moveNum--;
 	if (moveNum == -MOVE_LIMIT)
 	{
-		shp_reverseText->PlayAnimation();
+		//shp_reverseText->PlayAnimation();
 	}
 }
 

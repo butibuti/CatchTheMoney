@@ -42,11 +42,14 @@ namespace ButiEngine {
 		
 		std::weak_ptr<GameObject> wkp_stageNumber;
 		std::weak_ptr<GameObject> wkp_player;
+		std::weak_ptr<GameObject> wkp_fadeObject;
 
 		GameMode mode;
 
 		void ResetStage();
 		int clearAnimationFrame;
+		int fadeCount;
+		bool isNext;
 		const int CLEAR_FRAME = 90;
 
 		void OnGoal();
