@@ -68,7 +68,7 @@ void ButiEngine::StageManager::Start()
 
 	wkp_stageNumber = GetManager().lock()->AddObjectFromCereal("ParentNumber", ObjectFactory::Create<Transform>(Vector3(-550, 350, 0), Vector3::Zero, Vector3(80, 80, 0)));
 	auto numComponent = wkp_stageNumber.lock()->GetGameComponent<NumberComponent>();
-	numComponent->SetNumber(StageSelect::GetStageNum());
+	numComponent->SetNumber(StageSelect::GetStageNum() + 1);
 
 	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 0, -0.5f), Vector3::Zero, Vector3(1920, 1080, 1)));
 
