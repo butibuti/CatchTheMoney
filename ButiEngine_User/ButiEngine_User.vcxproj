@@ -186,6 +186,7 @@
     <ClCompile Include="SelectPanel.cpp" />
     <ClCompile Include="SelectScreen.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
+    <ClCompile Include="SquareParticleEmitter.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -224,6 +225,7 @@
     <ClInclude Include="SelectPanel.h" />
     <ClInclude Include="SelectScreen.h" />
     <ClInclude Include="ShakeComponent.h" />
+    <ClInclude Include="SquareParticleEmitter.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="StageSelect.h" />
     <ClInclude Include="stdafx_u.h" />

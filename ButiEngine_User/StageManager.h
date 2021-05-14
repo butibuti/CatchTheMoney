@@ -8,7 +8,7 @@ namespace ButiEngine {
 	class ScrollManager;
 	class CameraController;
 	class ClearBand;
-
+	class SquareParticleEmitter;
 	enum GameMode
 	{
 		Normal,
@@ -40,6 +40,8 @@ namespace ButiEngine {
 		std::shared_ptr<ScrollManager> shp_scrollManager;
 		std::shared_ptr<CameraController> shp_cameraController;
 		
+		std::shared_ptr< SquareParticleEmitter> shp_particleEmitter;
+
 		std::weak_ptr<GameObject> wkp_stageNumber;
 		std::weak_ptr<GameObject> wkp_player;
 
@@ -48,7 +50,7 @@ namespace ButiEngine {
 		void ResetStage();
 		int clearAnimationFrame;
 		const int CLEAR_FRAME = 90;
-
+		float particleScrollOffset;
 		void OnGoal();
 		void ChangeScene(const std::string& arg_sceneName);
 		void ModeChange();

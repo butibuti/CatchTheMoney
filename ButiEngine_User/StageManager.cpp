@@ -11,7 +11,8 @@
 #include "ShakeComponent.h"
 #include "ClearBand.h"
 #include "NumberComponent.h"
-
+#include"SquareParticleEmitter.h"
+#include"GameSettings.h"
 void ButiEngine::StageManager::OnUpdate()
 {
 	if (!wkp_player.lock())
@@ -42,6 +43,12 @@ void ButiEngine::StageManager::OnUpdate()
 	ModeChange();
 
 	GetManager().lock()->GetApplication().lock()->GetGUIController()->SetGUIObject(GetThis<StageManager>());
+
+	if (mode == GameMode::Edit) {
+		auto swing = shp_scrollManager->GetCurrentScrollSwing()*360;
+
+		shp_particleEmitter->SetRotation(particleScrollOffset+swing);
+	}
 }
 
 void ButiEngine::StageManager::OnSet()
@@ -65,6 +72,7 @@ void ButiEngine::StageManager::Start()
 	clearAnimationFrame = CLEAR_FRAME;
 
 	mode = GameMode::Normal;
+	shp_particleEmitter= GetManager().lock()->GetGameObject("SquareParticleEmitter").lock()->GetGameComponent<SquareParticleEmitter>();
 }
 
 void ButiEngine::StageManager::ShowGUI()
@@ -132,11 +140,21 @@ void ButiEngine::StageManager::ModeChange()
 			shp_cameraController->ZoomOut();
 			shp_panelManager->ResetMoveNum();
 			shp_panelManager->ResetMoveHistories();
+
+			shp_particleEmitter->SetIsEdit(true);
+
+			auto nowPosX = wkp_player.lock()->transform->GetWorldPosition();
+			particleScrollOffset = nowPosX.x-shp_panelManager->GetClosestPanel(nowPosX.x).lock()->transform->GetWorldPosition().x;
+
+			particleScrollOffset = 360 * (particleScrollOffset / (float)GameSettings::windowWidth);
+
 		}
 		else
 		{
 			mode = GameMode::Normal;
-			shp_cameraController->ZoomIn();
+			shp_cameraController->ZoomIn(); 
+
+			shp_particleEmitter->SetIsEdit(false);
 		}
 	}
 }

@@ -14,6 +14,7 @@ void ButiEngine::Player::OnUpdate()
 {
 	if (shp_pauseManager->GetPause())
 	{
+
 		return;
 	}
 
@@ -69,7 +70,8 @@ void ButiEngine::Player::Start()
 	se_land = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Land.wav");
 	se_reverse = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/GravityReverse.wav");
 	se_powerUp = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/GravityPowerUp.wav");
-}
+
+	}
 
 void ButiEngine::Player::OnCollisionEnter(std::weak_ptr<GameObject> arg_other)
 {

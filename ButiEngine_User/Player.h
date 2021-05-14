@@ -6,7 +6,6 @@ namespace ButiEngine {
 	class PanelManager;
 	class MobiusLoop;
 	class SpliteAnimationComponent;
-
 	class Player :public GameComponent
 	{
 	public:
@@ -47,7 +46,6 @@ namespace ButiEngine {
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
 
 		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
-
 		const float JUMP_FORCE = 3.8f;
 		const int FREEZE_FRAME = 60;
 		const int ANIMATION_RATE = 5;

@@ -36,6 +36,7 @@
     <ClCompile Include="TestBehavior.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="ReverseText.cpp" />
+    <ClCompile Include="SquareParticleEmitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
@@ -71,5 +72,6 @@
     <ClInclude Include="TestBehavior.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="ReverseText.h" />
+    <ClInclude Include="SquareParticleEmitter.h" />
   </ItemGroup>
 </Project>

@@ -21,6 +21,9 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 		void ResetScroll();
+		float GetCurrentScrollSwing()const {
+			return previousScroll- currentScroll;
+		}
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 
