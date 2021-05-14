@@ -6,15 +6,17 @@
 #include"GameSettings.h"
 #include"Panel.h"
 #include"ParentPanel.h"
+#include"Player.h"
 
 void ButiEngine::FollowPanel::OnUpdate()
 {
+	auto core = gameObject.lock()->GetGameComponent<GravityCore>();
 	if (shp_pauseManager->GetPause())
 	{
+		pause = true;
 		waitFrame++;
-		if (waitFrame == 3 && StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "Player"))
+		if (waitFrame == 2 && gameObject.lock() == wkp_player.lock())
 		{
-			pause = true;
 			panelInitZ = wkp_closestPanel.lock()->transform->GetWorldPosition().z;
 			wkp_closestPanel.lock()->transform->TranslateZ(-3.0f);
 		}
@@ -26,7 +28,7 @@ void ButiEngine::FollowPanel::OnUpdate()
 		}
 		return;
 	}
-	else if (pause && StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "Player"))
+	else if (pause && wkp_closestPanel.lock() == wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock())
 	{
 		waitFrame = 0;
 		pause = false;
@@ -35,9 +37,6 @@ void ButiEngine::FollowPanel::OnUpdate()
 		wkp_closestPanel.lock()->transform->SetWorldPosition(pos);
 	}
 
-	StoreClosestPanel();
-
-	auto core = gameObject.lock()->GetGameComponent<GravityCore>();
 	if (core)
 	{
 		if (!core->GetGrabbed())
@@ -49,6 +48,9 @@ void ButiEngine::FollowPanel::OnUpdate()
 	{
 		gameObject.lock()->transform->SetBaseTransform(nullptr);
 	}
+
+	StorePlayer();
+	StoreClosestPanel();
 }
 
 void ButiEngine::FollowPanel::OnSet()
@@ -76,7 +78,7 @@ void ButiEngine::FollowPanel::StoreClosestPanel()
 	wkp_closestPanel = shp_panelManager->GetClosestPanel(x);
 }
 
-void ButiEngine::FollowPanel::Correction()
+void ButiEngine::FollowPanel::Correction(float arg_targetZ)
 {
 	float localX = gameObject.lock()->transform->GetLocalPosition().x;
 	float movableRange = GameSettings::panelWidth * 0.5f - GameSettings::blockSize * 0.5f;
@@ -91,7 +93,20 @@ void ButiEngine::FollowPanel::Correction()
 		auto anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
 		anim->SetTargetTransform(gameObject.lock()->transform->Clone());
 		anim->GetTargetTransform()->TranslateX(difference);
+		if (arg_targetZ < 1000.0f)
+		{
+			//setZsitai
+			//anim->GetTargetTransform()->TranslateX(difference);
+		}
 		anim->SetSpeed(1.0f / 10.0f);
 		anim->SetEaseType(Easing::EasingType::Liner);
+	}
+}
+
+void ButiEngine::FollowPanel::StorePlayer()
+{
+	if (!wkp_player.lock())
+	{
+		wkp_player = GetManager().lock()->GetGameObject("Player");
 	}
 }
