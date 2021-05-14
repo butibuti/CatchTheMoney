@@ -16,7 +16,7 @@ void ButiEngine::ContorolByStick::OnUpdate()
 	if (InputManager::OnTriggerMobiusResetRotationKey())
 	{
 		cameraResetFrame = 0;
-		rotation = Vector3(0, 0, 0);
+		rotation = Vector3(-25, -25, 0);
 		auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
 		if (!anim)
 		{
@@ -41,7 +41,7 @@ void ButiEngine::ContorolByStick::Start()
 	rotationSpeed = 2.0f;
 	returnSpeed = 1.0f;
 	initAxis = -gameObject.lock()->transform->GetUp();
-	rotation = Vector3(0, 0, 0);
+	rotation = Vector3(-25, -25, 0);
 	currMousePos = Vector2(0, 0);
 	preMousePos = Vector2(0, 0);
 }

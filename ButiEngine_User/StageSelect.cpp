@@ -4,9 +4,11 @@
 #include "InputManager.h"
 #include "SelectScreen.h"
 #include "ShakeComponent.h"
+#include "SelectPlayer.h"
+#include "SceneChangeAnimation.h"
 
 int ButiEngine::StageSelect::stageNum = 0;
-int ButiEngine::StageSelect::maxStageNum = 9; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
+int ButiEngine::StageSelect::maxStageNum = 11; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
 
 void ButiEngine::StageSelect::OnUpdate()
 {
@@ -59,7 +61,11 @@ void ButiEngine::StageSelect::Start()
 	isAnimation = false;
 	animationFrame = 90;
 	intervalFrame = 0;
+	fadeCount = 0;
 	wkp_parentSelectPanel = GetManager().lock()->GetGameObject("ParentSelectPanel");
+	wkp_animationPlayer = GetManager().lock()->AddObjectFromCereal("AnimationPlayer");
+
+	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 0, 0), Vector3::Zero, Vector3(1920, 1080, 1)));
 
 	preParentRotation = Vector3::Zero;
 
@@ -75,6 +81,9 @@ void ButiEngine::StageSelect::Start()
 		std::string sceneName = "Stage" + std::to_string(preStageNum);
 		sceneManager->RemoveScene(sceneName);
 	}
+
+	bgm = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/BGM.wav");
+	GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
 }
 
 void ButiEngine::StageSelect::OnShowUI()
@@ -169,7 +178,30 @@ void ButiEngine::StageSelect::DecisionAnimation()
 		GetManager().lock()->GetGameObject("SelectScreen").lock()->GetGameComponent<SelectScreen>()->StartAnimation();
 	}
 
+	if (animationFrame == 89)
+	{
+		wkp_animationPlayer.lock()->GetGameComponent<SelectPlayer>()->IsDecision();
+	}
+	else if (animationFrame == 60)
+	{
+		GetManager().lock()->AddObjectFromCereal("SelectZanzo");
+	}
+
 	if (animationFrame <= 0)
+	{
+		isNext = true;
+	}
+
+	if (isNext)
+	{
+		fadeCount++;
+	}
+	if (fadeCount == 1)
+	{
+		GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 1080, 0), Vector3::Zero, Vector3(1920, 1080, 1)));
+	}
+
+	if (fadeCount > 30)
 	{
 		OnDecision();
 	}

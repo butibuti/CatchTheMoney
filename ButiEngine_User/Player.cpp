@@ -18,7 +18,7 @@ void ButiEngine::Player::OnUpdate()
 		return;
 	}
 
-	Controll();
+	Control();
 	Move();
 	CheckGravity();
 	Animation();
@@ -52,6 +52,8 @@ void ButiEngine::Player::Start()
 
 	wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 	wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+	//wkp_predictionLine2 = GetManager().lock()->AddObjectFromCereal("PredictionLine");
+	//wkp_predictionLine2.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 
 	wkp_bottom = GetManager().lock()->AddObject(ObjectFactory::Create<Transform>(), "Player_Bottom");
 	wkp_bottom.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
@@ -106,7 +108,7 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 	return ObjectFactory::Create<Player>();
 }
 
-void ButiEngine::Player::Controll()
+void ButiEngine::Player::Control()
 {
 	animation = ButiEngine::Player::IDLE;
 	if (freeze)

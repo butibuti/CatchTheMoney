@@ -34,28 +34,18 @@ namespace ButiEngine {
 		void serialize(Archive& archive)
 		{
 			archive(isActive);
-			archive(colorMin);
-			archive(colorMax);
-			archive(colorPaseMin);
-			archive(colorPaseMax);
 			archive(thickness);
 			archive(sizeMin);
 			archive(sizeMax);
 			archive(speedMin);
-			archive(speedMax);
-			archive(accelMin);
-			archive(accelMax);
-			archive(lifeMin);
-			archive(lifeMax);
 			archive(increase);
 			archive(rotation);
 			archive(radius);
 		}
 	private:
 		void ParticleInformationSet(Particle3D& arg_refParticle);
-		Vector4 colorMin, colorMax, colorPaseMin, colorPaseMax;
 		Vector3  center;
-		float	thickness, sizeMin, sizeMax, speedMin, speedMax, accelMin, accelMax, lifeMin, lifeMax,radius;
+		float	thickness, sizeMin, sizeMax, speedMin,radius;
 		Vector3 leftUpEdge, leftDownEdge, rightUpEdge, rightDownEdge;
 		int increase = 0;
 		float rotation;

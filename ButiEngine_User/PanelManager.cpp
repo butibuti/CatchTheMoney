@@ -18,7 +18,7 @@ void ButiEngine::PanelManager::OnUpdate()
 	{
 		return;
 	}
-	Contoroll();
+	Control();
 	Reset();
 }
 
@@ -30,7 +30,7 @@ void ButiEngine::PanelManager::Start()
 {
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	shp_shake = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ShakeComponent>();
-	shp_reverseText = GetManager().lock()->GetGameObject("ParentReverseText").lock()->GetGameComponent<ReverseText>();
+	//shp_reverseText = GetManager().lock()->GetGameObject("ParentReverseText").lock()->GetGameComponent<ReverseText>();
 	moveNum = 0;
 	reverse = false;
 
@@ -125,7 +125,7 @@ bool ButiEngine::PanelManager::IsAnimation()
 	return result;
 }
 
-void ButiEngine::PanelManager::Contoroll()
+void ButiEngine::PanelManager::Control()
 {
 	if (InputManager::OnTriggerRightKey())
 	{
@@ -240,13 +240,25 @@ void ButiEngine::PanelManager::SwapPanelNum(int arg_num1, int arg_num2, int arg_
 
 void ButiEngine::PanelManager::SwapRight(int arg_frame)
 {
-	auto currentParentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
-	int currentParentIndex = currentParentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
-	SwapPanelNum(currentParentIndex, currentParentIndex + 1, arg_frame);
+	auto currentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
+	int currentIndex = currentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
+	int rightPanelIndex = currentIndex + 1;
+	if (rightPanelIndex >= GameSettings::panelCount)
+	{
+		rightPanelIndex -= GameSettings::panelCount;
+	}
+	if (vec_panels[rightPanelIndex].lock()->GetGameComponent<Panel>()->IsLock())
+	{
+		shp_shake->ShakeStart(3.0);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, 0.1f);
+		return;
+	}
+
+	SwapPanelNum(currentIndex, currentIndex + 1, arg_frame);
 	moveNum++;
 	if (moveNum == MOVE_LIMIT)
 	{
-		shp_reverseText->PlayAnimation();
+		//shp_reverseText->PlayAnimation();
 	}
 }
 
@@ -254,11 +266,22 @@ void ButiEngine::PanelManager::SwapLeft(int arg_frame)
 {
 	auto currentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 	int currentIndex = currentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
+	int leftPanelIndex = currentIndex - 1;
+	if (leftPanelIndex < 0)
+	{
+		leftPanelIndex += GameSettings::panelCount;
+	}
+	if (vec_panels[leftPanelIndex].lock()->GetGameComponent<Panel>()->IsLock())
+	{
+		shp_shake->ShakeStart(3.0);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, 0.1f);
+		return;
+	}
 	SwapPanelNum(currentIndex, currentIndex - 1, arg_frame);
 	moveNum--;
 	if (moveNum == -MOVE_LIMIT)
 	{
-		shp_reverseText->PlayAnimation();
+		//shp_reverseText->PlayAnimation();
 	}
 }
 

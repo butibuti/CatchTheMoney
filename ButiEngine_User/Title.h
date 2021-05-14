@@ -20,6 +20,9 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
+		std::weak_ptr<GameObject> wkp_fadeObject;
+		bool nextFlag;
+		int nextSceneCount;
 	};
 
 }

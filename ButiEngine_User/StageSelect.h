@@ -35,14 +35,20 @@ namespace ButiEngine {
 		void Onece();
 
 		std::weak_ptr<GameObject> wkp_parentSelectPanel;
+		std::weak_ptr<GameObject> wkp_animationPlayer;
+		std::weak_ptr<GameObject> wkp_fadeObject;
+
+		SoundTag bgm;
 
 		Vector3 preParentRotation;
 		float childAngle;
 		const int screenRotateFrame = 40;
 		int intervalFrame;
 		int animationFrame;
+		int fadeCount;
 		bool isAnimation;
 		bool isOnece;
+		bool isNext;
 	};
 
 }

@@ -182,9 +182,12 @@
     <ClCompile Include="PauseManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ReverseText.cpp" />
+    <ClCompile Include="SceneChangeAnimation.cpp" />
     <ClCompile Include="ScrollManager.cpp" />
     <ClCompile Include="SelectPanel.cpp" />
+    <ClCompile Include="SelectPlayer.cpp" />
     <ClCompile Include="SelectScreen.cpp" />
+    <ClCompile Include="SelectZanzo.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
     <ClCompile Include="SquareParticleEmitter.cpp" />
     <ClCompile Include="StageManager.cpp" />
@@ -221,9 +224,12 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="ReverseText.h" />
+    <ClInclude Include="SceneChangeAnimation.h" />
     <ClInclude Include="ScrollManager.h" />
     <ClInclude Include="SelectPanel.h" />
+    <ClInclude Include="SelectPlayer.h" />
     <ClInclude Include="SelectScreen.h" />
+    <ClInclude Include="SelectZanzo.h" />
     <ClInclude Include="ShakeComponent.h" />
     <ClInclude Include="SquareParticleEmitter.h" />
     <ClInclude Include="StageManager.h" />

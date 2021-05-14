@@ -52,7 +52,7 @@ namespace ButiEngine {
 		bool reset;
 		bool reverse;
 
-		void Contoroll();
+		void Control();
 		void StorePlayer();
 		void SwapPanelNum(int arg_num1, int arg_num2, int arg_frame);
 		void SwapRight(int arg_frame = 15);

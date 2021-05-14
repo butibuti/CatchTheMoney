@@ -31,6 +31,7 @@ namespace ButiEngine {
 		bool IsClear() { return isClear; }
 		float GetGravity() { return gravity; }
 		std::weak_ptr<GameObject> GetHoldCore() { return wkp_holdCore; }
+		std::weak_ptr<GameObject> GetPredictionLine() { return wkp_predictionLine; }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<PanelManager> shp_panelManager;
@@ -41,6 +42,7 @@ namespace ButiEngine {
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_bottomAABB;
 
 		std::weak_ptr<GameObject> wkp_predictionLine;
+		std::weak_ptr<GameObject> wkp_predictionLine2;
 		std::weak_ptr<GameObject> wkp_holdCore;
 
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
@@ -81,7 +83,7 @@ namespace ButiEngine {
 		bool freeze;
 		bool jump;
 
-		void Controll();
+		void Control();
 		void CheckGravity();
 		void OnJump();
 		void Move();

@@ -87,18 +87,9 @@ void ButiEngine::SquareParticleEmitter::Start()
 
 void ButiEngine::SquareParticleEmitter::OnShowUI()
 {
-    GUI::ColorEdit4("particleColorBaseMin", colorMin);
-    GUI::ColorEdit4("particleColorBaseMax", colorMax);
-    GUI::ColorEdit4("particleColorPaseMin", colorPaseMin);
-    GUI::ColorEdit4("particleColorPaseMax", colorPaseMax);
     GUI::DragFloat("speedMin", speedMin, 0.01f, 0.0f, 10.0f);
-    GUI::DragFloat("speedMax", speedMax, 0.01f, 0.0f, 10.0f);
-    GUI::DragFloat("lifeMin", lifeMin, 0.01f, 0.0f, 10.0f);
-    GUI::DragFloat("lifeMax", lifeMax, 0.01f, 0.0f, 10.0f);
     GUI::DragFloat("sizeMin", sizeMin, 0.01f, 0.0f, 10.0f);
     GUI::DragFloat("sizeMax", sizeMax, 0.01f, 0.0f, 10.0f);
-    GUI::DragFloat("accelMin", accelMin, 0.01f, 0.0f, 10.0f);
-    GUI::DragFloat("accelMax", accelMax, 0.01f, 0.0f, 10.0f);
     GUI::DragFloat("thickNess", thickness, 0.01f, 0.0f, 10.0f);
     GUI::DragFloat("radius", radius, 0.01f, 0.0f, 100.0f);
     GUI::DragFloat("rotation", rotation, 0.01f, 0.0f, 100.0f);
@@ -173,7 +164,14 @@ void ButiEngine::SquareParticleEmitter::EditUpdate()
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::SquareParticleEmitter::Clone()
 {
-    return ObjectFactory::Create<SquareParticleEmitter>();
+    auto output = ObjectFactory::Create<SquareParticleEmitter>();
+    output->sizeMax = sizeMax;
+    output->sizeMin = sizeMin;
+    output->speedMin = speedMin;
+    output->thickness = thickness;
+    output->radius = radius;
+    output->increase = increase;
+    return output;
 }
 
 void ButiEngine::SquareParticleEmitter::ParticleInformationSet(Particle3D& arg_refParticle)
