@@ -2,11 +2,11 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class ControlUI :public GameComponent
+	class ClearButton :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "ControlUI";
+			return "ClearButton";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -18,18 +18,15 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-		void Stop() { stop = true; }
+		void Appear();
+		void OnSelected();
+		void OnEndSelect();
 	private:
-		Vector3 initScale;
-		float progress;
-		bool animation;
-		bool stop;
+		Vector3 defaultScale;
 
-		void Animation();
-		void OnNoPush();
-		void OnPushAnyKey();
+		void AddAnimation(const Vector3& arg_targetScale);
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(ControlUI);
+BUTI_REGIST_GAMECOMPONENT(ClearButton);

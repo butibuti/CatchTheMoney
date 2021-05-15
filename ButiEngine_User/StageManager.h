@@ -9,6 +9,7 @@ namespace ButiEngine {
 	class CameraController;
 	class ClearBand;
 	class SquareParticleEmitter;
+	class ClearButton;
 	enum GameMode
 	{
 		Normal,
@@ -42,6 +43,8 @@ namespace ButiEngine {
 		std::shared_ptr<MeshDrawComponent> shp_XMesh;
 		std::shared_ptr<MeshDrawComponent> shp_EditMesh;
 		std::shared_ptr<MeshDrawComponent> shp_CharaMesh;
+		std::shared_ptr<ClearButton> shp_buttonNext;
+		std::shared_ptr<ClearButton> shp_buttonSelect;
 		
 		std::shared_ptr< SquareParticleEmitter> shp_particleEmitter;
 
@@ -52,6 +55,8 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_edit;
 		std::weak_ptr<GameObject> wkp_chara;
 		std::weak_ptr<GameObject> wkp_grab;
+		std::weak_ptr<GameObject> wkp_buttonNext;
+		std::weak_ptr<GameObject> wkp_buttonSelect;
 
 		SoundTag bgm;
 		SoundTag se_clear;
@@ -65,13 +70,16 @@ namespace ButiEngine {
 		const int CLEAR_FRAME = 90;
 		float particleScrollOffset;
 		Vector3 modeUIPosition;
+		bool clearButtonAnimation;
+		bool selectedNext;
+		std::string nextSceneName;
 
 		void OnGoal();
 		void ChangeScene(const std::string& arg_sceneName);
 		void ModeChange();
 		void CreateUI();
 		void ChangeUIAlpha();
-		void OnNoPush();
+		void ClearButtonUpdate();
 	};
 
 }

@@ -16,6 +16,9 @@
 #include "SceneChangeAnimation.h"
 #include"FollowPanel.h"
 #include"Panel.h"
+#include"ClearButton.h"
+#include"ControlUI.h"
+#include"ShakeComponent.h"
 
 void ButiEngine::StageManager::OnUpdate()
 {
@@ -29,6 +32,7 @@ void ButiEngine::StageManager::OnUpdate()
 	{
 		if (clearAnimationFrame >= CLEAR_FRAME)
 		{
+			GetManager().lock()->GetGameObject("Control2").lock()->GetGameComponent<ControlUI>()->Stop();
 			GetManager().lock()->AddObjectFromCereal("ClearFlash", ObjectFactory::Create<Transform>(Vector3(0.0f,0.0f,1000.0f)));
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_clear, 0.1f);
 		}
@@ -89,6 +93,9 @@ void ButiEngine::StageManager::Start()
 
 	modeUIPosition = Vector3(750.0f, -410.0f, -0.1f);
 
+	clearButtonAnimation = false;
+	selectedNext = true;
+
 	for (int i = 0; i < StageSelect::GetMaxStage(); i++)
 	{
 		std::string stageName = "Stage" + std::to_string(i);
@@ -103,6 +110,8 @@ void ButiEngine::StageManager::Start()
 	se_clear = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Clear.wav");
 
 	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, 0.1f);
+
+	nextSceneName = "Stage" + std::to_string(StageSelect::GetStageNum() + 1);
 }
 
 void ButiEngine::StageManager::ShowGUI()
@@ -130,10 +139,18 @@ void ButiEngine::StageManager::ResetStage()
 
 void ButiEngine::StageManager::OnGoal()
 {
-	if (clearAnimationFrame < 0)
+	if (clearAnimationFrame == 0)
 	{
-		isNext = true;
+		shp_buttonNext->Appear();
+		shp_buttonSelect->Appear();
 	}
+	else if (!clearButtonAnimation && clearAnimationFrame < 0 && 
+		!wkp_buttonNext.lock()->GetGameComponent<TransformAnimation>())
+	{
+		clearButtonAnimation = true;
+		shp_buttonNext->OnSelected();
+	}
+	ClearButtonUpdate();
 	if (isNext)
 	{
 		fadeCount++;
@@ -158,10 +175,8 @@ void ButiEngine::StageManager::OnGoal()
 		}
 		else
 		{
-			std::string stageName = "Stage" + std::to_string(StageSelect::GetStageNum());
-			StageSelect::SetRemoveStageName(stageName);
-			std::string sceneName = "Stage" + std::to_string(nextStageNum);
-			ChangeScene(sceneName);
+			StageSelect::SetRemoveStageName(nextSceneName);
+			ChangeScene(nextSceneName);
 		}
 
 		StageSelect::SetStageNum(nextStageNum);
@@ -249,6 +264,11 @@ void ButiEngine::StageManager::CreateUI()
 		wkp_chara.lock()->transform->TranslateZ(1000);
 	}
 
+	wkp_buttonNext = GetManager().lock()->AddObjectFromCereal("Button_Next");
+	wkp_buttonSelect = GetManager().lock()->AddObjectFromCereal("Button_Select");
+	shp_buttonNext = wkp_buttonNext.lock()->GetGameComponent<ClearButton>();
+	shp_buttonSelect = wkp_buttonSelect.lock()->GetGameComponent<ClearButton>();
+
 	if (stageNum >= 9)
 	{
 		wkp_grab = GetManager().lock()->AddObjectFromCereal("BTextWindow");
@@ -269,5 +289,40 @@ void ButiEngine::StageManager::ChangeUIAlpha()
 		shp_XMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = alpha;
 		shp_EditMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = alpha;
 		shp_CharaMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = alpha;
+	}
+}
+
+void ButiEngine::StageManager::ClearButtonUpdate()
+{
+	if (!clearButtonAnimation) { return; }
+
+	if (InputManager::OnTriggerRightKey() || InputManager::OnTriggerLeftKey())
+	{
+		selectedNext = !selectedNext;
+		if (selectedNext)
+		{
+			shp_buttonNext->OnSelected();
+			shp_buttonSelect->OnEndSelect();
+			nextSceneName = "Stage" + std::to_string(StageSelect::GetStageNum() + 1);
+		}
+		else
+		{
+			shp_buttonNext->OnEndSelect();
+			shp_buttonSelect->OnSelected();
+			nextSceneName = "StageSelect";
+		}
+	}
+
+	if (InputManager::OnTriggerDecisionKey())
+	{
+		isNext = true;
+		if (selectedNext)
+		{
+			wkp_buttonNext.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(10.0f);
+		}
+		else
+		{
+			wkp_buttonSelect.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(10.0f);
+		}
 	}
 }
