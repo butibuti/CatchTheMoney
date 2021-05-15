@@ -23,6 +23,7 @@ namespace ButiEngine {
 		virtual void SetInfo_WithoutCommand(){}
 		virtual void BufferUpdate() {}
 		virtual void CommandSet() {}
+		virtual void CommandExecute() {}
 
 		virtual std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> GetMeshAABB() = 0;
 		virtual std::shared_ptr<Collision::CollisionPrimitive_Box_OBB> GetMeshOBB() = 0;

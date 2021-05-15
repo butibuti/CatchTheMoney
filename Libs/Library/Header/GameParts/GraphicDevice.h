@@ -16,7 +16,7 @@ namespace ButiEngine {
 		AlphaBlend = 0, Addition = 1, Subtruction = 2, Reverse = 3, NoBlend = 4
 	};
 	enum class BillBoardMode {
-		none = 0, full = 1, x = 2, y = 3, z = 4, removeDecimalPart = 5, removeRotation = 6
+		none = 0, full = 1, x = 2, y = 3, z = 4, removeDecimalPart = 5, removeRotation = 6, removeDecimalPartXY = 7, removeDecimalPartYZ = 8, removeDecimalPartXZ = 9
 	};
 	enum class TopologyType {
 		triangleList = 4, point = 1,  line = 2, triangle = 3, pointList = 1,

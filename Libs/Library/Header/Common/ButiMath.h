@@ -168,7 +168,19 @@ namespace ButiEngine {
 		inline void PositionFloor();
 		inline Matrix4x4 GetPositionFloor()const;
 		inline void PositionFloor_transpose();
+		inline void PositionXFloor_transpose();
+		inline void PositionYFloor_transpose();
+		inline void PositionZFloor_transpose();
+		inline void PositionXYFloor_transpose();
+		inline void PositionYZFloor_transpose();
+		inline void PositionXZFloor_transpose();
 		inline Matrix4x4 GetPositionFloor_transpose()const;
+		inline Matrix4x4 GetPositionXFloor_transpose()const;
+		inline Matrix4x4 GetPositionYFloor_transpose()const;
+		inline Matrix4x4 GetPositionZFloor_transpose()const;
+		inline Matrix4x4 GetPositionXYFloor_transpose()const;
+		inline Matrix4x4 GetPositionYZFloor_transpose()const;
+		inline Matrix4x4 GetPositionXZFloor_transpose()const;
 		inline Matrix4x4 GetOnlyRotation_transpose()const;
 		inline void RemovePosition();
 		static inline Matrix4x4 Scale(const Vector3& arg_scale);
@@ -2079,10 +2091,118 @@ namespace ButiEngine {
 			_34 = ceil(_34);
 		}
 	}
+	inline void Matrix4x4::PositionXFloor_transpose()
+	{
+		if (_14 > 0) {
+			_14 = floor(_14);
+		}
+		else {
+			_14 = ceil(_14);
+		}
+	}
+	inline void Matrix4x4::PositionYFloor_transpose()
+	{
+		if (_24 > 0) {
+			_24 = floor(_24);
+		}
+		else {
+			_24 = ceil(_24);
+		}
+	}
+	inline void Matrix4x4::PositionZFloor_transpose()
+	{
+		if (_34 > 0) {
+			_34 = floor(_34);
+		}
+		else {
+			_34 = ceil(_34);
+		}
+	}
+	inline void Matrix4x4::PositionXYFloor_transpose()
+	{
+		if (_14 > 0) {
+			_14 = floor(_14);
+		}
+		else {
+			_14 = ceil(_14);
+		}
+		if (_24 > 0) {
+			_24 = floor(_24);
+		}
+		else {
+			_24 = ceil(_24);
+		}
+	}
+	inline void Matrix4x4::PositionYZFloor_transpose()
+	{
+		if (_24 > 0) {
+			_24 = floor(_24);
+		}
+		else {
+			_24 = ceil(_24);
+		}
+		if (_34 > 0) {
+			_34 = floor(_34);
+		}
+		else {
+			_34 = ceil(_34);
+		}
+	}
+	inline void Matrix4x4::PositionXZFloor_transpose()
+	{
+		if (_14 > 0) {
+			_14 = floor(_14);
+		}
+		else {
+			_14 = ceil(_14);
+		}
+		if (_34 > 0) {
+			_34 = floor(_34);
+		}
+		else {
+			_34 = ceil(_34);
+		}
+	}
 	inline Matrix4x4 Matrix4x4::GetPositionFloor_transpose() const
 	{
 		Matrix4x4 output = *this;
 		output.PositionFloor_transpose();
+		return output;
+	}
+	inline Matrix4x4 Matrix4x4::GetPositionXFloor_transpose() const
+	{
+		Matrix4x4 output = *this;
+		output.PositionXFloor_transpose();
+		return output;
+	}
+	inline Matrix4x4 Matrix4x4::GetPositionYFloor_transpose() const
+	{
+		Matrix4x4 output = *this;
+		output.PositionYFloor_transpose();
+		return output;
+	}
+	inline Matrix4x4 Matrix4x4::GetPositionZFloor_transpose() const
+	{
+		Matrix4x4 output = *this;
+		output.PositionZFloor_transpose();
+		return output;
+	}
+	inline Matrix4x4 Matrix4x4::GetPositionXYFloor_transpose() const
+	{
+		Matrix4x4 output = *this;
+		output.PositionXYFloor_transpose();
+		return output;
+	}
+	inline Matrix4x4 Matrix4x4::GetPositionYZFloor_transpose() const
+	{
+		Matrix4x4 output = *this;
+		output.PositionYZFloor_transpose();
+		return output;
+	}
+	inline Matrix4x4 Matrix4x4::GetPositionXZFloor_transpose() const
+	{
+		Matrix4x4 output = *this;
+		output.PositionXZFloor_transpose();
 		return output;
 	}
 	inline Matrix4x4 Matrix4x4::GetOnlyRotation_transpose() const

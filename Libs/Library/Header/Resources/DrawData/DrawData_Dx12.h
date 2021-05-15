@@ -16,7 +16,7 @@ namespace ButiEngine {
 		std::shared_ptr<ICBuffer> AddICBuffer(std::shared_ptr<ICBuffer> arg_cbuffer)override;
 
 		Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
-
+		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList;
 
 		D3D12_GPU_DESCRIPTOR_HANDLE samplerBufferDescriptorHandle;
 
