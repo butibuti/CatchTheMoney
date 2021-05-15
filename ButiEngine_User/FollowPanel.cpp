@@ -37,17 +37,7 @@ void ButiEngine::FollowPanel::OnUpdate()
 		wkp_closestPanel.lock()->transform->SetWorldPosition(pos);
 	}
 
-	if (core)
-	{
-		if (!core->GetGrabbed())
-		{
-			gameObject.lock()->transform->SetBaseTransform(nullptr);
-		}
-	}
-	else
-	{
-		gameObject.lock()->transform->SetBaseTransform(nullptr);
-	}
+	gameObject.lock()->transform->SetBaseTransform(nullptr);
 
 	StorePlayer();
 	StoreClosestPanel();
@@ -65,6 +55,7 @@ void ButiEngine::FollowPanel::Start()
 
 void ButiEngine::FollowPanel::OnShowUI()
 {
+	GUI::Text("%f", gameObject.lock()->transform->GetWorldPosition().z);
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::FollowPanel::Clone()
@@ -78,7 +69,7 @@ void ButiEngine::FollowPanel::StoreClosestPanel()
 	wkp_closestPanel = shp_panelManager->GetClosestPanel(x);
 }
 
-void ButiEngine::FollowPanel::Correction(float arg_targetZ)
+void ButiEngine::FollowPanel::Correction()
 {
 	float localX = gameObject.lock()->transform->GetLocalPosition().x;
 	float movableRange = GameSettings::panelWidth * 0.5f - GameSettings::blockSize * 0.5f;
@@ -93,11 +84,6 @@ void ButiEngine::FollowPanel::Correction(float arg_targetZ)
 		auto anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
 		anim->SetTargetTransform(gameObject.lock()->transform->Clone());
 		anim->GetTargetTransform()->TranslateX(difference);
-		if (arg_targetZ < 1000.0f)
-		{
-			//setZsitai
-			//anim->GetTargetTransform()->TranslateX(difference);
-		}
 		anim->SetSpeed(1.0f / 10.0f);
 		anim->SetEaseType(Easing::EasingType::Liner);
 	}

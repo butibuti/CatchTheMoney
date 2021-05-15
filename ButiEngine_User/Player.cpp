@@ -243,7 +243,7 @@ void ButiEngine::Player::Move()
 	if (freeze) { return; }
 	
 	OnJump();
-
+	hitCore = false;
 	velocity.x *= speed;
 
 	if (fabsf(velocity.x) > fabsf(velocity.y))
@@ -306,12 +306,12 @@ void ButiEngine::Player::BackX()
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == gameObject.lock()) { continue; }
-			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos)
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Goal"))
 			{
 				OnCollisionGoal((*itr));
 				continue; 
 			}
-			if ((*itr)->GetGameObjectName().find("GravityCore") != std::string::npos)
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "GravityCore"))
 			{
 				OnCollisionCore((*itr));
 				continue;
@@ -347,12 +347,12 @@ void ButiEngine::Player::BackY()
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == gameObject.lock()) { continue; }
-			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos)
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Goal"))
 			{
 				OnCollisionGoal((*itr));
 				continue;
 			}
-			if ((*itr)->GetGameObjectName().find("GravityCore") != std::string::npos)
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "GravityCore"))
 			{
 				continue;
 			}
@@ -450,6 +450,7 @@ void ButiEngine::Player::OnCollisionGoal(std::weak_ptr<GameObject> arg_goal)
 
 void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
 {
+	hitCore = true;
 	if (InputManager::OnTriggerGrabKey() && grounded)
 	{
 		GrabGravityCore(arg_core);

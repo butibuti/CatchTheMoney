@@ -6,6 +6,8 @@ ButiEngine::Vector2 ButiEngine::InputManager::currentLeftStick;
 ButiEngine::Vector2 ButiEngine::InputManager::previousRightStick;
 ButiEngine::Vector2 ButiEngine::InputManager::currentRightSrick;
 const float ButiEngine::InputManager::DEADZONE = 0.5f;
+bool ButiEngine::InputManager::noPush;
+int ButiEngine::InputManager::noPushCount;
 
 void ButiEngine::InputManager::OnUpdate()
 {
@@ -13,6 +15,20 @@ void ButiEngine::InputManager::OnUpdate()
 	previousRightStick = currentRightSrick;
 	currentLeftStick = GameDevice::GetInput()->GetLeftStick();
 	currentRightSrick = GameDevice::GetInput()->GetRightStick();
+
+	if (OnPushAnyKey())
+	{
+		noPushCount = 0;
+		noPush = false;
+	}
+	else
+	{
+		noPushCount++;
+	}
+	if (noPushCount >= NO_PUSH_FRAME)
+	{
+		noPush = true;
+	}
 }
 
 void ButiEngine::InputManager::OnSet()
@@ -25,6 +41,8 @@ void ButiEngine::InputManager::Start()
 	currentLeftStick = Vector2();
 	previousRightStick = Vector2();
 	currentRightSrick = Vector2();
+	noPushCount = 0;
+	noPush = false;
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::InputManager::Clone()
@@ -58,6 +76,18 @@ bool ButiEngine::InputManager::OnTriggerLeftKey()
 	return (GameDevice::GetInput()->TriggerKey(Keys::A) ||
 		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_LEFT) ||
 		(currentLeftStick.x <= -DEADZONE && previousLeftStick.x > -DEADZONE));
+}
+
+bool ButiEngine::InputManager::OnPushAnyKey()
+{
+	return (OnPushRightKey() ||
+		OnPushLeftKey() ||
+		OnTriggerJumpKey() ||
+		OnTriggerModeChangeKey() ||
+		OnTriggerMobiusResetRotationKey() ||
+		abs(currentRightSrick.x) > DEADZONE ||
+		abs(currentRightSrick.y) > DEADZONE ||
+		OnTriggerGrabKey());
 }
 
 bool ButiEngine::InputManager::OnTriggerMobiusResetRotationKey()

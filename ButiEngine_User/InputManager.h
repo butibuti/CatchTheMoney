@@ -23,17 +23,19 @@ namespace ButiEngine {
 		static bool OnPushLeftKey();
 		static bool OnTriggerRightKey();
 		static bool OnTriggerLeftKey();
+		static bool OnPushAnyKey();
 
 		//GameCommon
 		static bool OnTriggerMobiusResetRotationKey();
 		static bool OnTriggerModeChangeKey();
 		static bool OnTriggerOpenMenuKey();
+		static bool IsNoPush() { return noPush; }
 
-		//NormalMode
+		//CharaMode
 		static bool OnTriggerJumpKey();
 		static bool OnTriggerGrabKey();
 
-		//EditMode
+		//PanelMode
 		static bool OnPushRightScrollKey();
 		static bool OnPushLeftScrollKey();
 		static bool OnTriggerUndoKey();
@@ -47,10 +49,13 @@ namespace ButiEngine {
 
 	private:
 		static const float DEADZONE;
+		static const int NO_PUSH_FRAME = 60;
 		static Vector2 previousLeftStick;
 		static Vector2 currentLeftStick;
 		static Vector2 previousRightStick;
 		static Vector2 currentRightSrick;
+		static bool noPush;
+		static int noPushCount;
 	};
 
 }

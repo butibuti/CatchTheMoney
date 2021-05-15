@@ -32,6 +32,7 @@ namespace ButiEngine {
 		float GetGravity() { return gravity; }
 		std::weak_ptr<GameObject> GetHoldCore() { return wkp_holdCore; }
 		std::weak_ptr<GameObject> GetPredictionLine() { return wkp_predictionLine; }
+		bool IsHitCore() { return hitCore; }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<PanelManager> shp_panelManager;
@@ -82,6 +83,7 @@ namespace ButiEngine {
 		bool pushGrabKeyFrame;
 		bool freeze;
 		bool jump;
+		bool hitCore;
 
 		void Control();
 		void CheckGravity();

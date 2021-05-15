@@ -34,7 +34,7 @@ namespace ButiEngine {
 		float panelInitZ;
 		bool pause;
 
-		void Correction(float arg_targetZ = 1000.0f);
+		void Correction();
 		void StorePlayer();
 	};
 
