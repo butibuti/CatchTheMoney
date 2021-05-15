@@ -89,6 +89,16 @@ void ButiEngine::StageManager::Start()
 
 	modeUIPosition = Vector3(750.0f, -410.0f, -0.1f);
 
+	for (int i = 0; i < StageSelect::GetMaxStage(); i++)
+	{
+		std::string stageName = "Stage" + std::to_string(i);
+		if (stageName == StageSelect::GetRemoveStageName())
+		{
+			auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
+			sceneManager->RemoveScene(stageName);
+		}
+	}
+
 	bgm = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/BGM.wav");
 	se_clear = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Clear.wav");
 
@@ -142,11 +152,14 @@ void ButiEngine::StageManager::OnGoal()
 		int nextStageNum = StageSelect::GetStageNum() + 1;
 		if (nextStageNum > 11)
 		{
+			StageSelect::SetRemoveStageName("none");
 			std::string sceneName = "StageSelect";
 			ChangeScene(sceneName);
 		}
 		else
 		{
+			std::string stageName = "Stage" + std::to_string(StageSelect::GetStageNum());
+			StageSelect::SetRemoveStageName(stageName);
 			std::string sceneName = "Stage" + std::to_string(nextStageNum);
 			ChangeScene(sceneName);
 		}
@@ -155,6 +168,7 @@ void ButiEngine::StageManager::OnGoal()
 	}
 	if (GameDevice::GetInput()->TriggerKey(Keys::C))
 	{
+		StageSelect::SetRemoveStageName("none");
 		shp_map->DestoryBlock();
 		ChangeScene("StageSelect");
 	}

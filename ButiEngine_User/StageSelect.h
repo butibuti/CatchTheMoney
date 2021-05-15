@@ -21,7 +21,10 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 		static int GetStageNum() { return stageNum; }
+		static int GetMaxStage() { return maxStageNum; }
+		static std::string GetRemoveStageName() { return removeStageName; }
 		static void SetStageNum(int arg_stageNum);
+		static void SetRemoveStageName(std::string arg_removeStageName);
 	private:
 		static int stageNum;
 		static int maxStageNum;
@@ -49,6 +52,8 @@ namespace ButiEngine {
 		bool isAnimation;
 		bool isOnece;
 		bool isNext;
+
+		static std::string removeStageName;
 	};
 
 }

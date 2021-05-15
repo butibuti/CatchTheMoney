@@ -9,6 +9,7 @@
 
 int ButiEngine::StageSelect::stageNum = 0;
 int ButiEngine::StageSelect::maxStageNum = 11; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
+std::string ButiEngine::StageSelect::removeStageName = "none";
 
 void ButiEngine::StageSelect::OnUpdate()
 {
@@ -117,6 +118,11 @@ void ButiEngine::StageSelect::SetStageNum(int arg_stageNum)
 	{
 		stageNum = 0;
 	}
+}
+
+void ButiEngine::StageSelect::SetRemoveStageName(std::string arg_removeStageName)
+{
+	removeStageName = arg_removeStageName;
 }
 
 void ButiEngine::StageSelect::OnPushRight()
