@@ -71,6 +71,7 @@ namespace ButiEngine {
 		void ModeChange();
 		void CreateUI();
 		void ChangeUIAlpha();
+		void OnNoPush();
 	};
 
 }

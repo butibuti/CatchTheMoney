@@ -41,6 +41,7 @@
     <ClCompile Include="SelectZanzo.cpp" />
     <ClCompile Include="SceneChangeAnimation.cpp" />
     <ClCompile Include="GrabTextWindow.cpp" />
+    <ClCompile Include="ControlUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
@@ -81,5 +82,6 @@
     <ClInclude Include="SelectZanzo.h" />
     <ClInclude Include="SceneChangeAnimation.h" />
     <ClInclude Include="GrabTextWindow.h" />
+    <ClInclude Include="ControlUI.h" />
   </ItemGroup>
 </Project>
