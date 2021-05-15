@@ -306,12 +306,12 @@ void ButiEngine::Player::BackX()
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == gameObject.lock()) { continue; }
-			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos)
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Goal"))
 			{
 				OnCollisionGoal((*itr));
 				continue; 
 			}
-			if ((*itr)->GetGameObjectName().find("GravityCore") != std::string::npos)
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "GravityCore"))
 			{
 				OnCollisionCore((*itr));
 				continue;
@@ -347,12 +347,12 @@ void ButiEngine::Player::BackY()
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == gameObject.lock()) { continue; }
-			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos)
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Goal"))
 			{
 				OnCollisionGoal((*itr));
 				continue;
 			}
-			if ((*itr)->GetGameObjectName().find("GravityCore") != std::string::npos)
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "GravityCore"))
 			{
 				continue;
 			}
