@@ -7,7 +7,8 @@ void ButiEngine::GrabTextWindow::OnUpdate()
 	StorePlayer();
 	if (wkp_player.lock())
 	{
-		if (wkp_player.lock()->GetGameComponent<Player>()->IsHitCore())
+		auto player = wkp_player.lock()->GetGameComponent<Player>();
+		if (!player->GetHoldCore().lock() && player->IsHitCore())
 		{
 			gameObject.lock()->transform->SetWorldPosition(initPos);
 		}
