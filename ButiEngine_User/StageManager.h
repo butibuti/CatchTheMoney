@@ -51,6 +51,7 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_x;
 		std::weak_ptr<GameObject> wkp_edit;
 		std::weak_ptr<GameObject> wkp_chara;
+		std::weak_ptr<GameObject> wkp_grab;
 
 		SoundTag bgm;
 		SoundTag se_clear;

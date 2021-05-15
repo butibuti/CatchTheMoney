@@ -235,9 +235,9 @@ void ButiEngine::StageManager::CreateUI()
 		wkp_chara.lock()->transform->TranslateZ(1000);
 	}
 
-	if (stageNum == 9)
+	if (stageNum >= 9)
 	{
-		GetManager().lock()->AddObjectFromCereal("Grab");
+		wkp_grab = GetManager().lock()->AddObjectFromCereal("BTextWindow");
 	}
 }
 
