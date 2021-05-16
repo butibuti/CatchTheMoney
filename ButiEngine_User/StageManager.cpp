@@ -182,7 +182,12 @@ void ButiEngine::StageManager::OnGoal()
 		}
 		else
 		{
-			StageSelect::SetRemoveStageName(nextSceneName);
+			std::string sceneName = "Stage" + std::to_string(StageSelect::GetStageNum());
+			if (nextSceneName == "StageSelect")
+			{
+				sceneName = "none";
+			}
+			StageSelect::SetRemoveStageName(sceneName);
 			ChangeScene(nextSceneName);
 		}
 
