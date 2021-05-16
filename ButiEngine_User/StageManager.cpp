@@ -149,7 +149,10 @@ void ButiEngine::StageManager::OnGoal()
 	if (clearAnimationFrame == 0)
 	{
 		shp_buttonNext->Appear();
-		shp_buttonSelect->Appear();
+		if (StageSelect::GetStageNum() != StageSelect::GetMaxStage())
+		{
+			shp_buttonSelect->Appear();
+		}
 	}
 	else if (!clearButtonAnimation && clearAnimationFrame < 0 && 
 		!wkp_buttonNext.lock()->GetGameComponent<TransformAnimation>())
@@ -308,7 +311,8 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 {
 	if (!clearButtonAnimation) { return; }
 
-	if (InputManager::OnTriggerRightKey() || InputManager::OnTriggerLeftKey())
+	if ((InputManager::OnTriggerRightKey() || InputManager::OnTriggerLeftKey()) &&
+		StageSelect::GetStageNum() != StageSelect::GetMaxStage())
 	{
 		selectedNext = !selectedNext;
 		if (selectedNext)
