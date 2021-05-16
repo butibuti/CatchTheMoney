@@ -42,6 +42,7 @@
     <ClCompile Include="SceneChangeAnimation.cpp" />
     <ClCompile Include="GrabTextWindow.cpp" />
     <ClCompile Include="ControlUI.cpp" />
+    <ClCompile Include="ClearButton.cpp" />
     <ClCompile Include="TextWindow.cpp" />
     <ClCompile Include="TalkText.cpp" />
   </ItemGroup>
@@ -85,6 +86,7 @@
     <ClInclude Include="SceneChangeAnimation.h" />
     <ClInclude Include="GrabTextWindow.h" />
     <ClInclude Include="ControlUI.h" />
+    <ClInclude Include="ClearButton.h" />
     <ClInclude Include="TextWindow.h" />
     <ClInclude Include="TalkText.h" />
   </ItemGroup>

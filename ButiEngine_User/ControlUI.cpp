@@ -4,6 +4,7 @@
 
 void ButiEngine::ControlUI::OnUpdate()
 {
+	if (stop) { return; }
 	Animation();
 	OnNoPush();
 	OnPushAnyKey();
