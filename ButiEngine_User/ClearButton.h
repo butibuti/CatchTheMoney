@@ -24,7 +24,7 @@ namespace ButiEngine {
 	private:
 		Vector3 defaultScale;
 
-		void AddAnimation(const Vector3& arg_targetScale);
+		void AddAnimation(const Vector3& arg_targetScale, int frame);
 	};
 
 }

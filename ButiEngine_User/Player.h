@@ -33,6 +33,7 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> GetHoldCore() { return wkp_holdCore; }
 		std::weak_ptr<GameObject> GetPredictionLine() { return wkp_predictionLine; }
 		bool IsHitCore() { return hitCore; }
+		bool IsFreeze() { return freeze; }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<PanelManager> shp_panelManager;

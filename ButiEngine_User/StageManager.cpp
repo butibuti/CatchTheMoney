@@ -148,7 +148,7 @@ void ButiEngine::StageManager::ResetStage()
 
 void ButiEngine::StageManager::OnGoal()
 {
-	if (clearAnimationFrame == 0)
+	if (clearAnimationFrame == 30)
 	{
 		shp_buttonNext->Appear();
 		if (StageSelect::GetStageNum() != StageSelect::GetMaxStage())
@@ -156,8 +156,7 @@ void ButiEngine::StageManager::OnGoal()
 			shp_buttonSelect->Appear();
 		}
 	}
-	else if (!clearButtonAnimation && clearAnimationFrame < 0 && 
-		!wkp_buttonNext.lock()->GetGameComponent<TransformAnimation>())
+	else if (!clearButtonAnimation && clearAnimationFrame < 0)
 	{
 		clearButtonAnimation = true;
 		shp_buttonNext->OnSelected();
@@ -222,6 +221,8 @@ void ButiEngine::StageManager::ModeChange()
 		if (shp_panelManager->IsAnimation()) { return; }
 		if (StageSelect::GetStageNum() == 0) { return; }
 		if (wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock()) { return; }
+		if (wkp_player.lock()->GetGameComponent<Player>()->IsClear()) { return; }
+		if (wkp_player.lock()->GetGameComponent<Player>()->IsFreeze()) { return; }
 
 		shp_scrollManager->ResetScroll();
 		
