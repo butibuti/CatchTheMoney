@@ -18,7 +18,7 @@ void ButiEngine::InputManager::OnUpdate()
 	currentLeftStick = GameDevice::GetInput()->GetLeftStick();
 	currentRightSrick = GameDevice::GetInput()->GetRightStick();
 
-	if (shp_pauseManager->GetPause() || !TalkText::IsDelete()) { return; }
+	if ((shp_pauseManager && shp_pauseManager->GetPause()) || !TalkText::IsDelete()) { return; }
 	if (OnPushAnyKey())
 	{
 		noPushCount = 0;
@@ -40,7 +40,11 @@ void ButiEngine::InputManager::OnSet()
 
 void ButiEngine::InputManager::Start()
 {
-	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
+	auto pauseManager = GetManager().lock()->GetGameObject("PauseManager");
+	if (pauseManager.lock())
+	{
+		shp_pauseManager = pauseManager.lock()->GetGameComponent<PauseManager>();
+	}
 
 	previousLeftStick = Vector2();
 	currentLeftStick = Vector2();
