@@ -54,6 +54,7 @@ void ButiEngine::Player::Start()
 	animation = ButiEngine::Player::IDLE;
 	freeze = true;
 	jump = false;
+	jumpInputFrame = 0;
 
 	wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 	wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
@@ -155,8 +156,9 @@ void ButiEngine::Player::Control()
 
 	if (grounded)
 	{
-		if (InputManager::OnTriggerJumpKey() && !isClear)
+		if ((InputManager::OnTriggerJumpKey() || jumpInputFrame > 0) && !isClear)
 		{
+			jumpInputFrame = 0;
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_jump, 0.1f);
 			velocity.y = JUMP_FORCE;
 			if (gravity > 0)
@@ -173,6 +175,14 @@ void ButiEngine::Player::Control()
 	}
 	else
 	{
+		if (InputManager::OnTriggerJumpKey())
+		{
+			jumpInputFrame = COYOTE_TIME;
+		}
+		if (jumpInputFrame > 0)
+		{
+			jumpInputFrame--;
+		}
 		shp_spriteAnimation->SetHorizontalAnim(0);
 		animation = ButiEngine::Player::JUMP;
 	}
