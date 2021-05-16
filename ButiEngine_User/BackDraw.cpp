@@ -5,6 +5,7 @@
 #include"FollowPanel.h"
 #include"Panel.h"
 #include"PauseManager.h"
+#include"StageManager.h"
 
 void ButiEngine::BackDraw::OnUpdate()
 {
@@ -100,7 +101,7 @@ void ButiEngine::BackDraw::Correction()
 
 void ButiEngine::BackDraw::SwitchGravityCore(bool arg_scroll)
 {
-	if (shp_pauseManager->GetPause())
+	if (shp_pauseManager->GetPause() || StageManager::GetMode() == GameMode::Edit)
 	{
 		return;
 	}

@@ -5,12 +5,13 @@
 #include"FollowPanel.h"
 #include"Panel.h"
 #include"Player.h"
+#include"StageManager.h"
 
 void ButiEngine::GravityCore::OnUpdate()
 {
 	StorePlayer();
 	FollowPlayer();
-	if (shp_pauseManager->GetPause())
+	if (shp_pauseManager->GetPause() || StageManager::GetMode() == GameMode::Edit)
 	{
 		return;
 	}

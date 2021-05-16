@@ -10,11 +10,12 @@
 #include"InputManager.h"
 #include"ShakeComponent.h"
 #include"ReverseText.h"
+#include"StageManager.h"
 
 void ButiEngine::PanelManager::OnUpdate()
 {
 	StorePlayer();
-	if (!shp_pauseManager->GetPause() || IsAnimation())
+	if (StageManager::GetMode() != GameMode::Edit || IsAnimation())
 	{
 		return;
 	}

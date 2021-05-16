@@ -10,10 +10,13 @@
 #include"GravityCore.h"
 #include "TalkText.h"
 #include "Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
+#include"StageManager.h"
 
 void ButiEngine::Player::OnUpdate()
 {
 	if (shp_pauseManager->GetPause() ||
+		StageManager::GetMode() == GameMode::Edit ||
+		isClear ||
 		!TalkText::IsDelete())
 	{
 

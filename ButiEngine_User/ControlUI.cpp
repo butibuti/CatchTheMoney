@@ -1,10 +1,11 @@
 #include "stdafx_u.h"
 #include "ControlUI.h"
 #include"InputManager.h"
+#include"PauseManager.h"
 
 void ButiEngine::ControlUI::OnUpdate()
 {
-	if (stop) { return; }
+	if (stop || shp_pauseManager->GetPause()) { return; }
 	Animation();
 	OnNoPush();
 	OnPushAnyKey();
@@ -16,6 +17,7 @@ void ButiEngine::ControlUI::OnSet()
 
 void ButiEngine::ControlUI::Start()
 {
+	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	initScale = gameObject.lock()->transform->GetWorldScale();
 	progress = 0.0f;
 }

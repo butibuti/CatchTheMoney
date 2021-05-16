@@ -20,6 +20,8 @@
 #include"ControlUI.h"
 #include"ShakeComponent.h"
 
+ButiEngine::GameMode ButiEngine::StageManager::mode;
+
 void ButiEngine::StageManager::OnUpdate()
 {
 	if (!wkp_player.lock())
@@ -95,7 +97,7 @@ void ButiEngine::StageManager::Start()
 
 	clearAnimationFrame = CLEAR_FRAME;
 
-	mode = GameMode::Normal;
+	mode = GameMode::Chara;
 	shp_particleEmitter= GetManager().lock()->GetGameObject("SquareParticleEmitter").lock()->GetGameComponent<SquareParticleEmitter>();
 
 	modeUIPosition = Vector3(750.0f, -410.0f, -0.1f);
@@ -221,10 +223,9 @@ void ButiEngine::StageManager::ModeChange()
 		if (StageSelect::GetStageNum() == 0) { return; }
 		if (wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock()) { return; }
 
-		shp_pauseManager->SwitchPause();
 		shp_scrollManager->ResetScroll();
 		
-		if (mode == GameMode::Normal)
+		if (mode == GameMode::Chara)
 		{
 			mode = GameMode::Edit;
 
@@ -245,7 +246,7 @@ void ButiEngine::StageManager::ModeChange()
 		}
 		else
 		{
-			mode = GameMode::Normal;
+			mode = GameMode::Chara;
 			shp_cameraController->ZoomIn(); 
 
 			shp_particleEmitter->SetIsEdit(false);
