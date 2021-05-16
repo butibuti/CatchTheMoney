@@ -78,6 +78,13 @@ void ButiEngine::StageManager::Start()
 	auto numComponent = wkp_stageNumber.lock()->GetGameComponent<NumberComponent>();
 	numComponent->SetNumber(StageSelect::GetStageNum() + 1);
 
+	if (StageSelect::GetStageNum() == 0)
+	{
+		wkp_talkText = GetManager().lock()->AddObjectFromCereal("TalkText", ObjectFactory::Create<Transform>(Vector3(0, -330, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+		wkp_textWindow = GetManager().lock()->AddObjectFromCereal("TextWindow", ObjectFactory::Create<Transform>(Vector3(0, -330, -0.12f), Vector3::Zero, Vector3(1920, 640, 1)));
+	}
+
+
 	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 0, -0.5f), Vector3::Zero, Vector3(1920, 1080, 1)));
 
 	shp_map->PutTile();

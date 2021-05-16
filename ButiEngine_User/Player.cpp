@@ -8,11 +8,13 @@
 #include"Panel.h"
 #include"FollowPanel.h"
 #include"GravityCore.h"
+#include "TalkText.h"
 #include "Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
 
 void ButiEngine::Player::OnUpdate()
 {
-	if (shp_pauseManager->GetPause())
+	if (shp_pauseManager->GetPause() ||
+		!TalkText::IsDelete())
 	{
 
 		return;
