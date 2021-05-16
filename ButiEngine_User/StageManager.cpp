@@ -19,6 +19,7 @@
 #include"ClearButton.h"
 #include"ControlUI.h"
 #include"ShakeComponent.h"
+#include "TalkText.h"
 
 void ButiEngine::StageManager::OnUpdate()
 {
@@ -86,6 +87,11 @@ void ButiEngine::StageManager::Start()
 	{
 		wkp_talkText = GetManager().lock()->AddObjectFromCereal("TalkText", ObjectFactory::Create<Transform>(Vector3(0, -330, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
 		wkp_textWindow = GetManager().lock()->AddObjectFromCereal("TextWindow", ObjectFactory::Create<Transform>(Vector3(0, -330, -0.12f), Vector3::Zero, Vector3(1920, 640, 1)));
+		GetManager().lock()->AddObjectFromCereal("Abutton", ObjectFactory::Create<Transform>(Vector3(790, -390, -0.16f), Vector3::Zero, Vector3(180, 180, 1)));
+	}
+	else
+	{
+		TalkText::Delete();
 	}
 
 

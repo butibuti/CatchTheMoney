@@ -2,13 +2,11 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class SpliteAnimationComponent;
-
-	class TalkText :public GameComponent
+	class AbuttonAnimation :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "TalkText";
+			return "AbuttonAnimation";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -19,18 +17,13 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-
-		static bool IsDelete() { return isDelete; }
-		static void Delete();
 	private:
-		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
-		
-		int textCount;
-		static bool isDelete;
-
-		void Stage0Text();
+		float currentScale;
+		float previousScale;
+		bool isChange;
+		int changeCount;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(TalkText);
+BUTI_REGIST_GAMECOMPONENT(AbuttonAnimation);

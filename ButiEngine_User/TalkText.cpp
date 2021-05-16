@@ -17,10 +17,8 @@ void ButiEngine::TalkText::OnUpdate()
 
 	if (InputManager::OnTriggerDecisionKey())
 	{
-		//aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-		int count = shp_spriteAnimation->GetVarticalAnim();
 		textCount++;
-		if (textCount <= shp_spriteAnimation->GetVarticalAnim())
+		if (textCount < shp_spriteAnimation->GetVarticalSplitScale())
 		{
 			shp_spriteAnimation->UpdateVarticalAnim(1);
 		}
@@ -55,6 +53,11 @@ void ButiEngine::TalkText::Start()
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::TalkText::Clone()
 {
 	return ObjectFactory::Create<TalkText>();
+}
+
+void ButiEngine::TalkText::Delete()
+{
+	isDelete = true;
 }
 
 void ButiEngine::TalkText::Stage0Text()
