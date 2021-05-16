@@ -11,29 +11,36 @@ namespace ButiEngine {
 
 		inline Transform() {
 			localMatrix = nullptr;
-			rotation = Matrix4x4::RollX(
-				DirectX::XMConvertToRadians(0)
-			) *
-				Matrix4x4::RollY(
-					DirectX::XMConvertToRadians(0)
-				) *
-				Matrix4x4::RollZ(
-					DirectX::XMConvertToRadians(0)
-				);
+			rotation = Matrix4x4();
 		}
 		inline Transform(const Vector3& arg_position, const Vector3& arg_rotate, const Vector3& arg_scale) {
 
 			localPosition = arg_position;
-			rotation = DirectX::XMMatrixRotationX(
-				DirectX::XMConvertToRadians(arg_rotate.x)
+			rotation = Matrix4x4::RollX(
+				MathHelper::ToRadian(arg_rotate.x)
 			) *
-				DirectX::XMMatrixRotationY(
-					DirectX::XMConvertToRadians(arg_rotate.y)
+				Matrix4x4::RollY(
+					MathHelper::ToRadian(arg_rotate.y)
 				) *
-				DirectX::XMMatrixRotationZ(
-					DirectX::XMConvertToRadians(arg_rotate.z)
+				Matrix4x4::RollZ(
+					MathHelper::ToRadian(arg_rotate.z)
 				);
 			scale = arg_scale;
+			localMatrix = nullptr;
+		}
+		inline Transform(const Vector3& arg_position, const Vector3& arg_rotate, const float arg_scale) {
+
+			localPosition = arg_position;
+			rotation = Matrix4x4::RollX(
+				MathHelper::ToRadian(arg_rotate.x)
+			) *
+				Matrix4x4::RollY(
+					MathHelper::ToRadian(arg_rotate.y)
+				) *
+				Matrix4x4::RollZ(
+					MathHelper::ToRadian(arg_rotate.z)
+				);
+			scale = Vector3(arg_scale);
 			localMatrix = nullptr;
 		}
 		inline Transform(const Vector3& arg_position, const Matrix4x4& arg_rotate, const Vector3& arg_scale) {
@@ -43,17 +50,16 @@ namespace ButiEngine {
 			scale = arg_scale;
 			localMatrix = nullptr;
 		}
+		inline Transform(const Vector3& arg_position, const Matrix4x4& arg_rotate, const float arg_scale) {
+
+			localPosition = arg_position;
+			rotation = arg_rotate;
+			scale =Vector3( arg_scale);
+			localMatrix = nullptr;
+		}
 		inline Transform(const Vector3& pos) {
 			localPosition = pos;
-			rotation = DirectX::XMMatrixRotationX(
-				DirectX::XMConvertToRadians(0)
-			) *
-				DirectX::XMMatrixRotationY(
-					DirectX::XMConvertToRadians(0)
-				) *
-				DirectX::XMMatrixRotationZ(
-					DirectX::XMConvertToRadians(0)
-				);
+			rotation = Matrix4x4();
 			localMatrix = nullptr;
 		}
 		void Initialize()override {}
@@ -70,7 +76,7 @@ namespace ButiEngine {
 			Matrix4x4 output = GetLocalMatrix();
 			if (baseTransform != nullptr) {
 				auto baseMatrix = baseTransform->GetMatrix();
-				output = (XMMATRIX)output * (XMMATRIX)baseMatrix;
+				output = output * baseMatrix;
 			}
 			return output;
 		}
@@ -82,7 +88,7 @@ namespace ButiEngine {
 			output._43 = localPosition.z;
 			if (baseTransform != nullptr) {
 				auto baseMatrix = baseTransform->GetMatrix_WithoutScale();
-				output = (XMMATRIX)output * (XMMATRIX)baseMatrix;
+				output = output * baseMatrix;
 			}
 
 			return output;
@@ -108,9 +114,7 @@ namespace ButiEngine {
 			localMatrix = std::make_shared<Matrix4x4>();
 			{
 
-				*localMatrix = Matrix4x4().Scale(scale)*rotation
-					
-					;
+				*localMatrix = Matrix4x4().Scale(scale)*rotation;
 				localMatrix->_41 = localPosition.x;
 				localMatrix->_42 = localPosition.y;
 				localMatrix->_43 = localPosition.z;
@@ -144,7 +148,7 @@ namespace ButiEngine {
 			if (baseTransform == nullptr) {
 				return output;
 			}
-			output = (XMMATRIX)output * baseTransform->GetWorldRotation();
+			output = output * baseTransform->GetWorldRotation();
 			return output;
 		}
 
@@ -181,13 +185,13 @@ namespace ButiEngine {
 				localMatrix = nullptr;
 			}
 			return rotation = Matrix4x4::RollZ(
-				DirectX::XMConvertToRadians(arg_vec3_rotation.z)
+				MathHelper::ToRadian(arg_vec3_rotation.z)
 			) *
 				Matrix4x4::RollY(
-					DirectX::XMConvertToRadians(arg_vec3_rotation.y)
+					MathHelper::ToRadian(arg_vec3_rotation.y)
 				) *
 				Matrix4x4::RollX(
-					DirectX::XMConvertToRadians(arg_vec3_rotation.x)
+					MathHelper::ToRadian(arg_vec3_rotation.x)
 				);
 		}
 		inline const Matrix4x4& SetLocalRotation_radian(const Vector3& arg_vec3_rotation) {
@@ -206,7 +210,7 @@ namespace ButiEngine {
 				);
 		}
 		inline const Matrix4x4& RollLocalRotationX_Degrees(const float arg_x) {
-			return RollLocalRotationX_Radian(XMConvertToRadians(arg_x));
+			return RollLocalRotationX_Radian(MathHelper::ToRadian(arg_x));
 
 		}
 		inline const Matrix4x4& RollLocalRotationX_Radian(const float arg_x) {
@@ -221,7 +225,7 @@ namespace ButiEngine {
 		}
 		inline const Matrix4x4& RollWorldRotationX_Degrees(const float arg_x) {
 
-			return RollWorldRotationX_Radian(XMConvertToRadians(arg_x));
+			return RollWorldRotationX_Radian(MathHelper::ToRadian(arg_x));
 
 		}
 		inline const Matrix4x4& RollWorldRotationX_Radian(const float arg_x) {
@@ -236,7 +240,7 @@ namespace ButiEngine {
 		}
 
 		inline const Matrix4x4& RollLocalRotationY_Degrees(const float arg_y) {
-			return RollLocalRotationY_Radian(XMConvertToRadians(arg_y));
+			return RollLocalRotationY_Radian(MathHelper::ToRadian(arg_y));
 
 		}
 		inline const Matrix4x4& RollLocalRotationY_Radian(const float arg_y) {
@@ -251,7 +255,7 @@ namespace ButiEngine {
 		}
 		inline const Matrix4x4& RollWorldRotationY_Degrees(const float arg_y) {
 
-			return RollWorldRotationY_Radian(XMConvertToRadians(arg_y));
+			return RollWorldRotationY_Radian(MathHelper::ToRadian(arg_y));
 
 		}
 		inline const Matrix4x4& RollWorldRotationY_Radian(const float arg_y) {
@@ -266,7 +270,7 @@ namespace ButiEngine {
 		}
 
 		inline const Matrix4x4& RollLocalRotationZ_Degrees(const float arg_z) {
-			return RollLocalRotationZ_Radian(XMConvertToRadians(arg_z));
+			return RollLocalRotationZ_Radian(MathHelper::ToRadian(arg_z));
 
 		}
 		inline const Matrix4x4& RollLocalRotationZ_Radian(const float arg_z) {
@@ -281,7 +285,7 @@ namespace ButiEngine {
 		}
 		inline const Matrix4x4& RollWorldRotationZ_Degrees(const float arg_z) {
 
-			return RollWorldRotationZ_Radian(XMConvertToRadians(arg_z));
+			return RollWorldRotationZ_Radian(MathHelper::ToRadian(arg_z));
 
 		}
 		inline const Matrix4x4& RollWorldRotationZ_Radian(const float arg_z) {
@@ -299,29 +303,29 @@ namespace ButiEngine {
 			if (localMatrix) {
 				localMatrix = nullptr;
 			}
-			return rotation = DirectX::XMMatrixRotationX(
-				DirectX::XMConvertToRadians(arg_vec3_rotation.x)
+			return rotation = Matrix4x4::RollX(
+				MathHelper::ToRadian(arg_vec3_rotation.x)
 			) *
-				DirectX::XMMatrixRotationY(
-					DirectX::XMConvertToRadians(arg_vec3_rotation.y)
+				Matrix4x4::RollY(
+					MathHelper::ToRadian(arg_vec3_rotation.y)
 				) *
-				DirectX::XMMatrixRotationZ(
-					DirectX::XMConvertToRadians(arg_vec3_rotation.z)
-				) * (XMMATRIX)rotation;
+				Matrix4x4::RollZ(
+					MathHelper::ToRadian(arg_vec3_rotation.z)
+				) * rotation;
 		}
 		inline const Matrix4x4& RollWorldBase(const Vector3& arg_vec3_rotation)
 		{
 			if (localMatrix) {
 				localMatrix = nullptr;
 			}
-			return rotation = (XMMATRIX)rotation * DirectX::XMMatrixRotationX(
-				DirectX::XMConvertToRadians(arg_vec3_rotation.x)
+			return rotation = rotation * Matrix4x4::RollX(
+				MathHelper::ToRadian(arg_vec3_rotation.x)
 			) *
-				DirectX::XMMatrixRotationY(
-					DirectX::XMConvertToRadians(arg_vec3_rotation.y)
+				Matrix4x4::RollY(
+					MathHelper::ToRadian(arg_vec3_rotation.y)
 				) *
-				DirectX::XMMatrixRotationZ(
-					DirectX::XMConvertToRadians(arg_vec3_rotation.z)
+				Matrix4x4::RollZ(
+					MathHelper::ToRadian(arg_vec3_rotation.z)
 				);
 		}
 		inline const Matrix4x4& RollWorldRotation(const Quat& arg_rotation) {
@@ -439,7 +443,7 @@ namespace ButiEngine {
 			if (localMatrix) {
 				localMatrix = nullptr;
 			}
-			rotation = (XMMATRIX)rotation * (XMMATRIX)arg_rotation;
+			rotation = rotation * arg_rotation;
 
 
 			return rotation;
@@ -531,7 +535,7 @@ namespace ButiEngine {
 			return scale;
 		}
 		inline  Matrix4x4 GetLocalScaleMatrix() const {
-			return DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
+			return Matrix4x4::Scale(scale);
 		}
 		inline Vector3 GetWorldScale() const
 		{
@@ -645,7 +649,7 @@ namespace ButiEngine {
 			Matrix4x4 output = GetLocalMatrix();
 			if (parentBoneTransform != nullptr) {
 				auto baseMatrix = parentBoneTransform->GetBoneMatrix();
-				output = (XMMATRIX)output * (XMMATRIX)baseMatrix;
+				output =output * baseMatrix;
 			}
 			return output;
 		}
@@ -655,7 +659,7 @@ namespace ButiEngine {
 			Matrix4x4 output = GetLocalMatrix();
 			if (parentBoneTransform != nullptr) {
 				auto baseMatrix = parentBoneTransform->GetBoneMatrix();
-				output = (XMMATRIX)output * (XMMATRIX)baseMatrix;
+				output = output * baseMatrix;
 			}
 			return Vector3( output._41, output._42, output._43);
 		}

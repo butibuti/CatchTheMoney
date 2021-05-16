@@ -6,8 +6,8 @@ namespace ButiEngine {
 	public:
 		~MeshHelper();
 		static void ReverseWinding(std::vector<Vertex::Vertex_UV_Normal_Color>& ref_vertices, std::vector<UINT>& ref_indices);
-		static DirectX::XMVECTOR GetCircleTangent(int i, int tessellation);
-		static DirectX::XMVECTOR GetCircleVector(int size, int tessellation);
+		static Vector3 GetCircleTangent(int i, int tessellation);
+		static Vector3 GetCircleVector(int size, int tessellation);
 		
 		//
 		static void CreateTriangle(Vector3 point1, Vector3 point2, Vector3 point3, const std::vector<Color>& arg_colors, bool flat, BackupData<Vertex::Vertex_UV_Normal_Color>& outputMeshData);

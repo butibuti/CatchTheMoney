@@ -38,8 +38,8 @@ namespace ButiEngine {
             Box_AABB(const Vector3& arg_lengthes) : halfLengthes(arg_lengthes / 2) {}
 
             inline float GetLength(const UINT index)const { return *(&halfLengthes.x + index); }
-            inline float GetMin(const UINT index)const { return position.Get(index) - *(&halfLengthes.x + index); }
-            inline float GetMax(const UINT index)const { return position.Get(index) + *(&halfLengthes.x + index); }
+            inline float GetMin(const UINT index)const { return position[index] - *(&halfLengthes.x + index); }
+            inline float GetMax(const UINT index)const { return position[index] + *(&halfLengthes.x + index); }
             inline Vector3 GetMinPoint()const { return position -halfLengthes ; }
             inline Vector3 GetMaxPoint()const { return position + halfLengthes; }
         };
@@ -169,15 +169,15 @@ namespace ButiEngine {
             static inline bool IsContainPointInPolygon(const Vector3& arg_point, const Vector3& arg_normal, const Vector3& arg_vertex1, const Vector3& arg_vertex2, const Vector3& arg_vertex3) {
                 
                  
-                if (!(arg_normal -Vector3(arg_vertex2 - arg_vertex1).Cross(Vector3(arg_point - arg_vertex1)).GetNormalize()).isMinEps()) {
+                if (!(arg_normal -Vector3(arg_vertex2 - arg_vertex1).Cross(Vector3(arg_point - arg_vertex1)).GetNormalize()).IsMinEps()) {
 
                     return false;
                 }
-                if (!(arg_normal - Vector3(arg_vertex3 - arg_vertex2).Cross(Vector3(arg_point - arg_vertex2)).GetNormalize()).isMinEps()) {
+                if (!(arg_normal - Vector3(arg_vertex3 - arg_vertex2).Cross(Vector3(arg_point - arg_vertex2)).GetNormalize()).IsMinEps()) {
 
                     return false;
                 }
-                if (!(arg_normal - Vector3(arg_vertex1 - arg_vertex3).Cross(Vector3(arg_point - arg_vertex3)).GetNormalize()).isMinEps()) {
+                if (!(arg_normal - Vector3(arg_vertex1 - arg_vertex3).Cross(Vector3(arg_point - arg_vertex3)).GetNormalize()).IsMinEps()) {
 
                     return false;
                 }
@@ -659,10 +659,10 @@ namespace ButiEngine {
 
                 for (int i = 0; i < 3; i++)
                 {
-                    if (arg_point.Get(i) < arg_box.GetMin(i))  // i=0はX、1はY、2はZの意味です
-                        SqLen += (arg_point.Get(i) - arg_box.GetMin(i)) * (arg_point.Get(i) - arg_box.GetMin(i));
-                    if (arg_point.Get(i) > arg_box.GetMax(i))
-                        SqLen += (arg_point.Get(i) - arg_box.GetMax(i)) * (arg_point.Get(i) - arg_box.GetMax(i));
+                    if (arg_point[i] < arg_box.GetMin(i))  // i=0はX、1はY、2はZの意味です
+                        SqLen += (arg_point[i] - arg_box.GetMin(i)) * (arg_point[i] - arg_box.GetMin(i));
+                    if (arg_point[i] > arg_box.GetMax(i))
+                        SqLen += (arg_point[i] - arg_box.GetMax(i)) * (arg_point[i] - arg_box.GetMax(i));
                 }
                 return SqLen;
             }

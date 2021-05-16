@@ -123,7 +123,7 @@ namespace ButiEngine
 	public:
 		virtual void Initialize(const std::string arg_windowName, const WindowPopType arg_popType, bool isFullScreen, UINT width = 0, UINT height = 0)=0;
 		virtual HWND GetHandle()=0;
-		virtual DirectX::XMUINT2 GetSize()=0;
+		virtual UInt2 GetSize()=0;
 		virtual Vector2 GetWindowCenterPosition()=0;
 		virtual void SetSize(int width, int height)=0;
 		virtual bool Update()=0;

@@ -1,17 +1,131 @@
 #pragma once
-#include <DirectXMath.h>
-#include<vector>
-using namespace DirectX;
-
+#ifndef BUTI_MATH_H
+#define BUTI_MATH_H
 namespace ButiEngine {
+	static const float BM_PI = 3.141592654f;
+	static const float BM_2PI = 6.283185307f;
+	static const float BM_1DIVPI = 0.318309886f;
+	static const float BM_1DIV2PI = 0.159154943f;
+	static const float BM_PIDIV2 = 1.570796327f;
+	static const float BM_PIDIV4 = 0.785398163f;
+	static const char BM_CHAR_MAX = 127;
+	static const short int BM_SHORT_MAX = 32767;
+	static const int BM_INT_MAX = 2147483647;
+	static const unsigned char BM_UCHAR_MAX = 256;
+	static const unsigned short int BM_USHORT_MAX = 65535;
+	static const unsigned int BM_UINT_MAX = 4294967295;
 
+
+	namespace MathHelper {
+
+		static void SinCos(float& ref_Sin, float& ref_Cos, const float  Value)
+		{
+			float quotient = BM_1DIV2PI * Value;
+			if (Value >= 0.0f)
+			{
+				quotient = static_cast<float>(static_cast<int>(quotient + 0.5f));
+			}
+			else
+			{
+				quotient = static_cast<float>(static_cast<int>(quotient - 0.5f));
+			}
+			float y = Value - BM_2PI * quotient;
+
+			float sign;
+			if (y > BM_PIDIV2)
+			{
+				y = BM_PI - y;
+				sign = -1.0f;
+			}
+			else if (y < -BM_PIDIV2)
+			{
+				y = -BM_PI - y;
+				sign = -1.0f;
+			}
+			else
+			{
+				sign = +1.0f;
+			}
+
+			float y2 = y * y;
+
+			ref_Sin = (((((-2.3889859e-08f * y2 + 2.7525562e-06f) * y2 - 0.00019840874f) * y2 + 0.0083333310f) * y2 - 0.16666667f) * y2 + 1.0f) * y;
+
+			float p = ((((-2.6051615e-07f * y2 + 2.4760495e-05f) * y2 - 0.0013888378f) * y2 + 0.041666638f) * y2 - 0.5f) * y2 + 1.0f;
+			ref_Cos = sign * p;
+		}
+		static double Ceil(const double dSrc,const int iLen)
+		{
+			double	dRet;
+
+			dRet = dSrc * pow(10.0, iLen);
+			dRet = (double)(int)(dRet + 0.9);
+
+			return dRet * pow(10.0, -iLen);
+		}
+		static double Floor(const double dSrc,const int iLen)
+		{
+			double dRet;
+
+			dRet = dSrc * pow(10.0, iLen);
+			dRet = (double)(int)(dRet);
+
+			return dRet * pow(10.0, -iLen);
+		}
+		static double Round(const double dSrc,const int iLen)
+		{
+			double	dRet;
+
+			dRet = dSrc * pow(10.0, iLen);
+			dRet = (double)(int)(dRet + 0.5);
+
+			return dRet * pow(10.0, -iLen);
+		}
+
+		static float ToRadian(const float deg) {
+
+			return deg * BM_PI / 180.0f;
+		}
+		static float ToDegree(const float rad) {
+
+			return rad * 180.0f / BM_PI;
+		}
+
+		static char GetByteSize(const int arg_check) {
+
+			if (arg_check <= BM_CHAR_MAX) {
+				return 1;
+			}
+			else if (arg_check <=BM_SHORT_MAX ) {
+				return 2;
+			}
+			else if (arg_check <=BM_INT_MAX ) {
+				return 4;
+			}
+
+			return 8;
+		}
+		static char GetUnsignedByteSize(const UINT arg_check) {
+
+			if (arg_check <= BM_UCHAR_MAX) {
+				return 1;
+			}
+			else if (arg_check <= BM_USHORT_MAX) {
+				return 2;
+			}
+			else if (arg_check <= BM_UINT_MAX) {
+				return 4;
+			}
+			return 8;
+		}
+	}
 	struct Vector2;
 	struct Vector3;
 	struct Vector4;
 	struct Quat;
 	struct Matrix4x4;
 
-	struct UInt2 :public DirectX::XMUINT2 {
+	struct UInt2   {
 		inline UInt2(int arg_x, int arg_y) {
 			x = arg_x;
 			y = arg_y;
@@ -20,85 +134,178 @@ namespace ButiEngine {
 			x = 0;
 			y = 0;
 		}
+#ifdef USE_DIRECTXMATH
+
+		operator DirectX::XMUINT2() {
+			return *(XMUINT2*)((void*)this);
+		}
+#endif // USE_DIRECTXMATH
+
 
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
 			archive(x, y);
 		}
+		unsigned int x, y;
 	};
 
-	struct Matrix4x4 :public DirectX::XMFLOAT4X4
+	struct Matrix4x4 
 	{
-	public:
-		inline Matrix4x4() {
-			_11 = 1.0f;
-			_12 = 0.0f;
-			_13 = 0.0f;
-			_14 = 0.0f;
-
-			_21 = 0.0f;
-			_22 = 1.0f;
-			_23 = 0.0f;
-			_24 = 0.0f;
-
-			_31 = 0.0f;
-			_32 = 0.0f;
-			_33 = 1.0f;
-			_34 = 0.0f;
-
-			_41 = 0.0f;
-			_42 = 0.0f;
-			_43 = 0.0f;
-			_44 = 1.0f;
-		}
-		inline Matrix4x4(const DirectX::XMMATRIX other)
-		{
-			DirectX::XMMATRIX tmp = other;
-			DirectX::XMStoreFloat4x4(this, tmp);
+		explicit inline Matrix4x4() {
+			_11 = 1.0f;	_12 = 0.0f;	_13 = 0.0f;	_14 = 0.0f;
+			_21 = 0.0f;	_22 = 1.0f;	_23 = 0.0f;	_24 = 0.0f;
+			_31 = 0.0f;	_32 = 0.0f;	_33 = 1.0f;	_34 = 0.0f;
+			_41 = 0.0f;	_42 = 0.0f;	_43 = 0.0f;	_44 = 1.0f;
 		}
 		explicit inline Matrix4x4(const Quat& quat);
-		inline Matrix4x4& operator=(const DirectX::XMMATRIX& other)
-		{
-			DirectX::XMStoreFloat4x4(this, other);
-			return *this;
-		}
 		bool ShowUI() { return false; }
-		inline Vector4 operator*(const Vector4& vec4);
+		inline Vector4 operator*(const Vector4& other);
+		inline Vector3 operator*(const Vector3& other);
 
-		inline Matrix4x4 operator*(const Matrix4x4& arg_matrix)const {
-			return (XMMATRIX)(*this) * (XMMATRIX)arg_matrix;
-		}
-		inline Matrix4x4 operator*=(const Matrix4x4& arg_matrix) {
-			*this= (XMMATRIX)(*this) * (XMMATRIX)arg_matrix;
-			return *this;
-		}
+		inline Matrix4x4 operator*(const Matrix4x4& other)const {
+			Matrix4x4 output;
+			float x = this->_11;
+			float y = this->_12;
+			float z = this->_13;
+			float w = this->_14;
 
-		inline operator DirectX::XMMATRIX() const
-		{
-			auto tmp = *this;
-			auto output = DirectX::XMLoadFloat4x4(&tmp);
+			output._11 = (other._11 * x) + (other._21 * y) + (other._31 * z) + (other._41 * w);
+			output._12 = (other._12 * x) + (other._22 * y) + (other._32 * z) + (other._42 * w);
+			output._13 = (other._13 * x) + (other._23 * y) + (other._33 * z) + (other._43 * w);
+			output._14 = (other._14 * x) + (other._24 * y) + (other._34 * z) + (other._44 * w);
+			
+
+			x = this->_21;
+			y = this->_22;
+			z = this->_23;
+			w = this->_24;
+			output._21 = (other._11 * x) + (other._21 * y) + (other._31 * z) + (other._41 * w);
+			output._22 = (other._12 * x) + (other._22 * y) + (other._32 * z) + (other._42 * w);
+			output._23 = (other._13 * x) + (other._23 * y) + (other._33 * z) + (other._43 * w);
+			output._24 = (other._14 * x) + (other._24 * y) + (other._34 * z) + (other._44 * w);
+			x = this->_31;
+			y = this->_32;
+			z = this->_33;
+			w = this->_34;
+			output._31 = (other._11 * x) + (other._21 * y) + (other._31 * z) + (other._41 * w);
+			output._32 = (other._12 * x) + (other._22 * y) + (other._32 * z) + (other._42 * w);
+			output._33 = (other._13 * x) + (other._23 * y) + (other._33 * z) + (other._43 * w);
+			output._34 = (other._14 * x) + (other._24 * y) + (other._34 * z) + (other._44 * w);
+			x = this->_41;
+			y = this->_42;
+			z = this->_43;
+			w = this->_44;
+			output._41 = (other._11 * x) + (other._21 * y) + (other._31 * z) + (other._41 * w);
+			output._42 = (other._12 * x) + (other._22 * y) + (other._32 * z) + (other._42 * w);
+			output._43 = (other._13 * x) + (other._23 * y) + (other._33 * z) + (other._43 * w);
+			output._44 = (other._14 * x) + (other._24 * y) + (other._34 * z) + (other._44 * w);
+
 			return output;
 		}
+		inline Matrix4x4 operator*=(const Matrix4x4& other) {
+			*this=(*this) * other;
+			return *this;
+		}
+
+		inline Vector4& operator [](const unsigned int idx);
+
+
+		inline Vector4 operator [](const unsigned int idx) const;
+
 		inline Matrix4x4& Identity()
 		{
-			*this = (Matrix4x4)DirectX::XMMatrixIdentity();
+			_11 = 1.0f;	_12 = 0.0f;	_13 = 0.0f;	_14 = 0.0f;
+			_21 = 0.0f;	_22 = 1.0f;	_23 = 0.0f;	_24 = 0.0f;
+			_31 = 0.0f;	_32 = 0.0f;	_33 = 1.0f;	_34 = 0.0f;
+			_41 = 0.0f;	_42 = 0.0f;	_43 = 0.0f;	_44 = 1.0f;
 			return *this;
 		}
 		inline Matrix4x4& Transpose() {
 
-			*this = (Matrix4x4)XMMatrixTranspose(*this);
+			Matrix4x4 temp = *this;
+
+			this->_12 = temp._21; this->_13 = temp._31; this->_14 = temp._41;
+			this->_21 = temp._12; this->_23 = temp._32; this->_24 = temp._42;
+			this->_31 = temp._13; this->_32 = temp._23; this->_34 = temp._43;
+			this->_41 = temp._14; this->_42 = temp._24; this->_43 = temp._34;
+
 			return *this;
 		}
 		inline Matrix4x4 GetTranspose() const {
-			return  (Matrix4x4)XMMatrixTranspose(*this);
+			Matrix4x4 output;
+
+			output._12 = this->_21; output._13 = this->_31; output._14 = this->_41;
+			output._21 = this->_12; output._23 = this->_32; output._24 = this->_42;
+			output._31 = this->_13; output._32 = this->_23; output._34 = this->_43;
+			output._41 = this->_14; output._42 = this->_24; output._43 = this->_34;
+			output._11 = this->_11; output._22= this->_22; output._33 = this->_33; output._44 = this->_44;
+			return output;
 		}
 		inline Matrix4x4& Inverse() {
-			*this = (Matrix4x4)XMMatrixInverse(nullptr, *this);
+
+			float a =this->_11,b = this->_12, c = this->_13, d = this->_14,
+				e = this->_21, f = this->_22, g = this->_23, h = this->_24,
+				i = this->_31, j = this->_32, k = this->_33, l = this->_34,
+				m = this->_41, n = this->_42, o = this->_43, p = this->_44,
+				q = a * f - b * e, r = a * g - c * e,
+				s = a * h - d * e, t = b * g - c * f,
+				u = b * h - d * f, v = c * h - d * g,
+				w = i * n - j * m, x = i * o - k * m,
+				y = i * p - l * m, z = j * o - k * n,
+				A = j * p - l * n, B = k * p - l * o,
+				ivd = 1 / (q * B - r * A + s * z + t * y - u * x + v * w);
+			this->_11 = (f * B - g * A + h * z) * ivd;
+			this->_12 = (-b * B + c * A - d * z) * ivd;
+			this->_13 = (n * v - o * u + p * t) * ivd;
+			this->_14= (-j * v + k * u - l * t) * ivd;
+			this->_21= (-e * B + g * y - h * x) * ivd;
+			this->_22= (a * B - c * y + d * x) * ivd;
+			this->_23= (-m * v + o * s - p * r) * ivd;
+			this->_24= (i * v - k * s + l * r) * ivd;
+			this->_31= (e * A - f * y + h * w) * ivd;
+			this->_32= (-a * A + b * y - d * w) * ivd;
+			this->_33 = (m * u - n * s + p * q) * ivd;
+			this->_34 = (-i * u + j * s - l * q) * ivd;
+			this->_41 = (-e * z + f * x - g * w) * ivd;
+			this->_42 = (a * z - b * x + c * w) * ivd;
+			this->_43 = (-m * t + n * r - o * q) * ivd;
+			this->_44 = (i * t - j * r + k * q) * ivd;
+
+
 			return *this;
 		}
 		inline Matrix4x4 GetInverse()const {
-			return (Matrix4x4)XMMatrixInverse(nullptr, *this);
+
+			Matrix4x4 output;
+			float a = this->_11, b = this->_12, c = this->_13, d = this->_14,
+				e = this->_21, f = this->_22, g = this->_23, h = this->_24,
+				i = this->_31, j = this->_32, k = this->_33, l = this->_34,
+				m = this->_41, n = this->_42, o = this->_43, p = this->_44,
+				q = a * f - b * e, r = a * g - c * e,
+				s = a * h - d * e, t = b * g - c * f,
+				u = b * h - d * f, v = c * h - d * g,
+				w = i * n - j * m, x = i * o - k * m,
+				y = i * p - l * m, z = j * o - k * n,
+				A = j * p - l * n, B = k * p - l * o,
+				ivd = 1 / (q * B - r * A + s * z + t * y - u * x + v * w);
+			output._11 = (f * B - g * A + h * z) * ivd;
+			output._12 = (-b * B + c * A - d * z) * ivd;
+			output._13 = (n * v - o * u + p * t) * ivd;
+			output._14 = (-j * v + k * u - l * t) * ivd;
+			output._21 = (-e * B + g * y - h * x) * ivd;
+			output._22 = (a * B - c * y + d * x) * ivd;
+			output._23 = (-m * v + o * s - p * r) * ivd;
+			output._24 = (i * v - k * s + l * r) * ivd;
+			output._31 = (e * A - f * y + h * w) * ivd;
+			output._32 = (-a * A + b * y - d * w) * ivd;
+			output._33 = (m * u - n * s + p * q) * ivd;
+			output._34 = (-i * u + j * s - l * q) * ivd;
+			output._41 = (-e * z + f * x - g * w) * ivd;
+			output._42 = (a * z - b * x + c * w) * ivd;
+			output._43 = (-m * t + n * r - o * q) * ivd;
+			output._44 = (i * t - j * r + k * q) * ivd;
+			return output;
 		}
 		inline Matrix4x4 GetInValidYZ()const {
 			Matrix4x4 output = *this;
@@ -142,8 +349,6 @@ namespace ButiEngine {
 		}
 		inline Quat ToQuat()const;
 
-		inline void Decompose(Vector3& rScaling, Quat& rQt, Vector3& rTranslation)const;
-
 		inline Vector3 GetEulerOneValue()const;
 		inline Vector3 GetEulerOneValue_local()const;
 
@@ -183,88 +388,207 @@ namespace ButiEngine {
 		inline Matrix4x4 GetPositionXZFloor_transpose()const;
 		inline Matrix4x4 GetOnlyRotation_transpose()const;
 		inline void RemovePosition();
+		static inline Matrix4x4 Translate(const Vector3& arg_position);
 		static inline Matrix4x4 Scale(const Vector3& arg_scale);
 
-		static inline Matrix4x4 RollX(const float Angle) {
+		static inline Matrix4x4 RollX(const float angle) {
 			float    fSinAngle;
 			float    fCosAngle;
-			DirectX::XMScalarSinCos(&fSinAngle, &fCosAngle, Angle);
+			MathHelper::SinCos(fSinAngle, fCosAngle, angle);
 
-			Matrix4x4 M;
-			M._11 = 1.0f;
-			M._12 = 0.0f;
-			M._13 = 0.0f;
-			M._14= 0.0f;
+			Matrix4x4 output;
+			output._11 = 1.0f;
+			output._12 = 0.0f;
+			output._13 = 0.0f;
+			output._14= 0.0f;
 
-			M._21 = 0.0f;
-			M._22 = fCosAngle;
-			M._23 = fSinAngle;
-			M._24 = 0.0f;
+			output._21 = 0.0f;
+			output._22 = fCosAngle;
+			output._23 = fSinAngle;
+			output._24 = 0.0f;
 
-			M._31 = 0.0f;
-			M._32 = -fSinAngle;
-			M._33 = fCosAngle;
-			M._34 = 0.0f;
+			output._31 = 0.0f;
+			output._32 = -fSinAngle;
+			output._33 = fCosAngle;
+			output._34 = 0.0f;
 
-			M._41 = 0.0f;
-			M._42 = 0.0f;
-			M._43 = 0.0f;
-			M._44 = 1.0f;
-			return M;
+			output._41 = 0.0f;
+			output._42 = 0.0f;
+			output._43 = 0.0f;
+			output._44 = 1.0f;
+			return output;
 		}
-		static inline Matrix4x4 RollY(const float Angle) {
+		static inline Matrix4x4 RollY(const float angle) {
 			float    fSinAngle;
 			float    fCosAngle;
-			XMScalarSinCos(&fSinAngle, &fCosAngle, Angle);
+			MathHelper::SinCos(fSinAngle, fCosAngle, angle);
 
-			Matrix4x4 M;
-			M._11 = fCosAngle;
-			M._12 = 0.0f;
-			M._13 = -fSinAngle;
-			M._14 =  0.0f;
+			Matrix4x4 output;
+			output._11 = fCosAngle;
+			output._12 = 0.0f;
+			output._13 = -fSinAngle;
+			output._14 =  0.0f;
 
-			M._21 = 0.0f;
-			M._22 = 1.0f;
-			M._23 = 0.0f;
-			M._24 = 0.0f;
+			output._21 = 0.0f;
+			output._22 = 1.0f;
+			output._23 = 0.0f;
+			output._24 = 0.0f;
 
-			M._31 = fSinAngle;
-			M._32 = 0.0f;
-			M._33 = fCosAngle;
-			M._34 = 0.0f;
+			output._31 = fSinAngle;
+			output._32 = 0.0f;
+			output._33 = fCosAngle;
+			output._34 = 0.0f;
 
-			M._41 = 0.0f;
-			M._42 = 0.0f;
-			M._43 = 0.0f;
-			M._44 = 1.0f;
-			return M;
+			output._41 = 0.0f;
+			output._42 = 0.0f;
+			output._43 = 0.0f;
+			output._44 = 1.0f;
+			return output;
 		}
-		static inline Matrix4x4 RollZ(const float Angle) {
+		static inline Matrix4x4 RollZ(const float angle) {
 			float    fSinAngle;
 			float    fCosAngle;
-			XMScalarSinCos(&fSinAngle, &fCosAngle, Angle);
+			MathHelper::SinCos(fSinAngle, fCosAngle, angle);
 
-			Matrix4x4 M;
-			M._11 = fCosAngle;
-			M._12 = fSinAngle;
-			M._13 = 0.0f;
-			M._14 = 0.0f;
+			Matrix4x4 output;
+			output._11 = fCosAngle;
+			output._12 = fSinAngle;
+			output._13 = 0.0f;
+			output._14 = 0.0f;
 
-			M._21 = -fSinAngle;
-			M._22 = fCosAngle;
-			M._23 = 0.0f;
-			M._24 = 0.0f;
+			output._21 = -fSinAngle;
+			output._22 = fCosAngle;
+			output._23 = 0.0f;
+			output._24 = 0.0f;
 
-			M._31 = 0.0f;
-			M._32 = 0.0f;
-			M._33 = 1.0f;
-			M._34 = 0.0f;
+			output._31 = 0.0f;
+			output._32 = 0.0f;
+			output._33 = 1.0f;
+			output._34 = 0.0f;
 
-			M._41 = 0.0f;
-			M._42 = 0.0f;
-			M._43 = 0.0f;
-			M._44 = 1.0f;
-			return M;
+			output._41 = 0.0f;
+			output._42 = 0.0f;
+			output._43 = 0.0f;
+			output._44 = 1.0f;
+			return output;
+		}
+
+		static Matrix4x4 PersepectiveFovLH(const float fovAngleY, const float aspectRate, const float nearClip, const float farClip) {
+			float    SinFov;
+			float    CosFov;
+			MathHelper::SinCos(SinFov, CosFov, fovAngleY * 0.5f);
+
+			float Height = CosFov / SinFov;
+			float Width = Height / aspectRate;
+			float fRange = farClip / (farClip - nearClip);
+
+			Matrix4x4 output;
+			output._11 = Width;
+			output._12 = 0.0f;
+			output._13 = 0.0f;
+			output._14 = 0.0f;
+
+			output._21 = 0.0f;
+			output._22 = Height;
+			output._23 = 0.0f;
+			output._24 = 0.0f;
+
+			output._31 = 0.0f;
+			output._32 = 0.0f;
+			output._33 = fRange;
+			output._34 = 1.0f;
+
+			output._41 = 0.0f;
+			output._42 = 0.0f;
+			output._43 = -fRange * nearClip;
+			output._44 = 0.0f;
+			return output;
+		}
+		static Matrix4x4 PersepectiveFovRH(const float fovAngleY, const float aspectRate, const float nearClip, const float farClip) {
+			float    SinFov;
+			float    CosFov;
+			MathHelper::SinCos(SinFov, CosFov, fovAngleY * 0.5f);
+
+			float Height = CosFov / SinFov;
+			float Width = Height / aspectRate;
+			float fRange = farClip / (farClip - nearClip);
+
+			Matrix4x4 output;
+			output._11 = Width;
+			output._12 = 0.0f;
+			output._13 = 0.0f;
+			output._14 = 0.0f;
+
+			output._21 = 0.0f;
+			output._22 = Height;
+			output._23 = 0.0f;
+			output._24 = 0.0f;
+
+			output._31 = 0.0f;
+			output._32 = 0.0f;
+			output._33 = fRange;
+			output._34 = -1.0f;
+
+			output._41 = 0.0f;
+			output._42 = 0.0f;
+			output._43 = fRange * nearClip;
+			output._44 = 0.0f;
+			return output;
+		}
+		static Matrix4x4 OrthographicOffCenterLH(const float viewLeft, const float viewRight, const float viewBottom, const float viewTop, const float nearClip, const float farClip) {
+			float reciprocalWidth = 1.0f / (viewRight - viewLeft);
+			float reciprocalHeight = 1.0f / (viewTop - viewBottom);
+			float fRange = 1.0f / (farClip - nearClip);
+
+			Matrix4x4 output;
+			output._11 = reciprocalWidth + reciprocalWidth;
+			output._12 = 0.0f;
+			output._13 = 0.0f;
+			output._14 = 0.0f;
+
+			output._21 = 0.0f;
+			output._22 = reciprocalHeight + reciprocalHeight;
+			output._23 = 0.0f;
+			output._24 = 0.0f;
+
+			output._31 = 0.0f;
+			output._32 = 0.0f;
+			output._33 = fRange;
+			output._34 = 0.0f;
+
+			output._41 = -(viewLeft + viewRight) * reciprocalWidth;
+			output._42 = -(viewTop + viewBottom) * reciprocalHeight;
+			output._43 = -fRange * nearClip;
+			output._44 = 1.0f;
+			return output;
+		}
+		static Matrix4x4 OrthographicOffCenterRH(const float viewLeft, const float viewRight, const float viewBottom, const float viewTop, const float nearClip, const float farClip) {
+			float reciprocalWidth = 1.0f / (viewRight - viewLeft);
+			float reciprocalHeight = 1.0f / (viewTop - viewBottom);
+			float fRange = 1.0f / (nearClip - farClip);
+
+			Matrix4x4 output;
+			output._11 = reciprocalWidth + reciprocalWidth;
+			output._12 = 0.0f;
+			output._13 = 0.0f;
+			output._14 = 0.0f;
+
+			output._21 = 0.0f;
+			output._22 = reciprocalHeight + reciprocalHeight;
+			output._23 = 0.0f;
+			output._24 = 0.0f;
+
+			output._31 = 0.0f;
+			output._32 = 0.0f;
+			output._33 = fRange;
+			output._34 = 0.0f;
+
+			output._41 = -(viewLeft + viewRight) * reciprocalWidth;
+			output._42 = -(viewTop + viewBottom) * reciprocalHeight;
+			output._43 = fRange * nearClip;
+			output._44 = 1.0f;
+
+			return output;
 		}
 		~Matrix4x4() {}
 
@@ -277,25 +601,60 @@ namespace ButiEngine {
 			archive(this->_31, this->_32, this->_33, this->_34);
 			archive(this->_41, this->_42, this->_43, this->_44);
 		}
-	};
-	struct Vector2 :public DirectX::XMFLOAT2
-	{
-		inline Vector2(const DirectX::XMVECTOR other)
+
+#ifdef USE_DIRECTXMATH
+
+		//DirectXMathとの互換
+		inline Matrix4x4(const DirectX::XMMATRIX other)
 		{
-
-			DirectX::XMVECTOR temp = other;
-			DirectX::XMStoreFloat2(this, temp);
+			DirectX::XMMATRIX tmp = other;
+			DirectX::XMStoreFloat4x4((XMFLOAT4X4*)((void*)this), tmp);
+		}
+		inline Matrix4x4& operator=(const DirectX::XMMATRIX& other)
+		{
+			DirectX::XMStoreFloat4x4((XMFLOAT4X4*)((void*)this), other);
+			return *this;
+		}
+		inline operator DirectX::XMMATRIX() const
+		{
+			auto output = DirectX::XMLoadFloat4x4((XMFLOAT4X4*)((void*)this));
+			return output;
+		}
+#endif
+		union
+		{
+			struct
+			{
+				float _11, _12, _13, _14;
+				float _21, _22, _23, _24;
+				float _31, _32, _33, _34;
+				float _41, _42, _43, _44;
+			};
+			float m[4][4];
 		};
+	};
 
-		inline Vector2(float x, float y)
+	struct Vector2 
+	{
+		float x;
+		float y;
+		explicit inline Vector2(float x, float y)
 		{
 			this->x = x;
 			this->y = y;
 		}
 
-		inline Vector2() {
+		explicit inline Vector2() {
 			this->x = 0;
 			this->y = 0;
+		}
+		inline Vector2(const Vector2& other) {
+			this->x = other.x;
+			this->y = other.y;
+		}
+		inline Vector2(const float value) {
+			this->x = value;
+			this->y = value;
 		}
 
 		inline ~Vector2() {}
@@ -314,12 +673,97 @@ namespace ButiEngine {
 			}
 		}
 
-		inline Vector2& operator=(const DirectX::XMVECTOR& other)
+		inline Vector2& operator +=(const Vector2& other)
 		{
-			DirectX::XMVECTOR temp = other;
-			DirectX::XMStoreFloat2(this, temp);
+			*this = *this + other;
 			return *this;
 		}
+
+		inline Vector2& operator +=(float value)
+		{
+			*this = *this + value;
+			return *this;
+		}
+		inline Vector2& operator -=(const Vector2& other)
+		{
+			*this = *this - other;
+			return *this;
+		}
+
+		inline Vector2& operator -=(float value)
+		{
+			*this = *this - value;
+			return *this;
+		}
+
+		inline Vector2& operator *=(const Vector2& other)
+		{
+			*this = *this * other;
+			return *this;
+		}
+
+		inline Vector2 operator /=(const Vector2& other)
+		{
+			*this = *this / other;
+			return *this;
+		}
+
+		inline Vector2& operator *=(float value)
+		{
+			x *= value;
+			y *= value;
+			return *this;
+		}
+
+		inline Vector2& operator /=(float value)
+		{
+			x /= value;
+			y /= value;
+			return *this;
+		}
+
+
+
+		inline Vector2 operator +(float value) const
+		{
+			return Vector2(x + value, y + value);
+		}
+		inline Vector2 operator -(float value)const
+		{
+			return Vector2(x - value, y - value);
+		}
+		inline Vector2 operator *(float value)const
+		{
+			return Vector2(x * value, y * value);
+		}
+		inline Vector2 operator /(float value)const
+		{
+			return Vector2(x / value, y / value);
+		}
+
+		inline Vector2 operator +(const Vector2& other) const
+		{
+			return Vector2(x + other.x, y + other.y);
+		}
+		inline Vector2 operator -(const Vector2& other) const
+		{
+			return Vector2(x - other.x, y - other.y);
+		}
+		inline Vector2 operator *(const Vector2& other) const
+		{
+			return Vector2(x * other.x, y * other.y);
+		}
+		inline Vector2 operator /(const Vector2& other) const
+		{
+			return Vector2(x / other.x, y / other.y);
+		}
+
+
+		inline const Vector2 operator -() const
+		{
+			return (*this) * -1;
+		}
+
 		inline bool operator==(const Vector2& other)
 		{
 
@@ -331,59 +775,8 @@ namespace ButiEngine {
 			return !(*this  == other);
 		}
 
-		inline Vector2& operator +=(const Vector2& vec)
-		{
-			*this = *this + vec;
-			return *this;
-		}
-
-		inline Vector2& operator +=(float value)
-		{
-			*this = *this + value;
-			return *this;
-		}
-
-		inline Vector2 operator +(float value)
-		{
-			Vector2 temp(value, value);
-			return (Vector2)XMVectorAdd(*this, temp);
-		}
-
-		inline Vector2& operator -=(const Vector2& vec)
-		{
-			*this = *this - vec;
-			return *this;
-		}
-
-		inline Vector2& operator -=(float value)
-		{
-			*this = *this - value;
-			return *this;
-		}
-
-
-		inline Vector2 operator -(float value)
-		{
-			Vector2 temp(value, value);
-			return (Vector2)XMVectorSubtract(*this, temp);
-		}
-
-		inline Vector2& operator *=(float value)
-		{
-			*this = *this * value;
-			return *this;
-		}
-
-		inline Vector2& operator /=(float value)
-		{
-			*this = *this / value;
-			return *this;
-		}
-
-		inline const Vector2 operator -() const
-		{
-			return -1*(*this);
-		}
+		inline operator Vector3() const;
+		inline operator Vector4() const;
 
 		inline Vector2& Floor(int len=1)
 		{
@@ -420,7 +813,6 @@ namespace ButiEngine {
 			*this /= (float) std::pow(10, len - 1);
 			return *this;
 		}
-
 
 		inline Vector2 GetRound(int len = 1)const
 		{
@@ -459,81 +851,140 @@ namespace ButiEngine {
 			return output;
 		}
 
-		inline float Dot(const Vector2& vec1) const
+		inline float Dot(const Vector2& other) const
 		{
-			return ((Vector2)DirectX::XMVector2Dot(DirectX::XMVECTOR(*this), vec1)).x;
+			return this->x*other.x + this->y * other.y;
 		}
 
-		inline bool isNaN() const
+		inline bool IsNaN() const
 		{
-			return XMVector2IsNaN(*this);
+			return isnan(x) || isnan(y);
 		}
 
-		inline bool isInfinite() const
+		inline bool IsInfinite() const
 		{
-			return XMVector2IsInfinite(*this);
+			return isinf(x) || isinf(y);
 		}
 
 		inline float GetLengthSqr() const
 		{
-			return ((Vector2)DirectX::XMVector2LengthSq(DirectX::XMVECTOR(*this))).x;
-		}
-
-		inline operator DirectX::XMVECTOR() const
-		{
-			DirectX::XMFLOAT2 temp = *this;
-			DirectX::XMVECTOR output = DirectX::XMLoadFloat2(&temp);
-			return output;
+			return this->x * this->x + this->y * this->y;
 		}
 
 		inline float GetLength() const {
-			return ((Vector2)DirectX::XMVector2Length(DirectX::XMVECTOR(*this))).x;
+			return std::sqrt(GetLengthSqr());
 		}
 
 		inline float GetDistance(Vector2& other) const {
-			auto i = sqrt((other.x - x) * (other.x - x) + (other.y - y) * (other.y - y));
+			auto i = std::sqrt((other.x - x) * (other.x - x) + (other.y - y) * (other.y - y));
 			return i;
 		}
 
-		inline const Vector2& ToRadian() {
-			x = XMConvertToRadians(x);
-			y = XMConvertToRadians(y);
+		inline Vector2& ToRadian() {
+			x *= (BM_PI / 180.0f);
+			y *= (BM_PI / 180.0f);
 
 			return *this;
 		}
 
 		inline Vector2 GetRadian() const {
-			return Vector2(XMConvertToRadians(x), XMConvertToRadians(y));
+			return Vector2(x * (BM_PI / 180.0f), y * (BM_PI / 180.0f));
 
+		}
+		inline Vector2& ToDegrees() {
+			x *= (180.0f / BM_PI);
+			y *= (180.0f / BM_PI);
+			return *this;
+		}
+
+		inline Vector2 GetDegrees() const {
+			return Vector2(x * (180.0f / BM_PI), y * (180.0f / BM_PI));
+
+		}
+		inline Vector2& Clamp(const Vector2& arg_max, const Vector2& arg_min) {
+			x = max(arg_min.x, x);
+			y = max(arg_min.y, y);
+
+			x = min(arg_max.x, x);
+			y = min(arg_max.y, y);
+			return *this;
+		}
+		inline Vector2 GetClamp(const Vector2& arg_max, const Vector2& arg_min)const {
+			Vector2 output;
+			output.x = max(arg_min.x, x);
+			output.y = max(arg_min.y, y);
+
+			output.x = min(arg_max.x, x);
+			output.y = min(arg_max.y, y);
+			return *this;
 		}
 		inline void Normalize()
 		{
-			*this = DirectX::XMVector2Normalize(DirectX::XMVECTOR(*this));
+			float length = GetLength();
+			if(length)
+				this->x /= length;
+			if(length)
+				this->y /= length;
+		}
+		inline Vector2 GetNormalize()const
+		{
+			Vector2 temp = *this;
+			temp.Normalize();
+			return temp;
 		}
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
 			archive(x, y);
 		}
+
+
+#ifdef USE_DIRECTXMATH
+
+		//DirectXMathとの互換
+		inline operator DirectX::XMVECTOR() const
+		{
+			DirectX::XMVECTOR output = DirectX::XMLoadFloat2((XMFLOAT2*)((void*)this));
+			return output;
+		}
+		inline operator DirectX::XMFLOAT2() const
+		{
+			return *(XMFLOAT2*)((void*)this);
+		}
+		inline Vector2& operator=(const DirectX::XMVECTOR& other)
+		{
+			DirectX::XMVECTOR temp = other;
+			DirectX::XMStoreFloat2((XMFLOAT2*)((void*)this), temp);
+			return *this;
+		}
+		inline Vector2(const DirectX::XMVECTOR other)
+		{
+			DirectX::XMVECTOR temp = other;
+			DirectX::XMStoreFloat2((XMFLOAT2*)((void*)this), temp);
+		}
+#endif
+
+
 	};
 
-	struct  Vector3 :public DirectX::XMFLOAT3
+	struct  Vector3 
 	{
 		static Vector3 XAxis;
 		static Vector3 YAxis;
 		static Vector3 ZAxis;
 		static Vector3 Zero;
 
-		inline Vector3(const DirectX::XMVECTOR other)
-		{
-			DirectX::XMVECTOR temp = other;
-			DirectX::XMStoreFloat3(this, temp);
-		}
-		inline Vector3(float x, float y, float z)
+		explicit inline Vector3(float x, float y, float z)
 		{
 			this->x = x;
 			this->y = y;
 			this->z = z;
+		}
+		inline Vector3(const Vector3& other)
+		{
+			this->x = other.x;
+			this->y = other.y;
+			this->z = other.z;
 		}
 		inline Vector3(float v)
 		{
@@ -570,13 +1021,6 @@ namespace ButiEngine {
 		{
 			return &x;
 		}
-		inline Vector3& operator=(const DirectX::XMVECTOR& other)
-		{
-			DirectX::XMVECTOR temp = other;
-			DirectX::XMStoreFloat3(this, temp);
-			return *this;
-
-		}
 
 		inline Vector3 operator=(const Vector3& other)
 		{
@@ -588,16 +1032,9 @@ namespace ButiEngine {
 			return *this;
 		}
 
-		inline Vector3& operator=(const DirectX::XMFLOAT3& other)
+		inline Vector3& operator +=(const Vector3& other)
 		{
-			DirectX::XMVECTOR temp = DirectX::XMLoadFloat3(&other);
-			DirectX::XMStoreFloat3(this, temp);
-			return *this;
-		}
-
-		inline Vector3& operator +=(const Vector3& vec)
-		{
-			*this = *this + vec;
+			*this = *this + other;
 			return *this;
 		}
 
@@ -606,23 +1043,10 @@ namespace ButiEngine {
 			*this = *this + value;
 			return *this;
 		}
-
-
-		inline Vector3 operator +(float value)
+		inline Vector3& operator -=(const Vector3& other)
 		{
-			Vector3 temp(value, value, value);
-			return (Vector3)XMVectorAdd(*this, temp);
-		}
-
-		inline Vector3& operator -=(const Vector3& vec)
-		{
-			*this = *this - vec;
+			*this = *this - other;
 			return *this;
-		}
-		inline Vector3 operator -(const Vector3& vec)const
-		{
-			return Vector3(x - vec.x, y - vec.y, z - vec.z);
-			
 		}
 
 		inline Vector3& operator -=(float value)
@@ -630,44 +1054,16 @@ namespace ButiEngine {
 			*this = *this - value;
 			return *this;
 		}
-
-		inline Vector3 operator -(float value)
-		{
-			Vector3 temp(value, value, value);
-			return (Vector3)XMVectorSubtract(*this, temp);
-		}
-
 		inline Vector3& operator *=(float value)
 		{
 			*this = *this * value;
 			return *this;
 		}
-		inline Vector3 operator *(float value)const
-		{
-			Vector3 out = *this;
-			out.x *= value;
-			out.y *= value;
-			out.z *= value;
-			return out;
-		}
-
-		inline Vector3& operator *=(Matrix4x4 value)
+		inline Vector3& operator *=(const Matrix4x4& value)
 		{
 			*this = *this * value;
 			return *this;
 		}
-
-		inline Vector3 operator *(Matrix4x4 value) const
-		{
-			auto tmp = (Vector3)XMVector3Transform(*this, value);
-			return tmp;
-		}
-
-		inline Vector3 operator *(const Vector3& other)const {
-
-			return Vector3(other.x * x, other.y * y, other.z * z);
-		}
-
 		inline Vector3& operator *=(const Vector3& other) {
 			*this = Vector3(other.x * x, other.y * y, other.z * z);
 			return  *this;
@@ -678,13 +1074,63 @@ namespace ButiEngine {
 			*this = *this / value;
 			return *this;
 		}
+		inline operator Vector4()const;
+		inline operator Vector2()const {
+			return Vector2(x, y);
+		}
 
+		inline Vector3 operator +(float value)const
+		{
+			return Vector3(this->x + value, this->y + value, this->z + value);
+		}
+		inline Vector3 operator -(float value)const
+		{
+			return Vector3(this->x - value, this->y - value, this->z - value);
+		}
+
+		inline Vector3 operator *(float value)const
+		{
+			return Vector3(this->x * value, this->y * value, this->z * value);
+		}
+		inline Vector3 operator /(float value)const
+		{
+			return Vector3(this->x / value, this->y / value, this->z / value);
+		}
+
+		inline Vector3 operator +(Vector3 other)const
+		{
+			return Vector3(this->x + other.x, this->y + other.y, this->z + other.z);
+		}
+		inline Vector3 operator -(const Vector3& other)const
+		{
+			return Vector3(x - other.x, y - other.y, z - other.z);
+		}
+
+		inline Vector3 operator *(const Vector3& other)const {
+
+			return Vector3(other.x * x, other.y * y, other.z * z);
+		}
+		inline Vector3 operator /(const Vector3& other)const {
+
+			return Vector3(other.x / x, other.y / y, other.z / z);
+		}
+
+
+
+		inline Vector3 operator *(const Matrix4x4& value) const
+		{
+			Vector3 temp = Vector3(value._11 * x + value._21 * y + value._31 * z + value._41,
+				value._12 * x + value._22 * y + value._32 * z + value._42,
+				value._13 * x + value._23 * y + value._33 * z + value._43);
+			return temp;
+		}
 		inline const Vector3 operator -() const
 		{
-			return  -1 * (*this);
+			return   (*this)* -1;
 		}
 
 		inline Vector3 operator*(const Quat& other);
+
 
 		inline const bool operator==(const Vector3& other)const {
 			if (other.x != this->x || other.y != this->y || other.z != this->z) {
@@ -698,12 +1144,19 @@ namespace ButiEngine {
 			return !(*this == other);
 		}
 
-		inline const float Get(const UINT index)const {
-			return *((&x) + index);
+		inline float& operator [](const unsigned int idx)
+		{
+			return *(&x + idx);
 		}
 
 
-		inline Vector3& Floor(int len=1)
+		inline float operator [](const unsigned int idx) const
+		{
+			return *(&x + idx);
+		}
+
+
+		inline Vector3& Floor(const int len=1)
 		{
 			if (len <= 0) {
 				return *this;
@@ -716,7 +1169,7 @@ namespace ButiEngine {
 			return *this;
 		}
 
-		inline Vector3& Round(int len=1)
+		inline Vector3& Round(const int len=1)
 		{
 			if (len <= 0) {
 				return *this;
@@ -729,7 +1182,7 @@ namespace ButiEngine {
 			return *this;
 		}
 
-		inline Vector3& Ceil(int len=1)
+		inline Vector3& Ceil(const int len=1)
 		{
 			if (len <= 0) {
 				return *this;
@@ -743,7 +1196,7 @@ namespace ButiEngine {
 		}
 
 
-		inline Vector3 GetRound(int len = 1)const
+		inline Vector3 GetRound(const int len = 1)const
 		{
 			if (len <= 0) {
 				return *this;
@@ -756,7 +1209,7 @@ namespace ButiEngine {
 			output /= (float) std::pow(10, len - 1);
 			return output;
 		}
-		inline Vector3 GetFloor(int len = 1)const
+		inline Vector3 GetFloor(const int len = 1)const
 		{
 			if (len <= 0) {
 				return *this;
@@ -769,7 +1222,7 @@ namespace ButiEngine {
 			output /= (float) std::pow(10, len - 1);
 			return output;
 		}
-		inline Vector3 GetCeil(int len = 1)const
+		inline Vector3 GetCeil(const int len = 1)const
 		{
 			if (len <= 0) {
 				return *this;
@@ -783,73 +1236,24 @@ namespace ButiEngine {
 			return output;
 		}
 
-		inline float Distance(const Vector3& arg_point) {
+		inline float Distance(const Vector3& arg_point)const {
 
 			return sqrt((this->x - arg_point.x) * (this->x - arg_point.x) + (this->y - arg_point.y) * (this->y - arg_point.y) + (this->z - arg_point.z) * (this->z - arg_point.z));
 			
 		}
 
-		inline float Dot(const Vector3& vec1) const
-		{
-			return ((Vector3)XMVector3Dot(*this, vec1)).x;
-		}
 		inline Vector2 ToVector2()const {
 			return Vector2(x,y);
 		}
-		inline Vector3& Cross(const Vector3& vec1)
-		{
-			*this = (Vector3)XMVector3Cross(*this, vec1);
-			return *this;
-		}
-
-		inline Vector3 GetCross(const Vector3& vec1)const
-		{
-			return (Vector3)XMVector3Cross(*this, vec1);
-		}
-
-		inline bool isNaN() const
-		{
-			return XMVector3IsNaN(*this);
-		}
-
-		inline bool isInfinite() const
-		{
-			return XMVector3IsInfinite(*this);
-		}
-		inline bool isZero() const
-		{
-			return (abs(x) <= FLT_MIN * 10) && (abs(y) <= FLT_MIN * 10) && (abs(z) <= FLT_MIN * 10);
-		}
-		inline bool isMinEps() const
-		{
-			return (abs(x) <= 0.00025) && (abs(y) <= 0.00025) && (abs(z) <= 0.00025);
-		}
-		inline void RemoveEps() {
-			if ((abs(x) <= 0.000000025)) {
-				x = 0;
-			}
-			if ((abs(y) <= 0.000000025)) {
-				y = 0;
-			}
-			if ((abs(z) <= 0.000000025)) {
-				z = 0;
-			}
-		}
-		inline const Vector3& ToDegrees() {
-			x = XMConvertToDegrees(x);
-			y = XMConvertToDegrees(y);
-			z = XMConvertToDegrees(z);
-
-			return *this;
-		}
-		inline  Vector3 GetDegrees() {
-			Vector3 output = Vector3(XMConvertToDegrees(x), XMConvertToDegrees(y), XMConvertToDegrees(z));
 
 
-			return output;
+		inline bool IsNaN() const
+		{
+			return isnan(x) || isnan(y) || isnan(z);
 		}
+
 		inline Vector3 GetRemoveNan() {
-			if (XMVector3IsNaN(*this)) {
+			if (IsNaN()) {
 				auto output = *this;
 
 				if (output.x == nanf("")) {
@@ -864,19 +1268,56 @@ namespace ButiEngine {
 			}
 			return *this;
 		}
+		inline bool IsInfinite() const
+		{
+			return isinf(x) || isinf(y) || isinf(z);
+		}
+		inline bool IsZero() const
+		{
+			return (abs(x) <= FLT_MIN * 10) && (abs(y) <= FLT_MIN * 10) && (abs(z) <= FLT_MIN * 10);
+		}
+		inline bool IsMinEps() const
+		{
+			return (abs(x) <= 0.00025) && (abs(y) <= 0.00025) && (abs(z) <= 0.00025);
+		}
+		inline void RemoveEps() {
+			if ((abs(x) <= 0.000000025)) {
+				x = 0;
+			}
+			if ((abs(y) <= 0.000000025)) {
+				y = 0;
+			}
+			if ((abs(z) <= 0.000000025)) {
+				z = 0;
+			}
+		}
+
+		inline const Vector3& ToDegrees() {
+			x *= (180.0f / BM_PI);
+			y *= (180.0f / BM_PI);
+			z *= (180.0f / BM_PI);
+
+			return *this;
+		}
+		inline  Vector3 GetDegrees() const{
+			Vector3 output = Vector3(x * (180.0f / BM_PI), y * (180.0f / BM_PI), z * (180.0f / BM_PI));
+
+
+			return output;
+		}
 		inline const Vector3& ToRadian() {
-			x = XMConvertToRadians(x);
-			y = XMConvertToRadians(y);
-			z = XMConvertToRadians(z);
+			x *= (BM_PI / 180.0f);
+			y *= (BM_PI / 180.0f);
+			z *= (BM_PI / 180.0f);
 
 			return *this;
 		}
 
 		inline Vector3 GetRadian() const {
-			return Vector3(XMConvertToRadians(x), XMConvertToRadians(y), XMConvertToRadians(z));
+			return Vector3(x*(BM_PI/180.0f), y * (BM_PI / 180.0f), z * (BM_PI / 180.0f));
 
 		}
-		inline const Vector3& SetLimit(const Vector3& arg_max, const Vector3& arg_min) {
+		inline Vector3& Clamp(const Vector3& arg_max, const Vector3& arg_min) {
 			x = max(arg_min.x, x);
 			y = max(arg_min.y, y);
 			z = max(arg_min.z, z);
@@ -886,7 +1327,18 @@ namespace ButiEngine {
 			z = min(arg_max.z, z);
 			return *this;
 		}
-		inline Vector3 GetFreeze(bool arg_freezeX, bool arg_freezeY, bool arg_freezeZ) {
+		inline Vector3 GetClamp(const Vector3& arg_max, const Vector3& arg_min)const {
+			Vector3 output;
+			output.x = max(arg_min.x, x);
+			output.y = max(arg_min.y, y);
+			output.z = max(arg_min.z, z);
+
+			output.x = min(arg_max.x, x);
+			output.y = min(arg_max.y, y);
+			output.z = min(arg_max.z, z);
+			return *this;
+		}
+		inline Vector3 GetFreeze(bool arg_freezeX, bool arg_freezeY, bool arg_freezeZ)const {
 			auto output = *this;
 			if (arg_freezeX)
 				output.x = 0;
@@ -898,21 +1350,50 @@ namespace ButiEngine {
 			return output;
 		}
 
-		inline float GetLengthSqr() const
+		inline float Dot(const Vector3& other) const
 		{
-			return ((Vector3)XMVector3LengthSq(*this)).x;
+			return this->x * other.x + this->y * other.y + this->z * other.z;
+		}
+		inline Vector3& Cross(const Vector3& other)
+		{
+			auto temp = *this;
+			this->x = (temp.y * other.z) - (temp.z * other.y);
+			this->y = (temp.z * other.x) - (temp.x * other.z);
+			this->z = (temp.x * other.y) - (temp.y * other.x);
+			return *this;
 		}
 
-		inline operator DirectX::XMVECTOR() const
+		inline Vector3 GetCross(const Vector3& other)const
 		{
-			DirectX::XMFLOAT3 temp = *this;
-			DirectX::XMVECTOR output = DirectX::XMLoadFloat3(&temp);
-			return output;
-		};
+			return Vector3((this->y * other.z) - (this->z * other.y), (this->z * other.x) - (this->x * other.z), (this->x * other.y) - (this->y * other.x));
+		}
+		inline float GetLengthSqr() const
+		{
+			return this->x * this->x + this->y * this->y + this->z * this->z;
+		}
+
 
 		inline float GetLength() const
 		{
-			return ((Vector3)DirectX::XMVector3Length(DirectX::XMVECTOR(*this))).x;
+			return std::sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
+		}
+
+		inline Vector3& Normalize()
+		{
+			float length = GetLength();
+			if (length) {
+				this->x /= length;
+				this->y /= length;
+				this->z /= length;
+			}
+			return *this;
+		}
+
+		inline Vector3 GetNormalize() const
+		{
+			Vector3 output = *this;
+			output.Normalize();
+			return output;
 		}
 
 		inline Vector3& Abs() {
@@ -930,12 +1411,6 @@ namespace ButiEngine {
 			output.z = abs(z);
 
 			return output;
-		}
-
-		inline Vector3& Normalize()
-		{
-			*this = DirectX::XMVector3Normalize(DirectX::XMVECTOR(*this));
-			return *this;
 		}
 		inline Vector3& Scroll()
 		{
@@ -955,11 +1430,6 @@ namespace ButiEngine {
 			y = temp.z;
 			z = temp.x;
 			return *this;
-		}
-
-		inline Vector3 GetNormalize() const
-		{
-			return DirectX::XMVector3Normalize(DirectX::XMVECTOR(*this));
 		}
 
 		inline Vector3& Max(const Vector3& arg_other) {
@@ -992,101 +1462,117 @@ namespace ButiEngine {
 			return output;
 		}
 
+		inline Vector3 GetReflect(const Vector3& other)const {
+			Vector3 output;
+			float s = 2.0f * (this->x * other.x + this->y * other.y + this->z * other.z);
+
+			output.x = this->x - s * other.x;
+			output.y = this->y - s * y;
+			output.z = this->z - s * z;
+
+			return output;
+		}
 
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
 			archive(x, y, z);
 		}
-
-	};
-
-	struct Vector4 :public DirectX::XMFLOAT4
-	{
-		inline Vector4(const DirectX::XMVECTOR other)
+#ifdef USE_DIRECTXMATH
+		//DirectXMathとの互換
+		inline operator DirectX::XMVECTOR() const
+		{
+			DirectX::XMVECTOR output = DirectX::XMLoadFloat3((XMFLOAT3*)((void*)this));
+			return output;
+		};
+		inline Vector3& operator=(const DirectX::XMFLOAT3& other)
+		{
+			DirectX::XMVECTOR temp = DirectX::XMLoadFloat3(&other);
+			DirectX::XMStoreFloat3((XMFLOAT3*)((void*)this), temp);
+			return *this;
+		}
+		inline Vector3(const DirectX::XMVECTOR other)
 		{
 			DirectX::XMVECTOR temp = other;
-			DirectX::XMStoreFloat4(this, temp);
+			DirectX::XMStoreFloat3((XMFLOAT3*)((void*)this), temp);
 		}
-		inline Vector4(float x, float y, float z, float w)
+		inline Vector3& operator=(const DirectX::XMVECTOR& other)
+		{
+			DirectX::XMVECTOR temp = other;
+			DirectX::XMStoreFloat3((XMFLOAT3*)((void*)this), temp);
+			return *this;
+		}
+#endif
+		
+
+
+		float x, y, z;
+	};
+
+	struct Vector4 
+	{
+		explicit inline Vector4(float x, float y, float z, float w)
 		{
 			this->x = x;
 			this->y = y;
 			this->z = z;
 			this->w = w;
 		}
-		inline Vector4(const Vector3& xyz, float w)
+		explicit inline Vector4(const Vector3& xyz, float w)
 		{
 			this->x = xyz.x;
 			this->y = xyz.y;
 			this->z = xyz.z;
 			this->w = w;
 		}
-
-		explicit inline Vector4(const XMFLOAT4& v) :
-			DirectX::XMFLOAT4(v)
+		inline Vector4(const Vector4& other)
 		{
+			this->x = other.x;
+			this->y = other.y;
+			this->z = other.z;
+			this->w = other.w;
 		}
+
 		inline Vector4()
 		{
-			x = 0;
-			y = 0;
-			z = 0;
-			w = 0;
+			x = 0;y = 0;z = 0;w = 0;
 		}
 
 		inline  float* GetData() 
-		{
-			
+		{			
 			return &(this->x);
 		}
-		inline  void GetData(float* out) 
-		{
-			auto data = GetData();
-			for (int i = 0; i < 4; i++) {
-				out[i] = data[i];
-			}
-		}
-		inline Vector4& operator=(const DirectX::XMVECTOR& other)
-		{
-			DirectX::XMVECTOR temp = other;
-			DirectX::XMStoreFloat4(this, temp);
-			return *this;
-		};
 		inline ~Vector4() {};
-		inline Vector4& operator +=(const Vector4& vec) {
-			*this = *this + vec;
+		inline Vector4& operator +=(const Vector4& other) {
+			*this = *this + other;
 			return *this;
 		};
 
+		inline Vector4& operator -=(const Vector4& other)
+		{
+			*this = *this - other;
+			return *this;
+		}
+		inline Vector4& operator *=(const Vector4& other) {
+			*this = *this * other;
+			return *this;
+		};
+
+		inline Vector4& operator /=(const Vector4& other)
+		{
+			*this = *this / other;
+			return *this;
+		}
 
 		inline Vector4& operator +=(float value) {
 			*this = *this + value;
 			return *this;
 		};
 
-		inline Vector4 operator +(float value) {
-			Vector4 temp(value, value, value, value);
-			return (Vector4)XMVectorAdd(*this, temp);
-		}
-
-
-		inline Vector4& operator -=(const Vector4& vec)
-		{
-			*this = *this - vec;
-			return *this;
-		}
-
 		inline Vector4& operator -=(float value)
 		{
 			*this = *this - value;
 			return *this;
-		};
-
-		inline Vector4 operator -(float value)
-		{
-			Vector4 temp(value, value, value, value);
-			return (Vector4)XMVectorSubtract(*this, temp);
 		};
 
 		inline Vector4& operator *=(float value)
@@ -1101,44 +1587,185 @@ namespace ButiEngine {
 			return *this;
 		}
 
-		inline const Vector4 operator -() const
+		inline Vector4 operator +(float value)const {
+			return Vector4(this->x + value, this->y + value, this->z + value, this->w + value);
+		}
+		inline Vector4 operator -(float value)const
 		{
-			
-			return -1*(*this);
+			return Vector4(this->x - value, this->y - value, this->z - value, this->w - value);
+		};
+		inline Vector4 operator *(float value)const {
+			return Vector4(this->x * value, this->y * value, this->z * value, this->w * value);
+		}
+		inline Vector4 operator /(float value)const
+		{
+			return Vector4(this->x / value, this->y / value, this->z / value, this->w / value);
+		};
+
+
+
+		inline Vector4 operator +(const Vector4& other)const {
+			return Vector4(this->x + other.x, this->y + other.y, this->z + other.z, this->w + other.w);
+		}
+		inline Vector4 operator -(const Vector4& other)const {
+			return Vector4(this->x - other.x, this->y - other.y, this->z - other.z, this->w - other.w);
+		}
+		inline Vector4 operator *(const Vector4& other)const {
+			return Vector4(this->x * other.x, this->y * other.y, this->z * other.z, this->w * other.w);
+		}
+		inline Vector4 operator /(const Vector4& other)const {
+			return Vector4(this->x / other.x, this->y / other.y, this->z / other.z, this->w / other.w);
 		}
 
 
-		inline Vector4& Floor(int len) {}
+		inline Vector4 operator *(const Matrix4x4& other) const
+		{
+			Vector4 temp = Vector4(other._11 * this->x + other._21 * this->y + other._31 * this->z + other._41 * this->w,
+				other._12 * this->x + other._22 * this->y + other._32 * this->z + other._42 * this->w,
+				other._13 * this->x + other._23 * this->y + other._33 * this->z + other._43 * this->w,
+				other._14 * this->x + other._24 * this->y + other._34 * this->z + other._44 * this->w
+			);
+			return temp;
+		}
 
-		inline Vector4& Round(int len) {}
 
-		inline Vector4& Ceil(int len) {}
+		inline const Vector4 operator -() const
+		{
+			return *this* - 1;
+		}
+
+		inline bool operator==(const Vector4& other)const {
+			return this->x == other.x && this->y == other.y && this->z == other.z && this->w == other.w;
+		}
+
+		inline bool operator!=(const Vector4& other)const {
+			return !((*this) == other);
+		}
+
+		inline float& operator [](int idx)
+		{
+			return *(&x + idx);
+		}
+		inline float operator [](int idx) const
+		{
+			return *(&x + idx);
+		}
+
+		inline operator Vector3() const{
+			return Vector3(x, y, z);
+		}
+		inline operator Vector2()const {
+			return Vector2(x, y);
+		}
+
+		inline Vector4& Floor(int len = 1)
+		{
+			if (len <= 0) {
+				return *this;
+			}
+			*this *= (float)std::pow(10, len - 1);
+			x = std::floor(x);
+			y = std::floor(y);
+			z = std::floor(z);
+			w = std::floor(w);
+			*this /= (float)std::pow(10, len - 1);
+			return *this;
+		}
+		inline Vector4& Round(int len = 1)
+		{
+			if (len <= 0) {
+				return *this;
+			}
+			*this *= (float)std::pow(10, len - 1);
+			x = std::round(x);
+			y = std::round(y);
+			z = std::round(z);
+			w = std::round(w);
+			*this /= (float)std::pow(10, len - 1);
+			return *this;
+		}
+		inline Vector4& Ceil(int len = 1)
+		{
+			if (len <= 0) {
+				return *this;
+			}
+			*this *= (float)std::pow(10, len - 1);
+			x = std::ceil(x);
+			y = std::ceil(y);
+			z = std::ceil(z);
+			w = std::ceil(w);
+			*this /= (float)std::pow(10, len - 1);
+			return *this;
+		}
+
+		inline Vector4 GetRound(int len = 1)const
+		{
+			if (len <= 0) {
+				return *this;
+			}
+			Vector4 output;
+			output *= (float)std::pow(10, len - 1);
+			output.x = std::round(x);
+			output.y = std::round(y);
+			output.z = std::round(z);
+			output.w = std::round(w);
+			output /= (float)std::pow(10, len - 1);
+			return output;
+		}
+		inline Vector4 GetFloor(int len = 1)const
+		{
+			if (len <= 0) {
+				return *this;
+			}
+			Vector4 output;
+			output *= (float)std::pow(10, len - 1);
+			output.x = std::floor(x);
+			output.y = std::floor(y);
+			output.z = std::floor(z);
+			output.w = std::floor(w);
+			output /= (float)std::pow(10, len - 1);
+			return output;
+		}
+		inline Vector4 GetCeil(int len = 1)const
+		{
+			if (len <= 0) {
+				return *this;
+			}
+			Vector4 output;
+			output *= (float)std::pow(10, len - 1);
+			output.x = std::ceil(x);
+			output.y = std::ceil(y);
+			output.z = std::ceil(z);
+			output.w = std::ceil(w);
+			output /= (float)std::pow(10, len - 1);
+			return output;
+		}
 
 		inline Vector3 GetVec3()const {
 			return Vector3(x, y, z);
 		}
 
-		inline float Dot(const Vector4& vec1) const
+		inline float Dot(const Vector4& other) const
 		{
-			return ((Vector3)XMVector4Dot(*this, vec1)).x;
+			return this->x * other.x + this->y * other.y + this->z * other.z + this->w * other.w;
 		}
 
-		inline bool isNaN() const
+		inline bool IsNaN() const
 		{
-			return XMVector4IsNaN(*this);
+			return isnan(x) || isnan(y) || isnan(z) || isnan(w);
 		}
 
-		inline bool isInfinite() const
+		inline bool IsInfinite() const
 		{
-			return XMVector4IsInfinite(*this);
+			return isinf(x) || isinf(y) || isinf(z) || isinf(w);
 		}
 
 		inline float GetLengthSqr() const
 		{
-			return ((Vector3)DirectX::XMVector4LengthSq(DirectX::XMVECTOR(*this))).x;
+			return this->x * this->x + this->y * this->y + this->z * this->z + this->w * this->w;
 		}
 		inline Vector4& RemoveNan() {
-			if (XMVector4IsNaN(*this)) {
+			if (IsNaN()) {
 
 				if (isnan((*this).x)) {
 					(*this).x = 0;
@@ -1155,108 +1782,454 @@ namespace ButiEngine {
 			}
 			return *this;
 		}
-		inline operator DirectX::XMVECTOR() const
-		{
-			DirectX::XMFLOAT4 temp = *this;
-			DirectX::XMVECTOR output = DirectX::XMLoadFloat4(&temp);
-			return output;
-		}
-
 		inline float GetLength() const
 		{
-			return ((Vector4)DirectX::XMVector4Length(DirectX::XMVECTOR(*this))).x;
+			return std::sqrt(this->x * this->x + this->y * this->y + this->z * this->z + this->w * this->w);
+		}
+
+		inline const Vector4& ToDegrees() {
+			x *= (180.0f / BM_PI);
+			y *= (180.0f / BM_PI);
+			z *= (180.0f / BM_PI);
+			w *= (180.0f / BM_PI);
+
+			return *this;
+		}
+		inline  Vector4 GetDegrees() const {
+			Vector4 output = Vector4(x * (180.0f / BM_PI), y * (180.0f / BM_PI), z * (180.0f / BM_PI), w * (180.0f / BM_PI));
+
+
+			return output;
+		}
+		inline const Vector4& ToRadian() {
+			x *= (BM_PI / 180.0f);
+			y *= (BM_PI / 180.0f);
+			z *= (BM_PI / 180.0f);
+			w *= (BM_PI / 180.0f);
+
+			return *this;
+		}
+
+		inline Vector4 GetRadian() const {
+			return Vector4(x * (BM_PI / 180.0f), y * (BM_PI / 180.0f), z * (BM_PI / 180.0f), w * (BM_PI / 180.0f));
+
+		}
+
+		inline Vector4& Clamp(const Vector4& arg_max, const Vector4& arg_min) {
+			x = max(arg_min.x, x);
+			y = max(arg_min.y, y);
+			z = max(arg_min.z, z);
+			w = max(arg_min.w, w);
+
+			x = min(arg_max.x, x);
+			y = min(arg_max.y, y);
+			z = min(arg_max.z, z);
+			w = min(arg_max.w, w);
+			return *this;
+		}
+		inline Vector4 GetClamp(const Vector4& arg_max, const Vector4& arg_min)const {
+			Vector4 output;
+			output.x = max(arg_min.x, x);
+			output.y = max(arg_min.y, y);
+			output.z = max(arg_min.z, z);
+			output.w = max(arg_min.w, w);
+
+			output.x = min(arg_max.x, x);
+			output.y = min(arg_max.y, y);
+			output.z = min(arg_max.z, z);
+			output.w = min(arg_max.w, w);
+			return *this;
 		}
 
 		inline void Normalize()
 		{
-			*this = DirectX::XMVector4Normalize(DirectX::XMVECTOR(*this));
-		}
+			auto length = GetLength();
+			if (length) {
+				x /= length;
+				y /= length;
+				z /= length;
+				w /= length;
+			}
 
+		}
+		inline Vector4 GetNormalize()const
+		{
+			Vector4 output = *this;
+			output.Normalize();
+			return output;
+
+		}
 
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
 			archive(x, y, z, w);
 		}
+
+#ifdef USE_DIRECTXMATH
+
+		//DirectXMathとの互換性
+		inline operator DirectX::XMVECTOR() const
+		{
+			DirectX::XMVECTOR output = DirectX::XMLoadFloat4((XMFLOAT4*)((void*)this));
+			return output;
+		}
+		inline Vector4(const DirectX::XMVECTOR other)
+		{
+			DirectX::XMVECTOR temp = other;
+			DirectX::XMStoreFloat4((XMFLOAT4*)((void*)this), temp);
+		}
+		inline Vector4(const DirectX::XMFLOAT4 other)
+		{
+			this->x = other.x;
+			this->y = other.y;
+			this->z = other.z;
+			this->w = other.w;
+		}
+		inline Vector4& operator=(const DirectX::XMVECTOR& other)
+		{
+			DirectX::XMVECTOR temp = other;
+			DirectX::XMStoreFloat4((XMFLOAT4*)((void*)this), temp);
+			return *this;
+		};
+
+#endif
+
+		float x, y, z, w;
 	};
 
-	class MathHelper
+	struct Quat : public Vector4
 	{
-	public:
-		inline static double Ceil(double dSrc, int iLen)
+
+		inline Quat() :Vector4()
 		{
-			double	dRet;
-
-			dRet = dSrc * pow(10.0, iLen);
-			dRet = (double)(int)(dRet + 0.9);
-
-			return dRet * pow(10.0, -iLen);
+			Identity();
 		}
-		inline static double Floor(double dSrc, int iLen)
+		inline Quat(const Quat& quat) :
+			Vector4(quat.x, quat.y, quat.z, quat.w)
 		{
-			double dRet;
-
-			dRet = dSrc * pow(10.0, iLen);
-			dRet = (double)(int)(dRet);
-
-			return dRet * pow(10.0, -iLen);
 		}
-		inline static double Round(double dSrc, int iLen)
+		explicit inline Quat(float x, float y, float z, float w) :
+			Vector4(x, y, z, w)
 		{
-			double	dRet;
-
-			dRet = dSrc * pow(10.0, iLen);
-			dRet = (double)(int)(dRet + 0.5);
-
-			return dRet * pow(10.0, -iLen);
-		}
-		template<typename T>
-		inline static T GetMaximum(const T& v1, const T& v2) {
-			return v1 > v2 ? v1 : v2;
-		}
-		template<typename T>
-		inline static T GetMinimum(const T& v1, const T& v2) {
-			return v1 < v2 ? v1 : v2;
 		}
 
-		inline static float Dot(const Vector2& vec0, const Vector2& vec1)
+		explicit inline Quat(const Vector3& axis, float radians) :
+			Vector4()
 		{
-			return ((Vector2)XMVector2Dot(vec0, vec1)).x;
+			this->w = cos(radians * 0.5f);
+			float sinedRad = sin(radians * 0.5f);
+			this->x = axis.x * sinedRad;
+			this->y = axis.y * sinedRad;
+			this->z = axis.z * sinedRad;
 		}
 
-		inline static float LengthSqr(const Vector2& vec)
+		explicit  inline Quat(float val) :
+			Vector4()
 		{
-			return ((Vector2)XMVector2LengthSq(vec)).x;
+			x = val;
+			y = val;
+			z = val;
+			w = val;
 		}
 
-		inline static float Length(const Vector2& vec)
-		{
-			return ((Vector2)XMVector2Length(vec)).x;
+		explicit inline Quat(const Matrix4x4& m) {
+			*this = m.ToQuat();
 		}
 
-		inline static const Vector2 Normalize(const Vector2& vec)
+
+		inline Quat& operator =(const Quat& other)
 		{
-			return (Vector2)XMVector2Normalize(vec);
-		}
-		inline static float Dot(const Vector3& vec0, const Vector3& vec1)
-		{
-			return ((Vector3)XMVector3Dot(vec0, vec1)).x;
+			if (this != &other) {
+				x = other.x;
+				y = other.y;
+				z = other.z;
+				w = other.w;
+			}
+			return *this;
 		}
 
-		inline static float LengthSqr(const Vector3& vec)
+
+
+
+		inline Quat& SetXYZ(const Vector3& other)
 		{
-			return ((Vector3)XMVector3LengthSq(vec)).x;
+			x = other.x;
+			y = other.y;
+			z = other.z;
+			return *this;
 		}
 
-		inline static float Length(const Vector3& vec)
+		inline const Vector3 GetXYZ() const
 		{
-			return ((Vector3)XMVector3Length(vec)).x;
+			return Vector3(x, y, z);
 		}
 
-		inline static Vector3 Normalize(const Vector3& vec)
+
+		inline float& operator [](int idx)
 		{
-			return (Vector3)XMVector3Normalize(vec);
+			return *(&x + idx);
 		}
+
+
+		inline float operator [](int idx) const
+		{
+			return *(&x + idx);
+		}
+
+
+		inline Quat operator +(const Quat& other) const
+		{
+			return Quat(this->x + other.x, this->y + other.y, this->z + other.z, this->w + other.w);
+		}
+
+		inline Quat operator -(const Quat& other) const
+		{
+			return Quat(this->x - other.x, this->y - other.y, this->z - other.z, this->w - other.w);
+		}
+
+		inline Quat operator *(const Quat& other) const
+		{
+			float ax = this->x, ay = this->y, az = this->z, aw = this->w;
+			float bx = other.x, by = other.y, bz = other.z, bw = other.w;
+			return Quat(ax * bw + aw * bx + ay * bz - az * by, 	ay * bw + aw * by + az * bx - ax * bz, 
+				az * bw + aw * bz + ax * by - ay * bx, aw * bw - ax * bx - ay * by - az * bz);
+		}
+		inline Quat operator /(const Quat& other) const
+		{
+			float ax = this->x, ay = this->y, az = this->z, aw = this->w;
+			float bx = -other.x, by = -other.y, bz = -other.z, bw = -other.w;
+			return Quat(ax * bw + aw * bx + ay * bz - az * by, ay * bw + aw * by + az * bx - ax * bz,
+				az * bw + aw * bz + ax * by - ay * bx, aw * bw - ax * bx - ay * by - az * bz);
+		}
+
+
+		inline Quat& operator *=(const Quat& other) {
+			float ax = this->x, ay = this->y, az = this->z, aw = this->w;
+			float bx = other.x, by = other.y, bz = other.z, bw = other.w;
+			this->x = (ax * bw + aw * bx + ay * bz - az * by);
+			this->y = (ay * bw + aw * by + az * bx - ax * bz);
+			this->z = (az * bw + aw * bz + ax * by - ay * bx);
+			this->w=(aw * bw - ax * bx - ay * by - az * bz);
+			return *this;
+		}
+		inline Quat& operator /=(const Quat& other) {
+			float ax = this->x, ay = this->y, az = this->z, aw = this->w;
+			float bx = -other.x, by = -other.y, bz = -other.z, bw = -other.w;
+			this->x = (ax * bw + aw * bx + ay * bz - az * by);
+			this->y = (ay * bw + aw * by + az * bx - ax * bz);
+			this->z = (az * bw + aw * bz + ax * by - ay * bx);
+			this->w = (aw * bw - ax * bx - ay * by - az * bz);
+			return *this;
+		}
+
+		inline Quat operator *(float value) const
+		{
+			return Quat(this->x * value, this->y * value, this->z * value, this->w * value);
+		}
+		inline Quat operator /(float value) const
+		{
+			return Quat(this->x / value, this->y / value, this->z / value, this->w / value);
+		}
+		inline const Quat& operator *=(float value)
+		{
+			*this = *this * value;
+			return *this;
+		}
+		inline const Quat& operator /=(float value)
+		{
+			*this = *this / value;
+			return *this;
+		}
+
+		inline const Quat operator -() const
+		{
+			return   (*this) * -1;
+		}
+		inline bool operator==(const Quat& other)const {
+			return this->x == other.x && this->y == other.y && this->z == other.z && this->w == other.w;
+		}
+
+		inline bool operator!=(const Quat& other)const {
+			return !((*this) == other);
+		}
+
+		inline const Quat& CreateFromAxisRotate(const Vector3& axis, const  float radians) {
+			this->w = cos(radians * 0.5f);
+			float sinedRad = sin(radians * 0.5f);
+			this->x = axis.x * sinedRad;
+			this->y = axis.y * sinedRad;
+			this->z = axis.z * sinedRad;
+			return *this;
+		}
+
+		inline Matrix4x4 ToMatrix()const {
+			return Matrix4x4(*this);
+		}
+		inline Quat& CreateFromEular(const Vector3& arg_eular) {
+
+			Matrix4x4 rotationMatrix = Matrix4x4::RollZ(
+				arg_eular.z
+			) *
+				Matrix4x4::RollY(
+					arg_eular.y
+				) *
+				Matrix4x4::RollX(
+					arg_eular.x
+				);
+			*this = rotationMatrix.ToQuat();
+			return *this;
+		}
+		inline Quat& CreateFromEular_local_deg(const Vector3& arg_eular) {
+
+			Matrix4x4 rotationMatrix = Matrix4x4::RollZ(
+				(arg_eular.z) * (BM_PI / 180.0f)
+			) *
+				Matrix4x4::RollY(
+					(arg_eular.y) * (BM_PI / 180.0f)
+				) *
+				Matrix4x4::RollX(
+					(arg_eular.x) * (BM_PI / 180.0f)
+				);
+			*this = rotationMatrix.ToQuat();
+			return *this;
+		}
+		inline Quat& CreateFromEular_deg(const Vector3& arg_eular) {
+
+			Matrix4x4 rotationMatrix = Matrix4x4::RollX(
+				(arg_eular.x) * (BM_PI / 180.0f)
+			) *
+				Matrix4x4::RollY(
+					(arg_eular.y) * (BM_PI / 180.0f)
+				) *
+				Matrix4x4::RollZ(
+					(arg_eular.z) * (BM_PI / 180.0f)
+				);
+			*this = rotationMatrix.ToQuat();
+			return *this;
+		}
+
+
+		inline Quat& Normalize() {
+			Vector4::Normalize();
+			return *this;
+		}
+
+		inline float Dot(const Quat& other)const {
+			return Vector4::Dot(other);
+		}
+
+		inline Quat& Conj(const Quat& other) {
+			this->x = -other.x;
+			this->y = -other.y;
+			this->z = -other.z;
+			this->w = other.w;
+			return *this;
+		}
+		inline Quat& Conj() {
+			this->x = -this->x;
+			this->y = -this->y;
+			this->z = -this->z;
+			return *this;
+		}
+		inline  Quat& Identity() {
+			this->x = 0;
+			this->y = 0;
+			this->z = 0;
+			this->w = 1;
+			return *this;
+		}
+
+
+		inline  Vector3 ToRotVec() const {
+			Quat Temp = *this;
+			Temp.Normalize();
+			Matrix4x4 mt(Temp);
+			Vector3 Rot;
+			if (mt._32 == 1.0f) {
+				Rot.x = BM_PI / 2.0f;
+				Rot.y = 0;
+				Rot.z = -atan2(mt._21, mt._11);
+			}
+			else if (mt._32 == -1.0f) {
+				Rot.x = -BM_PI / 2.0f;
+				Rot.y = 0;
+				Rot.z = -atan2(mt._21, mt._11);
+			}
+			else {
+				Rot.x = -asin(mt._32);
+				Rot.y = -atan2(-mt._31, mt._33);
+				Rot.z = atan2(mt._12, mt._11);
+			}
+			return Rot;
+		}
+
+		inline Quat& Inverse() {
+			float LengthSq = this->x * this->x + this->y * this->y + this->z * this->z + this->w * this->w;
+
+			this->x = -this->x / LengthSq;
+			this->y = -this->y / LengthSq;
+			this->z = -this->z / LengthSq;
+			this->w = this->w / LengthSq;
+			return *this;
+		}
+		inline Quat GetInverse()const {
+			Quat output;
+			float LengthSq = this->x * this->x + this->y * this->y + this->z * this->z + this->w * this->w;
+
+			output.x = -this->x / LengthSq;
+			output.y = -this->y / LengthSq;
+			output.z = -this->z / LengthSq;
+			output.w = this->w / LengthSq;
+			return output;
+		}
+
+#ifdef USE_DIRECTXMATH
+		//DirectXMathとの互換
+		inline Quat& operator=(const XMFLOAT4& other) {
+			this->x = other.x;
+			this->y = other.y;
+			this->z = other.z;
+			this->w = other.w;
+			return *this;
+		}
+		explicit inline Quat(const XMFLOAT4& v) :
+			Vector4(v)
+		{
+		}
+		explicit inline Quat(const XMVECTOR& other) : Vector4()
+		{
+			XMVECTOR temp = other;
+			XMStoreFloat4((XMFLOAT4*)((void*)this), temp);
+		}
+		inline operator XMVECTOR() const {
+			return XMLoadFloat4((XMFLOAT4*)((void*)this));
+		}
+		inline Quat& operator=(const XMVECTOR& other) {
+			XMVECTOR temp = other;
+			XMStoreFloat4((XMFLOAT4*)((void*)this), temp);
+			return *this;
+		}
+#endif
+		
+	};
+
+
+	static Vector2 operator* (float value, const Vector2& other) {
+		return Vector2(other.x * value, other.y * value);
+	}
+	static Vector3 operator* (float value, const Vector3& other) {
+		return Vector3(other.x * value, other.y * value, other.z * value);
+	}
+	static Vector4 operator* (float value, const Vector4& other) {
+		return Vector4(other.x * value, other.y * value, other.z * value, other.w * value);
+	}
+	static Quat operator* (float value, const Quat& other) {
+		return Quat(other.x * value, other.y * value, other.z * value, other.w * value);
+	}
+
+	namespace MathHelper
+	{
 
 		static  Matrix4x4 GetLookAtRotation(const Vector3& arg_lookPos,const Vector3& arg_targetPos, const Vector3& arg_upAxis) {
 			Vector3 z = ((Vector3)(arg_targetPos - arg_lookPos)).GetNormalize();
@@ -1272,454 +2245,84 @@ namespace ButiEngine {
 			return out;
 		}
 
-		inline static  Vector3 Cross(const Vector3& vec0, const Vector3& vec1)
-		{
-			return (Vector3)XMVector3Cross(vec0, vec1);
-		}
 
-		inline static Vector3 Reflect(const Vector3& vec, const Vector3& normal)
+		static Vector3 Slide(const Vector3& vec, const Vector3& normal)
 		{
-			return (Vector3)XMVector3Reflect(vec, normal);
-		}
-
-		inline static Vector3 Slide(const Vector3& vec, const Vector3& normal)
-		{
-			//vecと法線から直行線の長さ（内積で求める）
-			float Len = Dot(vec, normal);
-			//その長さに伸ばす
+			float Len = vec.Dot( normal);
 			Vector3 Contact = normal * Len;
-			//スライドする方向は現在のベクトルから引き算
 			return (vec - Contact);
 		}
-		inline static Matrix4x4 inverse(const Matrix4x4& mat)
-		{
-			XMVECTOR Vec;
-			return (Matrix4x4)XMMatrixInverse(&Vec, mat);
+
+		
+
+		static Quat LearpQuat(const Quat& arg_firstQuat, const Quat& arg_secondQuat, const float pase) {
+			Quat secQ = arg_secondQuat;
+			if (arg_firstQuat.Dot(secQ) <= 0) {
+				secQ = -secQ;
+			}
+			Quat out = Quat();
+			const float len1 = arg_firstQuat.GetLength();
+			const float len2 = arg_firstQuat.GetLength();
+
+			if (len1 == 0.0f || len2 == 0.0f)
+				return out;
+
+			const float cos_val = (arg_firstQuat[0] * secQ[0] + arg_firstQuat[1] * secQ[1] + arg_firstQuat[2] * secQ[2] + arg_firstQuat[3] * secQ[3]) / (len1 * len2);
+
+
+			if (abs(cos_val - 1.0f) < 0.001) {
+				return arg_firstQuat;
+			}
+			const float w = acosf(cos_val);
+			const float sin_w = sinf(w);
+			const float sin_t_w = sinf(pase * w);
+			const float sin_inv_t_w = sinf((1.0f - pase) * w);
+			const float mult_q1 = sin_inv_t_w / sin_w;
+			const float mult_q2 = sin_t_w / sin_w;
+
+
+			for (int i = 0; i < 4; i++)
+				out[i] = mult_q1 * arg_firstQuat[i] + mult_q2 * secQ[i];
+
+			return out;
 		}
-
-		static float ToRadian(float deg) {
-
-			return deg * XM_PI / 180.0f;
-		}
-		static float ToDegree(float rad) {
-
-			return rad * 180.0f / XM_PI;
-		}
-
-
-		static inline Quat LearpQuat(const Quat& arg_firstQuat, const Quat& arg_secondQuat, const float pase);
-		static inline Vector3 LarpPosition(const Vector3& arg_startPoint, const Vector3& arg_endPoint, const float t) {
+		static Vector3 LarpPosition(const Vector3& arg_startPoint, const Vector3& arg_endPoint, const float t) {
 			return arg_startPoint + (arg_endPoint - arg_startPoint) * t;
 
 		}
 
-		static inline Vector3 LarpPosition(const Vector3& arg_startPoint, const Vector3& arg_endPoint, const float xt, const float yt, const float zt) {
+		static Vector3 LarpPosition(const Vector3& arg_startPoint, const Vector3& arg_endPoint, const float xt, const float yt, const float zt) {
 			return Vector3(arg_startPoint.x + (arg_endPoint.x - arg_startPoint.x) * xt, arg_startPoint.y + (arg_endPoint.y - arg_startPoint.y) * yt, arg_startPoint.z + (arg_endPoint.z - arg_startPoint.z) * zt);
 
 		}
 
-		static const int IntMax = 2147483647;
-		static const char CharMax = 127;
-		static const short ShortMax = 32767;
-
-		static char GetByteSize(const int arg_check);
-		static char GetUnsignedByteSize(const UINT arg_check);
-	private:
-		MathHelper() {};
 	};
 
 
 
-	struct Quat : public Vector4
-	{
-
-		inline Quat() :Vector4()
-		{
-			Identity();
-		}
-		inline Quat(const Quat& quat) :
-			Vector4(quat.x, quat.y, quat.z, quat.w)
-		{
-		}
-		explicit inline Quat(const XMFLOAT4& v) :
-			Vector4(v)
-		{
-		}
-		inline Quat(float x, float y, float z, float w) :
-			Vector4(x, y, z, w)
-		{
-		}
-
-		inline Quat(const Vector3& vec, float r) :
-			Vector4()
-		{
-			*this = (Quat)XMQuaternionRotationAxis(vec, r);
-		}
-
-		explicit inline Quat(float val) :
-			Vector4()
-		{
-			x = val;
-			y = val;
-			z = val;
-			w = val;
-		}
-		explicit inline Quat(const XMVECTOR& other) :
-			Vector4()
-		{
-			XMVECTOR temp = other;
-			XMStoreFloat4((XMFLOAT4*)this, temp);
-		}
-
-		explicit inline Quat(const Matrix4x4& m) {
-			*this = m.ToQuat();
-		}
-
-		inline operator XMVECTOR() const {
-			XMFLOAT4 temp = *this;
-			XMVECTOR Vec = XMLoadFloat4(&temp);
-			return Vec;
-		}
-		inline Quat& operator =(const Quat& quat)
-		{
-			if (this != &quat) {
-				x = quat.x;
-				y = quat.y;
-				z = quat.z;
-				w = quat.w;
-			}
-			return *this;
-		}
-
-		inline Quat& operator=(const XMFLOAT4& other) {
-			(XMFLOAT4)*this = other;
-			return *this;
-		}
-
-		inline Quat& operator=(const XMVECTOR& other) {
-			XMVECTOR temp = other;
-			XMStoreFloat4((XMFLOAT4*)this, temp);
-			return *this;
-		}
-
-		inline bool operator==(const Quat& other)const {
-			return XMQuaternionEqual(*this, other);
-		}
-
-		inline bool operator!=(const Quat& other)const {
-			return !XMQuaternionEqual(*this, other);
-		}
-
-		inline Quat operator/(const Quat& other) {
-			return (Quat)(((XMVECTOR)*this )/ (XMVECTOR)other);
-		}
-
-		inline Quat& setXYZ(const Vector3& vec)
-		{
-			x = vec.x;
-			y = vec.y;
-			z = vec.z;
-			return *this;
-		}
-
-		inline const Vector3 getXYZ() const
-		{
-			return Vector3(x, y, z);
-		}
-
-		inline Quat& setX(float arg_x)
-		{
-			x = arg_x;
-			return *this;
-		}
-
-		inline Quat& setY(float arg_y)
-		{
-			y = arg_y;
-			return *this;
-		}
-
-		inline Quat& setZ(float arg_z)
-		{
-			z = arg_z;
-			return *this;
-		}
-
-		inline Quat& setW(float arg_w)
-		{
-			w = arg_w;
-			return *this;
-		}
-
-		inline float getX()const {
-			return x;
-		}
-
-		inline float getY()const {
-			return y;
-		}
-
-		inline float getZ()const {
-			return z;
-		}
-
-		inline float getW()const {
-			return w;
-		}
-
-		inline Quat& SetElem(int idx, float value) {
-
-			*(&x + idx) = value;
-			return *this;
-
-		}
-
-		inline float GetElem(int idx) const {
-			return *(&x + idx);
-		}
-
-		inline float& operator [](int idx)
-		{
-			return *(&x + idx);
-		}
-
-
-		inline float operator [](int idx) const
-		{
-			return *(&x + idx);
-		}
-
-
-		inline Quat operator +(const Quat& quat) const
-		{
-			return (Quat)XMVectorAdd(*this, quat);
-		}
-
-
-		inline Quat operator -(const Quat& quat) const
-		{
-			return (Quat)XMVectorSubtract(*this, quat);
-		}
-
-
-		inline Quat operator *(const Quat& quat) const
-		{
-			return (Quat)XMQuaternionMultiply(*this, quat);
-		}
-
-		inline Quat operator *(float val) const
-		{
-			Quat temp(val, val, val, val);
-			return (Quat)XMVectorMultiply(*this, temp);
-		}
-		inline const Quat& operator *=(float val) 
-		{
-			Quat temp(val, val, val, val);
-			return *this=(Quat)XMVectorMultiply(*this, temp);
-		}
-
-		inline const Quat& CreateFromAxisRotate(const Vector3& arg_axis, const  float angle) {
-			*this = XMQuaternionRotationAxis(arg_axis, angle);
-			return *this;
-		}
-
-		inline Matrix4x4 ToMatrix()const {
-			return Matrix4x4(*this);
-		}
-		inline Quat& CreateFromEular(const Vector3& arg_eular) {
-
-			Matrix4x4 rotationMatrix = DirectX::XMMatrixRotationZ(
-				arg_eular.z
-			) *
-				DirectX::XMMatrixRotationY(
-					arg_eular.y
-				) *
-				DirectX::XMMatrixRotationX(
-					arg_eular.x
-				);
-			*this = rotationMatrix.ToQuat();
-			return *this;
-		}
-		inline Quat& CreateFromEular_local_deg(const Vector3& arg_eular) {
-
-			Matrix4x4 rotationMatrix = DirectX::XMMatrixRotationZ(
-				XMConvertToRadians(arg_eular.z)
-			) *
-				DirectX::XMMatrixRotationY(
-					XMConvertToRadians(arg_eular.y)
-				) *
-				DirectX::XMMatrixRotationX(
-					XMConvertToRadians(arg_eular.x)
-				);
-			*this = rotationMatrix.ToQuat();
-			return *this;
-		}
-		inline Quat& CreateFromEular_deg(const Vector3& arg_eular) {
-
-			Matrix4x4 rotationMatrix = DirectX::XMMatrixRotationX(
-				XMConvertToRadians(arg_eular.x)
-			) *
-				DirectX::XMMatrixRotationY(
-					XMConvertToRadians(arg_eular.y)
-				) *
-				DirectX::XMMatrixRotationZ(
-					XMConvertToRadians(arg_eular.z)
-				);
-			*this = rotationMatrix.ToQuat();
-			return *this;
-		}
-
-		inline Quat& operator *=(const Quat& quat) {
-			*this = *this * quat;
-			return *this;
-		}
-
-		inline Quat& Normalize() {
-			*this = (Quat)XMQuaternionNormalize(*this);
-			return *this;
-		}
-
-		inline float Dot(const Quat& quat)const {
-			return ((Quat)XMQuaternionDot(*this, quat)).x;
-		}
-
-		inline Quat& Conj(const Quat& quat) {
-			*this = (Quat)XMQuaternionConjugate(quat);
-			return *this;
-		}
-		inline Quat& Conj() {
-			this->x = -this->x;
-			this->y = -this->y;
-			this->z = -this->z;
-			return *this;
-		}
-		inline  Quat& Identity() {
-			*this = (Quat)XMQuaternionIdentity();
-			return *this;
-		}
-		
-		inline Quat& Rotation(float radians, const Vector3& unitVec) {
-			*this = (Quat)XMQuaternionRotationAxis(unitVec, radians);
-			return *this;
-		}
-
-		inline Quat& Rotation(const Vector3& unitVec, float radians) {
-			*this = (Quat)XMQuaternionRotationAxis(unitVec, radians);
-			return *this;
-		}
-		inline Quat& rotationRollPitchYawFromVector(const Vector3& rotVec) {
-			*this = (Quat)XMQuaternionRotationRollPitchYawFromVector(rotVec);
-			return *this;
-		}
-
-		inline  Vector3 ToRotVec() const {
-			Quat Temp = *this;
-			Temp.Normalize();
-			Matrix4x4 mt(Temp);
-			Vector3 Rot;
-			if (mt._32 == 1.0f) {
-				Rot.x = XM_PI / 2.0f;
-				Rot.y = 0;
-				Rot.z = -atan2(mt._21, mt._11);
-			}
-			else if (mt._32 == -1.0f) {
-				Rot.x = -XM_PI / 2.0f;
-				Rot.y = 0;
-				Rot.z = -atan2(mt._21, mt._11);
-			}
-			else {
-				Rot.x = -asin(mt._32);
-				Rot.y = -atan2(-mt._31, mt._33);
-				Rot.z = atan2(mt._12, mt._11);
-			}
-			return Rot;
-		}
-
-		inline Quat& Inverse() {
-			*this = (Quat)XMQuaternionInverse(*this);
-			return *this;
-		}
-		inline Quat GetInverse()const {
-			return (Quat)XMQuaternionInverse(*this);
-			
-		}
-		inline Quat& Facing(const Vector3& norm) {
-			Vector3 DefUp(0, 1.0f, 0);
-			Vector3 Temp = norm;
-			Vector2 TempVec2(Temp.x, Temp.z);
-			if (MathHelper::Length(TempVec2) < 0.1f) {
-				DefUp = Vector3(0, 0, 1.0f);
-			}
-			Temp.Normalize();
-			Matrix4x4 RotMatrix;
-			RotMatrix = XMMatrixLookAtLH(Vector3(0, 0, 0), Temp, DefUp);
-			RotMatrix = MathHelper::inverse(RotMatrix);
-			*this = RotMatrix.ToQuat();
-			(*this).Normalize();
-			return *this;
-		}
-
-		inline Quat& facingY(const Vector3& norm) {
-			Vector3 Temp = norm;
-			Temp.Normalize();
-			*this = XMQuaternionRotationRollPitchYaw(0, atan2(Temp.x, Temp.z), 0);
-			(*this).Normalize();
-			return *this;
-		}
-
-		inline bool IsNaN() const {
-			return XMQuaternionIsNaN(*this);
-		}
-		inline bool IsInfinite() const {
-			return XMQuaternionIsInfinite(*this);
-		}
-	};
 	inline Vector3 ButiEngine::Vector3::operator*(const Quat& other)
 	{
 		return (Vector3)(*this)*(other.ToMatrix());
 	}
-
-	inline Quat MathHelper::LearpQuat(const Quat& arg_firstQuat, const Quat& arg_secondQuat, const float pase)
-	{
-		Quat secQ = arg_secondQuat;
-		if (arg_firstQuat.Dot(secQ) <= 0) {
-			secQ = -secQ;
-		}
-		Quat out = Quat();
-		const float len1 = arg_firstQuat.GetLength();
-		const float len2 = arg_firstQuat.GetLength();
-
-		if (len1 == 0.0f || len2 == 0.0f)
-			return out;
-
-		const float cos_val = (arg_firstQuat[0] * secQ[0] + arg_firstQuat[1] * secQ[1] + arg_firstQuat[2] * secQ[2] + arg_firstQuat[3] * secQ[3]) / (len1 * len2);
-		
-
-		if (abs(cos_val- 1.0f)<0.001) {
-			return arg_firstQuat;
-		}
-		const float w = acosf(cos_val);
-		const float sin_w = sinf(w);
-		const float sin_t_w = sinf(pase * w);
-		const float sin_inv_t_w = sinf((1.0f - pase) * w);
-		const float mult_q1 = sin_inv_t_w / sin_w;
-		const float mult_q2 = sin_t_w / sin_w;
-
-
-		for (int i = 0; i < 4; i++)
-			out[i] = mult_q1 * arg_firstQuat[i] + mult_q2 * secQ[i];
-
-		return out;
+	inline ButiEngine::Vector3::operator Vector4()const {
+		return Vector4(x, y, z, 1.0f);
 	}
 
+	inline ButiEngine::Vector2::operator Vector3() const
+	{
+		return Vector3(x, y, 0.0f);
+	}
+	inline ButiEngine::Vector2::operator Vector4() const
+	{
+		return Vector4(x, y, 0.0f,1.0f);
+	}
 	struct Line {
 		Vector3 point;
 		Vector3 velocity;
 		Line() {}
 		Line(const Vector3& p, const Vector3& v) :point(p), velocity(v) {}
 
-		// 線上の座標を取得
-		//  t: ベクトルに掛け算する係数
+
 		inline virtual Vector3 GetPoint(float t) const {
 			return point + velocity * t;
 		}
@@ -1737,7 +2340,7 @@ namespace ButiEngine {
 		Segment() {}
 		Segment(const Vector3& startPoint, const Vector3& endPoint) :Line(startPoint,((Vector3)( endPoint - startPoint)).GetNormalize()), endPos(endPoint) {}
 
-		// 終点を取得
+
 		inline Vector3 GetEndPoint() const {
 			return endPos;
 		}
@@ -1789,8 +2392,7 @@ namespace ButiEngine {
 		Line2D() {}
 		Line2D(const Vector2& p, const Vector2& v) :point(p), velocity(v) {}
 
-		// 線上の座標を取得
-		//  t: ベクトルに掛け算する係数
+
 		inline virtual Vector2 GetPoint(float t) const {
 			return point + velocity * t;
 		}
@@ -1800,7 +2402,7 @@ namespace ButiEngine {
 		Segment2D() {}
 		Segment2D(const Vector2& startPoint, const Vector2& endPoint) :Line2D(startPoint, endPoint - startPoint), endPos(endPoint) {}
 
-		// 終点を取得
+
 		inline Vector2 GetEndPoint() const {
 			return endPos;
 		}
@@ -1954,12 +2556,12 @@ namespace ButiEngine {
 			return vec_points.at(0) == vec_points.at(vec_points.size()-1);
 		}
 
-		Vector3 GetPoint(float t) {
+		Vector3 GetPoint(float t) const{
 			{
-				UINT itr = (t / unit);
+				UINT itr =(UINT) (t / unit);
 
 				if (itr >= vec_points.size() - 3) {
-					itr = vec_points.size() - 4;
+					itr =(UINT) vec_points.size() - 4;
 				}
 
 
@@ -1971,7 +2573,7 @@ namespace ButiEngine {
 			if (t > 1.0f) {
 				t = 0;
 			}
-
+			return vec_points[vec_points.size() - 1];
 		}
 
 		bool ShowUI();
@@ -2004,15 +2606,61 @@ namespace ButiEngine {
 
 	////////////////////////////////////////////////////
 
-	inline Vector4 ButiEngine::Matrix4x4::operator*(const Vector4& vec4)
+	inline Vector4 ButiEngine::Matrix4x4::operator*(const Vector4& other)
 	{
-		return XMVector4Transform(vec4, *this);
+
+		Vector4 temp = Vector4(this->_11 * other.x + this->_21 * other.y + this->_31 * other.z + this->_41 * other.w,
+			this->_12 * other.x + this->_22 * other.y + this->_32 * other.z + this->_42 * other.w,
+			this->_13 * other.x + this->_23 * other.y + this->_33 * other.z + this->_43 * other.w,
+			this->_14 * other.x + this->_24 * other.y + this->_34 * other.z + this->_44 * other.w
+		);
+		return temp;
+	}
+	inline Vector3 ButiEngine::Matrix4x4::operator*(const Vector3& other)
+	{
+
+		Vector3 temp = Vector3(this->_11 * other.x + this->_21 * other.y + this->_31 * other.z + this->_41,
+			this->_12 * other.x + this->_22 * other.y + this->_32 * other.z + this->_42 ,
+			this->_13 * other.x + this->_23 * other.y + this->_33 * other.z + this->_43 
+		);
+		return temp;
 	}
 
-	inline ButiEngine::Matrix4x4::Matrix4x4(const Quat& quat)
+	inline Vector4& Matrix4x4::operator[](const unsigned int idx)
 	{
-		if (!quat.isNaN())
-			*this = (Matrix4x4)XMMatrixRotationQuaternion(XMVECTOR(quat));
+		return *((Vector4*) (&m[idx][0]));
+	}
+
+	inline Vector4 Matrix4x4::operator[](const unsigned int idx) const
+	{
+		return *((Vector4*)(&m[idx][0]));
+	}
+
+	inline ButiEngine::Matrix4x4::Matrix4x4(const Quat& other)
+	{
+		if (!other.IsNaN()) {
+
+			float x2 = other.x + other.x, y2 = other.y + other.y, z2 = other.z + other.z;
+			float xx = other.x * x2, xy = other.x * y2, xz = other.x * z2;
+			float yy = other.y * y2, yz = other.y * z2, zz = other.z * z2;
+			float wx = other.w * x2, wy = other.w * y2, wz = other.w * z2;
+			this->_11 = 1 - (yy + zz);
+			this->_21 = xy - wz;
+			this->_31 = xz + wy;
+			this->_41 = 0;
+			this->_12 = xy + wz;
+			this->_22 = 1 - (xx + zz);
+			this->_32 = yz - wx;
+			this->_42 = 0;
+			this->_13 = xz - wy;
+			this->_23 = yz + wx;
+			this->_33 = 1 - (xx + yy);
+			this->_34 = 0;
+			this->_14 = 0;
+			this->_24 = 0;
+			this->_34 = 0;
+			this->_44 = 1;
+		}
 		else {
 			_11 = 1.0f;
 			_12 = 0.0f;
@@ -2221,6 +2869,14 @@ namespace ButiEngine {
 		_42 = 0;
 		_43 = 0;
 	}
+	inline Matrix4x4 ButiEngine::Matrix4x4::Translate(const Vector3& arg_position)
+	{
+		Matrix4x4 output;
+		output._41 = arg_position.x;
+		output._42 = arg_position.y;
+		output._43 = arg_position.z;
+		return output;
+	}
 	inline Matrix4x4 ButiEngine::Matrix4x4::Scale(const Vector3& arg_scale)
 	{
 		Matrix4x4 output;
@@ -2231,102 +2887,75 @@ namespace ButiEngine {
 	}
 	inline Quat ButiEngine::Matrix4x4::ToQuat() const
 	{
-		Vector3 scale, pos;
-		Quat qt;
-		Decompose(scale, qt, pos);
-		return qt;
-	}
-	inline void ButiEngine::Matrix4x4::Decompose(Vector3& rScaling, Quat& rQt, Vector3& rTranslation) const
-	{
-		XMVECTOR Scale;
-		XMVECTOR Qt;
-		XMVECTOR Translation;
-		if (XMMatrixDecompose(&Scale, &Qt, &Translation, *this)) {
-			rScaling = Scale;
-			rQt = Qt;
-			rTranslation = Translation;
+		Quat output;
+		float elem[4];
+		elem[0] = this->_11 - this->_22 - this->_33 + 1.0f;
+		elem[1] = -this->_11 + this->_22 - this->_33 + 1.0f;
+		elem[2] = -this->_11 - this->_22 + this->_33 + 1.0f;
+		elem[3] = this->_11 + this->_22 + this->_33 + 1.0f;
+
+		unsigned biggestIndex = 0;
+		for (int i = 1; i < 4; i++) {
+			if (elem[i] > elem[biggestIndex])
+				biggestIndex = i;
 		}
-		else {
-			//スケーリングマイナスの場合の処理
-			auto XLen = MathHelper::Length(Vector3(_11, _12, _13));
-			auto YLen = MathHelper::Length(Vector3(_21, _22, _23));
-			auto ZLen = MathHelper::Length(Vector3(_31, _32, _33));
-			//スケーリングが0の要素がある
-			if (XLen == 0.0f) {
-				XLen = 0.0001f;
-			}
-			if (YLen == 0.0f) {
-				YLen = 0.0001f;
-			}
-			if (ZLen == 0.0f) {
-				ZLen = 0.0001f;
-			}
-			rScaling = Vector3(XLen, YLen, ZLen);
-			rTranslation = Vector3(_41, _42, _43);
 
-			Vector3 vX = Vector3(_11, _12, _13) / XLen;
-			Vector3 vY = Vector3(_21, _22, _23) / XLen;
-			Vector3 vZ = Vector3(_31, _32, _33) / XLen;
 
-			Matrix4x4 retM;
-			retM.Identity();
-			retM._11 = vX.x;
-			retM._12 = vX.y;
-			retM._13 = vX.z;
 
-			retM._21 = vY.x;
-			retM._22 = vY.y;
-			retM._23 = vY.z;
+		float v = sqrtf(elem[biggestIndex]) * 0.5f;
+		output[biggestIndex] = v;
+		float mult = 0.25f / v;
 
-			retM._31 = vZ.x;
-			retM._32 = vZ.y;
-			retM._33 = vZ.z;
-
-			rQt = (Quat)XMQuaternionRotationMatrix(retM);
-
+		switch (biggestIndex) {
+		case 0: // x
+			output[1] = (this->_12 + this->_21) * mult;
+			output[2] = (this->_31 + this->_13) * mult;
+			output[3] = (this->_23 - this->_32) * mult;
+			break;
+		case 1: // y
+			output[0] = (this->_12 + this->_21) * mult;
+			output[2] = (this->_23 + this->_32) * mult;
+			output[3] = (this->_31 - this->_13) * mult;
+			break;
+		case 2: // z
+			output[0] = (this->_31 + this->_13) * mult;
+			output[1] = (this->_23 + this->_32) * mult;
+			output[3] = (this->_12 - this->_21) * mult;
+			break;
+		case 3: // w
+			output[0] = (this->_23 - this->_32) * mult;
+			output[1] = (this->_31 - this->_13) * mult;
+			output[2] = (this->_12 - this->_21) * mult;
+			break;
 		}
+
+		return output;
 	}
 
 	inline Matrix4x4& Matrix4x4::CreateFromEuler(const Vector3& arg_euler)
 	{
-		*this = DirectX::XMMatrixRotationX(
-			arg_euler.x
-		) *
-			DirectX::XMMatrixRotationY(
-				arg_euler.y
-			) *
-			DirectX::XMMatrixRotationZ(
-				arg_euler.z
-			);
+		*this = RollX(arg_euler.x) *RollY(arg_euler.y) *RollZ(arg_euler.z);
 		return *this;
 	}
 	inline Matrix4x4& Matrix4x4::CreateFromEuler_local(const Vector3& arg_euler)
 	{
-		*this = DirectX::XMMatrixRotationZ(
-			arg_euler.z
-		) *
-			DirectX::XMMatrixRotationY(
-				arg_euler.y
-			) *
-			DirectX::XMMatrixRotationX(
-				arg_euler.x
-			);
+		*this = RollZ(arg_euler.z) *RollY(arg_euler.y) *RollX(arg_euler.x);
 		return *this;
 	}
 
-	static const float EulerXLimit = 90.0f / 180.0f * XM_PI;
+	static const float EulerXLimit = 90.0f / 180.0f * BM_PI;
 	inline Vector3 Matrix4x4::GetEulerOneValue_local() const
 	{
 
 		Vector3 Rot;
 		if (this->_31 == 1.0f) {
 			Rot.x = atan2(-this->_32,this->_33);
-			Rot.y = XM_PI / 2.0f;
+			Rot.y = BM_PI / 2.0f;
 			Rot.z = 0;
 		}
 		else if (this->_31 == -1.0f) {
 			Rot.x = atan2(-this->_32,this->_33);
-			Rot.y = -XM_PI / 2.0f;
+			Rot.y = -BM_PI / 2.0f;
 			Rot.z = 0;
 		}
 		else {
@@ -2346,12 +2975,12 @@ namespace ButiEngine {
 		Vector3 Rot;
 		if (this->_13 == 1.0f) {
 			Rot.x = atan2(this->_23 , this->_33);
-			Rot.y = XM_PI / 2.0f;
+			Rot.y = BM_PI / 2.0f;
 			Rot.z = 0;
 		}
 		else if (this->_13 == -1.0f) {
 			Rot.x = atan2(this->_23 , this->_33 );
-			Rot.y = -XM_PI / 2.0f;
+			Rot.y = -BM_PI / 2.0f;
 			Rot.z = 0;
 		}
 		else {
@@ -2366,8 +2995,8 @@ namespace ButiEngine {
 	}
 
 
-	typedef Vector4 Color;
-	typedef Vector2 Point2D;
+	using Color=Vector4 ;
+	using Point2D=Vector2;
 
 	class Rectangle {
 	public:
@@ -2437,7 +3066,7 @@ namespace ButiEngine {
 
 
 			auto output = std::sqrt(u / t) / 4;
-			return output;
+			return (float)output;
 		}
 		inline static float GetRectangleOuterCircleRadius(const Rectangle& ref_rect) {
 			auto s = (ref_rect.width + ref_rect.height);
@@ -2472,3 +3101,5 @@ namespace ButiEngine {
 
 
 }
+
+#endif

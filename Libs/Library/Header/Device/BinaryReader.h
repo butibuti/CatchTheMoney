@@ -76,12 +76,12 @@ namespace ButiEngine {
 			return fin.eof();
 		}
 
-		inline void Skip(int skipByte) {
+		inline void Skip(const int skipByte) {
 			auto currentPos = fin.tellg();
 			fin.seekg((((int)currentPos) + skipByte), std::ios_base::beg);
 		}
 
-		inline bool Skip(std::string skipSource) {
+		inline bool Skip(const  std::string& skipSource) {
 
 			auto currentPos = fin.tellg();
 			std::string find = "";

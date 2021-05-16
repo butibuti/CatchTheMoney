@@ -15,7 +15,10 @@ namespace ButiEngine {
 		void SetVarticalAnim(const int arg_setNum);
 		int GetHorizontalAnim() const;
 		int GetVarticalAnim()const;
-		
+		int GetHorizontalSplitScale()const;
+		int GetVarticalSplitScale()const;
+
+
 		std::string GetGameComponentName()override {
 			return "SpliteAnimationComponent";
 		}

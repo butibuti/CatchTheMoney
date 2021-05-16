@@ -43,7 +43,7 @@ void ButiEngine::ParentPanel::SetBackPanel(std::weak_ptr<GameObject> arg_backPan
 
 void ButiEngine::ParentPanel::SetChildScale()
 {
-	gameObject.lock()->transform->SetLocalScale(1.0f);
+	gameObject.lock()->transform->SetLocalScale(Vector3(1.0f, 1.0f, 1.0f));
 
 	if (wkp_frontPanel.lock())
 	{

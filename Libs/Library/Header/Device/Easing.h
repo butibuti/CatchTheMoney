@@ -110,7 +110,7 @@ namespace ButiEngine {
                 ? ((float) std::pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2
                 : ((float) std::pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
         }
-        const  float c4 = (2 * DirectX::XM_PI) / 3;
+        const  float c4 = (2 * BM_PI) / 3;
         static float EaseInElastic(const float x) {
 
 

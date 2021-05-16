@@ -10,7 +10,7 @@ namespace ButiEngine {
 		Window();
 		void Initialize(const std::string arg_windowName,const WindowPopType arg_popType ,bool isFullScreen,  UINT width=0, UINT height = 0)override;
 		HWND GetHandle()override;
-		DirectX::XMUINT2 GetSize()override;
+		UInt2 GetSize()override;
 		Vector2 GetWindowCenterPosition()override;
 		void SetSize(int width, int height)override;
 		bool Update()override;
