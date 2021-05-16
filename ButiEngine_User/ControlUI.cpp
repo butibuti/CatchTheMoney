@@ -2,10 +2,16 @@
 #include "ControlUI.h"
 #include"InputManager.h"
 #include"PauseManager.h"
+#include"TalkText.h"
 
 void ButiEngine::ControlUI::OnUpdate()
 {
-	if (stop || shp_pauseManager->GetPause()) { return; }
+	if (stop || 
+		shp_pauseManager->GetPause() ||
+		!TalkText::IsDelete())
+	{
+		return; 
+	}
 	Animation();
 	OnNoPush();
 	OnPushAnyKey();

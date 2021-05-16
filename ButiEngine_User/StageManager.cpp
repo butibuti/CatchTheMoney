@@ -18,7 +18,6 @@
 #include"Panel.h"
 #include"ClearButton.h"
 #include"ControlUI.h"
-#include"ShakeComponent.h"
 
 ButiEngine::GameMode ButiEngine::StageManager::mode;
 
@@ -336,11 +335,11 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 		isNext = true;
 		if (selectedNext)
 		{
-			wkp_buttonNext.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(10.0f);
+			wkp_buttonNext.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
 		}
 		else
 		{
-			wkp_buttonSelect.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(10.0f);
+			wkp_buttonSelect.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
 		}
 	}
 }

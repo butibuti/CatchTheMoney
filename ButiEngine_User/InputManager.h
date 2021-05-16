@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class PauseManager;
+
 	class InputManager :public GameComponent
 	{
 	public:
@@ -48,8 +50,10 @@ namespace ButiEngine {
 		static bool OnSkipKey();
 
 	private:
+		std::shared_ptr<PauseManager> shp_pauseManager;
+
 		static const float DEADZONE;
-		static const int NO_PUSH_FRAME = 60;
+		static const int NO_PUSH_FRAME = 120;
 		static Vector2 previousLeftStick;
 		static Vector2 currentLeftStick;
 		static Vector2 previousRightStick;
