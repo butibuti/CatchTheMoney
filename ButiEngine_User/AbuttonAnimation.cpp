@@ -4,40 +4,38 @@
 
 void ButiEngine::AbuttonAnimation::OnUpdate()
 {
-	const float MIN_SCALE = 160;
+	const float MIN_SCALE = 140;
 	const float MAX_SCALE = 180;
 
 	changeCount++;
 
 	if (!isChange)
 	{
-		currentScale = MIN_SCALE;
+		currentScale = MAX_SCALE;
 	}
 	else
 	{
-		currentScale = MAX_SCALE;
+		currentScale = MIN_SCALE;
 	}
 
 	if (InputManager::OnTriggerDecisionKey())
 	{
-		gameObject.lock()->transform->SetLocalScale(Vector3(80, 80, 0));
+		previousScale = 60;
+		isChange = false;
+		currentScale = MAX_SCALE;
+		changeCount = 0;
 	}
 
 	if (changeCount > 30)
 	{
 		isChange = !isChange;
 		changeCount = 0;
-
-		auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
-		if (!anim)
-		{
-			anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
-			anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-			anim->GetTargetTransform()->SetLocalScale(Vector3(currentScale, currentScale, 0));
-			anim->SetSpeed(0.05f);
-			anim->SetEaseType(Easing::EasingType::EaseOut);
-		}
 	}
+
+	//Lerp
+	previousScale = previousScale * (1.0f - 0.08f) + currentScale * 0.08f;
+
+	gameObject.lock()->transform->SetLocalScale(Vector3(previousScale, previousScale, 0));
 }
 
 void ButiEngine::AbuttonAnimation::OnSet()
