@@ -28,6 +28,7 @@ namespace ButiEngine {
 		void Start()override;
 		void OnShowUI()override;
 		void SetIsEdit(const bool arg_isEdit);
+		void SetIsPause(const bool arg_isPause);
 		void EditUpdate();
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
@@ -49,7 +50,7 @@ namespace ButiEngine {
 		Vector3 leftUpEdge, leftDownEdge, rightUpEdge, rightDownEdge;
 		int increase = 0;
 		float rotation;
-		bool isEdit=false;
+		bool isEdit=false,isPause=false;
 		std::vector <FramePart >vec_frameParts;
 		std::vector<Vector3>vec_controlPoints;
 	};

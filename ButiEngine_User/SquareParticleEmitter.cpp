@@ -4,19 +4,12 @@
 const float circleLength = 360.0f / 16.0f;
 
 
-ButiEngine::Vector3 GetMobiusPoint(float arg_time,float arg_radius) {
-    ButiEngine::Vector3 output;
 
-    output.x = -(arg_radius * cos(arg_time)+2) * sin(2 * arg_time);
-    output.y = (arg_radius * cos(arg_time)+2) * cos(2 * arg_time);
-    output.z = arg_radius * sin(arg_time);
-
-    return output;
-}
 
 void ButiEngine::SquareParticleEmitter::OnUpdate(){
     if (isEdit) {
-        EditUpdate();
+        if(!isPause)
+            EditUpdate();
     }
     else {
         for (int i = 0; i < increase; i++)
@@ -41,10 +34,10 @@ void ButiEngine::SquareParticleEmitter::Roll(const float arg_degrees)
         rotation -= 360.0f;
     }
 
-    leftUpEdge = GetMobiusPoint(MathHelper::ToRadian(rotation + -circleLength), -1) * radius;
-    leftDownEdge = GetMobiusPoint(MathHelper::ToRadian(rotation + -circleLength + 180), -1) * radius;
-    rightUpEdge = GetMobiusPoint(MathHelper::ToRadian(rotation + circleLength), -1) * radius;
-    rightDownEdge = GetMobiusPoint(MathHelper::ToRadian(rotation + circleLength + 180), -1) * radius;
+    leftUpEdge =MathHelper:: GetMobiusPoint(MathHelper::ToRadian(rotation + -circleLength), -1) * radius;
+    leftDownEdge = MathHelper::GetMobiusPoint(MathHelper::ToRadian(rotation + -circleLength + 180), -1) * radius;
+    rightUpEdge = MathHelper::GetMobiusPoint(MathHelper::ToRadian(rotation + circleLength), -1) * radius;
+    rightDownEdge = MathHelper::GetMobiusPoint(MathHelper::ToRadian(rotation + circleLength + 180), -1) * radius;
 }
 
 void ButiEngine::SquareParticleEmitter::SetRotation(const float arg_degrees)
@@ -60,10 +53,10 @@ void ButiEngine::SquareParticleEmitter::SetRotation(const float arg_degrees)
         rotation -= 360.0f;
     }
 
-    leftUpEdge = GetMobiusPoint(MathHelper::ToRadian(rotation + -circleLength), -1) * radius;
-    leftDownEdge = GetMobiusPoint(MathHelper::ToRadian(rotation + -circleLength + 180), -1) * radius;
-    rightUpEdge = GetMobiusPoint(MathHelper::ToRadian(rotation + circleLength), -1) * radius;
-    rightDownEdge = GetMobiusPoint(MathHelper::ToRadian(rotation + circleLength + 180), -1) * radius;
+    leftUpEdge = MathHelper::GetMobiusPoint(MathHelper::ToRadian(rotation + -circleLength), -1) * radius;
+    leftDownEdge = MathHelper::GetMobiusPoint(MathHelper::ToRadian(rotation + -circleLength + 180), -1) * radius;
+    rightUpEdge = MathHelper::GetMobiusPoint(MathHelper::ToRadian(rotation + circleLength), -1) * radius;
+    rightDownEdge = MathHelper::GetMobiusPoint(MathHelper::ToRadian(rotation + circleLength + 180), -1) * radius;
 }
 
 void ButiEngine::SquareParticleEmitter::Start()
@@ -101,6 +94,11 @@ void ButiEngine::SquareParticleEmitter::SetIsEdit(const bool arg_isEdit)
     isEdit = arg_isEdit;
 }
 
+void ButiEngine::SquareParticleEmitter::SetIsPause(const bool arg_isPause)
+{
+    isPause = false;
+}
+
 void ButiEngine::SquareParticleEmitter::EditUpdate()
 {
     Vector3 thicknessOffset = Vector3(0, 0, thickness);
@@ -109,27 +107,26 @@ void ButiEngine::SquareParticleEmitter::EditUpdate()
         auto currentScale = vec_frameParts[i].shp_object->transform->GetLocalScale().x;
         vec_frameParts[i].shp_object->transform->SetLocalScale(Vector3((vec_frameParts[i].size - currentScale) * 0.5f));
         vec_frameParts[i].shp_object->transform->SetWorldRotation(Matrix4x4());
+
+        vec_frameParts[i].time += speedMin*0.5f;
         switch (vec_frameParts[i].mode)
         {
         case MoveMode::Move_TopLineFront:
         {
-            vec_frameParts[i].time += speedMin;
             auto t = (rotation - circleLength) * (1 - (vec_frameParts[i].time)) + (rotation ) * (vec_frameParts[i].time);
-            vec_frameParts[i].shp_object->transform->SetLocalPosition(GetMobiusPoint(MathHelper::ToRadian(t + 180), -1) * radius + thicknessOffset);
+            vec_frameParts[i].shp_object->transform->SetLocalPosition(MathHelper::GetMobiusPoint(MathHelper::ToRadian(t + 180), -1) * radius + thicknessOffset);
 
         }
         break;
         case MoveMode::Move_TopLineBack:
         {
-            vec_frameParts[i].time += speedMin;
             auto t = (rotation ) * (1 - (vec_frameParts[i].time)) + (rotation + circleLength) * (vec_frameParts[i].time);
-            vec_frameParts[i].shp_object->transform->SetLocalPosition(GetMobiusPoint(MathHelper::ToRadian(t + 180), -1) * radius + thicknessOffset);
+            vec_frameParts[i].shp_object->transform->SetLocalPosition(MathHelper::GetMobiusPoint(MathHelper::ToRadian(t + 180), -1) * radius + thicknessOffset);
 
         }
         break;
         case MoveMode::Move_LeftLine:
         {
-            vec_frameParts[i].time += speedMin;
             auto t = (vec_frameParts[i].time);
             vec_frameParts[i].shp_object->transform->SetLocalPosition(rightDownEdge + (rightUpEdge - rightDownEdge) * t + thicknessOffset);
 
@@ -138,16 +135,14 @@ void ButiEngine::SquareParticleEmitter::EditUpdate()
         case MoveMode::Move_BottomLine:
         {
 
-            vec_frameParts[i].time += speedMin;
             auto time = vec_frameParts[i].time;
             auto t = (rotation + circleLength) * (1 - time) + (rotation - circleLength) * (time);
-            vec_frameParts[i].shp_object->transform->SetLocalPosition(GetMobiusPoint(MathHelper::ToRadian(t), -1) * radius + thicknessOffset);
+            vec_frameParts[i].shp_object->transform->SetLocalPosition(MathHelper::GetMobiusPoint(MathHelper::ToRadian(t), -1) * radius + thicknessOffset);
 
         }
         break;
         case MoveMode::Move_RightLine:
         {
-            vec_frameParts[i].time += speedMin;
             auto t = (vec_frameParts[i].time);
             vec_frameParts[i].shp_object->transform->SetLocalPosition(leftUpEdge + (leftDownEdge - leftUpEdge) * t + thicknessOffset);
 

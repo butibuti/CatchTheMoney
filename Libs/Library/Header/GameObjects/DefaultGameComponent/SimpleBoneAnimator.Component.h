@@ -15,6 +15,7 @@ namespace ButiEngine {
 		void SetLoop(const bool arg_isLoop);
 		void OnShowUI()override;
 		void Start()override;
+		void OnSet()override;
 		void SetModelData();
 		std::string GetGameComponentName()override {
 			return "SimpleBoneAnimatorComponent";

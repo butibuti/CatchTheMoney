@@ -1990,10 +1990,10 @@ namespace ButiEngine {
 
 		inline Quat operator *(const Quat& other) const
 		{
-			float ax = this->x, ay = this->y, az = this->z, aw = this->w;
-			float bx = other.x, by = other.y, bz = other.z, bw = other.w;
-			return Quat(ax * bw + aw * bx + ay * bz - az * by, 	ay * bw + aw * by + az * bx - ax * bz, 
-				az * bw + aw * bz + ax * by - ay * bx, aw * bw - ax * bx - ay * by - az * bz);
+			float px = this->x, py = this->y, pz = this->z, pw = this->w;
+			float qx = other.x, qy = other.y, qz = other.z, qw = other.w;
+			return Quat(qw*px -qz*py + qy*pz + qx*pw, qz*px + qw*py-qx*pz + qy*pw,
+				-qy*px + qx*py + qw*pz + qz*pw, -qx*px-qy*py-qz*pz + qw*pw);
 		}
 		inline Quat operator /(const Quat& other) const
 		{
@@ -2294,6 +2294,16 @@ namespace ButiEngine {
 		static Vector3 LarpPosition(const Vector3& arg_startPoint, const Vector3& arg_endPoint, const float xt, const float yt, const float zt) {
 			return Vector3(arg_startPoint.x + (arg_endPoint.x - arg_startPoint.x) * xt, arg_startPoint.y + (arg_endPoint.y - arg_startPoint.y) * yt, arg_startPoint.z + (arg_endPoint.z - arg_startPoint.z) * zt);
 
+		}
+
+		static Vector3 GetMobiusPoint(float arg_time, float arg_radius) {
+			Vector3 output;
+
+			output.x = -(arg_radius * cos(arg_time) + 2) * sin(2 * arg_time);
+			output.y = (arg_radius * cos(arg_time) + 2) * cos(2 * arg_time);
+			output.z = arg_radius * sin(arg_time);
+
+			return output;
 		}
 
 	};
