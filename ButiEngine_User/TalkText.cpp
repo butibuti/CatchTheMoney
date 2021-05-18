@@ -18,11 +18,13 @@ void ButiEngine::TalkText::OnUpdate()
 	if (!isOnce)
 	{
 		isOnce = true;
+		//GetManager().lock()->GetGameObject("TextWindow").lock()->transform->SetLocalScale(Vector3(2000, 720, 0));
 		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 30);
 	}
 
-	if (InputManager::OnTriggerDecisionKey())
+	if (InputManager::OnTriggerDecisionKey() && waitTime > 12)
 	{
+		waitTime = 0;
 		textCount++;
 		ShakeAimation();
 		if (textCount < shp_spriteAnimation->GetVarticalSplitScale())
@@ -34,6 +36,10 @@ void ButiEngine::TalkText::OnUpdate()
 			isDelete = true;
 		}
 	}
+	if(waitTime < 60)
+	{
+		waitTime++;
+	}
 }
 
 void ButiEngine::TalkText::OnSet()
@@ -44,6 +50,7 @@ void ButiEngine::TalkText::Start()
 {
 	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 	textCount = 0;
+	waitTime = 0;
 	isDelete = false;
 	isOnce = false;
 }
@@ -68,8 +75,10 @@ void ButiEngine::TalkText::ShakeAimation()
 	{
 		if (textCount == 4 || textCount == 6)
 		{
+			//GetManager().lock()->GetGameObject("TextWindow").lock()->transform->SetLocalScale(Vector3(1920, 640, 0));
 			return;
 		}
+		//GetManager().lock()->GetGameObject("TextWindow").lock()->transform->SetLocalScale(Vector3(2000, 720, 0));
 		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
 	}
 	else if (StageSelect::GetStageNum() == 6)

@@ -26,6 +26,7 @@ namespace ButiEngine {
 		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 		
 		int textCount;
+		int waitTime;
 		bool isOnce;
 		static bool isDelete;
 
