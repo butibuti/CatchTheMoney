@@ -130,12 +130,12 @@ void ButiEngine::PanelManager::Control()
 {
 	if (InputManager::OnTriggerRightKey())
 	{
-		if (moveNum >= MOVE_LIMIT)
+		/*if (moveNum >= MOVE_LIMIT)
 		{
 			shp_shake->ShakeStart(3.0);
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, 0.1f);
 			return;
-		}
+		}*/
 		SwapRight();
 		RemoveHistories();
 		vec_histories.push_back(RIGHT);
@@ -143,12 +143,12 @@ void ButiEngine::PanelManager::Control()
 	}
 	else if (InputManager::OnTriggerLeftKey())
 	{
-		if (moveNum <= -MOVE_LIMIT)
+		/*if (moveNum <= -MOVE_LIMIT)
 		{
 			shp_shake->ShakeStart(3.0);
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, 0.1f);
 			return;
-		}
+		}*/
 		SwapLeft();
 		RemoveHistories();
 		vec_histories.push_back(LEFT);
