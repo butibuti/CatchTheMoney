@@ -2,6 +2,7 @@
 #include "TalkText.h"
 #include "StageSelect.h"
 #include "InputManager.h"
+#include "ShakeComponent.h"
 #include "Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
 
 bool ButiEngine::TalkText::isDelete = false;
@@ -14,10 +15,16 @@ void ButiEngine::TalkText::OnUpdate()
 		return;
 	}
 
+	if (!isOnce)
+	{
+		isOnce = true;
+		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 30);
+	}
 
 	if (InputManager::OnTriggerDecisionKey())
 	{
 		textCount++;
+		ShakeAimation();
 		if (textCount < shp_spriteAnimation->GetVarticalSplitScale())
 		{
 			shp_spriteAnimation->UpdateVarticalAnim(1);
@@ -26,7 +33,6 @@ void ButiEngine::TalkText::OnUpdate()
 		{
 			isDelete = true;
 		}
-
 	}
 }
 
@@ -39,15 +45,7 @@ void ButiEngine::TalkText::Start()
 	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 	textCount = 0;
 	isDelete = false;
-
-	switch (StageSelect::GetStageNum())
-	{
-	case 0:
-		shp_spriteAnimation->SetVarticalAnim(0);
-		break;
-	default:
-		break;
-	}
+	isOnce = false;
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::TalkText::Clone()
@@ -60,7 +58,25 @@ void ButiEngine::TalkText::Delete()
 	isDelete = true;
 }
 
-void ButiEngine::TalkText::Stage0Text()
+void ButiEngine::TalkText::ShakeAimation()
 {
-
+	if (StageSelect::GetStageNum() == 0)
+	{
+		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+	}
+	else if (StageSelect::GetStageNum() == 2)
+	{
+		if (textCount == 4 || textCount == 6)
+		{
+			return;
+		}
+		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+	}
+	else if (StageSelect::GetStageNum() == 6)
+	{
+		if (textCount == 0)
+		{
+			GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+		}
+	}
 }

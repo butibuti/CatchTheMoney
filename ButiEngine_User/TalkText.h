@@ -26,9 +26,10 @@ namespace ButiEngine {
 		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 		
 		int textCount;
+		bool isOnce;
 		static bool isDelete;
 
-		void Stage0Text();
+		void ShakeAimation();
 	};
 
 }
