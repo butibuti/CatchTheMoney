@@ -31,7 +31,7 @@ void ButiEngine::Panel::Start()
 	scale.y = GameSettings::panelHeight;
 	scale.z = 1.0f;
 
-	wkp_drawObjectGravity = GetManager().lock()->AddObjectFromCereal("Gravity", ObjectFactory::Create<Transform>(Vector3(0, 0, 0.3f), Vector3::Zero, scale));
+	wkp_drawObjectGravity = GetManager().lock()->AddObjectFromCereal("Gravity", ObjectFactory::Create<Transform>(Vector3(0, 0, 0.5f), Vector3::Zero, scale));
 	wkp_drawObjectGravity.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 	wkp_drawObjectFrame = GetManager().lock()->AddObjectFromCereal("PanelFrame", ObjectFactory::Create<Transform>(Vector3(0, 0, -1.0f), Vector3::Zero, scale));
 	wkp_drawObjectFrame.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
@@ -157,7 +157,7 @@ void ButiEngine::Panel::Lock(bool arg_back)
 		scale.y *= -1;
 	}
 
-	wkp_drawObjectSky = GetManager().lock()->AddObjectFromCereal("Lock", ObjectFactory::Create<Transform>(Vector3(0, 0, -1.1f), Vector3::Zero, scale));
+	wkp_drawObjectSky = GetManager().lock()->AddObjectFromCereal("Lock", ObjectFactory::Create<Transform>(Vector3(0, 0, -2.0f), Vector3::Zero, scale));
 	wkp_drawObjectSky.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 }
 

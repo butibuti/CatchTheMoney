@@ -33,6 +33,7 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> GetHoldCore() { return wkp_holdCore; }
 		std::weak_ptr<GameObject> GetPredictionLine() { return wkp_predictionLine; }
 		bool IsHitCore() { return hitCore; }
+		bool IsFreeze() { return freeze; }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<PanelManager> shp_panelManager;
@@ -50,6 +51,7 @@ namespace ButiEngine {
 
 		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 		const float JUMP_FORCE = 3.8f;
+		const int COYOTE_TIME = 10;
 		const int FREEZE_FRAME = 60;
 		const int ANIMATION_RATE = 5;
 		const int FLOATING_FRAME = 6;
@@ -84,6 +86,7 @@ namespace ButiEngine {
 		bool freeze;
 		bool jump;
 		bool hitCore;
+		int jumpInputFrame;
 
 		void Control();
 		void CheckGravity();

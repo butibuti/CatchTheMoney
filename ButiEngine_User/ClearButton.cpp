@@ -26,29 +26,30 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::ClearButton::Clone()
 
 void ButiEngine::ClearButton::Appear()
 {
-	AddAnimation(defaultScale);
+	AddAnimation(defaultScale, 60);
 }
 
 void ButiEngine::ClearButton::OnSelected()
 {
-	AddAnimation(defaultScale * 1.2f);
+	AddAnimation(defaultScale * 1.2f, 40);
 }
 
 void ButiEngine::ClearButton::OnEndSelect()
 {
-	AddAnimation(defaultScale);
+	AddAnimation(defaultScale, 40);
 }
 
-void ButiEngine::ClearButton::AddAnimation(const Vector3& arg_targetScale)
+void ButiEngine::ClearButton::AddAnimation(const Vector3& arg_targetScale, int frame)
 {
-	auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
-	if (!anim)
+	auto anim_ = gameObject.lock()->GetGameComponent<TransformAnimation>();
+	if (anim_)
 	{
-		anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+		gameObject.lock()->RemoveGameComponent("TransformAnimation");
 	}
+	auto anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
 
 	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
 	anim->GetTargetTransform()->SetLocalScale(arg_targetScale);
-	anim->SetSpeed(1.0f / 10);
-	anim->SetEaseType(Easing::EasingType::EaseOutExpo);
+	anim->SetSpeed(1.0f / frame);
+	anim->SetEaseType(Easing::EasingType::EaseOutElastic);
 }

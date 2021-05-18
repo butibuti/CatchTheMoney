@@ -12,7 +12,7 @@ namespace ButiEngine {
 	class ClearButton;
 	enum GameMode
 	{
-		Normal,
+		Chara,
 		Edit,
 	};
 
@@ -33,7 +33,7 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-		GameMode GetMode() { return mode; }
+		static GameMode GetMode() { return mode; }
 	private:
 		std::shared_ptr<Map> shp_map;
 		std::shared_ptr<PauseManager> shp_pauseManager;
@@ -63,7 +63,7 @@ namespace ButiEngine {
 		SoundTag bgm;
 		SoundTag se_clear;
 
-		GameMode mode;
+		static GameMode mode;
 
 		void ResetStage();
 		int clearAnimationFrame;

@@ -21,6 +21,8 @@
 #include"ShakeComponent.h"
 #include "TalkText.h"
 
+ButiEngine::GameMode ButiEngine::StageManager::mode;
+
 void ButiEngine::StageManager::OnUpdate()
 {
 	if (!wkp_player.lock())
@@ -113,7 +115,7 @@ void ButiEngine::StageManager::Start()
 
 	clearAnimationFrame = CLEAR_FRAME;
 
-	mode = GameMode::Normal;
+	mode = GameMode::Chara;
 	shp_particleEmitter= GetManager().lock()->GetGameObject("SquareParticleEmitter").lock()->GetGameComponent<SquareParticleEmitter>();
 
 	modeUIPosition = Vector3(750.0f, -410.0f, -0.1f);
@@ -164,13 +166,15 @@ void ButiEngine::StageManager::ResetStage()
 
 void ButiEngine::StageManager::OnGoal()
 {
-	if (clearAnimationFrame == 0)
+	if (clearAnimationFrame == 30)
 	{
 		shp_buttonNext->Appear();
-		shp_buttonSelect->Appear();
+		if (StageSelect::GetStageNum() != StageSelect::GetMaxStage())
+		{
+			shp_buttonSelect->Appear();
+		}
 	}
-	else if (!clearButtonAnimation && clearAnimationFrame < 0 && 
-		!wkp_buttonNext.lock()->GetGameComponent<TransformAnimation>())
+	else if (!clearButtonAnimation && clearAnimationFrame < 0)
 	{
 		clearButtonAnimation = true;
 		shp_buttonNext->OnSelected();
@@ -235,11 +239,12 @@ void ButiEngine::StageManager::ModeChange()
 		if (shp_panelManager->IsAnimation()) { return; }
 		if (StageSelect::GetStageNum() == 0) { return; }
 		if (wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock()) { return; }
+		if (wkp_player.lock()->GetGameComponent<Player>()->IsClear()) { return; }
+		if (wkp_player.lock()->GetGameComponent<Player>()->IsFreeze()) { return; }
 
-		shp_pauseManager->SwitchPause();
 		shp_scrollManager->ResetScroll();
 		
-		if (mode == GameMode::Normal)
+		if (mode == GameMode::Chara)
 		{
 			mode = GameMode::Edit;
 
@@ -260,7 +265,7 @@ void ButiEngine::StageManager::ModeChange()
 		}
 		else
 		{
-			mode = GameMode::Normal;
+			mode = GameMode::Chara;
 			shp_cameraController->ZoomIn(); 
 
 			shp_particleEmitter->SetIsEdit(false);
@@ -326,7 +331,8 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 {
 	if (!clearButtonAnimation) { return; }
 
-	if (InputManager::OnTriggerRightKey() || InputManager::OnTriggerLeftKey())
+	if ((InputManager::OnTriggerRightKey() || InputManager::OnTriggerLeftKey()) &&
+		StageSelect::GetStageNum() != StageSelect::GetMaxStage())
 	{
 		selectedNext = !selectedNext;
 		if (selectedNext)
@@ -348,11 +354,11 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 		isNext = true;
 		if (selectedNext)
 		{
-			wkp_buttonNext.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(10.0f);
+			wkp_buttonNext.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
 		}
 		else
 		{
-			wkp_buttonSelect.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(10.0f);
+			wkp_buttonSelect.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
 		}
 	}
 }

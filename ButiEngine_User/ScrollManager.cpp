@@ -7,6 +7,7 @@
 #include"BackDraw.h"
 #include"FollowPanel.h"
 #include"Panel.h"
+#include"StageManager.h"
 
 void ButiEngine::ScrollManager::OnUpdate()
 {
@@ -17,15 +18,8 @@ void ButiEngine::ScrollManager::OnUpdate()
 	}
 
 	isPreviousEdit = isCurrentEdit;
-	isCurrentEdit = shp_pauseManager->GetPause();
-	if (!shp_pauseManager->GetPause())
-	{
-	}
-	else
-	{
-		//MoveScroll();
-		//currentScroll = (scrollPosition.x / GameSettings::windowWidth);
-	}
+	isCurrentEdit = (StageManager::GetMode() == GameMode::Edit);
+
 	Vector3 position = wkp_player.lock()->transform->GetWorldPosition();
 	currentScroll = (position.x / GameSettings::windowWidth);
 	//scrollPosition.x = position.x;
@@ -87,7 +81,7 @@ void ButiEngine::ScrollManager::Start()
 	scrollSpeed = 4.0f;
 	wkp_screenScroll = gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
 
-	isCurrentEdit = shp_pauseManager->GetPause();
+	isCurrentEdit = (StageManager::GetMode() == GameMode::Edit);
 	isPreviousEdit = isCurrentEdit;
 }
 

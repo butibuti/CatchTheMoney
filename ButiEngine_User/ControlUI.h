@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class PauseManager;
+
 	class ControlUI :public GameComponent
 	{
 	public:
@@ -20,6 +22,8 @@ namespace ButiEngine {
 		}
 		void Stop() { stop = true; }
 	private:
+		std::shared_ptr<PauseManager> shp_pauseManager;
+
 		Vector3 initScale;
 		float progress;
 		bool animation;
