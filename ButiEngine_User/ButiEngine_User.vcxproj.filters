@@ -46,6 +46,7 @@
     <ClCompile Include="TextWindow.cpp" />
     <ClCompile Include="TalkText.cpp" />
     <ClCompile Include="AbuttonAnimation.cpp" />
+    <ClCompile Include="PauseButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
@@ -91,5 +92,6 @@
     <ClInclude Include="TextWindow.h" />
     <ClInclude Include="TalkText.h" />
     <ClInclude Include="AbuttonAnimation.h" />
+    <ClInclude Include="PauseButton.h" />
   </ItemGroup>
 </Project>

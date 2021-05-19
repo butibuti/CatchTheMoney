@@ -465,7 +465,10 @@ void ButiEngine::Player::OnCollisionGoal(std::weak_ptr<GameObject> arg_goal)
 
 void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
 {
-	hitCore = true;
+	if (grounded)
+	{
+		hitCore = true;
+	}
 	if (InputManager::OnTriggerGrabKey() && grounded)
 	{
 		GrabGravityCore(arg_core);
