@@ -71,7 +71,7 @@ void ButiEngine::TalkText::ShakeAimation()
 	{
 		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
 	}
-	else if (StageSelect::GetStageNum() == 2)
+	else if (StageSelect::GetStageNum() == 3)
 	{
 		if (textCount == 4 || textCount == 6)
 		{
