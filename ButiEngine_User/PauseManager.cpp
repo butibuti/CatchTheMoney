@@ -1,6 +1,7 @@
 #include "stdafx_u.h"
 #include "PauseManager.h"
 #include"PauseButton.h"
+#include"InputManager.h"
 
 void ButiEngine::PauseManager::OnUpdate()
 {
@@ -17,6 +18,7 @@ void ButiEngine::PauseManager::OnUpdate()
 		}
 	}
 	SwitchPause();
+	ButtonAnimation();
 }
 
 void ButiEngine::PauseManager::OnSet()
@@ -41,6 +43,7 @@ void ButiEngine::PauseManager::Start()
 	pause = false;
 	pushPauseKey = false;
 	progress = 0;
+	selectedButton = 0;
 }
 
 void ButiEngine::PauseManager::OnShowUI()
@@ -68,7 +71,32 @@ void ButiEngine::PauseManager::SwitchPause()
 	else
 	{
 		pause = true;
+		if (wkp_button_back.lock()->GetGameComponent<TransformAnimation>()) { return; }
 		pushPauseKey = false;
+	}
+}
+
+void ButiEngine::PauseManager::ButtonAnimation()
+{
+	if (!pause) { return; }
+	progress++;
+	if (progress < ANIMATION_FRAME) { return; }
+
+	if (InputManager::OnTriggerRightKey())
+	{
+		selectedButton++;
+		if (selectedButton > SELECT)
+		{
+			selectedButton = BACK;
+		}
+	}
+	else if (InputManager::OnTriggerLeftKey())
+	{
+		selectedButton--;
+		if (selectedButton < BACK)
+		{
+			selectedButton = SELECT;
+		}
 	}
 }
 
