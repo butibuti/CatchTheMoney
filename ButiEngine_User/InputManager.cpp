@@ -119,6 +119,12 @@ bool ButiEngine::InputManager::OnTriggerOpenMenuKey()
 		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_START));
 }
 
+bool ButiEngine::InputManager::OnTextSkipKey()
+{
+	return (GameDevice::GetInput()->TriggerKey(Keys::X) ||
+		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_Y));
+}
+
 bool ButiEngine::InputManager::OnTriggerJumpKey()
 {
 	return (GameDevice::GetInput()->TriggerKey(Keys::W) ||

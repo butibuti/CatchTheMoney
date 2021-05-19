@@ -2,7 +2,6 @@
 #include "TextWindow.h"
 #include "TalkText.h"
 #include "InputManager.h"
-#include "ShakeComponent.h"
 
 void ButiEngine::TextWindow::OnUpdate()
 {
@@ -11,11 +10,6 @@ void ButiEngine::TextWindow::OnUpdate()
 		gameObject.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
 		return;
 	}
-
-	/*if (InputManager::OnTriggerDecisionKey())
-	{
-
-	}*/
 }
 
 void ButiEngine::TextWindow::OnSet()

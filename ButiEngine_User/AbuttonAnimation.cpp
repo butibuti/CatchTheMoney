@@ -7,8 +7,6 @@ void ButiEngine::AbuttonAnimation::OnUpdate()
 	const float MIN_SCALE = 140;
 	const float MAX_SCALE = 180;
 
-	changeCount++;
-
 	if (!isChange)
 	{
 		currentScale = MAX_SCALE;
@@ -30,6 +28,10 @@ void ButiEngine::AbuttonAnimation::OnUpdate()
 	{
 		isChange = !isChange;
 		changeCount = 0;
+	}
+	else
+	{
+		changeCount++;
 	}
 
 	//Lerp

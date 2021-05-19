@@ -193,6 +193,7 @@
     <ClCompile Include="SelectScreen.cpp" />
     <ClCompile Include="SelectZanzo.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
+    <ClCompile Include="SkipTextAnimation.cpp" />
     <ClCompile Include="SquareParticleEmitter.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="StageSelect.cpp" />
@@ -241,6 +242,7 @@
     <ClInclude Include="SelectScreen.h" />
     <ClInclude Include="SelectZanzo.h" />
     <ClInclude Include="ShakeComponent.h" />
+    <ClInclude Include="SkipTextAnimation.h" />
     <ClInclude Include="SquareParticleEmitter.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="StageSelect.h" />

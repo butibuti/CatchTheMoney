@@ -36,6 +36,10 @@ void ButiEngine::TalkText::OnUpdate()
 			isDelete = true;
 		}
 	}
+	if (InputManager::OnTextSkipKey())
+	{
+		isDelete = true;
+	}
 	if(waitTime < 60)
 	{
 		waitTime++;

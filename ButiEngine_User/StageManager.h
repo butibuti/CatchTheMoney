@@ -82,6 +82,7 @@ namespace ButiEngine {
 		void CreateUI();
 		void ChangeUIAlpha();
 		void ClearButtonUpdate();
+		void CommonTextObject();
 	};
 
 }

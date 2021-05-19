@@ -31,6 +31,7 @@ namespace ButiEngine {
 		static bool OnTriggerMobiusResetRotationKey();
 		static bool OnTriggerModeChangeKey();
 		static bool OnTriggerOpenMenuKey();
+		static bool OnTextSkipKey();
 		static bool IsNoPush() { return noPush; }
 
 		//CharaMode
