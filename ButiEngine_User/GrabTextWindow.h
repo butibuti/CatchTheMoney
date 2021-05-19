@@ -22,6 +22,9 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_player;
 		std::weak_ptr<GameObject> wkp_b;
 
+		float currentScale;
+		float previousScale;
+
 		Vector3 initPos;
 
 		void StorePlayer();
