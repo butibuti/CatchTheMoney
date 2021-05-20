@@ -50,7 +50,6 @@ void ButiEngine::StageManager::OnUpdate()
 		clearAnimationFrame--;
 	}
 
-	ResetStage();
 	OnGoal();
 	ModeChange();
 	ChangeUIAlpha();
@@ -151,16 +150,6 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::StageManager::Clone()
 	return ObjectFactory::Create<StageManager>();
 }
 
-void ButiEngine::StageManager::ResetStage()
-{
-	if (InputManager::OnTriggerOpenMenuKey())
-	{
-		shp_map->DestoryBlock();
-		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
-		sceneManager->ReloadScene();
-	}
-}
-
 void ButiEngine::StageManager::OnGoal()
 {
 	if (clearAnimationFrame == 30)
@@ -183,7 +172,7 @@ void ButiEngine::StageManager::OnGoal()
 	}
 	if (fadeCount == 1)
 	{
-		GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 1080, -0.5f), Vector3::Zero, Vector3(1920, 1080, 1)));
+		GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 1080, -0.7f), Vector3::Zero, Vector3(1920, 1080, 1)));
 	}
 	if (fadeCount > 30)
 	{

@@ -2,10 +2,13 @@
 #include "PauseManager.h"
 #include"PauseButton.h"
 #include"InputManager.h"
+#include"ShakeComponent.h"
+#include"Map.h"
+#include"StageSelect.h"
 
 void ButiEngine::PauseManager::OnUpdate()
 {
-	if (GameDevice::GetInput()->TriggerKey(Keys::P) && !pushPauseKey)
+	if (InputManager::OnTriggerOpenMenuKey() && !pushPauseKey)
 	{
 		pushPauseKey = true;
 		if (!pause)
@@ -19,6 +22,8 @@ void ButiEngine::PauseManager::OnUpdate()
 	}
 	SwitchPause();
 	ButtonAnimation();
+	OnDecide();
+	FadeUpdate();
 }
 
 void ButiEngine::PauseManager::OnSet()
@@ -45,6 +50,9 @@ void ButiEngine::PauseManager::Start()
 	pushPauseKey = false;
 	progress = 0;
 	selectedButton = 0;
+	isNext = false;
+	fadeCount = 0;
+	reset = false;
 }
 
 void ButiEngine::PauseManager::OnShowUI()
@@ -76,6 +84,7 @@ void ButiEngine::PauseManager::SwitchPause()
 		if (wkp_button_back.lock()->GetGameComponent<TransformAnimation>()) { return; }
 		pause_ = true;
 		pushPauseKey = false;
+		progress = 0;
 	}
 }
 
@@ -85,22 +94,95 @@ void ButiEngine::PauseManager::ButtonAnimation()
 	progress++;
 	if (progress < ANIMATION_FRAME) { return; }
 
-	if (InputManager::OnTriggerRightKey())
+	if (InputManager::OnTriggerRightKey() || 
+		InputManager::OnTriggerLeftKey() ||
+		progress == ANIMATION_FRAME)
 	{
-		selectedButton++;
-		if (selectedButton > SELECT)
+		if (InputManager::OnTriggerRightKey())
 		{
-			selectedButton = BACK;
+			selectedButton++;
+			if (selectedButton > SELECT)
+			{
+				selectedButton = BACK;
+			}
+		}
+		else if (InputManager::OnTriggerLeftKey())
+		{
+			selectedButton--;
+			if (selectedButton < BACK)
+			{
+				selectedButton = SELECT;
+			}
+		}
+
+		SelectButton();
+	}
+}
+
+void ButiEngine::PauseManager::SelectButton()
+{
+	if (selectedButton == BACK)
+	{
+		wkp_button_back.lock()->GetGameComponent<PauseButton>()->OnSelected();
+		wkp_button_reset.lock()->GetGameComponent<PauseButton>()->OnEndSelect();
+		wkp_button_select.lock()->GetGameComponent<PauseButton>()->OnEndSelect();
+	}
+	else if (selectedButton == RESET)
+	{
+		wkp_button_back.lock()->GetGameComponent<PauseButton>()->OnEndSelect();
+		wkp_button_reset.lock()->GetGameComponent<PauseButton>()->OnSelected();
+		wkp_button_select.lock()->GetGameComponent<PauseButton>()->OnEndSelect();
+	}
+	else if (selectedButton == SELECT)
+	{
+		wkp_button_back.lock()->GetGameComponent<PauseButton>()->OnEndSelect();
+		wkp_button_reset.lock()->GetGameComponent<PauseButton>()->OnEndSelect();
+		wkp_button_select.lock()->GetGameComponent<PauseButton>()->OnSelected();
+	}
+}
+
+void ButiEngine::PauseManager::OnDecide()
+{
+	if (!pause) { return; }
+	if (progress < ANIMATION_FRAME) { return; }
+
+	if (InputManager::OnTriggerDecisionKey())
+	{
+		if (selectedButton == BACK)
+		{
+			OnDecideBack();
+		}
+		else if (selectedButton == RESET)
+		{
+			OnDecideReset();
+		}
+		else if (selectedButton == SELECT)
+		{
+			OnDecideSelect();
 		}
 	}
-	else if (InputManager::OnTriggerLeftKey())
-	{
-		selectedButton--;
-		if (selectedButton < BACK)
-		{
-			selectedButton = SELECT;
-		}
-	}
+}
+
+void ButiEngine::PauseManager::OnDecideBack()
+{
+	wkp_button_back.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
+
+	pushPauseKey = true;
+	DisappearUI();
+}
+
+void ButiEngine::PauseManager::OnDecideReset()
+{
+	wkp_button_reset.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
+	isNext = true;
+	reset = true;
+}
+
+void ButiEngine::PauseManager::OnDecideSelect()
+{
+	wkp_button_select.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
+	isNext = true;
+	reset = false;
 }
 
 void ButiEngine::PauseManager::AppearUI()
@@ -119,6 +201,39 @@ void ButiEngine::PauseManager::DisappearUI()
 	wkp_button_back.lock()->GetGameComponent<PauseButton>()->Disappear();
 	wkp_button_reset.lock()->GetGameComponent<PauseButton>()->Disappear();
 	wkp_button_select.lock()->GetGameComponent<PauseButton>()->Disappear();
+}
+
+void ButiEngine::PauseManager::FadeUpdate()
+{
+	if (!isNext) { return; }
+
+	fadeCount++;
+	if (fadeCount == 1)
+	{
+		GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 1080, -0.7f), Vector3::Zero, Vector3(1920, 1080, 1)));
+	}
+	if (fadeCount == 30)
+	{
+		GetManager().lock()->GetGameObject("Map").lock()->GetGameComponent<Map>()->DestoryBlock();
+		if (reset)
+		{
+			auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
+			sceneManager->ReloadScene();
+		}
+		else
+		{
+			StageSelect::SetRemoveStageName("none");
+			ChangeScene("StageSelect");
+		}
+	}
+}
+
+void ButiEngine::PauseManager::ChangeScene(const std::string& arg_sceneName)
+{
+	auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
+	sceneManager->RemoveScene(arg_sceneName);
+	sceneManager->LoadScene(arg_sceneName);
+	sceneManager->ChangeScene(arg_sceneName);
 }
 
 void ButiEngine::PauseManager::AddAnimation(std::weak_ptr<GameObject> arg_object, const Vector3& arg_targetPosition, const Vector3& arg_targetScale, int frame, Easing::EasingType easingType)

@@ -32,11 +32,14 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_button_reset;
 		std::weak_ptr<GameObject> wkp_button_select;
 
+		bool isNext;
 		bool pause;
 		bool pause_;
 		bool pushPauseKey;
 		int progress;
 		int selectedButton;
+		int fadeCount;
+		bool reset;
 
 		Vector3 initTextPos;
 		Vector3 defaultTextPos;
@@ -47,8 +50,15 @@ namespace ButiEngine {
 
 		void SwitchPause();
 		void ButtonAnimation();
+		void SelectButton();
+		void OnDecide();
+		void OnDecideBack();
+		void OnDecideReset();
+		void OnDecideSelect();
 		void AppearUI();
 		void DisappearUI();
+		void FadeUpdate();
+		void ChangeScene(const std::string& arg_sceneName);
 		void AddAnimation(std::weak_ptr<GameObject> arg_object, const Vector3& arg_targetPosition, const Vector3& arg_targetScale, int frame, Easing::EasingType easingType);
 	};
 
