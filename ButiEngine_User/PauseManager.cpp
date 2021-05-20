@@ -41,6 +41,7 @@ void ButiEngine::PauseManager::Start()
 	BGPos = Vector3(0.0f, 0.0f, -0.4f);
 
 	pause = false;
+	pause_ = false;
 	pushPauseKey = false;
 	progress = 0;
 	selectedButton = 0;
@@ -62,16 +63,18 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::PauseManager::Clone()
 void ButiEngine::PauseManager::SwitchPause()
 {
 	if (!pushPauseKey) { return; }
-	if (pause)
+	if (pause_)
 	{
 		if (wkp_button_back.lock()->GetGameComponent<TransformAnimation>()) { return; }
 		pause = false;
+		pause_ = false;
 		pushPauseKey = false;
 	}
 	else
 	{
 		pause = true;
 		if (wkp_button_back.lock()->GetGameComponent<TransformAnimation>()) { return; }
+		pause_ = true;
 		pushPauseKey = false;
 	}
 }

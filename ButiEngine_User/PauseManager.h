@@ -33,6 +33,7 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_button_select;
 
 		bool pause;
+		bool pause_;
 		bool pushPauseKey;
 		int progress;
 		int selectedButton;
