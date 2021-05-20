@@ -62,6 +62,9 @@ namespace ButiEngine {
 			rotation = Matrix4x4();
 			localMatrix = nullptr;
 		}
+		inline ~Transform() {
+			delete localMatrix;
+		}
 		void Initialize()override {}
 		void PreInitialize()override {}
 		inline Matrix4x4 ToMatrix()
@@ -111,7 +114,7 @@ namespace ButiEngine {
 			{
 				return *localMatrix;
 			}
-			localMatrix = std::make_shared<Matrix4x4>();
+			localMatrix = new Matrix4x4();
 			{
 
 				*localMatrix = Matrix4x4().Scale(scale)*rotation;
@@ -154,6 +157,7 @@ namespace ButiEngine {
 
 		inline const Matrix4x4& SetLocalRotationIdentity() {
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			return rotation = Matrix4x4();
@@ -162,6 +166,7 @@ namespace ButiEngine {
 		inline const Matrix4x4& SetLocalRotation(const Matrix4x4& arg_rotation) {
 
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			return rotation = arg_rotation;
@@ -169,6 +174,7 @@ namespace ButiEngine {
 		inline const Matrix4x4& SetWorldRotation(const Matrix4x4& arg_rotation) {
 
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 
@@ -182,6 +188,7 @@ namespace ButiEngine {
 		inline const Matrix4x4& SetLocalRotation(const Vector3& arg_vec3_rotation) {
 
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			return rotation = Matrix4x4::RollZ(
@@ -197,6 +204,7 @@ namespace ButiEngine {
 		inline const Matrix4x4& SetLocalRotation_radian(const Vector3& arg_vec3_rotation) {
 
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			return rotation = Matrix4x4::RollZ(
@@ -216,6 +224,7 @@ namespace ButiEngine {
 		inline const Matrix4x4& RollLocalRotationX_Radian(const float arg_x) {
 
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			return  rotation = Matrix4x4::RollX(
@@ -231,6 +240,7 @@ namespace ButiEngine {
 		inline const Matrix4x4& RollWorldRotationX_Radian(const float arg_x) {
 
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			return rotation = rotation * Matrix4x4::RollX(
@@ -246,6 +256,7 @@ namespace ButiEngine {
 		inline const Matrix4x4& RollLocalRotationY_Radian(const float arg_y) {
 
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			return  rotation = Matrix4x4::RollY(
@@ -261,6 +272,7 @@ namespace ButiEngine {
 		inline const Matrix4x4& RollWorldRotationY_Radian(const float arg_y) {
 
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			return rotation = rotation * Matrix4x4::RollY(
@@ -276,6 +288,7 @@ namespace ButiEngine {
 		inline const Matrix4x4& RollLocalRotationZ_Radian(const float arg_z) {
 
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			return  rotation = Matrix4x4::RollZ(
@@ -291,6 +304,7 @@ namespace ButiEngine {
 		inline const Matrix4x4& RollWorldRotationZ_Radian(const float arg_z) {
 
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			return rotation = rotation * Matrix4x4::RollZ(
@@ -301,6 +315,7 @@ namespace ButiEngine {
 		inline const Matrix4x4& RollLocalRotation(const Vector3& arg_vec3_rotation)
 		{
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			return rotation = Matrix4x4::RollX(
@@ -316,6 +331,7 @@ namespace ButiEngine {
 		inline const Matrix4x4& RollWorldBase(const Vector3& arg_vec3_rotation)
 		{
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			return rotation = rotation * Matrix4x4::RollX(
@@ -330,6 +346,7 @@ namespace ButiEngine {
 		}
 		inline const Matrix4x4& RollWorldRotation(const Quat& arg_rotation) {
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			if (baseTransform) {
@@ -342,6 +359,7 @@ namespace ButiEngine {
 
 		inline void RollIdentity() {
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			rotation.Identity();
@@ -441,6 +459,7 @@ namespace ButiEngine {
 
 		inline const Matrix4x4& RollLocalRotation(const Matrix4x4& arg_rotation) {
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			rotation = rotation * arg_rotation;
@@ -460,6 +479,7 @@ namespace ButiEngine {
 			rotation._21 = y.x; rotation._22 = y.y; rotation._23 = y.z;
 			rotation._31 = z.x; rotation._32 = z.y; rotation._33 = z.z;
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 
@@ -495,6 +515,7 @@ namespace ButiEngine {
 		inline Matrix4x4& SetLocalRotation()
 		{
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			return rotation;
@@ -513,6 +534,7 @@ namespace ButiEngine {
 		}
 		inline const Vector3& SetWorldPosition(const Vector3& arg_position) {
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			if (!baseTransform)
@@ -524,6 +546,7 @@ namespace ButiEngine {
 
 		inline Vector3& SetLocalPosition() {
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 
 			}
@@ -548,6 +571,7 @@ namespace ButiEngine {
 
 		inline const Vector3& SetLocalScale(const Vector3& arg_scale) {
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			scale = arg_scale;
@@ -555,6 +579,7 @@ namespace ButiEngine {
 		}
 		inline Vector3& SetLocalScale() {
 			if (localMatrix) {
+				delete localMatrix;
 				localMatrix = nullptr;
 			}
 			return  scale;
@@ -586,7 +611,8 @@ namespace ButiEngine {
 				}
 				rotation = GetWorldRotation();
 				localPosition= GetWorldPosition();
-
+				if(localMatrix)
+					delete localMatrix;
 				localMatrix = nullptr;
 				baseTransform = argParent;
 				return;
@@ -628,7 +654,7 @@ namespace ButiEngine {
 		Vector3 localPosition = Vector3(0.0f, 0.0f, 0.0f);
 		Matrix4x4 rotation;
 		Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
-		std::shared_ptr< Matrix4x4> localMatrix = nullptr;
+		Matrix4x4* localMatrix = nullptr;
 		std::shared_ptr<Transform> baseTransform = nullptr;
 	};
 
