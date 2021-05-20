@@ -42,6 +42,9 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_player;
 
 		SoundTag se_panelLimit;
+		SoundTag se_slide0;
+		SoundTag se_slide1;
+		SoundTag se_slide2;
 
 		const int MOVE_LIMIT = 3;
 		const bool RIGHT = true;
@@ -61,6 +64,7 @@ namespace ButiEngine {
 		void Redo(int arg_frame = 15);
 		void Reset();
 		void RemoveHistories();
+		void PlaySlideSound();
 	};
 
 }

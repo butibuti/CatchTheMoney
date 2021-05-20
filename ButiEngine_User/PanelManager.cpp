@@ -36,25 +36,30 @@ void ButiEngine::PanelManager::Start()
 	reverse = false;
 
 	se_panelLimit = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/PanelLimit.wav");
+	se_slide0 = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/PanelSlide_0.wav");
+	se_slide1 = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/PanelSlide_1.wav");
+	se_slide2 = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/PanelSlide_2.wav");
 }
 
 void ButiEngine::PanelManager::OnShowUI()
 {
-	auto end = vec_histories.end();
-	for (auto itr = vec_histories.begin(); itr != end; ++itr)
-	{
-		int index = itr - vec_histories.begin();
-		int num = 1;
-		if (*itr == LEFT)
-		{
-			num = 0; 
-		}
-		GUI::Text(std::to_string(index) + ":%d", num);
-		if (index == currentIndex)
-		{
-			GUI::Text("Current!!");
-		}
-	}
+	//auto end = vec_histories.end();
+	//for (auto itr = vec_histories.begin(); itr != end; ++itr)
+	//{
+	//	int index = itr - vec_histories.begin();
+	//	int num = 1;
+	//	if (*itr == LEFT)
+	//	{
+	//		num = 0; 
+	//	}
+	//	GUI::Text(std::to_string(index) + ":%d", num);
+	//	if (index == currentIndex)
+	//	{
+	//		GUI::Text("Current!!");
+	//	}
+	//}
+
+	GUI::Text("%d", moveNum);
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::PanelManager::Clone()
@@ -256,9 +261,11 @@ void ButiEngine::PanelManager::SwapRight(int arg_frame)
 	}
 
 	SwapPanelNum(currentIndex, currentIndex + 1, arg_frame);
+	PlaySlideSound();
 	moveNum++;
-	if (moveNum == MOVE_LIMIT)
+	if (moveNum >= MOVE_LIMIT)
 	{
+		moveNum -= MOVE_LIMIT;
 		//shp_reverseText->PlayAnimation();
 	}
 }
@@ -279,9 +286,11 @@ void ButiEngine::PanelManager::SwapLeft(int arg_frame)
 		return;
 	}
 	SwapPanelNum(currentIndex, currentIndex - 1, arg_frame);
+	PlaySlideSound();
 	moveNum--;
-	if (moveNum == -MOVE_LIMIT)
+	if (moveNum <= -MOVE_LIMIT)
 	{
+		moveNum += MOVE_LIMIT;
 		//shp_reverseText->PlayAnimation();
 	}
 }
@@ -344,5 +353,21 @@ void ButiEngine::PanelManager::RemoveHistories()
 		auto itr = vec_histories.begin() + nextIndex;
 		auto end = vec_histories.end();
 		vec_histories.erase(itr, end);
+	}
+}
+
+void ButiEngine::PanelManager::PlaySlideSound()
+{
+	if (abs(moveNum) == 0)
+	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_slide0, 0.3f);
+	}
+	else if (abs(moveNum) == 1)
+	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_slide1, 0.3f);
+	}
+	else if (abs(moveNum) == 2)
+	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_slide2, 0.3f);
 	}
 }
