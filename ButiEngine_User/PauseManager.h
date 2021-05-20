@@ -20,10 +20,36 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 		bool GetPause() { return pause; }
-
-		void SwitchPause() { pause = !pause; }
 	private:
+		const int ANIMATION_FRAME = 30;
+		const int BACK = 0;
+		const int RESET = 1;
+		const int SELECT = 2;
+
+		std::weak_ptr<GameObject> wkp_text;
+		std::weak_ptr<GameObject> wkp_background;
+		std::weak_ptr<GameObject> wkp_button_back;
+		std::weak_ptr<GameObject> wkp_button_reset;
+		std::weak_ptr<GameObject> wkp_button_select;
+
 		bool pause;
+		bool pause_;
+		bool pushPauseKey;
+		int progress;
+		int selectedButton;
+
+		Vector3 initTextPos;
+		Vector3 defaultTextPos;
+		Vector3 textScale;
+		Vector3 initBGScale;
+		Vector3 defaultBGScale;
+		Vector3 BGPos;
+
+		void SwitchPause();
+		void ButtonAnimation();
+		void AppearUI();
+		void DisappearUI();
+		void AddAnimation(std::weak_ptr<GameObject> arg_object, const Vector3& arg_targetPosition, const Vector3& arg_targetScale, int frame, Easing::EasingType easingType);
 	};
 
 }

@@ -106,7 +106,7 @@ void ButiEngine::StageManager::Start()
 	}
 
 
-	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 0, -0.5f), Vector3::Zero, Vector3(1920, 1080, 1)));
+	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 0, -0.7f), Vector3::Zero, Vector3(1920, 1080, 1)));
 
 	shp_map->PutTile();
 
@@ -301,7 +301,7 @@ void ButiEngine::StageManager::CreateUI()
 	shp_buttonNext = wkp_buttonNext.lock()->GetGameComponent<ClearButton>();
 	shp_buttonSelect = wkp_buttonSelect.lock()->GetGameComponent<ClearButton>();
 
-	if (stageNum >= 9)
+	if (stageNum >= 7)
 	{
 		wkp_grab = GetManager().lock()->AddObjectFromCereal("BTextWindow");
 	}

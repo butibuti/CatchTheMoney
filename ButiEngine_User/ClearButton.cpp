@@ -12,7 +12,7 @@ void ButiEngine::ClearButton::OnSet()
 void ButiEngine::ClearButton::Start()
 {
 	gameObject.lock()->transform->SetLocalScale(Vector3(0, 0, 1));
-	defaultScale = Vector3(420, 160, 1);
+	defaultScale = Vector3(400, 152, 1);
 }
 
 void ButiEngine::ClearButton::OnShowUI()
