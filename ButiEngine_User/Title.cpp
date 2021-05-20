@@ -2,13 +2,24 @@
 #include "Title.h"
 #include "InputManager.h"
 #include "SceneChangeAnimation.h"
+#include "TitleLogo.h"
 
 void ButiEngine::Title::OnUpdate()
 {
 	if (InputManager::OnGameStartKey())
 	{
+		wkp_titleLogo.lock()->GetGameComponent<TitleLogo>()->AnimationStart();
+		isAnimation = true;
+	}
+	if (isAnimation)
+	{
+		animationCount++;
+	}
+	if (animationCount > 120)
+	{
 		nextFlag = true;
 	}
+
 	if (nextFlag)
 	{
 		nextSceneCount++;
@@ -34,8 +45,12 @@ void ButiEngine::Title::OnSet()
 
 void ButiEngine::Title::Start()
 {
+	isAnimation = false;
 	nextFlag = false;
+	animationCount = 0;
+	nextSceneCount = 0;
 	//wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 0, 0), Vector3::Zero, Vector3(1920, 1080, 1)));
+	wkp_titleLogo = GetManager().lock()->AddObjectFromCereal("TitleLogo", ObjectFactory::Create<Transform>(Vector3::Zero, Vector3::Zero, Vector3(960, 540, 1)));
 }
 
 void ButiEngine::Title::OnShowUI()

@@ -16,10 +16,11 @@ void ButiEngine::AbuttonAnimation::OnUpdate()
 		currentScale = MIN_SCALE;
 	}
 
+	const float PUSH_SCALE = 60;
 	if (InputManager::OnTriggerDecisionKey())
 	{
-		previousScale = 60;
 		isChange = false;
+		previousScale = PUSH_SCALE;
 		currentScale = MAX_SCALE;
 		changeCount = 0;
 	}
@@ -34,8 +35,9 @@ void ButiEngine::AbuttonAnimation::OnUpdate()
 		changeCount++;
 	}
 
+	const float LERP_SCALE = 0.08f;
 	//Lerp
-	previousScale = previousScale * (1.0f - 0.08f) + currentScale * 0.08f;
+	previousScale = previousScale * (1.0f - LERP_SCALE) + currentScale * LERP_SCALE;
 
 	gameObject.lock()->transform->SetLocalScale(Vector3(previousScale, previousScale, 0));
 }
@@ -47,8 +49,9 @@ void ButiEngine::AbuttonAnimation::OnSet()
 void ButiEngine::AbuttonAnimation::Start()
 {
 	isChange = false;
-	currentScale = 180;
-	previousScale = 180;
+	const float DEFAULT_SCALE = 180;
+	currentScale = DEFAULT_SCALE;
+	previousScale = DEFAULT_SCALE;
 	changeCount = 0;
 }
 

@@ -2,17 +2,16 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class Title :public GameComponent
+	class TitleLogo :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "Title";
+			return "TitleLogo";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
-		void OnShowUI()override;
-		void OnCollision(std::weak_ptr<GameObject> arg_other)override;
+		void AnimationStart();
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)
@@ -20,14 +19,10 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
-		std::weak_ptr<GameObject> wkp_fadeObject;
-		std::weak_ptr<GameObject> wkp_titleLogo;
-		bool nextFlag;
-		bool isAnimation;
-		int nextSceneCount;
-		int animationCount;
+		float currentPosY;
+		float previousPosY;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(Title);
+BUTI_REGIST_GAMECOMPONENT(TitleLogo);
