@@ -154,10 +154,13 @@ void ButiEngine::PanelManager::Control()
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, 0.1f);
 			return;
 		}*/
-		SwapLeft();
+		shp_shake->ShakeStart(3.0);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, 0.1f);
+		return;
+		/*SwapLeft();
 		RemoveHistories();
 		vec_histories.push_back(LEFT);
-		currentIndex = vec_histories.size() - 1;
+		currentIndex = vec_histories.size() - 1;*/
 	}
 
 	if (vec_histories.size() == 0)
