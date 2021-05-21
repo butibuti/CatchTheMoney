@@ -318,7 +318,7 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 {
 	if (!clearButtonAnimation) { return; }
 
-	if (StageSelect::GetStageNum() != StageSelect::GetMaxStage())
+	if (StageSelect::GetStageNum() != StageSelect::GetMaxStage() && !isNext)
 	{
 		if (InputManager::OnTriggerRightKey())
 		{
@@ -336,7 +336,7 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 		}
 	}
 
-	if (InputManager::OnTriggerDecisionKey())
+	if (InputManager::OnTriggerDecisionKey() && !isNext)
 	{
 		isNext = true;
 		if (selectedNext)
