@@ -1,6 +1,7 @@
 #include "stdafx_u.h"
 #include "AbuttonAnimation.h"
 #include "InputManager.h"
+#include "GameSettings.h"
 
 void ButiEngine::AbuttonAnimation::OnUpdate()
 {
@@ -16,13 +17,18 @@ void ButiEngine::AbuttonAnimation::OnUpdate()
 		currentScale = MIN_SCALE;
 	}
 
-	const float PUSH_SCALE = 60;
+	const float PUSH_SCALE = 30;
 	if (InputManager::OnTriggerDecisionKey())
 	{
 		isChange = false;
 		previousScale = PUSH_SCALE;
 		currentScale = MAX_SCALE;
 		changeCount = 0;
+
+		if (GameSettings::isTitle)
+		{
+			gameObject.lock()->transform->SetLocalPosition(Vector3(0,0,-3000));
+		}
 	}
 
 	if (changeCount > 30)

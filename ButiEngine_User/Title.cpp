@@ -3,19 +3,27 @@
 #include "InputManager.h"
 #include "SceneChangeAnimation.h"
 #include "TitleLogo.h"
+#include "GameSettings.h"
+#include "CameraController.h"
 
 void ButiEngine::Title::OnUpdate()
 {
-	if (InputManager::OnGameStartKey())
+	if (!wkp_camera.lock())
+	{
+		wkp_camera = GetManager().lock()->GetGameObject("Camera");
+		return;
+	}
+	if (InputManager::OnGameStartKey() && !isAnimation)
 	{
 		wkp_titleLogo.lock()->GetGameComponent<TitleLogo>()->AnimationStart();
+		wkp_camera.lock()->GetGameComponent<CameraController>()->TitleZoomOut();
 		isAnimation = true;
 	}
 	if (isAnimation)
 	{
 		animationCount++;
 	}
-	if (animationCount > 120)
+	if (animationCount > 90)
 	{
 		nextFlag = true;
 	}
@@ -26,11 +34,12 @@ void ButiEngine::Title::OnUpdate()
 	}
 	if (nextSceneCount == 1)
 	{
-		GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 1080, 0), Vector3::Zero, Vector3(1920, 1080, 1)));
+		GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 1080, 0), Vector3::Zero, Vector3(1920, 1080, 1)));
 	}
 
 	if (nextSceneCount > 45)
 	{
+		GameSettings::isTitle = false;
 		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
 		//sceneManager->LoadScene("StageSelect");
 		//sceneManager->ChangeScene("StageSelect");
@@ -45,12 +54,14 @@ void ButiEngine::Title::OnSet()
 
 void ButiEngine::Title::Start()
 {
+	GameSettings::isTitle = true;
 	isAnimation = false;
 	nextFlag = false;
 	animationCount = 0;
 	nextSceneCount = 0;
 	//wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 0, 0), Vector3::Zero, Vector3(1920, 1080, 1)));
-	wkp_titleLogo = GetManager().lock()->AddObjectFromCereal("TitleLogo", ObjectFactory::Create<Transform>(Vector3::Zero, Vector3::Zero, Vector3(960, 540, 1)));
+	wkp_titleLogo = GetManager().lock()->AddObjectFromCereal("TitleLogo", ObjectFactory::Create<Transform>(Vector3(0,100,0), Vector3::Zero, Vector3(1440, 810, 1)));
+	GetManager().lock()->AddObjectFromCereal("TitleAbutton", ObjectFactory::Create<Transform>(Vector3(0, -180, -0.02f), Vector3::Zero, Vector3(180, 180, 1)));
 }
 
 void ButiEngine::Title::OnShowUI()

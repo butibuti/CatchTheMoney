@@ -22,9 +22,12 @@ namespace ButiEngine {
 
 		void ZoomIn();
 		void ZoomOut();
+
+		void TitleZoomOut();
 	private:
 		float zoomInFrame;
 		float zoomOutFrame;
+		float titleZoomOutFrame;
 		float moveLength;
 		float initCameraZ;
 

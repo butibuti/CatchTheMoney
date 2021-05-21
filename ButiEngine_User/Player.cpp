@@ -23,7 +23,16 @@ void ButiEngine::Player::OnUpdate()
 		return;
 	}
 
-	Control();
+	if (!GameSettings::isTitle)
+	{
+		Control();
+	}
+	else
+	{
+		freeze = false;
+		animation = ButiEngine::Player::WALK;
+		velocity.x = 1.0f;
+	}
 	Move();
 	CheckGravity();
 	Animation();
@@ -43,7 +52,6 @@ void ButiEngine::Player::Start()
 	//wkp_screenScroll = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
 
 	velocity = Vector3::Zero;
-	speed = 3.0f;
 	grounded = true;
 	gravity = -0.4f;
 	pushGrabKeyFrame = false;
@@ -56,8 +64,11 @@ void ButiEngine::Player::Start()
 	jump = false;
 	jumpInputFrame = 0;
 
-	wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
-	wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+	if (!GameSettings::isTitle)
+	{
+		wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
+		wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+	}
 	//wkp_predictionLine2 = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 	//wkp_predictionLine2.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 
@@ -99,7 +110,6 @@ void ButiEngine::Player::ShowGUI()
 
 void ButiEngine::Player::OnShowUI()
 {
-	GUI::SliderFloat("speed", &speed, 0.0f, 50.0f);
 	GUI::Text("velY    : %f", velocity.y);
 	GUI::Text("gravity : %f", gravity);
 }
@@ -139,12 +149,12 @@ void ButiEngine::Player::Control()
 		if (InputManager::OnPushRightKey())
 		{
 			animation = ButiEngine::Player::WALK;
-			velocity.x = 1.0f;
+			velocity.x = 3.0f;
 		}
 		else if (InputManager::OnPushLeftKey())
 		{
 			animation = ButiEngine::Player::WALK;
-			velocity.x = -1.0f;
+			velocity.x = -3.0f;
 		}
 		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
 		if (velocity.x != 0 && scale.x > 0 != velocity.x > 0)
@@ -259,7 +269,6 @@ void ButiEngine::Player::Move()
 	
 	OnJump();
 	hitCore = false;
-	velocity.x *= speed;
 
 	if (fabsf(velocity.x) > fabsf(velocity.y))
 	{

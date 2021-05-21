@@ -3,7 +3,7 @@
 
 void ButiEngine::TitleLogo::OnUpdate()
 {
-	const float LERP_SCALE = 0.05f;
+	const float LERP_SCALE = 0.04f;
 	previousPosY = previousPosY * (1.0f - LERP_SCALE) + currentPosY * LERP_SCALE;
 
 	gameObject.lock()->transform->SetLocalPostionY(previousPosY);
@@ -15,13 +15,13 @@ void ButiEngine::TitleLogo::OnSet()
 
 void ButiEngine::TitleLogo::Start()
 {
-	currentPosY = 0;
-	previousPosY = 0;
+	currentPosY = 100;
+	previousPosY = 100;
 }
 
 void ButiEngine::TitleLogo::AnimationStart()
 {
-	currentPosY = 700;
+	currentPosY = 900;
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::TitleLogo::Clone()

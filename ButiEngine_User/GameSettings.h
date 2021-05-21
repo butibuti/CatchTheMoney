@@ -27,6 +27,8 @@ public:
 	static const float coreZ;
 	static const float gravity;
 
+	static bool isTitle;
+
 private:
 	GameSettings();
 };

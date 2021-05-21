@@ -21,6 +21,7 @@ void ButiEngine::CameraController::Start()
 {
     zoomInFrame = 20.0f;
     zoomOutFrame = 10.0f;
+    titleZoomOutFrame = 75.0f;
     moveLength = 100.0f;
     initCameraZ = -1000.0f;
     animation = false;
@@ -61,5 +62,18 @@ void ButiEngine::CameraController::ZoomOut()
         anim->GetTargetTransform()->SetWorldPosition(Vector3(0, 0, initCameraZ - moveLength));
         anim->SetSpeed(1.0f / zoomOutFrame);
         anim->SetEaseType(Easing::EasingType::EaseInQuad);
+    }
+}
+
+void ButiEngine::CameraController::TitleZoomOut()
+{
+    auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
+    if (!anim)
+    {
+        anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+        anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+        anim->GetTargetTransform()->SetWorldPosition(Vector3(0, 0, initCameraZ));
+        anim->SetSpeed(1.0f / titleZoomOutFrame);
+        anim->SetEaseType(Easing::EasingType::EaseOutQuart);
     }
 }

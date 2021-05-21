@@ -1,10 +1,12 @@
 #include "stdafx_u.h"
 #include "ContorolByStick.h"
 #include"InputManager.h"
+#include "GameSettings.h"
 
 void ButiEngine::ContorolByStick::OnUpdate()
 {
-	if (cameraResetFrame < 10)
+	bool isCameraResetFrame = cameraResetFrame < 10;
+	if (isCameraResetFrame || GameSettings::isTitle)
 	{
 		cameraResetFrame++;
 		return;

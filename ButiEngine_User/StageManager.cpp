@@ -81,21 +81,24 @@ void ButiEngine::StageManager::Start()
 
 	CreateUI();
 
-	wkp_stageNumber = GetManager().lock()->AddObjectFromCereal("ParentNumber", ObjectFactory::Create<Transform>(Vector3(-550, 350, 0), Vector3::Zero, Vector3(80, 80, 0)));
-	auto numComponent = wkp_stageNumber.lock()->GetGameComponent<NumberComponent>();
-	numComponent->SetNumber(StageSelect::GetStageNum() + 1);
+	if (!GameSettings::isTitle)
+	{
+		wkp_stageNumber = GetManager().lock()->AddObjectFromCereal("ParentNumber", ObjectFactory::Create<Transform>(Vector3(-550, 350, 0), Vector3::Zero, Vector3(80, 80, 0)));
+		auto numComponent = wkp_stageNumber.lock()->GetGameComponent<NumberComponent>();
+		numComponent->SetNumber(StageSelect::GetStageNum() + 1);
+	}
 
-	if (StageSelect::GetStageNum() == 0)
+	if (StageSelect::GetStageNum() == 0 && !GameSettings::isTitle)
 	{
 		wkp_talkText = GetManager().lock()->AddObjectFromCereal("FirstTalkText", ObjectFactory::Create<Transform>(Vector3(0, -330, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
 		CommonTextObject();
 	}
-	else if (StageSelect::GetStageNum() == 3)
+	else if (StageSelect::GetStageNum() == 3 && !GameSettings::isTitle)
 	{
 		wkp_talkText = GetManager().lock()->AddObjectFromCereal("ReverseTalkText", ObjectFactory::Create<Transform>(Vector3(0, -330, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
 		CommonTextObject();
 	}
-	else if (StageSelect::GetStageNum() == 6)
+	else if (StageSelect::GetStageNum() == 6 && !GameSettings::isTitle)
 	{
 		wkp_talkText = GetManager().lock()->AddObjectFromCereal("GravityTalkText", ObjectFactory::Create<Transform>(Vector3(0, -330, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
 		CommonTextObject();
@@ -104,7 +107,6 @@ void ButiEngine::StageManager::Start()
 	{
 		TalkText::Delete();
 	}
-
 
 	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 0, -0.7f), Vector3::Zero, Vector3(1920, 1080, 1)));
 
@@ -277,6 +279,7 @@ void ButiEngine::StageManager::ModeChange()
 
 void ButiEngine::StageManager::CreateUI()
 {
+	if (GameSettings::isTitle) return;
 	int stageNum = StageSelect::GetStageNum();
 
 	if (stageNum == 0)

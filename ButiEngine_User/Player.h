@@ -74,7 +74,6 @@ namespace ButiEngine {
 		Animation animation;
 
 		Vector3 velocity;
-		float speed;
 
 		int freezeProgressFrame;
 		int animationFrame;

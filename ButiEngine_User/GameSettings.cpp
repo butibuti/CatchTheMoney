@@ -8,6 +8,8 @@ const float GameSettings::goalZ = -0.2f;
 const float GameSettings::coreZ = -0.3f;
 const float GameSettings::gravity = 0.4f;
 
+bool GameSettings::isTitle = true;
+
 GameSettings::~GameSettings()
 {
 }

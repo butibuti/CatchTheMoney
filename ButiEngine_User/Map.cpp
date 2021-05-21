@@ -33,7 +33,15 @@ void ButiEngine::Map::PutTile()
 {
 	DestoryBlock();
 
-	MapData mapData = MapData(StageSelect::GetStageNum());
+	MapData mapData;
+	if (!GameSettings::isTitle)
+	{
+		mapData = MapData(StageSelect::GetStageNum());
+	}
+	else
+	{
+		mapData = MapData(100);
+	}
 
 	std::weak_ptr<GameObject> tile = std::shared_ptr<GameObject>();
 	std::weak_ptr<GameObject> parentPanel = std::shared_ptr<GameObject>();
