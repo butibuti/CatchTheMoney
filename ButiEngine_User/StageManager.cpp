@@ -291,7 +291,7 @@ void ButiEngine::StageManager::CreateUI()
 	shp_buttonNext = wkp_buttonNext.lock()->GetGameComponent<ClearButton>();
 	shp_buttonSelect = wkp_buttonSelect.lock()->GetGameComponent<ClearButton>();
 
-	if (stageNum >= 7)
+	if (stageNum >= 6)
 	{
 		wkp_grab = GetManager().lock()->AddObjectFromCereal("BTextWindow");
 	}
@@ -318,18 +318,18 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 {
 	if (!clearButtonAnimation) { return; }
 
-	if ((InputManager::OnTriggerRightKey() || InputManager::OnTriggerLeftKey()) &&
-		StageSelect::GetStageNum() != StageSelect::GetMaxStage())
+	if (StageSelect::GetStageNum() != StageSelect::GetMaxStage())
 	{
-		selectedNext = !selectedNext;
-		if (selectedNext)
+		if (InputManager::OnTriggerRightKey())
 		{
+			selectedNext = true;
 			shp_buttonNext->OnSelected();
 			shp_buttonSelect->OnEndSelect();
 			nextSceneName = "Stage" + std::to_string(StageSelect::GetStageNum() + 1);
 		}
-		else
+		else if (InputManager::OnTriggerLeftKey())
 		{
+			selectedNext = false;
 			shp_buttonNext->OnEndSelect();
 			shp_buttonSelect->OnSelected();
 			nextSceneName = "StageSelect";

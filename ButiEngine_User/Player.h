@@ -44,7 +44,6 @@ namespace ButiEngine {
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_bottomAABB;
 
 		std::weak_ptr<GameObject> wkp_predictionLine;
-		std::weak_ptr<GameObject> wkp_predictionLine2;
 		std::weak_ptr<GameObject> wkp_holdCore;
 
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;

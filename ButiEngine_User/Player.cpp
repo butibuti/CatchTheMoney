@@ -58,8 +58,9 @@ void ButiEngine::Player::Start()
 
 	wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 	wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
-	//wkp_predictionLine2 = GetManager().lock()->AddObjectFromCereal("PredictionLine");
-	//wkp_predictionLine2.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+	Vector3 lineScale = wkp_predictionLine.lock()->transform->GetLocalScale();
+	lineScale.y = -lineScale.y;
+	//wkp_predictionLine.lock()->transform->SetLocalScale(lineScale);
 
 	wkp_bottom = GetManager().lock()->AddObject(ObjectFactory::Create<Transform>(), "Player_Bottom");
 	wkp_bottom.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
