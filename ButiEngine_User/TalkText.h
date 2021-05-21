@@ -3,6 +3,7 @@
 namespace ButiEngine {
 
 	class SpliteAnimationComponent;
+	class PauseManager;
 
 	class TalkText :public GameComponent
 	{
@@ -24,7 +25,8 @@ namespace ButiEngine {
 		static void Delete();
 	private:
 		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
-		
+		std::shared_ptr<PauseManager> shp_pauseManager;
+
 		int textCount;
 		int waitTime;
 		bool isOnce;

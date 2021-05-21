@@ -14,7 +14,7 @@
 
 void ButiEngine::Player::OnUpdate()
 {
-	if (shp_pauseManager->GetPause() ||
+	if (shp_pauseManager->IsPause() ||
 		StageManager::GetMode() == GameMode::Edit ||
 		isClear ||
 		!TalkText::IsDelete())
@@ -58,8 +58,8 @@ void ButiEngine::Player::Start()
 
 	wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 	wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
-	Vector3 lineScale = wkp_predictionLine.lock()->transform->GetLocalScale();
-	lineScale.y = -lineScale.y;
+	//Vector3 lineScale = wkp_predictionLine.lock()->transform->GetLocalScale();
+	//lineScale.y = -lineScale.y;
 	//wkp_predictionLine.lock()->transform->SetLocalScale(lineScale);
 
 	wkp_bottom = GetManager().lock()->AddObject(ObjectFactory::Create<Transform>(), "Player_Bottom");

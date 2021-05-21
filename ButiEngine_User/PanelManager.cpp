@@ -16,7 +16,7 @@ void ButiEngine::PanelManager::OnUpdate()
 {
 	StorePlayer();
 	if (StageManager::GetMode() != GameMode::Edit ||
-		shp_pauseManager->GetPause() ||
+		shp_pauseManager->IsPause() ||
 		IsAnimation())
 	{
 		return;

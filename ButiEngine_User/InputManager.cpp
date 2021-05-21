@@ -18,7 +18,7 @@ void ButiEngine::InputManager::OnUpdate()
 	currentLeftStick = GameDevice::GetInput()->GetLeftStick();
 	currentRightSrick = GameDevice::GetInput()->GetRightStick();
 
-	if ((shp_pauseManager && shp_pauseManager->GetPause()) || !TalkText::IsDelete()) { return; }
+	if ((shp_pauseManager && shp_pauseManager->IsPause()) || !TalkText::IsDelete()) { return; }
 	if (OnPushAnyKey())
 	{
 		noPushCount = 0;

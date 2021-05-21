@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class PauseManager;
+
 	class ContorolByStick :public GameComponent
 	{
 	public:
@@ -22,6 +24,8 @@ namespace ButiEngine {
 			archive(returnSpeed);
 		}
 	private:
+		std::shared_ptr<PauseManager> shp_pauseManager;
+
 		Vector3 initAxis;
 		Vector3 rotation;
 		Vector2 preMousePos;

@@ -7,9 +7,12 @@
 #include"StageSelect.h"
 #include"Header/GameObjects/DefaultGameComponent/PositionAnimationComponent.h"
 #include"Header/GameObjects/DefaultGameComponent/ScaleAnimationComponent.h"
+#include"Player.h"
 
 void ButiEngine::PauseManager::OnUpdate()
 {
+	StorePlayer();
+	if (wkp_player.lock() && wkp_player.lock()->GetGameComponent<Player>()->IsClear()) { return; }
 	if (InputManager::OnTriggerOpenMenuKey() && !pushPauseKey)
 	{
 		pushPauseKey = true;
@@ -17,6 +20,7 @@ void ButiEngine::PauseManager::OnUpdate()
 		{
 			progress = 0;
 			selectedButton = BACK;
+			disappear = false;
 			AppearUI();
 		}
 		else
@@ -55,6 +59,7 @@ void ButiEngine::PauseManager::Start()
 	isNext = false;
 	fadeCount = 0;
 	reset = false;
+	disappear = false;
 }
 
 void ButiEngine::PauseManager::OnShowUI()
@@ -92,7 +97,7 @@ void ButiEngine::PauseManager::SwitchPause()
 
 void ButiEngine::PauseManager::ButtonAnimation()
 {
-	if (!pause) { return; }
+	if (!pause || disappear) { return; }
 	progress++;
 	if (progress < ANIMATION_FRAME) { return; }
 
@@ -145,7 +150,7 @@ void ButiEngine::PauseManager::SelectButton()
 
 void ButiEngine::PauseManager::OnDecide()
 {
-	if (!pause) { return; }
+	if (!pause || disappear) { return; }
 	if (progress < ANIMATION_FRAME) { return; }
 
 	if (InputManager::OnTriggerDecisionKey())
@@ -198,6 +203,7 @@ void ButiEngine::PauseManager::AppearUI()
 
 void ButiEngine::PauseManager::DisappearUI()
 {
+	disappear = true;
 	AddPositionAnimation(wkp_text, initTextPos, 30, Easing::EasingType::EaseInBack);
 	AddScaleAnimation(wkp_background, initBGScale, 10, Easing::EasingType::EaseOutQuad);
 	wkp_button_back.lock()->GetGameComponent<PauseButton>()->Disappear();
@@ -266,4 +272,12 @@ void ButiEngine::PauseManager::AddScaleAnimation(std::weak_ptr<GameObject> arg_o
 	anim->SetTargetScale(arg_targetScale);
 	anim->SetSpeed(1.0f / frame);
 	anim->SetEaseType(easingType);
+}
+
+void ButiEngine::PauseManager::StorePlayer()
+{
+	if (!wkp_player.lock())
+	{
+		wkp_player = GetManager().lock()->GetGameObject("Player");
+	}
 }

@@ -7,7 +7,7 @@
 void ButiEngine::ControlUI::OnUpdate()
 {
 	if (stop || 
-		shp_pauseManager->GetPause() ||
+		shp_pauseManager->IsPause() ||
 		!TalkText::IsDelete())
 	{
 		return; 

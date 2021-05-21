@@ -19,13 +19,14 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-		bool GetPause() { return pause; }
+		bool IsPause() { return pause; }
 	private:
 		const int ANIMATION_FRAME = 20;
 		const int BACK = 0;
 		const int RESET = 1;
 		const int SELECT = 2;
 
+		std::weak_ptr<GameObject> wkp_player;
 		std::weak_ptr<GameObject> wkp_text;
 		std::weak_ptr<GameObject> wkp_background;
 		std::weak_ptr<GameObject> wkp_button_back;
@@ -35,6 +36,7 @@ namespace ButiEngine {
 		bool isNext;
 		bool pause;
 		bool pause_;
+		bool disappear;
 		bool pushPauseKey;
 		int progress;
 		int selectedButton;
@@ -59,6 +61,7 @@ namespace ButiEngine {
 		void ChangeScene(const std::string& arg_sceneName);
 		void AddPositionAnimation(std::weak_ptr<GameObject> arg_object, const Vector3& arg_targetPosition, int frame, Easing::EasingType easingType);
 		void AddScaleAnimation(std::weak_ptr<GameObject> arg_object, const Vector3& arg_targetScale, int frame, Easing::EasingType easingType);
+		void StorePlayer();
 	};
 
 }

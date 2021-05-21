@@ -11,7 +11,7 @@ void ButiEngine::GravityCore::OnUpdate()
 {
 	StorePlayer();
 	FollowPlayer();
-	if (shp_pauseManager->GetPause() || StageManager::GetMode() == GameMode::Edit)
+	if (shp_pauseManager->IsPause() || StageManager::GetMode() == GameMode::Edit)
 	{
 		return;
 	}

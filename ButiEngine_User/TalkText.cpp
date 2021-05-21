@@ -4,6 +4,7 @@
 #include "InputManager.h"
 #include "ShakeComponent.h"
 #include "Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
+#include"PauseManager.h"
 
 bool ButiEngine::TalkText::isDelete = false;
 
@@ -20,6 +21,8 @@ void ButiEngine::TalkText::OnUpdate()
 		isOnce = true;
 		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 30);
 	}
+
+	if (shp_pauseManager->IsPause()) { return; }
 
 	const int WAIT_FRAME = 12;
 	if (InputManager::OnTriggerDecisionKey() && waitTime > WAIT_FRAME)
@@ -53,6 +56,8 @@ void ButiEngine::TalkText::OnSet()
 void ButiEngine::TalkText::Start()
 {
 	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
+	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
+
 	textCount = 0;
 	waitTime = 0;
 	isDelete = false;
