@@ -46,10 +46,11 @@ namespace ButiEngine {
 		SoundTag se_slide1;
 		SoundTag se_slide2;
 
-		const int MOVE_LIMIT = 3;
+		const int MOVE_LIMIT = 6;
 		const bool RIGHT = true;
 		const bool LEFT = false;
 		int moveNum;
+		int soundNum;
 		std::vector<bool> vec_histories;
 		int currentIndex;
 		bool reset;

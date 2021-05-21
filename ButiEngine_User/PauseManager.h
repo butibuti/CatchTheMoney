@@ -21,7 +21,7 @@ namespace ButiEngine {
 		}
 		bool GetPause() { return pause; }
 	private:
-		const int ANIMATION_FRAME = 30;
+		const int ANIMATION_FRAME = 20;
 		const int BACK = 0;
 		const int RESET = 1;
 		const int SELECT = 2;
@@ -43,10 +43,8 @@ namespace ButiEngine {
 
 		Vector3 initTextPos;
 		Vector3 defaultTextPos;
-		Vector3 textScale;
 		Vector3 initBGScale;
 		Vector3 defaultBGScale;
-		Vector3 BGPos;
 
 		void SwitchPause();
 		void ButtonAnimation();
@@ -59,7 +57,8 @@ namespace ButiEngine {
 		void DisappearUI();
 		void FadeUpdate();
 		void ChangeScene(const std::string& arg_sceneName);
-		void AddAnimation(std::weak_ptr<GameObject> arg_object, const Vector3& arg_targetPosition, const Vector3& arg_targetScale, int frame, Easing::EasingType easingType);
+		void AddPositionAnimation(std::weak_ptr<GameObject> arg_object, const Vector3& arg_targetPosition, int frame, Easing::EasingType easingType);
+		void AddScaleAnimation(std::weak_ptr<GameObject> arg_object, const Vector3& arg_targetScale, int frame, Easing::EasingType easingType);
 	};
 
 }

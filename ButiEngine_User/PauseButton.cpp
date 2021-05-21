@@ -1,5 +1,7 @@
 #include "stdafx_u.h"
 #include "PauseButton.h"
+#include"Header/GameObjects/DefaultGameComponent/PositionAnimationComponent.h"
+#include"Header/GameObjects/DefaultGameComponent/ScaleAnimationComponent.h"
 
 void ButiEngine::PauseButton::OnUpdate()
 {
@@ -24,36 +26,51 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::PauseButton::Clone()
 
 void ButiEngine::PauseButton::Appear()
 {
-	AddAnimation(defaultPosition, defaultScale, 30, Easing::EasingType::EaseOutBack);
+	gameObject.lock()->transform->SetLocalScale(defaultScale);
+	AddPositionAnimation(defaultPosition, 30, Easing::EasingType::EaseOutBack);
 }
 
 void ButiEngine::PauseButton::Disappear()
 {
-	AddAnimation(initPosition, defaultScale, 30, Easing::EasingType::EaseInBack);
+	AddPositionAnimation(initPosition, 30, Easing::EasingType::EaseInBack);
 }
 
 void ButiEngine::PauseButton::OnSelected()
 {
-	AddAnimation(defaultPosition, defaultScale * 1.2f, 40, Easing::EasingType::EaseOutElastic);
+	AddScaleAnimation(defaultScale * 1.2f, 40, Easing::EasingType::EaseOutElastic);
 }
 
 void ButiEngine::PauseButton::OnEndSelect()
 {
-	AddAnimation(defaultPosition, defaultScale, 40, Easing::EasingType::EaseOutElastic);
+	AddScaleAnimation(defaultScale, 40, Easing::EasingType::EaseOutElastic);
 }
 
-void ButiEngine::PauseButton::AddAnimation(const Vector3& arg_targetPosition, const Vector3& arg_targetScale, int frame, Easing::EasingType easingType)
+void ButiEngine::PauseButton::AddPositionAnimation(const Vector3& arg_targetPosition, int frame, Easing::EasingType easingType)
 {
-	auto anim_ = gameObject.lock()->GetGameComponent<TransformAnimation>();
+	auto anim_ = gameObject.lock()->GetGameComponent<PositionAnimation>();
 	if (anim_)
 	{
-		gameObject.lock()->RemoveGameComponent("TransformAnimation");
+		gameObject.lock()->RemoveGameComponent("PositionAnimation");
 	}
-	auto anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+	auto anim = gameObject.lock()->AddGameComponent<PositionAnimation>();
 
-	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-	anim->GetTargetTransform()->SetWorldPosition(arg_targetPosition);
-	anim->GetTargetTransform()->SetLocalScale(arg_targetScale);
+	anim->SetInitPosition(gameObject.lock()->transform->GetWorldPosition());
+	anim->SetTargetPosition(arg_targetPosition);
+	anim->SetSpeed(1.0f / frame);
+	anim->SetEaseType(easingType);
+}
+
+void ButiEngine::PauseButton::AddScaleAnimation(const Vector3& arg_targetScale, int frame, Easing::EasingType easingType)
+{
+	auto anim_ = gameObject.lock()->GetGameComponent<ScaleAnimation>();
+	if (anim_)
+	{
+		gameObject.lock()->RemoveGameComponent("ScaleAnimation");
+	}
+	auto anim = gameObject.lock()->AddGameComponent<ScaleAnimation>();
+
+	anim->SetInitScale(gameObject.lock()->transform->GetWorldScale());
+	anim->SetTargetScale(arg_targetScale);
 	anim->SetSpeed(1.0f / frame);
 	anim->SetEaseType(easingType);
 }

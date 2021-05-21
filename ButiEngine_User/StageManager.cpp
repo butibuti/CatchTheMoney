@@ -223,6 +223,7 @@ void ButiEngine::StageManager::ModeChange()
 	{
 		if (shp_cameraController->IsAnimation()) { return; }
 		if (shp_panelManager->IsAnimation()) { return; }
+		if (shp_pauseManager->GetPause()) { return; }
 		if (StageSelect::GetStageNum() == 0) { return; }
 		if (wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock()) { return; }
 		if (wkp_player.lock()->GetGameComponent<Player>()->IsClear()) { return; }
