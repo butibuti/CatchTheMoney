@@ -1,5 +1,6 @@
 #include "stdafx_u.h"
 #include "ClearFlash.h"
+#include"Header/GameObjects/DefaultGameComponent/ScaleAnimationComponent.h"
 
 void ButiEngine::ClearFlash::OnUpdate()
 {
@@ -20,7 +21,7 @@ void ButiEngine::ClearFlash::OnUpdate()
 		transform->SetLocalPosition(initPos);
 	}
 
-	ScaleAnimation();
+	ClearScaleAnimation();
 }
 
 void ButiEngine::ClearFlash::OnSet()
@@ -41,21 +42,22 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::ClearFlash::Clone()
 	return ObjectFactory::Create<ClearFlash>();
 }
 
-void ButiEngine::ClearFlash::ScaleAnimation()
+void ButiEngine::ClearFlash::ClearScaleAnimation()
 {
 	if (isOnce) return;
 	isOnce = true;
 
 	auto goalPosition = GetManager().lock()->GetGameObject("Goal").lock()->transform->GetWorldPosition();
+	goalPosition.z -= 0.1f;
 	gameObject.lock()->transform->SetLocalPosition(goalPosition);
 	initPos = gameObject.lock()->transform->GetLocalPosition();
 
-	auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
+	auto anim = gameObject.lock()->GetGameComponent<ScaleAnimation>();
 	if (!anim)
 	{
-		anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
-		anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-		anim->GetTargetTransform()->SetLocalScale(Vector3(50.0f, 50.0f, 0.0f));
+		anim = gameObject.lock()->AddGameComponent<ScaleAnimation>();
+		anim->SetInitScale(gameObject.lock()->transform->GetWorldScale());
+		anim->SetTargetScale(Vector3(50.0f, 50.0f, 0.0f));
 		anim->SetSpeed(0.06f);
 		anim->SetEaseType(Easing::EasingType::EaseOutExpo);
 	}

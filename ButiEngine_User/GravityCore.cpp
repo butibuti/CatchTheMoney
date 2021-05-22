@@ -11,7 +11,7 @@ void ButiEngine::GravityCore::OnUpdate()
 {
 	StorePlayer();
 	FollowPlayer();
-	if (shp_pauseManager->GetPause() || StageManager::GetMode() == GameMode::Edit)
+	if (shp_pauseManager->IsPause() || StageManager::GetMode() == GameMode::Edit)
 	{
 		return;
 	}
@@ -85,7 +85,7 @@ void ButiEngine::GravityCore::FollowPlayer()
 	Vector3 playerPos = wkp_player.lock()->transform->GetWorldPosition();
 	Vector3 targetPos = playerPos;
 	float playerGravity = wkp_player.lock()->GetGameComponent<Player>()->GetGravity();
-	float difference = 32.0f;
+	float difference = 16.0f;
 
 	if (playerGravity > 0)
 	{

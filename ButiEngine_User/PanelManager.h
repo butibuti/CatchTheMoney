@@ -28,7 +28,11 @@ namespace ButiEngine {
 		void AddBackPanel(std::weak_ptr<GameObject> arg_panel);
 		void RemoveGravityCores(int arg_num, float arg_gravity);
 		bool IsAnimation();
-		void ResetMoveNum() { moveNum = 0; }
+		void ResetMoveNum()
+		{
+			moveNum = 0; 
+			soundNum = 0;
+		}
 		void ResetMoveHistories() { vec_histories.clear(); }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
@@ -42,11 +46,15 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_player;
 
 		SoundTag se_panelLimit;
+		SoundTag se_slide0;
+		SoundTag se_slide1;
+		SoundTag se_slide2;
 
-		const int MOVE_LIMIT = 3;
+		const int MOVE_LIMIT = 6;
 		const bool RIGHT = true;
 		const bool LEFT = false;
 		int moveNum;
+		int soundNum;
 		std::vector<bool> vec_histories;
 		int currentIndex;
 		bool reset;
@@ -61,6 +69,7 @@ namespace ButiEngine {
 		void Redo(int arg_frame = 15);
 		void Reset();
 		void RemoveHistories();
+		void PlaySlideSound();
 	};
 
 }

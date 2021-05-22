@@ -50,7 +50,6 @@ void ButiEngine::StageManager::OnUpdate()
 		clearAnimationFrame--;
 	}
 
-	ResetStage();
 	OnGoal();
 	ModeChange();
 	ChangeUIAlpha();
@@ -153,16 +152,6 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::StageManager::Clone()
 	return ObjectFactory::Create<StageManager>();
 }
 
-void ButiEngine::StageManager::ResetStage()
-{
-	if (InputManager::OnTriggerOpenMenuKey())
-	{
-		shp_map->DestoryBlock();
-		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
-		sceneManager->ReloadScene();
-	}
-}
-
 void ButiEngine::StageManager::OnGoal()
 {
 	if (clearAnimationFrame == 30)
@@ -185,7 +174,7 @@ void ButiEngine::StageManager::OnGoal()
 	}
 	if (fadeCount == 1)
 	{
-		GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 1080, -0.5f), Vector3::Zero, Vector3(1920, 1080, 1)));
+		GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 1080, -0.7f), Vector3::Zero, Vector3(1920, 1080, 1)));
 	}
 	if (fadeCount > 30)
 	{
@@ -236,6 +225,7 @@ void ButiEngine::StageManager::ModeChange()
 	{
 		if (shp_cameraController->IsAnimation()) { return; }
 		if (shp_panelManager->IsAnimation()) { return; }
+		if (shp_pauseManager->IsPause()) { return; }
 		if (StageSelect::GetStageNum() == 0) { return; }
 		if (wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock()) { return; }
 		if (wkp_player.lock()->GetGameComponent<Player>()->IsClear()) { return; }
@@ -304,7 +294,7 @@ void ButiEngine::StageManager::CreateUI()
 	shp_buttonNext = wkp_buttonNext.lock()->GetGameComponent<ClearButton>();
 	shp_buttonSelect = wkp_buttonSelect.lock()->GetGameComponent<ClearButton>();
 
-	if (stageNum >= 7)
+	if (stageNum >= 6)
 	{
 		wkp_grab = GetManager().lock()->AddObjectFromCereal("BTextWindow");
 	}
@@ -331,25 +321,25 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 {
 	if (!clearButtonAnimation) { return; }
 
-	if ((InputManager::OnTriggerRightKey() || InputManager::OnTriggerLeftKey()) &&
-		StageSelect::GetStageNum() != StageSelect::GetMaxStage())
+	if (StageSelect::GetStageNum() != StageSelect::GetMaxStage() && !isNext)
 	{
-		selectedNext = !selectedNext;
-		if (selectedNext)
+		if (InputManager::OnTriggerRightKey())
 		{
+			selectedNext = true;
 			shp_buttonNext->OnSelected();
 			shp_buttonSelect->OnEndSelect();
 			nextSceneName = "Stage" + std::to_string(StageSelect::GetStageNum() + 1);
 		}
-		else
+		else if (InputManager::OnTriggerLeftKey())
 		{
+			selectedNext = false;
 			shp_buttonNext->OnEndSelect();
 			shp_buttonSelect->OnSelected();
 			nextSceneName = "StageSelect";
 		}
 	}
 
-	if (InputManager::OnTriggerDecisionKey())
+	if (InputManager::OnTriggerDecisionKey() && !isNext)
 	{
 		isNext = true;
 		if (selectedNext)

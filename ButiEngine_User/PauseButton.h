@@ -26,7 +26,8 @@ namespace ButiEngine {
 		Vector3 defaultPosition;
 		Vector3 defaultScale;
 
-		void AddAnimation(const Vector3& arg_targetPosition, const Vector3& arg_targetScale, int frame, Easing::EasingType easingType);
+		void AddPositionAnimation(const Vector3& arg_targetPosition, int frame, Easing::EasingType easingType);
+		void AddScaleAnimation(const Vector3& arg_targetScale, int frame, Easing::EasingType easingType);
 	};
 
 }

@@ -23,7 +23,7 @@ namespace ButiEngine {
 		Vector3 initPos;
 		Vector3 awayPos;
 
-		void ScaleAnimation();
+		void ClearScaleAnimation();
 	};
 
 }

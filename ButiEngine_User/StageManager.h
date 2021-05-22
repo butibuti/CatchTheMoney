@@ -65,7 +65,6 @@ namespace ButiEngine {
 
 		static GameMode mode;
 
-		void ResetStage();
 		int clearAnimationFrame;
 		int fadeCount;
 		bool isNext;

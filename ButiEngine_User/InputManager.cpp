@@ -18,7 +18,7 @@ void ButiEngine::InputManager::OnUpdate()
 	currentLeftStick = GameDevice::GetInput()->GetLeftStick();
 	currentRightSrick = GameDevice::GetInput()->GetRightStick();
 
-	if ((shp_pauseManager && shp_pauseManager->GetPause()) || !TalkText::IsDelete()) { return; }
+	if ((shp_pauseManager && shp_pauseManager->IsPause()) || !TalkText::IsDelete()) { return; }
 	if (OnPushAnyKey())
 	{
 		noPushCount = 0;
@@ -149,23 +149,23 @@ bool ButiEngine::InputManager::OnPushLeftScrollKey()
 
 bool ButiEngine::InputManager::OnTriggerUndoKey()
 {
-	return (GameDevice::GetInput()->CheckKey(Keys::LeftCtrl) &&
-		GameDevice::GetInput()->CheckKey(Keys::Z));
+	return ((GameDevice::GetInput()->TriggerKey(Keys::LeftCtrl) && GameDevice::GetInput()->CheckKey(Keys::Z)) ||
+		(GameDevice::GetInput()->CheckKey(Keys::LeftCtrl) && GameDevice::GetInput()->TriggerKey(Keys::Z)));
 		//GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_LEFT);
 }
 
 bool ButiEngine::InputManager::OnTriggerRedoKey()
 {
-	return (GameDevice::GetInput()->CheckKey(Keys::LeftCtrl) &&
-		GameDevice::GetInput()->CheckKey(Keys::Y));
+	return ((GameDevice::GetInput()->TriggerKey(Keys::LeftCtrl) && GameDevice::GetInput()->CheckKey(Keys::Y)) ||
+		(GameDevice::GetInput()->CheckKey(Keys::LeftCtrl) && GameDevice::GetInput()->TriggerKey(Keys::Y)));
 		//GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_BACK);
 }
 
 bool ButiEngine::InputManager::OnTriggerResetPanelKey()
 {
-	return (GameDevice::GetInput()->CheckKey(Keys::LeftCtrl) &&
-		GameDevice::GetInput()->CheckKey(Keys::R)) ||
-		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_B);
+	return ((GameDevice::GetInput()->TriggerKey(Keys::LeftCtrl) && GameDevice::GetInput()->CheckKey(Keys::R)) ||
+		(GameDevice::GetInput()->CheckKey(Keys::LeftCtrl) && GameDevice::GetInput()->TriggerKey(Keys::R)) ||
+		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_B));
 }
 
 bool ButiEngine::InputManager::OnTriggerDecisionKey()

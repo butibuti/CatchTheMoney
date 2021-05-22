@@ -14,7 +14,7 @@
 
 void ButiEngine::Player::OnUpdate()
 {
-	if (shp_pauseManager->GetPause() ||
+	if (shp_pauseManager->IsPause() ||
 		StageManager::GetMode() == GameMode::Edit ||
 		isClear ||
 		!TalkText::IsDelete())

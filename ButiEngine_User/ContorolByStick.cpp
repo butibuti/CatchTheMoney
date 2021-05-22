@@ -1,10 +1,13 @@
 #include "stdafx_u.h"
 #include "ContorolByStick.h"
 #include"InputManager.h"
+#include"PauseManager.h"
 #include "GameSettings.h"
 
 void ButiEngine::ContorolByStick::OnUpdate()
 {
+	if (shp_pauseManager->IsPause()) { return; }
+
 	bool isCameraResetFrame = cameraResetFrame < 10;
 	if (isCameraResetFrame || GameSettings::isTitle)
 	{
@@ -38,6 +41,8 @@ void ButiEngine::ContorolByStick::OnSet()
 
 void ButiEngine::ContorolByStick::Start()
 {
+	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
+
 	cameraResetFrame = 0;
 	rotationLimit = 60.0f;
 	rotationSpeed = 2.0f;

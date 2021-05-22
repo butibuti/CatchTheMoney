@@ -101,7 +101,7 @@ void ButiEngine::BackDraw::Correction()
 
 void ButiEngine::BackDraw::SwitchGravityCore(bool arg_scroll)
 {
-	if (shp_pauseManager->GetPause() || StageManager::GetMode() == GameMode::Edit)
+	if (shp_pauseManager->IsPause() || StageManager::GetMode() == GameMode::Edit)
 	{
 		return;
 	}

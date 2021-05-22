@@ -44,7 +44,6 @@ namespace ButiEngine {
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_bottomAABB;
 
 		std::weak_ptr<GameObject> wkp_predictionLine;
-		std::weak_ptr<GameObject> wkp_predictionLine2;
 		std::weak_ptr<GameObject> wkp_holdCore;
 
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
@@ -52,7 +51,7 @@ namespace ButiEngine {
 		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 		const float JUMP_FORCE = 3.8f;
 		const int COYOTE_TIME = 10;
-		const int FREEZE_FRAME = 60;
+		const int FREEZE_FRAME = 30;
 		const int ANIMATION_RATE = 5;
 		const int FLOATING_FRAME = 6;
 		enum Animation

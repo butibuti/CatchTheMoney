@@ -19,37 +19,49 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-		bool GetPause() { return pause; }
+		bool IsPause() { return pause; }
 	private:
-		const int ANIMATION_FRAME = 30;
+		const int ANIMATION_FRAME = 20;
 		const int BACK = 0;
 		const int RESET = 1;
 		const int SELECT = 2;
 
+		std::weak_ptr<GameObject> wkp_player;
 		std::weak_ptr<GameObject> wkp_text;
 		std::weak_ptr<GameObject> wkp_background;
 		std::weak_ptr<GameObject> wkp_button_back;
 		std::weak_ptr<GameObject> wkp_button_reset;
 		std::weak_ptr<GameObject> wkp_button_select;
 
+		bool isNext;
 		bool pause;
 		bool pause_;
+		bool disappear;
 		bool pushPauseKey;
 		int progress;
 		int selectedButton;
+		int fadeCount;
+		bool reset;
 
 		Vector3 initTextPos;
 		Vector3 defaultTextPos;
-		Vector3 textScale;
 		Vector3 initBGScale;
 		Vector3 defaultBGScale;
-		Vector3 BGPos;
 
 		void SwitchPause();
 		void ButtonAnimation();
+		void SelectButton();
+		void OnDecide();
+		void OnDecideBack();
+		void OnDecideReset();
+		void OnDecideSelect();
 		void AppearUI();
 		void DisappearUI();
-		void AddAnimation(std::weak_ptr<GameObject> arg_object, const Vector3& arg_targetPosition, const Vector3& arg_targetScale, int frame, Easing::EasingType easingType);
+		void FadeUpdate();
+		void ChangeScene(const std::string& arg_sceneName);
+		void AddPositionAnimation(std::weak_ptr<GameObject> arg_object, const Vector3& arg_targetPosition, int frame, Easing::EasingType easingType);
+		void AddScaleAnimation(std::weak_ptr<GameObject> arg_object, const Vector3& arg_targetScale, int frame, Easing::EasingType easingType);
+		void StorePlayer();
 	};
 
 }

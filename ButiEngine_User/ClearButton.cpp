@@ -1,5 +1,6 @@
 #include "stdafx_u.h"
 #include "ClearButton.h"
+#include"Header/GameObjects/DefaultGameComponent/ScaleAnimationComponent.h"
 
 void ButiEngine::ClearButton::OnUpdate()
 {
@@ -41,15 +42,15 @@ void ButiEngine::ClearButton::OnEndSelect()
 
 void ButiEngine::ClearButton::AddAnimation(const Vector3& arg_targetScale, int frame)
 {
-	auto anim_ = gameObject.lock()->GetGameComponent<TransformAnimation>();
+	auto anim_ = gameObject.lock()->GetGameComponent<ScaleAnimation>();
 	if (anim_)
 	{
-		gameObject.lock()->RemoveGameComponent("TransformAnimation");
+		gameObject.lock()->RemoveGameComponent("ScaleAnimation");
 	}
-	auto anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+	auto anim = gameObject.lock()->AddGameComponent<ScaleAnimation>();
 
-	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-	anim->GetTargetTransform()->SetLocalScale(arg_targetScale);
+	anim->SetInitScale(gameObject.lock()->transform->GetWorldScale());
+	anim->SetTargetScale(arg_targetScale);
 	anim->SetSpeed(1.0f / frame);
 	anim->SetEaseType(Easing::EasingType::EaseOutElastic);
 }
