@@ -27,7 +27,6 @@ namespace ButiEngine {
 		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> renderTargetDescriptorHeap;
 		D3D12_RESOURCE_STATES currentState;
 		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle;
-		bool isMapFrame;
 		std::string outputFileName;
 		//void UpdateResourceRelease()override;
 		//void ResourceUpdate() override;
