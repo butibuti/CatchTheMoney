@@ -37,7 +37,7 @@ void ButiEngine::StageManager::OnUpdate()
 		{
 			GetManager().lock()->GetGameObject("Control2").lock()->GetGameComponent<ControlUI>()->Stop();
 			GetManager().lock()->AddObjectFromCereal("ClearFlash", ObjectFactory::Create<Transform>(Vector3(0.0f,0.0f,1000.0f)));
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_clear, 0.1f);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_clear, GameSettings::masterVolume);
 		}
 		else if (clearAnimationFrame == CLEAR_FRAME - 10)
 		{
@@ -136,7 +136,7 @@ void ButiEngine::StageManager::Start()
 	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
 	se_select = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Select-Click.wav");
 
-	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, 0.1f);
+	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, GameSettings::masterVolume);
 
 	nextSceneName = "Stage" + std::to_string(StageSelect::GetStageNum() + 1);
 }
@@ -329,7 +329,7 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 		{
 			if (!selectedNext)
 			{
-				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, 0.1f);
+				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, GameSettings::masterVolume);
 			}
 			selectedNext = true;
 			shp_buttonNext->OnSelected();
@@ -340,7 +340,7 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 		{
 			if (selectedNext)
 			{
-				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, 0.1f);
+				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, GameSettings::masterVolume);
 			}
 			selectedNext = false;
 			shp_buttonNext->OnEndSelect();
@@ -352,7 +352,7 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 	if (InputManager::OnTriggerDecisionKey() && !isNext)
 	{
 		isNext = true;
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_enter, 0.1f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_enter, GameSettings::masterVolume);
 		if (selectedNext)
 		{
 			wkp_buttonNext.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);

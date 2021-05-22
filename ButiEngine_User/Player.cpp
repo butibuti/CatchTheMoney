@@ -169,7 +169,7 @@ void ButiEngine::Player::Control()
 		if ((InputManager::OnTriggerJumpKey() || jumpInputFrame > 0) && !isClear)
 		{
 			jumpInputFrame = 0;
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_jump, 0.1f);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_jump, GameSettings::masterVolume);
 			velocity.y = JUMP_FORCE;
 			if (gravity > 0)
 			{

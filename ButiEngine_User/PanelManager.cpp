@@ -141,7 +141,7 @@ void ButiEngine::PanelManager::Control()
 		/*if (moveNum >= MOVE_LIMIT)
 		{
 			shp_shake->ShakeStart(3.0);
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, 0.1f);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, GameSettings::masterVolume);
 			return;
 		}*/
 		SwapRight();
@@ -154,13 +154,13 @@ void ButiEngine::PanelManager::Control()
 		/*if (moveNum <= -MOVE_LIMIT)
 		{
 			shp_shake->ShakeStart(3.0);
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, 0.1f);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, GameSettings::masterVolume);
 			return;
 		}*/
 		if (soundNum <= 0)
 		{
 			shp_shake->ShakeStart(3.0);
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, 0.1f);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, GameSettings::masterVolume);
 			return;
 		}
 		SwapLeft();
@@ -174,7 +174,7 @@ void ButiEngine::PanelManager::Control()
 		if (moveNum == 0 || vec_histories.size() == 0)
 		{
 			shp_shake->ShakeStart(3.0);
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, 0.1f);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, GameSettings::masterVolume);
 			return;
 		}
 		reset = true;
@@ -270,7 +270,7 @@ void ButiEngine::PanelManager::SwapRight(int arg_frame)
 	if (vec_panels[rightPanelIndex].lock()->GetGameComponent<Panel>()->IsLock())
 	{
 		shp_shake->ShakeStart(3.0);
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, 0.1f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, GameSettings::masterVolume);
 		return;
 	}
 
@@ -296,7 +296,7 @@ void ButiEngine::PanelManager::SwapLeft(int arg_frame)
 	if (vec_panels[leftPanelIndex].lock()->GetGameComponent<Panel>()->IsLock())
 	{
 		shp_shake->ShakeStart(3.0);
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, 0.1f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, GameSettings::masterVolume);
 		return;
 	}
 	SwapPanelNum(currentIndex, currentIndex - 1, arg_frame);
@@ -375,14 +375,14 @@ void ButiEngine::PanelManager::PlaySlideSound()
 {
 	if (abs(soundNum) % 3 == 0)
 	{
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_slide0, 0.3f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_slide0, GameSettings::masterVolume * 3.0f);
 	}
 	else if (abs(soundNum) % 3 == 1)
 	{
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_slide1, 0.3f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_slide1, GameSettings::masterVolume * 3.0f);
 	}
 	else if (abs(soundNum) % 3 == 2)
 	{
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_slide2, 0.3f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_slide2, GameSettings::masterVolume * 3.0f);
 	}
 }

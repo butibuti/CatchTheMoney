@@ -13,9 +13,9 @@ void ButiEngine::Title::OnUpdate()
 		wkp_camera = GetManager().lock()->GetGameObject("Camera");
 		return;
 	}
-	if (InputManager::OnGameStartKey() && !isAnimation)
+	if (InputManager::OnTriggerDecisionKey() && !isAnimation)
 	{
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_enter, 0.1f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_enter, GameSettings::masterVolume);
 		wkp_titleLogo.lock()->GetGameComponent<TitleLogo>()->AnimationStart();
 		wkp_camera.lock()->GetGameComponent<CameraController>()->TitleZoomOut();
 		isAnimation = true;

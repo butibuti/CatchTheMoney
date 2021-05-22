@@ -6,6 +6,7 @@
 #include "ShakeComponent.h"
 #include "SelectPlayer.h"
 #include "SceneChangeAnimation.h"
+#include "GameSettings.h"
 
 int ButiEngine::StageSelect::stageNum = 0;
 int ButiEngine::StageSelect::maxStageNum = 11; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
@@ -131,7 +132,7 @@ void ButiEngine::StageSelect::OnPushRight()
 {
 	float angle = 360.0f / (float)(maxStageNum + 1) * 2.0f;
 	preParentRotation.y += angle;
-	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, 0.1f);
+	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, GameSettings::masterVolume);
 
 	stageNum++;
 	if (stageNum > maxStageNum)
@@ -144,7 +145,7 @@ void ButiEngine::StageSelect::OnPushLeft()
 {
 	float angle = 360.0f / (float)(maxStageNum + 1) * 2.0f;
 	preParentRotation.y -= angle;
-	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, 0.1f);
+	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, GameSettings::masterVolume);
 
 	stageNum--;
 	if (stageNum < 0)
@@ -157,7 +158,7 @@ void ButiEngine::StageSelect::OnPushSkip()
 {
 	float angle = 360.0f / (float)(maxStageNum + 1) * 2.0f;
 	preParentRotation.y += angle * ((maxStageNum + 1) / 2);
-	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, 0.1f);
+	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, GameSettings::masterVolume);
 
 	stageNum += (maxStageNum + 1) / 2;
 	if (stageNum > maxStageNum)
@@ -179,7 +180,7 @@ void ButiEngine::StageSelect::DecisionAnimation()
 {
 	if (InputManager::OnTriggerDecisionKey() && !isAnimation)
 	{
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_enter, 0.1f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_enter, GameSettings::masterVolume);
 		isAnimation = true;
 	}
 

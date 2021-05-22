@@ -50,6 +50,7 @@ namespace ButiEngine {
 
 		SoundTag se_enter;
 		SoundTag se_select;
+		SoundTag se_pick;
 
 		void SwitchPause();
 		void ButtonAnimation();

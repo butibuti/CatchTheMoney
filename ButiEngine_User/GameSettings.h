@@ -28,6 +28,7 @@ public:
 	static const float goalZ;
 	static const float coreZ;
 	static const float gravity;
+	static const float masterVolume;
 
 	static bool isTitle;
 

@@ -7,8 +7,9 @@ const float GameSettings::playerZ = -0.5f;
 const float GameSettings::goalZ = -0.2f;
 const float GameSettings::coreZ = -0.3f;
 const float GameSettings::gravity = 0.4f;
+const float GameSettings::masterVolume = 0.1f;
 
-bool GameSettings::isTitle = true;
+bool GameSettings::isTitle = false;
 
 GameSettings::~GameSettings()
 {
