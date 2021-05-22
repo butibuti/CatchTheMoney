@@ -300,13 +300,13 @@ void ButiEngine::PanelManager::SwapLeft(int arg_frame)
 		return;
 	}
 	SwapPanelNum(currentIndex, currentIndex - 1, arg_frame);
-	PlaySlideSound();
 	moveNum--;
 	if (moveNum == -MOVE_LIMIT)
 	{
 		moveNum = 0;
 	}
 	soundNum--;
+	PlaySlideSound();
 }
 
 void ButiEngine::PanelManager::Undo(int arg_frame)
@@ -373,15 +373,15 @@ void ButiEngine::PanelManager::RemoveHistories()
 
 void ButiEngine::PanelManager::PlaySlideSound()
 {
-	if (abs(soundNum) % 3 == 0)
+	if (abs(soundNum) % SOUND_LIMIT == 0)
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_slide0, GameSettings::masterVolume * 3.0f);
 	}
-	else if (abs(soundNum) % 3 == 1)
+	else if (abs(soundNum) % SOUND_LIMIT == 1)
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_slide1, GameSettings::masterVolume * 3.0f);
 	}
-	else if (abs(soundNum) % 3 == 2)
+	else if (abs(soundNum) % SOUND_LIMIT == 2)
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_slide2, GameSettings::masterVolume * 3.0f);
 	}

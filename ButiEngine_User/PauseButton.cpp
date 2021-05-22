@@ -27,12 +27,12 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::PauseButton::Clone()
 void ButiEngine::PauseButton::Appear()
 {
 	gameObject.lock()->transform->SetLocalScale(defaultScale);
-	AddPositionAnimation(defaultPosition, 30, Easing::EasingType::EaseOutBack);
+	AddPositionAnimation(defaultPosition, 20, Easing::EasingType::EaseOutBack);
 }
 
 void ButiEngine::PauseButton::Disappear()
 {
-	AddPositionAnimation(initPosition, 30, Easing::EasingType::EaseInBack);
+	AddPositionAnimation(initPosition, 20, Easing::EasingType::EaseInBack);
 }
 
 void ButiEngine::PauseButton::OnSelected()
