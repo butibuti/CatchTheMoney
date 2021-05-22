@@ -21,6 +21,8 @@
 #include"ShakeComponent.h"
 #include "TalkText.h"
 
+#define OUTPUT_STAGERENDERTARGET
+
 ButiEngine::GameMode ButiEngine::StageManager::mode;
 
 void ButiEngine::StageManager::OnUpdate()
@@ -136,9 +138,26 @@ void ButiEngine::StageManager::Start()
 	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
 	se_select = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Select-Click.wav");
 
-	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, GameSettings::masterVolume);
+	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, 0.1f);
+	const int stageNum = StageSelect::GetStageNum();
+	nextSceneName = "Stage" + std::to_string(stageNum + 1);
+	std::string filePath = "Texture/StageSelect/stage_";
+	
+#ifdef OUTPUT_STAGERENDERTARGET
 
-	nextSceneName = "Stage" + std::to_string(StageSelect::GetStageNum() + 1);
+
+
+	if (stageNum < 10) {
+		filePath += "0";
+	}
+
+	filePath+=std::to_string(stageNum) + ".png";
+	TextureTag output = TextureTag(":/wideScreen/1280/144");
+	auto texture= GetManager().lock()->GetApplication().lock()->GetResourceContainer()->GetTexture(output).lock();
+	if (texture&& !GameSettings::isTitle) {
+		texture->ToPNG(GlobalSettings::GetResourceDirectory()+filePath);
+	}
+#endif // OUTPUT_STAGERENDERTARGET
 }
 
 void ButiEngine::StageManager::ShowGUI()

@@ -440,7 +440,7 @@ namespace ButiEngine {
 		void OnSet()override;
 		void OnRemove() override;
 		void SetBlendMode(const BlendMode& arg_blendMode);
-		void SetMaterialTag(MaterialTag  arg_materialTag);
+		void SetMaterialTag(MaterialTag  arg_materialTag,const int arg_index);
 		void SetMeshTag(MeshTag  arg_meshTag);
 		void SetModelTag(ModelTag  arg_modelTag);
 		void SetShaderTag(ShaderTag  arg_shaderTag);

@@ -5,3 +5,4 @@
 #include"Header/GameObjects/DefaultGameComponent/MeshDrawComponent_Static.h"
 #include"Header/GameObjects/DefaultGameComponent/ModelDrawComponent.h"
 #include"Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
+#include"Header/GameObjects/DefaultGameComponent/SimpleBoneAnimator.Component.h"

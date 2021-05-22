@@ -24,21 +24,43 @@ void ButiEngine::StageSelect::OnUpdate()
 			intervalFrame = 0;
 			OnPushRight();
 			parentSelectPanel->ChildRotation(-childAngle);
-			GetManager().lock()->GetGameObject("SelectScreen").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
+			auto screen = GetManager().lock()->GetGameObject("SelectScreen").lock();
+			screen->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
+			std::string materialSource = "StageSelect_";
+			if (stageNum<10)
+			{
+				materialSource += "0";
+			}
+			screen->GetGameComponent<MeshDrawComponent>()->SetMaterialTag(MaterialTag(materialSource + std::to_string(stageNum)), 0);
+			screen->GetGameComponent<MeshDrawComponent>()->ReRegist();
 		}
 		else if (InputManager::OnPushLeftKey())
 		{
 			intervalFrame = 0;
 			OnPushLeft();
 			parentSelectPanel->ChildRotation(childAngle);
-			GetManager().lock()->GetGameObject("SelectScreen").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
+			auto screen = GetManager().lock()->GetGameObject("SelectScreen").lock();
+			screen->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f); std::string materialSource = "StageSelect_";
+			if (stageNum < 10)
+			{
+				materialSource += "0";
+			}
+			screen->GetGameComponent<MeshDrawComponent>()->SetMaterialTag(MaterialTag(materialSource + std::to_string(stageNum)),0);
+			screen->GetGameComponent<MeshDrawComponent>()->ReRegist();
 		}
 		if (InputManager::OnSkipKey())
 		{
 			intervalFrame = 0;
 			OnPushSkip();
 			parentSelectPanel->ChildRotation(-childAngle * ((maxStageNum + 1) / 2));
-			GetManager().lock()->GetGameObject("SelectScreen").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
+			auto screen = GetManager().lock()->GetGameObject("SelectScreen").lock();
+			screen->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f); std::string materialSource = "StageSelect_";
+			if (stageNum < 10)
+			{
+				materialSource += "0";
+			}
+			screen->GetGameComponent<MeshDrawComponent>()->SetMaterialTag(MaterialTag(materialSource + std::to_string(stageNum)),0);
+			screen->GetGameComponent<MeshDrawComponent>()->ReRegist();
 		}
 	}
 	else
@@ -88,6 +110,14 @@ void ButiEngine::StageSelect::Start()
 	se_select = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Select-Click.wav");
 	bgm = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/BGM.wav");
 	GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
+	auto screen = GetManager().lock()->GetGameObject("SelectScreen").lock();
+	std::string materialSource = "StageSelect_";
+	if (stageNum < 10)
+	{
+		materialSource += "0";
+	}
+	screen->GetGameComponent<MeshDrawComponent>()->SetMaterialTag(MaterialTag(materialSource + std::to_string(stageNum)), 0);
+	screen->GetGameComponent<MeshDrawComponent>()->ReRegist();
 }
 
 void ButiEngine::StageSelect::OnShowUI()

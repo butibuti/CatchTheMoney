@@ -132,7 +132,7 @@ namespace ButiEngine {
 		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> presentCommandList;
 
 		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> uploadCommandList;
-		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> copyCommandList;
+
 		std::vector<Resource*> vec_uploadResources;
 		std::vector<Resource*> vec_uploadResourcesBuffer;
 		std::vector<Resource*> vec_befUploadResources;
