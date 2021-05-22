@@ -373,15 +373,15 @@ void ButiEngine::PanelManager::RemoveHistories()
 
 void ButiEngine::PanelManager::PlaySlideSound()
 {
-	if (abs(soundNum) % 3 == 0)
+	if (abs(soundNum) % SOUND_LIMIT == 0)
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_slide0, 0.3f);
 	}
-	else if (abs(soundNum) % 3 == 1)
+	else if (abs(soundNum) % SOUND_LIMIT == 1)
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_slide1, 0.3f);
 	}
-	else if (abs(soundNum) % 3 == 2)
+	else if (abs(soundNum) % SOUND_LIMIT == 2)
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_slide2, 0.3f);
 	}

@@ -51,6 +51,7 @@ namespace ButiEngine {
 		SoundTag se_slide2;
 
 		const int MOVE_LIMIT = 6;
+		const int SOUND_LIMIT = 3;
 		const bool RIGHT = true;
 		const bool LEFT = false;
 		int moveNum;
