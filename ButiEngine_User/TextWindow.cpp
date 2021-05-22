@@ -8,8 +8,13 @@ void ButiEngine::TextWindow::OnUpdate()
 	if (TalkText::IsDelete())
 	{
 		gameObject.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
-		return;
 	}
+	else
+	{
+
+	}
+
+
 }
 
 void ButiEngine::TextWindow::OnSet()

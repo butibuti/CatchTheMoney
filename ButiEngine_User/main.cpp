@@ -24,7 +24,7 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	GameDevice::GetInput()->Initialize(app);
 
 	app->InitLoadResources();
-	app->GetSceneManager()->LoadScene_Init("Stage0");
+	app->GetSceneManager()->LoadScene_Init("Title");
 
 	app->GetGraphicDevice()->SetClearColor(Vector4(107 / 255.0f,43 / 255.0f,189 / 255.0f, 1));
 	int returnCode = app->Run();

@@ -9,7 +9,7 @@ const float GameSettings::coreZ = -0.3f;
 const float GameSettings::gravity = 0.4f;
 const float GameSettings::masterVolume = 0.1f;
 
-bool GameSettings::isTitle = false;
+bool GameSettings::isTitle = true;
 
 GameSettings::~GameSettings()
 {

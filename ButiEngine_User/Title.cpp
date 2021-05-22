@@ -42,10 +42,10 @@ void ButiEngine::Title::OnUpdate()
 	{
 		GameSettings::isTitle = false;
 		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
-		//sceneManager->LoadScene("StageSelect");
-		//sceneManager->ChangeScene("StageSelect");
-		sceneManager->LoadScene("Stage0");
-		sceneManager->ChangeScene("Stage0");
+		sceneManager->LoadScene("StageSelect");
+		sceneManager->ChangeScene("StageSelect");
+		//sceneManager->LoadScene("Stage0");
+		//sceneManager->ChangeScene("Stage0");
 	}
 }
 
@@ -64,6 +64,9 @@ void ButiEngine::Title::Start()
 	wkp_titleLogo = GetManager().lock()->AddObjectFromCereal("TitleLogo", ObjectFactory::Create<Transform>(Vector3(0,100,0), Vector3::Zero, Vector3(1440, 810, 1)));
 	GetManager().lock()->AddObjectFromCereal("TitleAbutton", ObjectFactory::Create<Transform>(Vector3(0, -180, -0.02f), Vector3::Zero, Vector3(180, 180, 1)));
 	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
+
+	auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
+	sceneManager->LoadScene("Stage0");
 }
 
 void ButiEngine::Title::OnShowUI()

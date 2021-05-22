@@ -18,6 +18,8 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
+		float currentPosY;
+		float previousPosY;
 	};
 
 }
