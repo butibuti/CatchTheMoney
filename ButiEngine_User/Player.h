@@ -51,7 +51,7 @@ namespace ButiEngine {
 		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 		const float JUMP_FORCE = 3.8f;
 		const int COYOTE_TIME = 10;
-		const int FREEZE_FRAME = 30;
+		const int FREEZE_FRAME = 10;
 		const int ANIMATION_RATE = 5;
 		const int FLOATING_FRAME = 6;
 		enum Animation

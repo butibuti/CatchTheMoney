@@ -97,7 +97,7 @@ void ButiEngine::PauseManager::SwitchPause()
 
 void ButiEngine::PauseManager::ButtonAnimation()
 {
-	if (!pause || disappear) { return; }
+	if (!pause || disappear || isNext) { return; }
 	progress++;
 	if (progress < ANIMATION_FRAME) { return; }
 
@@ -150,7 +150,7 @@ void ButiEngine::PauseManager::SelectButton()
 
 void ButiEngine::PauseManager::OnDecide()
 {
-	if (!pause || disappear) { return; }
+	if (!pause || disappear || isNext) { return; }
 	if (progress < ANIMATION_FRAME) { return; }
 
 	if (InputManager::OnTriggerDecisionKey())
