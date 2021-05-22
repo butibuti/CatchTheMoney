@@ -201,6 +201,30 @@ void ButiEngine::Map::PutTile()
 				tile = GetManager().lock()->AddObjectFromCereal("FillBlock_Back", ObjectFactory::Create<Transform>(blockPos, Vector3::Zero, blockScale));
 				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
 			}
+			else if (onceOfID == GameSettings::blockTop)
+			{
+				Vector3 blockPos = position;
+				blockPos.z = GameSettings::blockZ;
+				tile = GetManager().lock()->AddObjectFromCereal("Block_FrontTop", ObjectFactory::Create<Transform>(blockPos, Vector3::Zero, scale));
+				tile.lock()->transform->SetBaseTransform(frontPanel.lock()->transform);
+
+				blockPos.x += GameSettings::windowWidth * 0.5f;
+				blockPos.y *= -1.0f;
+				tile = GetManager().lock()->AddObjectFromCereal("Block_BackTop", ObjectFactory::Create<Transform>(blockPos, Vector3::Zero, scale));
+				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
+			}
+			else if (onceOfID == GameSettings::blockBottom)
+			{
+				Vector3 blockPos = position;
+				blockPos.z = GameSettings::blockZ;
+				tile = GetManager().lock()->AddObjectFromCereal("Block_FrontBottom", ObjectFactory::Create<Transform>(blockPos, Vector3::Zero, scale));
+				tile.lock()->transform->SetBaseTransform(frontPanel.lock()->transform);
+
+				blockPos.x += GameSettings::windowWidth * 0.5f;
+				blockPos.y *= -1.0f;
+				tile = GetManager().lock()->AddObjectFromCereal("Block_BackBottom", ObjectFactory::Create<Transform>(blockPos, Vector3::Zero, scale));
+				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
+			}
 		}
 	}
 }
