@@ -48,6 +48,9 @@ namespace ButiEngine {
 		Vector3 initBGScale;
 		Vector3 defaultBGScale;
 
+		SoundTag se_enter;
+		SoundTag se_select;
+
 		void SwitchPause();
 		void ButtonAnimation();
 		void SelectButton();

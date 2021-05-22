@@ -83,6 +83,8 @@ void ButiEngine::StageSelect::Start()
 		sceneManager->RemoveScene(sceneName);
 	}
 
+	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
+	se_select = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Select-Click.wav");
 	bgm = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/BGM.wav");
 	GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
 }
@@ -129,6 +131,7 @@ void ButiEngine::StageSelect::OnPushRight()
 {
 	float angle = 360.0f / (float)(maxStageNum + 1) * 2.0f;
 	preParentRotation.y += angle;
+	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, 0.1f);
 
 	stageNum++;
 	if (stageNum > maxStageNum)
@@ -141,6 +144,7 @@ void ButiEngine::StageSelect::OnPushLeft()
 {
 	float angle = 360.0f / (float)(maxStageNum + 1) * 2.0f;
 	preParentRotation.y -= angle;
+	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, 0.1f);
 
 	stageNum--;
 	if (stageNum < 0)
@@ -153,6 +157,7 @@ void ButiEngine::StageSelect::OnPushSkip()
 {
 	float angle = 360.0f / (float)(maxStageNum + 1) * 2.0f;
 	preParentRotation.y += angle * ((maxStageNum + 1) / 2);
+	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, 0.1f);
 
 	stageNum += (maxStageNum + 1) / 2;
 	if (stageNum > maxStageNum)
@@ -174,6 +179,7 @@ void ButiEngine::StageSelect::DecisionAnimation()
 {
 	if (InputManager::OnTriggerDecisionKey() && !isAnimation)
 	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_enter, 0.1f);
 		isAnimation = true;
 	}
 

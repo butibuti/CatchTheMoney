@@ -133,6 +133,8 @@ void ButiEngine::StageManager::Start()
 
 	bgm = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/BGM.wav");
 	se_clear = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Clear.wav");
+	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
+	se_select = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Select-Click.wav");
 
 	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, 0.1f);
 
@@ -325,6 +327,10 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 	{
 		if (InputManager::OnTriggerRightKey())
 		{
+			if (!selectedNext)
+			{
+				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, 0.1f);
+			}
 			selectedNext = true;
 			shp_buttonNext->OnSelected();
 			shp_buttonSelect->OnEndSelect();
@@ -332,6 +338,10 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 		}
 		else if (InputManager::OnTriggerLeftKey())
 		{
+			if (selectedNext)
+			{
+				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, 0.1f);
+			}
 			selectedNext = false;
 			shp_buttonNext->OnEndSelect();
 			shp_buttonSelect->OnSelected();
@@ -342,6 +352,7 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 	if (InputManager::OnTriggerDecisionKey() && !isNext)
 	{
 		isNext = true;
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_enter, 0.1f);
 		if (selectedNext)
 		{
 			wkp_buttonNext.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);

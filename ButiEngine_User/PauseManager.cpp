@@ -46,6 +46,9 @@ void ButiEngine::PauseManager::Start()
 	wkp_button_reset = GetManager().lock()->AddObjectFromCereal("PauseButton_Reset");
 	wkp_button_select = GetManager().lock()->AddObjectFromCereal("PauseButton_Select");
 
+	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
+	se_select = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Select-Click.wav");
+
 	initBGScale = Vector3(0.0f, 0.0f, 1.0f);
 	defaultBGScale = Vector3(1920.0f, 1080.0f, 1.0f);
 	initTextPos = wkp_text.lock()->transform->GetWorldPosition();
@@ -107,6 +110,7 @@ void ButiEngine::PauseManager::ButtonAnimation()
 	{
 		if (InputManager::OnTriggerRightKey())
 		{
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, 0.1f);
 			selectedButton++;
 			if (selectedButton > SELECT)
 			{
@@ -115,6 +119,7 @@ void ButiEngine::PauseManager::ButtonAnimation()
 		}
 		else if (InputManager::OnTriggerLeftKey())
 		{
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, 0.1f);
 			selectedButton--;
 			if (selectedButton < BACK)
 			{
@@ -155,6 +160,7 @@ void ButiEngine::PauseManager::OnDecide()
 
 	if (InputManager::OnTriggerDecisionKey())
 	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_enter, 0.1f);
 		if (selectedButton == BACK)
 		{
 			OnDecideBack();

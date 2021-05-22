@@ -42,6 +42,8 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_fadeObject;
 
 		SoundTag bgm;
+		SoundTag se_enter;
+		SoundTag se_select;
 
 		Vector3 preParentRotation;
 		float childAngle;

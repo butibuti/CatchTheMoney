@@ -15,6 +15,7 @@ void ButiEngine::Title::OnUpdate()
 	}
 	if (InputManager::OnGameStartKey() && !isAnimation)
 	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_enter, 0.1f);
 		wkp_titleLogo.lock()->GetGameComponent<TitleLogo>()->AnimationStart();
 		wkp_camera.lock()->GetGameComponent<CameraController>()->TitleZoomOut();
 		isAnimation = true;
@@ -62,6 +63,7 @@ void ButiEngine::Title::Start()
 	//wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 0, 0), Vector3::Zero, Vector3(1920, 1080, 1)));
 	wkp_titleLogo = GetManager().lock()->AddObjectFromCereal("TitleLogo", ObjectFactory::Create<Transform>(Vector3(0,100,0), Vector3::Zero, Vector3(1440, 810, 1)));
 	GetManager().lock()->AddObjectFromCereal("TitleAbutton", ObjectFactory::Create<Transform>(Vector3(0, -180, -0.02f), Vector3::Zero, Vector3(180, 180, 1)));
+	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
 }
 
 void ButiEngine::Title::OnShowUI()

@@ -23,6 +23,9 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_camera;
 		std::weak_ptr<GameObject> wkp_fadeObject;
 		std::weak_ptr<GameObject> wkp_titleLogo;
+
+		SoundTag se_enter;
+
 		bool nextFlag;
 		bool isAnimation;
 		int nextSceneCount;
