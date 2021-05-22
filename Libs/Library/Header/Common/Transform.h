@@ -63,6 +63,7 @@ namespace ButiEngine {
 			localMatrix = nullptr;
 		}
 		inline ~Transform() {
+			if(localMatrix)
 			delete localMatrix;
 		}
 		void Initialize()override {}

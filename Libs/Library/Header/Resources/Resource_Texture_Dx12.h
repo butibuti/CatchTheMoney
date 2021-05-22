@@ -72,7 +72,8 @@ namespace ButiEngine {
 			DXGI_FORMAT format;
 			size_t      rowPitch;
 			size_t      slicePitch;
-			std::vector<uint8_t>    pixels;
+			std::vector<uint8_t>    pixels; 
+			void* p_resourceData = nullptr;
 		};
 		Resource_Texture_Dx12(const std::vector<BYTE>& buffer, int width, int height, std::shared_ptr<GraphicDevice> arg_graphicDevice);
 		~Resource_Texture_Dx12() {
@@ -80,6 +81,7 @@ namespace ButiEngine {
 		void SetGraphicDevice(std::shared_ptr<GraphicDevice> arg_graphicDevice) override;
 		void Attach(int slot)override;
 		void CreateTexture(Image* srcImages, size_t nimages, const TexMetadata& metadata);
+		void ToPNG(const std::string& arg_textureFilePath);
 		virtual void CreateTextureUploadHeap();
 		void Initialize()override;
 		Microsoft::WRL::ComPtr<ID3D12Resource> GetTexture();

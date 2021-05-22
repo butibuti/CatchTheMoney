@@ -97,6 +97,7 @@ namespace ButiEngine {
 		virtual void Attach(int slot) = 0;
 		virtual UInt2 GetSize() const = 0;
 		virtual void SetFilePath(const std::string& arg_textureFilePath) = 0;
+		virtual void ToPNG(const std::string& arg_textureFilePath) {};
 		virtual const std::string& GetTexturePath() = 0;
 	};
 	class IResource_Material :public IObject {

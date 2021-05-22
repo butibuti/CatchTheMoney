@@ -39,6 +39,7 @@ namespace ButiEngine {
 		}
 
 		static void WStringtoMultiByte(const std::wstring & src, std::string& dest);
+		static void ToPNG(const std::string& arg_filePath,void* arg_data,const int width, const int height,const int stride,const int size);
 		static std::string WStringToString(std::wstring oWString);
 		static std::wstring StringToWString(std::string oString);
 		static void MultiBytetoWString(const std::string& src, std::wstring & dest) {

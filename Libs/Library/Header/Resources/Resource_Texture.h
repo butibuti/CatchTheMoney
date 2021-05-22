@@ -12,7 +12,7 @@ namespace ButiEngine {
 		virtual void SetGraphicDevice(std::shared_ptr<GraphicDevice> arg_graphicDevice) = 0;
 		virtual void Attach(int slot) = 0;
 		UInt2 GetSize() const { return size; }
-		void SetFilePath(const std::string& arg_textureFilePath);
+		void SetFilePath(const std::string& arg_textureFilePath); 
 		const std::string& GetTexturePath();
 	protected:
 		UInt2 size;

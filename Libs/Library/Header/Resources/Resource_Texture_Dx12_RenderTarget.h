@@ -14,15 +14,21 @@ namespace ButiEngine {
 		void CreateTextureUploadHeap()override;
 		void Initialize()override;
 		void DisSetRenderTarget()override;
+		void  CopyForOutput()override;
 		void UpdateResourceRelease()override;
 		void ResourceUpdate() override;
-		void Attach(int slot)override;
+		void Attach(int slot)override; 
+		void ToPNG(const std::string& arg_textureFilePath);
 		void SetIsCleared(bool arg_isClear)override;
 		Vector2 GetSize()override;
+		void OutputToFile()override;
 	private:
 
 		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> renderTargetDescriptorHeap;
+		D3D12_RESOURCE_STATES currentState;
 		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle;
+		bool isMapFrame;
+		std::string outputFileName;
 		//void UpdateResourceRelease()override;
 		//void ResourceUpdate() override;
 		bool isCleared = false;

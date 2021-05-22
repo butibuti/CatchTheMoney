@@ -4,11 +4,19 @@
 namespace ButiEngine {
 	class DescriptorHeapManager;
 	class PipelineStateManager;
-
+	enum FileFormat
+	{
+		PNG
+	};
 	static const unsigned char SamplerTableRegion = 1;
 	class IApplication;
 	class GraphicDevice_Dx12 :public GraphicDevice
 	{
+		struct OutputInfo {
+			Resource* p_outputResource;
+			std::string outputName;
+			FileFormat format;
+		};
 	public:
 
 		GraphicDevice_Dx12(std::weak_ptr<IApplication> arg_wkp_application);
@@ -47,6 +55,8 @@ namespace ButiEngine {
 		void SetRootSignature(const std::wstring& Key, const Microsoft::WRL::ComPtr<ID3D12RootSignature>& rootsig, const D3D12_ROOT_SIGNATURE_DESC& arg_desc);
 
 		void AddResource(Resource* rarg_resource);
+
+		void AddOutputResource(Resource* rarg_resource,const FileFormat arg_format,const std::string& arg_fileName);
 
 		void GraphicsCommandListReset();
 
@@ -122,6 +132,7 @@ namespace ButiEngine {
 		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> presentCommandList;
 
 		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> uploadCommandList;
+		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> copyCommandList;
 		std::vector<Resource*> vec_uploadResources;
 		std::vector<Resource*> vec_uploadResourcesBuffer;
 		std::vector<Resource*> vec_befUploadResources;
@@ -164,5 +175,7 @@ namespace ButiEngine {
 		UINT frameIndex;
 		HANDLE  fenceEvent;
 		UINT64  fenceValue;
+
+		std::vector<OutputInfo > vec_outputInfo;
 	};
 }

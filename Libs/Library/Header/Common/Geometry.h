@@ -8,7 +8,7 @@ namespace ButiEngine {
 
         struct Sphere {
             Vector3 position;
-            float radius = 1.0f; // ”¼Œa
+            float radius = 1.0f; 
             Sphere() {}
             Sphere(const Vector3& p, const float r) : position(p), radius(r) {}
             Sphere(const float r) :radius(r) {}
@@ -16,7 +16,7 @@ namespace ButiEngine {
         };
         struct Capsule {
             Segment s;
-            float r; // ”¼Œa
+            float r; 
             Capsule() : r(0.5f) {}
             Capsule(const Segment& s, const float r) : s(s), r(r) {}
             Capsule(const Vector3& p1, const Vector3& p2, const float r) : s(p1, p2), r(r) {}
@@ -24,7 +24,7 @@ namespace ButiEngine {
         };
         struct Cylinder {
             Segment s;
-            float r; // ”¼Œa
+            float r; 
             Cylinder() : r(0.5f) {}
             Cylinder(const Segment& s, const float r) : s(s), r(r) {}
             Cylinder(const Vector3& p1, const Vector3& p2, const float r) : s(p1, p2), r(r) {}

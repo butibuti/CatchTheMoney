@@ -7,6 +7,8 @@ namespace ButiEngine {
 	struct Resource {
 		virtual void  ResourceUpdate() {}
 		virtual void  UpdateResourceRelease() {}
+		virtual void  CopyForOutput() {}
+		virtual void  OutputToFile() {}
 	};
 	enum class CullMode {
 		none =1, front = 2, back =3
