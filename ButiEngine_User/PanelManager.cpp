@@ -300,13 +300,13 @@ void ButiEngine::PanelManager::SwapLeft(int arg_frame)
 		return;
 	}
 	SwapPanelNum(currentIndex, currentIndex - 1, arg_frame);
-	PlaySlideSound();
 	moveNum--;
 	if (moveNum == -MOVE_LIMIT)
 	{
 		moveNum = 0;
 	}
 	soundNum--;
+	PlaySlideSound();
 }
 
 void ButiEngine::PanelManager::Undo(int arg_frame)
