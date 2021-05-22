@@ -150,7 +150,7 @@ void ButiEngine::PauseManager::SelectButton()
 
 void ButiEngine::PauseManager::OnDecide()
 {
-	if (!pause || disappear || isNext) { return; }
+	if (!pause || disappear || isNext || pushPauseKey) { return; }
 	if (progress < ANIMATION_FRAME) { return; }
 
 	if (InputManager::OnTriggerDecisionKey())
@@ -194,7 +194,7 @@ void ButiEngine::PauseManager::OnDecideSelect()
 
 void ButiEngine::PauseManager::AppearUI()
 {
-	AddPositionAnimation(wkp_text, defaultTextPos,30, Easing::EasingType::EaseOutBack);
+	AddPositionAnimation(wkp_text, defaultTextPos,20, Easing::EasingType::EaseOutBack);
 	AddScaleAnimation(wkp_background, defaultBGScale, 10, Easing::EasingType::EaseInQuad);
 	wkp_button_back.lock()->GetGameComponent<PauseButton>()->Appear();
 	wkp_button_reset.lock()->GetGameComponent<PauseButton>()->Appear();
@@ -204,7 +204,7 @@ void ButiEngine::PauseManager::AppearUI()
 void ButiEngine::PauseManager::DisappearUI()
 {
 	disappear = true;
-	AddPositionAnimation(wkp_text, initTextPos, 30, Easing::EasingType::EaseInBack);
+	AddPositionAnimation(wkp_text, initTextPos, 20, Easing::EasingType::EaseInBack);
 	AddScaleAnimation(wkp_background, initBGScale, 10, Easing::EasingType::EaseOutQuad);
 	wkp_button_back.lock()->GetGameComponent<PauseButton>()->Disappear();
 	wkp_button_reset.lock()->GetGameComponent<PauseButton>()->Disappear();
