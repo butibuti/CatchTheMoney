@@ -17,7 +17,7 @@ void ButiEngine::PauseManager::OnUpdate()
 	if (wkp_player.lock() && wkp_player.lock()->GetGameComponent<Player>()->IsClear()) { return; }
 	if (InputManager::OnTriggerOpenMenuKey() && !pushPauseKey)
 	{
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_pick, GameSettings::masterVolume * 3.0f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_pick, GameSettings::masterVolume);
 		pushPauseKey = true;
 		if (!pause)
 		{
@@ -51,7 +51,7 @@ void ButiEngine::PauseManager::Start()
 
 	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
 	se_select = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Select-Click.wav");
-	se_pick = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Panel_Pick.wav");
+	se_pick = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Pause.wav");
 
 	initBGScale = Vector3(0.0f, 0.0f, 1.0f);
 	defaultBGScale = Vector3(1920.0f, 1080.0f, 1.0f);
