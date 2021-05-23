@@ -3,7 +3,24 @@
 
 const float circleLength = 360.0f / 16.0f;
 
+namespace ButiEngine {
+    namespace MathHelper {
 
+        Vector3 GetMobiusNormal(const float arg_time, const float arg_radius) {
+            if (arg_radius == 0) {
+
+                Vector3 point1 = MathHelper::GetMobiusPoint(arg_time, arg_radius), point2 = MathHelper::GetMobiusPoint(arg_time, -1), point3 = MathHelper::GetMobiusPoint(arg_time + ToRadian(0.5f), arg_radius);
+
+                return (point2 - point1).GetCross(point3 - point1).GetNormalize();
+            }
+            else {
+                Vector3 point1 = MathHelper::GetMobiusPoint(arg_time, arg_radius), point2 = MathHelper::GetMobiusPoint(arg_time, 0), point3 = MathHelper::GetMobiusPoint(arg_time + ToRadian(0.5f), arg_radius);
+
+                return (point2 - point1).GetCross(point3 - point1).GetNormalize();
+            }
+        }
+    }
+}
 
 
 void ButiEngine::SquareParticleEmitter::OnUpdate(){
@@ -34,8 +51,8 @@ void ButiEngine::SquareParticleEmitter::Roll(const float arg_degrees)
         rotation -= 360.0f;
     }
 
-    leftUpEdge =MathHelper:: GetMobiusPoint(MathHelper::ToRadian(rotation + -circleLength), -1) * radius;
-    leftDownEdge = MathHelper::GetMobiusPoint(MathHelper::ToRadian(rotation + -circleLength + 180), -1) * radius;
+    leftUpEdge =MathHelper:: GetMobiusPoint(MathHelper::ToRadian(rotation  -circleLength), -1) * radius;
+    leftDownEdge = MathHelper::GetMobiusPoint(MathHelper::ToRadian(rotation  -circleLength + 180), -1) * radius;
     rightUpEdge = MathHelper::GetMobiusPoint(MathHelper::ToRadian(rotation + circleLength), -1) * radius;
     rightDownEdge = MathHelper::GetMobiusPoint(MathHelper::ToRadian(rotation + circleLength + 180), -1) * radius;
 }
@@ -101,7 +118,6 @@ void ButiEngine::SquareParticleEmitter::SetIsPause(const bool arg_isPause)
 
 void ButiEngine::SquareParticleEmitter::EditUpdate()
 {
-    Vector3 thicknessOffset = Vector3(0, 0, thickness);
     for (int i = 0; i < increase; i++)
     {
         auto currentScale = vec_frameParts[i].shp_object->transform->GetLocalScale().x;
@@ -109,11 +125,15 @@ void ButiEngine::SquareParticleEmitter::EditUpdate()
         vec_frameParts[i].shp_object->transform->SetWorldRotation(Matrix4x4());
 
         vec_frameParts[i].time += speedMin*0.5f;
+
+        Vector3 leftThickness= (leftDownEdge-leftUpEdge).GetCross(MathHelper::GetMobiusPoint(MathHelper::ToRadian(rotation + -circleLength+180-1.0f), -1) * radius-leftUpEdge).GetNormalize()*thickness;
+        Vector3 rightThickness=(rightDownEdge - rightUpEdge).GetCross(MathHelper::GetMobiusPoint(MathHelper::ToRadian(rotation + circleLength+180 - 1.0f), -1) * radius - rightUpEdge).GetNormalize()*thickness;
         switch (vec_frameParts[i].mode)
         {
         case MoveMode::Move_TopLineFront:
         {
             auto t = (rotation - circleLength) * (1 - (vec_frameParts[i].time)) + (rotation ) * (vec_frameParts[i].time);
+            Vector3 thicknessOffset = MathHelper::GetMobiusNormal(MathHelper::ToRadian(t + 180), -1) * thickness;
             vec_frameParts[i].shp_object->transform->SetLocalPosition(MathHelper::GetMobiusPoint(MathHelper::ToRadian(t + 180), -1) * radius + thicknessOffset);
 
         }
@@ -121,6 +141,7 @@ void ButiEngine::SquareParticleEmitter::EditUpdate()
         case MoveMode::Move_TopLineBack:
         {
             auto t = (rotation ) * (1 - (vec_frameParts[i].time)) + (rotation + circleLength) * (vec_frameParts[i].time);
+            Vector3 thicknessOffset = MathHelper::GetMobiusNormal(MathHelper::ToRadian(t + 180), -1) * thickness;
             vec_frameParts[i].shp_object->transform->SetLocalPosition(MathHelper::GetMobiusPoint(MathHelper::ToRadian(t + 180), -1) * radius + thicknessOffset);
 
         }
@@ -128,15 +149,17 @@ void ButiEngine::SquareParticleEmitter::EditUpdate()
         case MoveMode::Move_LeftLine:
         {
             auto t = (vec_frameParts[i].time);
-            vec_frameParts[i].shp_object->transform->SetLocalPosition(rightDownEdge + (rightUpEdge - rightDownEdge) * t + thicknessOffset);
+            Vector3 mobiusPos = rightDownEdge + (rightUpEdge - rightDownEdge) * t;
+
+            vec_frameParts[i].shp_object->transform->SetLocalPosition(mobiusPos+ leftThickness);
 
         }
         break;
         case MoveMode::Move_BottomLine:
         {
-
             auto time = vec_frameParts[i].time;
             auto t = (rotation + circleLength) * (1 - time) + (rotation - circleLength) * (time);
+            Vector3 thicknessOffset = MathHelper::GetMobiusNormal(MathHelper::ToRadian(t + 180), -1) * thickness;
             vec_frameParts[i].shp_object->transform->SetLocalPosition(MathHelper::GetMobiusPoint(MathHelper::ToRadian(t), -1) * radius + thicknessOffset);
 
         }
@@ -144,7 +167,8 @@ void ButiEngine::SquareParticleEmitter::EditUpdate()
         case MoveMode::Move_RightLine:
         {
             auto t = (vec_frameParts[i].time);
-            vec_frameParts[i].shp_object->transform->SetLocalPosition(leftUpEdge + (leftDownEdge - leftUpEdge) * t + thicknessOffset);
+
+            vec_frameParts[i].shp_object->transform->SetLocalPosition(leftUpEdge + (leftDownEdge - leftUpEdge) * t + rightThickness);
 
         }
         break;

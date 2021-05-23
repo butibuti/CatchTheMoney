@@ -47,6 +47,7 @@ void ButiEngine::BackDraw::Start()
 		wkp_right.lock()->AddGameComponent(meshDraw->Clone());
 	}
 
+
 	wkp_left = GetManager().lock()->AddObject(std::make_shared<Transform>(), name + "_Back_Left");
 	clonePosition.x = position.x - GameSettings::windowWidth * 0.5f;
 	wkp_left.lock()->transform->SetWorldPosition(clonePosition);
@@ -58,6 +59,12 @@ void ButiEngine::BackDraw::Start()
 	{
 		wkp_left.lock()->AddGameComponent(meshDraw->Clone());
 	}
+	auto effectUpdater = gameObject.lock()->GetGameComponent<PostEffectParamUpdater>();
+	if (effectUpdater) {
+		wkp_right.lock()->AddGameComponent(effectUpdater->Clone());
+		wkp_left.lock()->AddGameComponent(effectUpdater->Clone());
+	}
+
 }
 
 void ButiEngine::BackDraw::OnShowUI()
