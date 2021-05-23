@@ -5,6 +5,7 @@
 #include "ShakeComponent.h"
 #include "Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
 #include"PauseManager.h"
+#include "GameSettings.h"
 
 bool ButiEngine::TalkText::isDelete = false;
 
@@ -16,22 +17,28 @@ void ButiEngine::TalkText::OnUpdate()
 		return;
 	}
 
-	if (!isOnce)
+	if (shp_pauseManager->IsPause()) { return; }
+
+	const int ONCE_FRAME = 20;
+	if (onceFrame == ONCE_FRAME)
 	{
-		isOnce = true;
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
 		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 30);
 	}
-
-	if (shp_pauseManager->IsPause()) { return; }
+	if (onceFrame <= ONCE_FRAME)
+	{
+		onceFrame++;
+		return;
+	}
 
 	const int WAIT_FRAME = 12;
 	if (InputManager::OnTriggerDecisionKey() && waitTime > WAIT_FRAME)
 	{
 		waitTime = 0;
 		textCount++;
-		ShakeAimation();
 		if (textCount < shp_spriteAnimation->GetVarticalSplitScale())
 		{
+			TextEffect();
 			shp_spriteAnimation->UpdateVarticalAnim(1);
 		}
 		else
@@ -58,10 +65,13 @@ void ButiEngine::TalkText::Start()
 	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 
+	se_bigText = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Daikokuten_Big.wav");
+	se_normalText = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Daikokuten_Small.wav");
+
 	textCount = 0;
 	waitTime = 0;
+	onceFrame = 0;
 	isDelete = false;
-	isOnce = false;
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::TalkText::Clone()
@@ -74,25 +84,31 @@ void ButiEngine::TalkText::Delete()
 	isDelete = true;
 }
 
-void ButiEngine::TalkText::ShakeAimation()
+void ButiEngine::TalkText::TextEffect()
 {
 	if (StageSelect::GetStageNum() == 0)
 	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
 		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
 	}
 	else if (StageSelect::GetStageNum() == 3)
 	{
 		if (textCount == 4 || textCount == 6)
 		{
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_normalText, GameSettings::masterVolume);
 			return;
 		}
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
 		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
 	}
 	else if (StageSelect::GetStageNum() == 6)
 	{
 		if (textCount == 0)
 		{
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
 			GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+			return;
 		}
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_normalText, GameSettings::masterVolume);
 	}
 }

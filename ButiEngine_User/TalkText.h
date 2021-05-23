@@ -27,12 +27,15 @@ namespace ButiEngine {
 		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 		std::shared_ptr<PauseManager> shp_pauseManager;
 
+		SoundTag se_bigText;
+		SoundTag se_normalText;
+
 		int textCount;
 		int waitTime;
-		bool isOnce;
+		int onceFrame;
 		static bool isDelete;
 
-		void ShakeAimation();
+		void TextEffect();
 	};
 
 }
