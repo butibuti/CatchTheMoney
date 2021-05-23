@@ -169,7 +169,7 @@ void ButiEngine::StageManager::Start()
 	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
 	se_select = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Select-Click.wav");
 	se_panelMode = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Panel_Pick.wav");
-	//se_charaMode = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Panel_Pick.wav");
+	se_charaMode = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Panel_Drop.wav");
 
 	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, 0.1f);
 	const int stageNum = StageSelect::GetStageNum();
@@ -310,7 +310,7 @@ void ButiEngine::StageManager::ModeChange()
 
 			shp_cameraController->ZoomIn();
 
-			//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_charaMode, GameSettings::masterVolume);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_charaMode, GameSettings::masterVolume * 3.0f);
 		}
 	}
 }
