@@ -22,6 +22,10 @@
 #include "TalkText.h"
 
 #define OUTPUT_STAGERENDERTARGET
+#ifdef DEBUG
+
+static int f = 0;
+#endif // DEBUG
 
 ButiEngine::GameMode ButiEngine::StageManager::mode;
 
@@ -63,6 +67,33 @@ void ButiEngine::StageManager::OnUpdate()
 
 		shp_particleEmitter->SetRotation(particleScrollOffset+swing);
 	}
+
+#ifdef OUTPUT_STAGERENDERTARGET 
+#ifdef DEBUG
+
+	if (f==3) {
+		const int stageNum = StageSelect::GetStageNum();
+
+		std::string filePath = "Texture/StageSelect/stage_";
+
+
+		if (stageNum < 10) {
+			filePath += "0";
+		}
+
+		filePath += std::to_string(stageNum) + ".png";
+		TextureTag output = TextureTag(":/wideScreen/1280/144");
+		auto texture = GetManager().lock()->GetApplication().lock()->GetResourceContainer()->GetTexture(output).lock();
+		if (texture && !GameSettings::isTitle) {
+			texture->ToPNG(GlobalSettings::GetResourceDirectory() + filePath);
+		}
+		f = 0;
+	}
+	if (f > 0) {
+		f++;
+	}
+#endif // DEBUG
+#endif // OUTPUT_STAGERENDERTARGET
 }
 
 void ButiEngine::StageManager::OnSet()
@@ -141,23 +172,12 @@ void ButiEngine::StageManager::Start()
 	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, 0.1f);
 	const int stageNum = StageSelect::GetStageNum();
 	nextSceneName = "Stage" + std::to_string(stageNum + 1);
-	std::string filePath = "Texture/StageSelect/stage_";
-	
-#ifdef OUTPUT_STAGERENDERTARGET
+
+#ifdef DEBUG
+	f = 1;
+#endif // DEBUG
 
 
-
-	if (stageNum < 10) {
-		filePath += "0";
-	}
-
-	filePath+=std::to_string(stageNum) + ".png";
-	TextureTag output = TextureTag(":/wideScreen/1280/144");
-	auto texture= GetManager().lock()->GetApplication().lock()->GetResourceContainer()->GetTexture(output).lock();
-	if (texture&& !GameSettings::isTitle) {
-		texture->ToPNG(GlobalSettings::GetResourceDirectory()+filePath);
-	}
-#endif // OUTPUT_STAGERENDERTARGET
 }
 
 void ButiEngine::StageManager::ShowGUI()
