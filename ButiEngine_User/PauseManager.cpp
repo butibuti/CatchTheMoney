@@ -17,7 +17,7 @@ void ButiEngine::PauseManager::OnUpdate()
 	if (wkp_player.lock() && wkp_player.lock()->GetGameComponent<Player>()->IsClear()) { return; }
 	if (InputManager::OnTriggerOpenMenuKey() && !pushPauseKey)
 	{
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_pick, GameSettings::masterVolume * 3.0f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_pick, GameSettings::masterVolume);
 		pushPauseKey = true;
 		if (!pause)
 		{

@@ -296,7 +296,7 @@ void ButiEngine::StageManager::ModeChange()
 
 			particleScrollOffset = 360 * (particleScrollOffset / (float)GameSettings::windowWidth);
 
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelMode, GameSettings::masterVolume);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelMode, GameSettings::masterVolume * 3.0f);
 		}
 		else
 		{
