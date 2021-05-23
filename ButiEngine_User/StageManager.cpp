@@ -21,7 +21,7 @@
 #include"ShakeComponent.h"
 #include "TalkText.h"
 
-#define OUTPUT_STAGERENDERTARGET
+//#define OUTPUT_STAGERENDERTARGET
 #ifdef DEBUG
 
 static int f = 0;

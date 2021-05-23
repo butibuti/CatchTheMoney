@@ -3,25 +3,6 @@
 
 const float circleLength = 360.0f / 16.0f;
 
-namespace ButiEngine {
-    namespace MathHelper {
-
-        Vector3 GetMobiusNormal(const float arg_time, const float arg_radius) {
-            if (arg_radius == 0) {
-
-                Vector3 point1 = MathHelper::GetMobiusPoint(arg_time, arg_radius), point2 = MathHelper::GetMobiusPoint(arg_time, -1), point3 = MathHelper::GetMobiusPoint(arg_time + ToRadian(0.5f), arg_radius);
-
-                return (point2 - point1).GetCross(point3 - point1).GetNormalize();
-            }
-            else {
-                Vector3 point1 = MathHelper::GetMobiusPoint(arg_time, arg_radius), point2 = MathHelper::GetMobiusPoint(arg_time, 0), point3 = MathHelper::GetMobiusPoint(arg_time + ToRadian(0.5f), arg_radius);
-
-                return (point2 - point1).GetCross(point3 - point1).GetNormalize();
-            }
-        }
-    }
-}
-
 
 void ButiEngine::SquareParticleEmitter::OnUpdate(){
     if (isEdit) {
