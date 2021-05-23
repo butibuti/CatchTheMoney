@@ -64,6 +64,8 @@ namespace ButiEngine {
 		SoundTag se_clear;
 		SoundTag se_enter;
 		SoundTag se_select;
+		SoundTag se_panelMode;
+		SoundTag se_charaMode;
 
 		static GameMode mode;
 

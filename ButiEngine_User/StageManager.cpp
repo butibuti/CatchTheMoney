@@ -168,6 +168,8 @@ void ButiEngine::StageManager::Start()
 	se_clear = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Clear.wav");
 	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
 	se_select = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Select-Click.wav");
+	se_panelMode = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Panel_Pick.wav");
+	//se_charaMode = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Panel_Pick.wav");
 
 	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, 0.1f);
 	const int stageNum = StageSelect::GetStageNum();
@@ -244,12 +246,14 @@ void ButiEngine::StageManager::OnGoal()
 
 		StageSelect::SetStageNum(nextStageNum);
 	}
+#ifdef _DEBUG
 	if (GameDevice::GetInput()->TriggerKey(Keys::C))
 	{
 		StageSelect::SetRemoveStageName("none");
 		shp_map->DestoryBlock();
 		ChangeScene("StageSelect");
 	}
+#endif
 }
 
 void ButiEngine::StageManager::ChangeScene(const std::string& arg_sceneName)
@@ -292,6 +296,7 @@ void ButiEngine::StageManager::ModeChange()
 
 			particleScrollOffset = 360 * (particleScrollOffset / (float)GameSettings::windowWidth);
 
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelMode, GameSettings::masterVolume);
 		}
 		else
 		{
@@ -304,6 +309,8 @@ void ButiEngine::StageManager::ModeChange()
 			wkp_edit.lock()->transform->SetWorldPosition(modeUIPosition);
 
 			shp_cameraController->ZoomIn();
+
+			//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_charaMode, GameSettings::masterVolume);
 		}
 	}
 }
