@@ -60,7 +60,8 @@ cbuffer RendererState:register(b2) {
     float4 cameraPos:packoffset(c1);
     float2 fogCoord:packoffset(c2);
     float2 pixelScale:packoffset(c2.z);
-    matrix shadowvpMatrix: packoffset(c3);
+    float4 worldAnimationParam:packoffset(c3);
+    matrix shadowvpMatrix: packoffset(c4);
 }
 cbuffer Light : register(b3)
 {
@@ -145,6 +146,8 @@ float WhiteNoise(float2 coord) {
 #define FXAA_REDUCE_MUL   (0.125)//1.0/8.0
 #define FXAA_SPAN_MAX     8.0
 
+#define Time lightDir.x
+#define Tiling lightDir.zw
 float3 FxaaPixelShader(float2 posPos, Texture2D tex, float2 rcpFrame)
 {
     float2 uv = posPos + float2(0, -rcpFrame.y);
@@ -225,9 +228,9 @@ struct Vertex_UV_Color
 
 struct Vertex_Normal
 {
-	//頂点シェーダのインプット構造体
-	float4 position : POSITION;//ポシション
-	float3 normal : NORMAL;
+    //頂点シェーダのインプット構造体
+    float4 position : POSITION;//ポシション
+    float3 normal : NORMAL;
 };
 
 
@@ -246,7 +249,7 @@ struct Vertex_UV_Normal_SingleBone
     float2 uv:TEXCOORD;/*UV*/
     float3 normal : NORMAL;
     min16int bone : BONE;
-}; 
+};
 
 struct Vertex_UV_Normal_QuadBone
 {
@@ -302,8 +305,8 @@ struct Pixel_UV
 
 struct Pixel_Normal
 {
-	float4 position : SV_POSITION;
-	float3 normal :  NORMAL;
+    float4 position : SV_POSITION;
+    float3 normal :  NORMAL;
 };
 
 struct Pixel_UV_Normal
@@ -357,7 +360,7 @@ struct Pixel_UV_Fog
 struct Pixel_Normal_Fog
 {
     float4 position : SV_POSITION;
-    float3 normal :  NORMAL; 
+    float3 normal :  NORMAL;
     float fog : COLOR0;
 };
 
@@ -398,10 +401,16 @@ struct Pixel_UV_Shadow
     float3 shadowPos :SHADOWPOS;
     float2 uv:TEXCOORD;
 };
+struct Pixel_UV_VertexPosition
+{
+    float4 position : SV_POSITION;
+    float4 vertexPosition :VERTEXPOS;
+    float2 uv:TEXCOORD;
+};
 
 struct Pixel_Normal_Shadow
 {
-    float4 position : SV_POSITION; 
+    float4 position : SV_POSITION;
     float3 shadowPos :SHADOWPOS;
     float3 normal :  NORMAL;
 };

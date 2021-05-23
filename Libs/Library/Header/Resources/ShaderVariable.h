@@ -30,8 +30,8 @@ namespace ButiEngine {
 		Vector4 cameraPos;
 		Vector2 fogCoord;
 		Vector2 pixelScale;
+		Vector4 worldAnimationParam;
 		Matrix4x4 shadowVP;
-
 		Fog() {
 			memset(this,0,sizeof(256));
 		}
@@ -44,8 +44,10 @@ namespace ButiEngine {
 			archive(fogColor);
 			archive(cameraPos);
 			archive(fogCoord);
+			archive(worldAnimationParam);
 			archive(shadowVP);
 		}
+
 	};
 
 	struct LightVariable {
