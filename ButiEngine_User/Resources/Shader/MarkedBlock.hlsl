@@ -7,8 +7,8 @@
 float4 PSMain(Pixel_UV pixel) : SV_TARGET
 {
 	float2 uv = pixel.uv;
-	uv *= lightDir.zw;
-	uv += lightDir.xy;
+	uv.x *= 0.5;
+	uv.x += worldAnimationParam.x;
 	float4 Tex = (mainTexture.Sample(mainSampler,uv));
 	return Tex;
 }

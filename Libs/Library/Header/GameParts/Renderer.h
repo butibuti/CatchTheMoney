@@ -42,7 +42,7 @@ namespace ButiEngine {
 		void Release()override;
 		void ReleaseFogBuffer()override;
 		void UpdateFog(const Fog& arg_param)override;
-		std::shared_ptr<CBuffer_Dx12<Fog>> GetFogCBuffer()override;
+		std::shared_ptr<CBuffer<Fog>> GetFogCBuffer()override;
 	private:
 
 
@@ -50,6 +50,6 @@ namespace ButiEngine {
 		std::weak_ptr<IScene> wkp_iScene;
 		std::weak_ptr<IResourceContainer>wkp_resourceContainer;
 		std::vector<std::shared_ptr< IDrawLayer>> vec_drawLayers;
-		std::shared_ptr<CBuffer_Dx12<Fog>> CBuffer_fog;
+		std::shared_ptr<CBuffer<Fog>> CBuffer_fog;
 	};
 }

@@ -86,6 +86,9 @@ namespace ButiEngine {
 		void ChangeUIAlpha();
 		void ClearButtonUpdate();
 		void CommonTextObject();
+
+		std::shared_ptr<Timer> shp_markedBlockAnimationtimer=nullptr;
+		std::shared_ptr< CBuffer <Fog>> markedAnimationParam=nullptr;
 	};
 
 }

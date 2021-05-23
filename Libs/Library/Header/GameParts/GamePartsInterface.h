@@ -27,7 +27,7 @@ namespace ButiEngine
 	class IApplication;
 	class ImguiController;
 	template<typename T>
-	class CBuffer_Dx12;
+	class CBuffer;
 	class SceneInformation;
 
 	class ICollisionManager :public IObject
@@ -111,7 +111,7 @@ namespace ButiEngine
 		virtual void Release() = 0;
 		virtual void UpdateFog(const Fog& arg_param) = 0;
 		virtual void ReleaseFogBuffer() = 0;
-		virtual std::shared_ptr<CBuffer_Dx12<Fog>> GetFogCBuffer() = 0;
+		virtual std::shared_ptr<CBuffer<Fog>> GetFogCBuffer() = 0;
 		virtual void SetShadowCamera(const unsigned int arg_layer,std::shared_ptr<ICamera> arg_shp_camera)=0;
 		virtual std::shared_ptr<ICamera> GetShadowCamera(const unsigned int arg_layer) = 0;
 		virtual std::vector< std::shared_ptr<IDrawObject>> GetHitDrawObjects(std::shared_ptr<Collision::CollisionPrimitive> arg_prim, const int arg_layer)=0;
