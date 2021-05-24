@@ -31,11 +31,11 @@ void ButiEngine::Panel::Start()
 	scale.y = GameSettings::panelHeight;
 	scale.z = 1.0f;
 
-	wkp_drawObjectGravity = GetManager().lock()->AddObjectFromCereal("Gravity", ObjectFactory::Create<Transform>(Vector3(0, 0, 0.5f), Vector3::Zero, scale));
+	wkp_drawObjectGravity = GetManager().lock()->AddObjectFromCereal("Gravity", ObjectFactory::Create<Transform>(Vector3(0, 0, GameSettings::gravityArrowZ), Vector3::Zero, scale));
 	wkp_drawObjectGravity.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 	if (!GameSettings::isTitle)
 	{
-		wkp_drawObjectFrame = GetManager().lock()->AddObjectFromCereal("PanelFrame", ObjectFactory::Create<Transform>(Vector3(0, 0, -1.0f), Vector3::Zero, scale));
+		wkp_drawObjectFrame = GetManager().lock()->AddObjectFromCereal("PanelFrame", ObjectFactory::Create<Transform>(Vector3(0, 0, GameSettings::frameZ), Vector3::Zero, scale));
 		wkp_drawObjectFrame.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 	}
 
@@ -101,7 +101,7 @@ void ButiEngine::Panel::OnChangeGravity(bool arg_scroll)
 	currentGravity = gravity;
 	if (gravity != 0)
 	{
-		wkp_drawObjectGravity.lock()->transform->SetLocalPosition(Vector3(0, 0, 0.5f));
+		wkp_drawObjectGravity.lock()->transform->SetLocalPosition(Vector3(0, 0, GameSettings::gravityArrowZ));
 		Vector3 scale = wkp_drawObjectGravity.lock()->transform->GetLocalScale();
 		if (scale.y > 0 == gravity > 0)
 		{
@@ -142,7 +142,7 @@ void ButiEngine::Panel::SetDrawObjectSky(bool arg_back)
 		name = "Sky_Back";
 	}
 
-	wkp_drawObjectSky = GetManager().lock()->AddObjectFromCereal(name, ObjectFactory::Create<Transform>(Vector3(0, 0, 1.0f), Vector3::Zero, scale));
+	wkp_drawObjectSky = GetManager().lock()->AddObjectFromCereal(name, ObjectFactory::Create<Transform>(Vector3(0, 0, GameSettings::skyZ), Vector3::Zero, scale));
 	wkp_drawObjectSky.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 }
 

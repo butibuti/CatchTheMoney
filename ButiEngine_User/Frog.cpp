@@ -13,6 +13,7 @@ void ButiEngine::Frog::OnUpdate()
 {
 	StorePlayer();
 	Interlock();
+	SetZ();
 	if (shp_pauseManager->IsPause() ||
 		StageManager::GetMode() == GameMode::Edit ||
 		!TalkText::IsDelete())
@@ -135,6 +136,23 @@ void ButiEngine::Frog::CheckNearPlayer()
 		nearPlayer = true;
 		wkp_backFrog.lock()->GetGameComponent<Frog>()->SetNearPlayer(false);
 	}
+}
+
+void ButiEngine::Frog::SetZ()
+{
+	if (!wkp_player.lock() || wkp_player.lock()->transform->GetWorldPosition().z > -3.0f) 
+	{
+		gameObject.lock()->transform->SetWorldPostionZ(GameSettings::frogZ);
+		return; 
+	}
+	
+	auto closestPanel = gameObject.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
+	auto playerClosestPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
+
+	if (closestPanel.lock() == playerClosestPanel.lock()) { return; }
+
+	gameObject.lock()->transform->SetLocalPostionZ(GameSettings::frogZ - 3.0f);
+
 }
 
 void ButiEngine::Frog::MoveY()

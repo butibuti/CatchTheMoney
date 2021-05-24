@@ -27,12 +27,18 @@ public:
 	static const int frogBottomRight = 13;
 	static const int frogBottomLeft = 14;
 	static const int lockPanel = 100;
+
+	static const float skyZ;
+	static const float gravityArrowZ;
+	static const float frogZ;
 	static const float panelZ;
-	static const float playerZ;
 	static const float blockZ;
 	static const float goalZ;
 	static const float coreZ;
-	static const float frogZ;
+	static const float playerZ;
+	static const float frameZ;
+	static const float predictionLineZ;
+
 	static const float gravity;
 	static const float masterVolume;
 

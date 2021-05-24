@@ -67,6 +67,7 @@ void ButiEngine::Player::Start()
 	{
 		wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 		wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+		wkp_predictionLine.lock()->transform->SetWorldPostionZ(GameSettings::predictionLineZ);
 	}
 
 	wkp_bottom = GetManager().lock()->AddObject(ObjectFactory::Create<Transform>(), "Player_Bottom");
