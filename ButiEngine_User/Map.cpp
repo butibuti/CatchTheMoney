@@ -237,6 +237,18 @@ void ButiEngine::Map::PutTile()
 				tile = GetManager().lock()->AddObjectFromCereal("Block_BackReversible", ObjectFactory::Create<Transform>(blockPos, Vector3::Zero, scale));
 				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
 			}
+			else if (onceOfID == GameSettings::frogTopRight)
+			{
+				//Vector3 blockPos = position;
+				//blockPos.z = GameSettings::blockZ;
+				//tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(blockPos, Vector3::Zero, scale));
+				//tile.lock()->transform->SetBaseTransform(frontPanel.lock()->transform);
+
+				//blockPos.x += GameSettings::windowWidth * 0.5f;
+				//blockPos.y *= -1.0f;
+				//tile = GetManager().lock()->AddObjectFromCereal("Block_BackReversible", ObjectFactory::Create<Transform>(blockPos, Vector3::Zero, scale));
+				//tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
+			}
 		}
 	}
 }
