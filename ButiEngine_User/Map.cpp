@@ -6,6 +6,7 @@
 #include"GravityCore.h"
 #include"StageSelect.h"
 #include"Panel.h"
+#include"Frog.h"
 
 void ButiEngine::Map::OnUpdate()
 {
@@ -242,12 +243,21 @@ void ButiEngine::Map::PutTile()
 				Vector3 frogPos = position;
 				frogPos.z = GameSettings::frogZ;
 				Vector3 frogScale = scale * 2.0f;
-				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				auto front = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
 
 				frogPos.x += GameSettings::windowWidth * 0.5f;
 				frogPos.y *= -1.0f;
 				frogScale.y *= -1.0f;
-				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				auto back = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+
+				auto front_frog = front.lock()->GetGameComponent<Frog>();
+				auto back_frog = back.lock()->GetGameComponent<Frog>();
+
+				front_frog->SetBackFrog(back);
+				back_frog->SetBackFrog(front);
+
+				front_frog->SetDefaultGravity(true);
+				back_frog->SetDefaultGravity(true);
 			}
 			else if (onceOfID == GameSettings::frogTopLeft)
 			{
@@ -255,12 +265,21 @@ void ButiEngine::Map::PutTile()
 				frogPos.z = GameSettings::frogZ;
 				Vector3 frogScale = scale * 2.0f;
 				frogScale.x *= -1.0f;
-				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				auto front = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
 
 				frogPos.x += GameSettings::windowWidth * 0.5f;
 				frogPos.y *= -1.0f;
 				frogScale.y *= -1.0f;
-				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				auto back = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+
+				auto front_frog = front.lock()->GetGameComponent<Frog>();
+				auto back_frog = back.lock()->GetGameComponent<Frog>();
+
+				front_frog->SetBackFrog(back);
+				back_frog->SetBackFrog(front);
+
+				front_frog->SetDefaultGravity(true);
+				back_frog->SetDefaultGravity(true);
 			}
 			else if (onceOfID == GameSettings::frogBottomRight)
 			{
@@ -268,12 +287,21 @@ void ButiEngine::Map::PutTile()
 				frogPos.z = GameSettings::frogZ;
 				Vector3 frogScale = scale * 2.0f;
 				frogScale.y *= -1.0f;
-				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				auto front = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
 
 				frogPos.x += GameSettings::windowWidth * 0.5f;
 				frogPos.y *= -1.0f;
 				frogScale.y *= -1.0f;
-				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				auto back = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+
+				auto front_frog = front.lock()->GetGameComponent<Frog>();
+				auto back_frog = back.lock()->GetGameComponent<Frog>();
+
+				front_frog->SetBackFrog(back);
+				back_frog->SetBackFrog(front);
+
+				front_frog->SetDefaultGravity(true);
+				back_frog->SetDefaultGravity(true);
 			}
 			else if (onceOfID == GameSettings::frogBottomLeft)
 			{
@@ -282,12 +310,21 @@ void ButiEngine::Map::PutTile()
 				Vector3 frogScale = scale * 2.0f;
 				frogScale.x *= -1.0f;
 				frogScale.y *= -1.0f;
-				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				auto front = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
 
 				frogPos.x += GameSettings::windowWidth * 0.5f;
 				frogPos.y *= -1.0f;
 				frogScale.y *= -1.0f;
-				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				auto back = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+
+				auto front_frog = front.lock()->GetGameComponent<Frog>();
+				auto back_frog = back.lock()->GetGameComponent<Frog>();
+
+				front_frog->SetBackFrog(back);
+				back_frog->SetBackFrog(front);
+
+				front_frog->SetDefaultGravity(true);
+				back_frog->SetDefaultGravity(true);
 			}
 		}
 	}

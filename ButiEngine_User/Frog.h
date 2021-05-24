@@ -21,6 +21,10 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 		void SetBackFrog(std::weak_ptr<GameObject> arg_backFrog) { wkp_backFrog = arg_backFrog; }
+		bool IsNearPlayer() { return nearPlayer; }
+		void SetNearPlayer(bool arg_flag) { nearPlayer = arg_flag; }
+		void SetDefaultGravity(bool arg_top);
+		void SetGravity(float arg_gravity) { gravity = arg_gravity; }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB;
@@ -30,15 +34,20 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_sita_tyuukan;
 		std::weak_ptr<GameObject> wkp_sita_sentan;
 		std::weak_ptr<GameObject> wkp_bottom;
+		std::weak_ptr<GameObject> wkp_player;
 
 		Vector3 velocity;
 		float gravity;
 		bool grounded;
+		bool nearPlayer;
 
 		void CreateSita();
 		void CheckGravity();
+		void CheckNearPlayer();
 		void MoveY();
 		void BackY();
+		void Interlock();
+		void StorePlayer();
 	};
 
 }

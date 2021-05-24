@@ -11,14 +11,17 @@
 
 void ButiEngine::Frog::OnUpdate()
 {
+	StorePlayer();
+	Interlock();
 	if (shp_pauseManager->IsPause() ||
 		StageManager::GetMode() == GameMode::Edit ||
 		!TalkText::IsDelete())
 	{
-
 		return;
 	}
 
+	CheckNearPlayer();
+	if (!nearPlayer) { return; }
 	MoveY();
 	CheckGravity();
 }
@@ -40,6 +43,11 @@ void ButiEngine::Frog::Start()
 	wkp_bottom.lock()->transform->SetLocalScale(Vector3(1.0f, 0.25f, 1.0f));
 
 	shp_bottomAABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 1.0f), wkp_bottom.lock()->transform);
+
+	velocity = Vector3::Zero;
+	gravity = -GameSettings::gravity;
+	grounded = false;
+	nearPlayer = false;
 }
 
 void ButiEngine::Frog::OnShowUI()
@@ -49,6 +57,18 @@ void ButiEngine::Frog::OnShowUI()
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Frog::Clone()
 {
 	return ObjectFactory::Create<Frog>();
+}
+
+void ButiEngine::Frog::SetDefaultGravity(bool arg_top)
+{
+	if (arg_top)
+	{
+		gravity = -GameSettings::gravity;
+	}
+	else
+	{
+		gravity = GameSettings::gravity;
+	}
 }
 
 void ButiEngine::Frog::CreateSita()
@@ -78,7 +98,6 @@ void ButiEngine::Frog::CheckGravity()
 	if (closestPanel.lock())
 	{
 		auto panelComponent = closestPanel.lock()->GetGameComponent<Panel>();
-		int coreCount = panelComponent->GetGravityCoreCount();
 		gravity = panelComponent->GetGravity();
 		if (gravity == 0)
 		{
@@ -101,6 +120,20 @@ void ButiEngine::Frog::CheckGravity()
 	}
 	else if (abs(gravity) > abs(previousGravity))
 	{
+	}
+}
+
+void ButiEngine::Frog::CheckNearPlayer()
+{
+	if (!wkp_player.lock() || nearPlayer) { return; }
+
+	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
+	Vector3 playerPos = wkp_player.lock()->transform->GetWorldPosition();
+
+	if (position.x < 0 == playerPos.x < 0)
+	{
+		nearPlayer = true;
+		wkp_backFrog.lock()->GetGameComponent<Frog>()->SetNearPlayer(false);
 	}
 }
 
@@ -165,5 +198,33 @@ void ButiEngine::Frog::BackY()
 			}
 			velocity.y = 0;
 		}
+	}
+}
+
+void ButiEngine::Frog::Interlock()
+{
+	if (!nearPlayer || wkp_backFrog.lock()->GetGameComponent<Frog>()->IsNearPlayer()) { return; }
+
+	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
+	Vector3 backPosition = wkp_backFrog.lock()->transform->GetWorldPosition();
+
+	position.x = backPosition.x;
+	position.y *= -1;
+
+	wkp_backFrog.lock()->transform->SetWorldPosition(position);
+
+	Vector3 scale = gameObject.lock()->transform->GetWorldScale();
+	scale.y *= -1;
+
+	wkp_backFrog.lock()->transform->SetLocalScale(scale);
+
+	wkp_backFrog.lock()->GetGameComponent<Frog>()->SetGravity(-gravity);
+}
+
+void ButiEngine::Frog::StorePlayer()
+{
+	if (!wkp_player.lock())
+	{
+		wkp_player = GetManager().lock()->GetGameObject("Player");
 	}
 }

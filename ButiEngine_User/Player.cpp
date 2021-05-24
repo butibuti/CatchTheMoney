@@ -52,7 +52,7 @@ void ButiEngine::Player::Start()
 
 	velocity = Vector3::Zero;
 	grounded = true;
-	gravity = -0.4f;
+	gravity = -GameSettings::gravity;
 	pushGrabKeyFrame = false;
 	isClear = false;
 	freezeProgressFrame = 0;
