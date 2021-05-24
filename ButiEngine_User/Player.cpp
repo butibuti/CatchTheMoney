@@ -49,7 +49,6 @@ void ButiEngine::Player::Start()
 	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 	shp_mobiusLoop = gameObject.lock()->GetGameComponent<MobiusLoop>();
 	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 10.0f), gameObject.lock()->transform);
-	//wkp_screenScroll = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
 
 	velocity = Vector3::Zero;
 	grounded = true;
@@ -69,8 +68,6 @@ void ButiEngine::Player::Start()
 		wkp_predictionLine = GetManager().lock()->AddObjectFromCereal("PredictionLine");
 		wkp_predictionLine.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 	}
-	//wkp_predictionLine2 = GetManager().lock()->AddObjectFromCereal("PredictionLine");
-	//wkp_predictionLine2.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 
 	wkp_bottom = GetManager().lock()->AddObject(ObjectFactory::Create<Transform>(), "Player_Bottom");
 	wkp_bottom.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
@@ -270,7 +267,7 @@ void ButiEngine::Player::Move()
 	OnJump();
 	hitCore = false;
 
-	if (fabsf(velocity.x) > fabsf(velocity.y))
+	if (abs(velocity.x) > abs(velocity.y))
 	{
 		MoveX();
 		MoveY();

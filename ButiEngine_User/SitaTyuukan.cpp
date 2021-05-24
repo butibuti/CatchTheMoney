@@ -8,9 +8,18 @@ void ButiEngine::SitaTyuukan::OnUpdate()
 	Vector3 sentanPos = wkp_sentan.lock()->transform->GetWorldPosition();
 	Vector3 frogScale = wkp_frog.lock()->transform->GetWorldScale();
 
-	if (frogScale.x < 0 != (sentanPos.x - frogPos.x) < 0)
+	//sita no sentan ga kaeru no mae ni aru ka
+	float difference = sentanPos.x - frogPos.x;
+	if (frogScale.x < 0 != difference < 0)
 	{
-		sentanPos.x += GameSettings::windowWidth;
+		if (difference < 0)
+		{
+			sentanPos.x += GameSettings::windowWidth;
+		}
+		else if (difference > 0)
+		{
+			sentanPos.x -= GameSettings::windowWidth;
+		}
 	}
 
 	Vector3 pos = Vector3::Zero;
