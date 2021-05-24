@@ -239,10 +239,11 @@ void ButiEngine::Map::PutTile()
 			}
 			else if (onceOfID == GameSettings::frogTopRight)
 			{
-				//Vector3 blockPos = position;
-				//blockPos.z = GameSettings::blockZ;
-				//tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(blockPos, Vector3::Zero, scale));
-				//tile.lock()->transform->SetBaseTransform(frontPanel.lock()->transform);
+				Vector3 frogPos = position;
+				frogPos.z = GameSettings::frogZ;
+				Vector3 frogScale = scale * 2.0f;
+				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				tile.lock()->transform->SetBaseTransform(frontPanel.lock()->transform);
 
 				//blockPos.x += GameSettings::windowWidth * 0.5f;
 				//blockPos.y *= -1.0f;

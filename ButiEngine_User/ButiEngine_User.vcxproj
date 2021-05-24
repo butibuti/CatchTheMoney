@@ -169,6 +169,7 @@
     <ClCompile Include="DebugController.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
     <ClCompile Include="FollowPanel.cpp" />
+    <ClCompile Include="Frog.cpp" />
     <ClCompile Include="GrabTextWindow.cpp" />
     <ClCompile Include="GravityCore.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="ControlUI.h" />
     <ClInclude Include="DebugController.h" />
     <ClInclude Include="FollowPanel.h" />
+    <ClInclude Include="Frog.h" />
     <ClInclude Include="GrabTextWindow.h" />
     <ClInclude Include="GravityCore.h" />
     <ClInclude Include="InputManager.h" />
