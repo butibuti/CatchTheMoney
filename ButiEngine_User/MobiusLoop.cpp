@@ -5,6 +5,7 @@
 
 void ButiEngine::MobiusLoop::OnUpdate()
 {
+	SetPosition();
 	SwitchPosition();
 }
 
@@ -85,7 +86,8 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::MobiusLoop::Clone()
 
 void ButiEngine::MobiusLoop::SwitchPosition()
 {
-	if (StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "PredictionLine"))
+	if (StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "PredictionLine") || 
+		StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "Sita_tyuukan"))
 	{
 		return;
 	}
@@ -232,4 +234,19 @@ void ButiEngine::MobiusLoop::BackYLeft(Vector3& arg_velocity)
 		}
 		arg_velocity.y = 0;
 	}
+}
+
+void ButiEngine::MobiusLoop::SetPosition()
+{
+	if (!StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "Sita_tyuukan")) { return; }
+
+	Vector3 localPosition = Vector3::Zero;
+
+	float scaleX = gameObject.lock()->transform->GetWorldScale().x;
+
+	localPosition.x = GameSettings::windowWidth / scaleX;
+	wkp_right.lock()->transform->SetLocalPosition(localPosition);
+
+	localPosition.x = -GameSettings::windowWidth / scaleX;
+	wkp_left.lock()->transform->SetLocalPosition(localPosition);
 }

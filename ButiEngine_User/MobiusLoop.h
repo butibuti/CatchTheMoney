@@ -39,6 +39,8 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_left;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB_right;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB_left;
+
+		void SetPosition();
 	};
 
 }

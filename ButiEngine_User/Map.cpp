@@ -245,10 +245,57 @@ void ButiEngine::Map::PutTile()
 				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
 				tile.lock()->transform->SetBaseTransform(frontPanel.lock()->transform);
 
-				//blockPos.x += GameSettings::windowWidth * 0.5f;
-				//blockPos.y *= -1.0f;
-				//tile = GetManager().lock()->AddObjectFromCereal("Block_BackReversible", ObjectFactory::Create<Transform>(blockPos, Vector3::Zero, scale));
-				//tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
+				frogPos.x += GameSettings::windowWidth * 0.5f;
+				frogPos.y *= -1.0f;
+				frogScale.y *= -1.0f;
+				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
+			}
+			else if (onceOfID == GameSettings::frogTopLeft)
+			{
+				Vector3 frogPos = position;
+				frogPos.z = GameSettings::frogZ;
+				Vector3 frogScale = scale * 2.0f;
+				frogScale.x *= -1.0f;
+				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				tile.lock()->transform->SetBaseTransform(frontPanel.lock()->transform);
+
+				frogPos.x += GameSettings::windowWidth * 0.5f;
+				frogPos.y *= -1.0f;
+				frogScale.y *= -1.0f;
+				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
+			}
+			else if (onceOfID == GameSettings::frogBottomRight)
+			{
+				Vector3 frogPos = position;
+				frogPos.z = GameSettings::frogZ;
+				Vector3 frogScale = scale * 2.0f;
+				frogScale.y *= -1.0f;
+				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				tile.lock()->transform->SetBaseTransform(frontPanel.lock()->transform);
+
+				frogPos.x += GameSettings::windowWidth * 0.5f;
+				frogPos.y *= -1.0f;
+				frogScale.y *= -1.0f;
+				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
+			}
+			else if (onceOfID == GameSettings::frogBottomLeft)
+			{
+				Vector3 frogPos = position;
+				frogPos.z = GameSettings::frogZ;
+				Vector3 frogScale = scale * 2.0f;
+				frogScale.x *= -1.0f;
+				frogScale.y *= -1.0f;
+				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				tile.lock()->transform->SetBaseTransform(frontPanel.lock()->transform);
+
+				frogPos.x += GameSettings::windowWidth * 0.5f;
+				frogPos.y *= -1.0f;
+				frogScale.y *= -1.0f;
+				tile = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
 			}
 		}
 	}

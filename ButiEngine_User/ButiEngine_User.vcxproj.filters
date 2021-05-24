@@ -49,6 +49,9 @@
     <ClCompile Include="PauseButton.cpp" />
     <ClCompile Include="TitleLogo.cpp" />
     <ClCompile Include="Frog.cpp" />
+    <ClCompile Include="SitaTyuukan.cpp" />
+    <ClCompile Include="SitaSentan.cpp" />
+    <ClCompile Include="SitaClone.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
@@ -97,5 +100,8 @@
     <ClInclude Include="TitleLogo.h" />
     <ClInclude Include="PauseButton.h" />
     <ClInclude Include="Frog.h" />
+    <ClInclude Include="SitaTyuukan.h" />
+    <ClInclude Include="SitaSentan.h" />
+    <ClInclude Include="SitaClone.h" />
   </ItemGroup>
 </Project>
