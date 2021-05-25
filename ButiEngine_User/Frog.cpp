@@ -55,6 +55,7 @@ void ButiEngine::Frog::Start()
 	grounded = false;
 	nearPlayer = false;
 	progress = 1.0f;
+	once = true;
 }
 
 void ButiEngine::Frog::OnShowUI()
@@ -276,6 +277,11 @@ void ButiEngine::Frog::CheckHitPlayer()
 void ButiEngine::Frog::FollowPlayer()
 {
 	if (!grabbed) { return; }
+	if (once)
+	{
+		gameObject.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
+		once = false;
+	}
 
 	Vector3 playerPos = wkp_player.lock()->transform->GetWorldPosition();
 	Vector3 targetPos = gameObject.lock()->transform->GetWorldPosition();

@@ -51,6 +51,7 @@ namespace ButiEngine {
 		bool grabbed;
 		bool animation;
 		float progress;
+		bool once;
 		static float sitaLength;
 
 		void CreateSita();
