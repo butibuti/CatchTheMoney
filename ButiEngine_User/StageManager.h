@@ -59,6 +59,9 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_buttonSelect;
 		std::weak_ptr<GameObject> wkp_textWindow;
 		std::weak_ptr<GameObject> wkp_talkText;
+		std::weak_ptr<GameObject> wkp_daikokutenHead;
+		std::weak_ptr<GameObject> wkp_daikokutenHandLeft;
+		std::weak_ptr<GameObject> wkp_daikokutenHandRight;
 
 		SoundTag bgm;
 		SoundTag se_clear;
@@ -72,6 +75,7 @@ namespace ButiEngine {
 		int clearAnimationFrame;
 		int fadeCount;
 		bool isNext;
+		bool isOnce;
 		const int CLEAR_FRAME = 90;
 		float particleScrollOffset;
 		Vector3 modeUIPosition;

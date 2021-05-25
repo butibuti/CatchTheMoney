@@ -27,6 +27,10 @@ namespace ButiEngine {
 		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 		std::shared_ptr<PauseManager> shp_pauseManager;
 
+		std::weak_ptr<GameObject> wkp_daikokutenHead;
+		std::weak_ptr<GameObject> wkp_daikokutenHandLeft;
+		std::weak_ptr<GameObject> wkp_daikokutenHandRight;
+
 		SoundTag se_bigText;
 		SoundTag se_normalText;
 

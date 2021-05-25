@@ -29,6 +29,7 @@ namespace ButiEngine {
 
 		bool nextFlag;
 		bool isAnimation;
+		bool isOnce;
 		int nextSceneCount;
 		int animationCount;
 	};

@@ -1,25 +1,24 @@
-#include "stdafx_u.h"
-#include "StageManager.h"
-#include"Map.h"
+#include"stdafx_u.h"
+#include"StageManager.h"
 #include"PauseManager.h"
-#include"CameraController.h"
-#include"ScrollManager.h"
 #include"InputManager.h"
 #include"PanelManager.h"
+#include"ScrollManager.h"
+#include"Map.h"
+#include"CameraController.h"
 #include"StageSelect.h"
-#include "Player.h"
-#include "ShakeComponent.h"
-#include "ClearBand.h"
-#include "NumberComponent.h"
+#include"Player.h"
+#include"ShakeComponent.h"
+#include"NumberComponent.h"
 #include"SquareParticleEmitter.h"
 #include"GameSettings.h"
-#include "SceneChangeAnimation.h"
+#include"SceneChangeAnimation.h"
 #include"FollowPanel.h"
 #include"Panel.h"
 #include"ClearButton.h"
 #include"ControlUI.h"
-#include"ShakeComponent.h"
-#include "TalkText.h"
+#include"TalkText.h"
+#include"Daikokuten.h"
 
 //#define OUTPUT_STAGERENDERTARGET
 #ifdef DEBUG
@@ -116,6 +115,7 @@ void ButiEngine::StageManager::Start()
 {
 	fadeCount = 0;
 	isNext = false;
+	isOnce = false;
 
 	shp_map = GetManager().lock()->GetGameObject("Map").lock()->GetGameComponent<Map>();
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
@@ -124,6 +124,10 @@ void ButiEngine::StageManager::Start()
 	shp_cameraController = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraController>();
 
 	CreateUI();
+
+	wkp_daikokutenHead = GetManager().lock()->GetGameObject("Daikokuten");
+	wkp_daikokutenHandLeft = GetManager().lock()->GetGameObject("DaikokutenHand_L");
+	wkp_daikokutenHandRight = GetManager().lock()->GetGameObject("DaikokutenHand_R");
 
 	if (!GameSettings::isTitle)
 	{
@@ -310,6 +314,11 @@ void ButiEngine::StageManager::ModeChange()
 			particleScrollOffset = 360 * (particleScrollOffset / (float)GameSettings::windowWidth);
 
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelMode, GameSettings::masterVolume * 3.0f);
+		
+			wkp_daikokutenHead.lock()->GetGameComponent<Daikokuten>()->TalkDisappear();
+			wkp_daikokutenHead.lock()->GetGameComponent<Daikokuten>()->Appear();
+			wkp_daikokutenHandLeft.lock()->GetGameComponent<Daikokuten>()->Appear();
+			wkp_daikokutenHandRight.lock()->GetGameComponent<Daikokuten>()->Appear();
 		}
 		else
 		{
@@ -324,6 +333,10 @@ void ButiEngine::StageManager::ModeChange()
 			shp_cameraController->ZoomIn();
 
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_charaMode, GameSettings::masterVolume * 3.0f);
+		
+			wkp_daikokutenHead.lock()->GetGameComponent<Daikokuten>()->Disappear();
+			wkp_daikokutenHandLeft.lock()->GetGameComponent<Daikokuten>()->Disappear();
+			wkp_daikokutenHandRight.lock()->GetGameComponent<Daikokuten>()->Disappear();
 		}
 	}
 }

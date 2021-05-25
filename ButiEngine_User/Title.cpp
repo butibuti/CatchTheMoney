@@ -13,6 +13,12 @@ void ButiEngine::Title::OnUpdate()
 		wkp_camera = GetManager().lock()->GetGameObject("Camera");
 		return;
 	}
+	if (!isOnce)
+	{
+		isOnce = true;
+		wkp_camera.lock()->transform->SetLocalPosition(Vector3(60, 270, -260));
+	}
+
 	if (InputManager::OnTriggerDecisionKey() && !isAnimation)
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_enter, GameSettings::masterVolume);
@@ -59,6 +65,7 @@ void ButiEngine::Title::Start()
 	GameSettings::isTitle = true;
 	isAnimation = false;
 	nextFlag = false;
+	isOnce = false;
 	animationCount = 0;
 	nextSceneCount = 0;
 	//wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 0, 0), Vector3::Zero, Vector3(1920, 1080, 1)));
