@@ -324,7 +324,8 @@ namespace ButiEngine
 		virtual std::shared_ptr<ISoundManager> GetSoundManager() = 0;
 		virtual bool Update()=0;
 		virtual int Run()=0;
-		virtual void InitLoadResources()=0;
+		virtual void PreLoadResources() = 0;
+		virtual void InitLoadResources() = 0;
 		virtual void Exit()=0;
 		virtual long long int GetBefFrame()const = 0;
 	};

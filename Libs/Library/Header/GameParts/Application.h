@@ -25,6 +25,7 @@ namespace ButiEngine {
 		bool Update()override;
 		int Run()override;
 		void InitLoadResources()override;
+		void PreLoadResources()override;
 		void Exit()override;
 		long long int GetBefFrame()const override;
 	private:

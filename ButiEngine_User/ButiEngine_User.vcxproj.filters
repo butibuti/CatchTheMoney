@@ -48,6 +48,7 @@
     <ClCompile Include="AbuttonAnimation.cpp" />
     <ClCompile Include="PauseButton.cpp" />
     <ClCompile Include="TitleLogo.cpp" />
+    <ClCompile Include="LogoSceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
@@ -95,5 +96,6 @@
     <ClInclude Include="AbuttonAnimation.h" />
     <ClInclude Include="TitleLogo.h" />
     <ClInclude Include="PauseButton.h" />
+    <ClInclude Include="LogoSceneManager.h" />
   </ItemGroup>
 </Project>
