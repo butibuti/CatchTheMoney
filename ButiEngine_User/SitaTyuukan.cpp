@@ -5,7 +5,6 @@
 
 void ButiEngine::SitaTyuukan::OnUpdate()
 {
-	wkp_sentan.lock()->GetGameComponent<SitaSentan>()->Move();
 
 	Vector3 frogPos = wkp_frog.lock()->transform->GetWorldPosition();
 	Vector3 sentanPos = wkp_sentan.lock()->transform->GetWorldPosition();
@@ -33,7 +32,7 @@ void ButiEngine::SitaTyuukan::OnUpdate()
 
 	Vector3 scale = Vector3::Zero;
 	scale.x = abs(frogPos.x - sentanPos.x);
-	scale.y = 16.0f;
+	scale.y = 12.0f;
 	scale.z = 1.0f;
 	gameObject.lock()->transform->SetLocalScale(scale);
 }

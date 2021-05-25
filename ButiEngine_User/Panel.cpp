@@ -7,6 +7,11 @@
 void ButiEngine::Panel::OnUpdate()
 {
 	StorePlayer();
+	if (once)
+	{
+		wkp_drawObjectTree.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
+		once = false;
+	}
 	if (gameObject.lock()->GetGameComponent<TransformAnimation>())
 	{
 		animation = true;
@@ -40,6 +45,7 @@ void ButiEngine::Panel::Start()
 	}
 
 	gravity = 0.0f;
+	once = true;
 
 	se_cancel = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/GravityCancel.wav");
 }

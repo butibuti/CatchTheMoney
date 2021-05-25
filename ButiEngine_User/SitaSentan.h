@@ -20,10 +20,10 @@ namespace ButiEngine {
 		}
 		void SetFrog(std::weak_ptr<GameObject> arg_frog) { wkp_frog = arg_frog; }
 		std::weak_ptr<GameObject> GetFrog() { return wkp_frog; }
-
-		void Move();
 	private:
 		std::weak_ptr<GameObject> wkp_frog;
+
+		void SetX();
 	};
 
 }

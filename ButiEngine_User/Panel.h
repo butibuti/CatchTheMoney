@@ -64,6 +64,7 @@ namespace ButiEngine {
 		bool animation;
 		bool scroll;
 		bool lock;
+		bool once;
 
 		std::vector<int> vec_gravityCoreNums;
 

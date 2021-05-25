@@ -528,7 +528,16 @@ void ButiEngine::Player::GrabFrog(std::weak_ptr<GameObject> arg_frog)
 
 		if (closestPanelNum != frogClosestPanelNum) { return; }
 		wkp_holdFrog = arg_frog;
-		wkp_holdFrog.lock()->GetGameComponent<Frog>()->SetGrabbed(true);
+		auto frog = wkp_holdFrog.lock()->GetGameComponent<Frog>();
+		frog->SetGrabbed(true);
+		frog->GetBackFrog().lock()->GetGameComponent<Frog>()->SetGrabbed(true);
+
+		if (wkp_holdFrog.lock()->transform->GetWorldScale().x < 0 != gameObject.lock()->transform->GetWorldScale().x < 0)
+		{
+			Vector3 scale = gameObject.lock()->transform->GetLocalScale();
+			scale.x *= -1;
+			gameObject.lock()->transform->SetLocalScale(scale);
+		}
 
 		CorrectionFrog(wkp_holdFrog);
 	}
@@ -539,7 +548,9 @@ void ButiEngine::Player::ReleaseFrog()
 	if (wkp_holdFrog.lock())
 	{
 		//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_orosu, 0.1f);
-		wkp_holdFrog.lock()->GetGameComponent<Frog>()->SetGrabbed(false);
+		auto frog = wkp_holdFrog.lock()->GetGameComponent<Frog>();
+		frog->SetGrabbed(false);
+		frog->GetBackFrog().lock()->GetGameComponent<Frog>()->SetGrabbed(false);
 		Vector3 frogPos = wkp_holdFrog.lock()->transform->GetWorldPosition();
 		frogPos.y = gameObject.lock()->transform->GetWorldPosition().y;
 		wkp_holdFrog.lock()->transform->SetWorldPosition(frogPos);

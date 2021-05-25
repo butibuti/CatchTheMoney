@@ -21,6 +21,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 		void SetBackFrog(std::weak_ptr<GameObject> arg_backFrog) { wkp_backFrog = arg_backFrog; }
+		std::weak_ptr<GameObject> GetBackFrog() { return wkp_backFrog; }
 		bool IsNearPlayer() { return nearPlayer; }
 		void SetNearPlayer(bool arg_flag) { nearPlayer = arg_flag; }
 		void SetDefaultGravity(bool arg_top);
@@ -31,8 +32,7 @@ namespace ButiEngine {
 			grabbed = arg_flag;
 			animation = true;
 		}
-
-		static float GetSitaLength() { return sitaLength; }
+		std::weak_ptr<GameObject> GetSitaSentan() { return wkp_sita_sentan; }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB;
@@ -52,7 +52,6 @@ namespace ButiEngine {
 		bool animation;
 		float progress;
 		bool once;
-		static float sitaLength;
 
 		void CreateSita();
 		void CheckGravity();

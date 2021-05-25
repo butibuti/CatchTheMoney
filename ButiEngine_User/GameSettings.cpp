@@ -1,8 +1,8 @@
 #include "stdafx_u.h"
 #include "GameSettings.h"
 
-const float GameSettings::skyZ = 1.0f;
-const float GameSettings::treeZ = 0.95f;
+const float GameSettings::skyZ = 1.5f;
+const float GameSettings::treeZ = 1.0f;
 const float GameSettings::gravityArrowZ = 0.9f;
 const float GameSettings::panelZ = 0.0f;
 const float GameSettings::blockZ = -0.1f;

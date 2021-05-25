@@ -7,9 +7,9 @@
 
 void ButiEngine::SitaSentan::OnUpdate()
 {
-	Vector3 scale = gameObject.lock()->transform->GetLocalScale();
-	scale.y = Frog::GetSitaLength() / (GameSettings::blockSize * 50) * 0.75f;
-	gameObject.lock()->transform->SetLocalScale(scale);
+	SetX();
+	gameObject.lock()->transform->SetWorldPostionY(wkp_frog.lock()->transform->GetWorldPosition().y);
+	gameObject.lock()->transform->SetWorldPostionZ(wkp_frog.lock()->transform->GetWorldPosition().z + 0.01f);
 }
 
 void ButiEngine::SitaSentan::OnSet()
@@ -32,11 +32,21 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::SitaSentan::Clone()
 	return ObjectFactory::Create<SitaSentan>();
 }
 
-void ButiEngine::SitaSentan::Move()
+void ButiEngine::SitaSentan::SetX()
 {
-	return;
-	Vector3 sentanPosition = Vector3::Zero;
-	sentanPosition.x = Frog::GetSitaLength() / abs(wkp_frog.lock()->transform->GetWorldScale().x);
-	sentanPosition.z = 0.01f;
-	gameObject.lock()->transform->SetLocalPosition(sentanPosition);
+	if (StageManager::GetMode() == GameMode::Edit)
+	{
+		float frogScaleX = wkp_frog.lock()->transform->GetWorldScale().x;
+		float x = wkp_frog.lock()->transform->GetWorldPosition().x + GameSettings::blockSize * 50;
+		if (frogScaleX < 0)
+		{
+			x = wkp_frog.lock()->transform->GetWorldPosition().x - GameSettings::blockSize * 50;
+		}
+
+		if (wkp_frog.lock()->GetGameComponent<Frog>()->IsGrabbed())
+		{
+			x = wkp_frog.lock()->transform->GetWorldPosition().x;
+		}
+		gameObject.lock()->transform->SetWorldPostionX(x);
+	}
 }
