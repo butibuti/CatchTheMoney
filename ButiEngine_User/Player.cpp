@@ -479,7 +479,7 @@ void ButiEngine::Player::CorrectionFrog(std::weak_ptr<GameObject> arg_frog)
 
 void ButiEngine::Player::GrabGravityCore(std::weak_ptr<GameObject> arg_core)
 {
-	if (!wkp_holdCore.lock() && !pushGrabKeyFrame)
+	if (!wkp_holdCore.lock() && !wkp_holdFrog.lock() && !pushGrabKeyFrame)
 	{
 		//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, 0.1f);
 		int closestPanelNum = gameObject.lock()->GetGameComponent<FollowPanel>()
@@ -510,7 +510,7 @@ void ButiEngine::Player::ReleaseGravityCore()
 
 void ButiEngine::Player::GrabFrog(std::weak_ptr<GameObject> arg_frog)
 {
-	if (!wkp_holdFrog.lock() && !pushGrabKeyFrame)
+	if (!wkp_holdFrog.lock() && !wkp_holdCore.lock() && !pushGrabKeyFrame)
 	{
 		//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, 0.1f);
 		int closestPanelNum = gameObject.lock()->GetGameComponent<FollowPanel>()
