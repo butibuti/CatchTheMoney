@@ -41,17 +41,16 @@ void ButiEngine::Frog::Start()
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 
 	CreateSita();
-	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 1.0f), gameObject.lock()->transform);
+	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 10.0f), gameObject.lock()->transform);
 
 	wkp_bottom = GetManager().lock()->AddObject(ObjectFactory::Create<Transform>(), "Frog_Bottom");
 	wkp_bottom.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
 	wkp_bottom.lock()->transform->SetLocalPosition(Vector3(0.0f, -0.75f, 0.0f));
 	wkp_bottom.lock()->transform->SetLocalScale(Vector3(1.0f, 0.25f, 1.0f));
 
-	shp_bottomAABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 1.0f), wkp_bottom.lock()->transform);
+	shp_bottomAABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 10.0f), wkp_bottom.lock()->transform);
 
 	velocity = Vector3::Zero;
-	gravity = -GameSettings::gravity;
 	grounded = false;
 	nearPlayer = false;
 	progress = 1.0f;
@@ -92,8 +91,12 @@ void ButiEngine::Frog::CreateSita()
 	wkp_sita_sentan.lock()->GetGameComponent<SitaSentan>()->SetFrog(gameObject);
 
 	wkp_sita_sentan.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-	wkp_sita_sentan.lock()->transform->SetLocalScale(Vector3(1, 1, 1));
+	wkp_sita_sentan.lock()->transform->SetLocalScale(Vector3(0.75f, 0.75f, 1));
 	sitaLength = GameSettings::blockSize * 50;
+	Vector3 sentanPosition = Vector3::Zero;
+	sentanPosition.x = sitaLength / 32;
+	sentanPosition.z = 0.01f;
+	wkp_sita_sentan.lock()->transform->SetLocalPosition(sentanPosition);
 }
 
 void ButiEngine::Frog::CheckGravity()
@@ -144,26 +147,6 @@ void ButiEngine::Frog::CheckNearPlayer()
 
 void ButiEngine::Frog::SetZ()
 {
-	if (!wkp_player.lock() || wkp_player.lock()->transform->GetWorldPosition().z > -3.0f) 
-	{
-		gameObject.lock()->transform->SetWorldPostionZ(GameSettings::frogZ);
-		return; 
-	}
-	
-	auto closestPanel = gameObject.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
-	auto playerClosestPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
-
-	if (closestPanel.lock() == playerClosestPanel.lock())
-	{
-		if (grabbed)
-		{
-			float z = wkp_player.lock()->transform->GetWorldPosition().z + (GameSettings::frogZ - GameSettings::playerZ);
-			//gameObject.lock()->transform->SetWorldPostionZ(z);
-		}
-		return; 
-	}
-
-	gameObject.lock()->transform->SetLocalPostionZ(GameSettings::frogZ - 3.0f);
 
 }
 

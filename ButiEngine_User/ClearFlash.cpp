@@ -47,7 +47,12 @@ void ButiEngine::ClearFlash::ClearScaleAnimation()
 	if (isOnce) return;
 	isOnce = true;
 
-	auto goalPosition = GetManager().lock()->GetGameObject("Goal").lock()->transform->GetWorldPosition();
+	auto goal = GetManager().lock()->GetGameObject("Goal");
+	if (!goal.lock())
+	{
+		goal = GetManager().lock()->GetGameObject("Frog");
+	}
+	auto goalPosition = goal.lock()->transform->GetWorldPosition();
 	goalPosition.z -= 0.01f;
 	gameObject.lock()->transform->SetLocalPosition(goalPosition);
 	initPos = gameObject.lock()->transform->GetLocalPosition();

@@ -307,8 +307,8 @@ void ButiEngine::Map::PutTile()
 				front_frog->SetBackFrog(back);
 				back_frog->SetBackFrog(front);
 
-				front_frog->SetDefaultGravity(true);
-				back_frog->SetDefaultGravity(true);
+				front_frog->SetDefaultGravity(false);
+				back_frog->SetDefaultGravity(false);
 			}
 			else if (onceOfID == GameSettings::frogBottomLeft)
 			{
@@ -330,8 +330,8 @@ void ButiEngine::Map::PutTile()
 				front_frog->SetBackFrog(back);
 				back_frog->SetBackFrog(front);
 
-				front_frog->SetDefaultGravity(true);
-				back_frog->SetDefaultGravity(true);
+				front_frog->SetDefaultGravity(false);
+				back_frog->SetDefaultGravity(false);
 			}
 		}
 	}

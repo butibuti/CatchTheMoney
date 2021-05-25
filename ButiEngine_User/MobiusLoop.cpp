@@ -94,7 +94,8 @@ void ButiEngine::MobiusLoop::SwitchPosition()
 	float x = gameObject.lock()->transform->GetWorldPosition().x;
 	auto right = wkp_right;
 	auto left = wkp_left;
-	if (gameObject.lock()->transform->GetWorldScale().x < 0)
+	if (gameObject.lock()->transform->GetLocalScale().x < 0 &&
+		!StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "Frog"))
 	{
 		right = wkp_left;
 		left = wkp_right;

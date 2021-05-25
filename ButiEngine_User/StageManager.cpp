@@ -244,7 +244,7 @@ void ButiEngine::StageManager::OnGoal()
 		//StageSelect::SetStageNum(nextStageNum);
 		
 		int nextStageNum = StageSelect::GetStageNum() + 1;
-		if (nextStageNum > 11)
+		if (nextStageNum > StageSelect::GetMaxStage())
 		{
 			StageSelect::SetRemoveStageName("none");
 			std::string sceneName = "StageSelect";

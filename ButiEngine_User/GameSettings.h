@@ -31,11 +31,11 @@ public:
 	static const float skyZ;
 	static const float treeZ;
 	static const float gravityArrowZ;
-	static const float frogZ;
 	static const float panelZ;
 	static const float blockZ;
 	static const float goalZ;
 	static const float coreZ;
+	static const float frogZ;
 	static const float playerZ;
 	static const float frameZ;
 	static const float predictionLineZ;

@@ -27,7 +27,7 @@ void ButiEngine::FollowPanel::OnUpdate()
 		}
 		return;
 	}
-	else if (pause && wkp_closestPanel.lock() == wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock())
+	else if (wkp_player.lock() && pause && wkp_closestPanel.lock() == wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock())
 	{
 		waitFrame = 0;
 		pause = false;

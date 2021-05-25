@@ -77,7 +77,7 @@ void ButiEngine::Player::Start()
 	wkp_bottom = GetManager().lock()->AddObject(ObjectFactory::Create<Transform>(), "Player_Bottom");
 	wkp_bottom.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
 	wkp_bottom.lock()->transform->SetLocalPosition(Vector3(0.0f, -0.75f, 0.0f));
-	wkp_bottom.lock()->transform->SetLocalScale(Vector3(1.0f, 0.5f, 1.0f));
+	wkp_bottom.lock()->transform->SetLocalScale(Vector3(1.0f, 0.5f, 10.0f));
 	
 	shp_bottomAABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 1.0f), wkp_bottom.lock()->transform);
 	
