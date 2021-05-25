@@ -2,6 +2,7 @@
 #include "GameSettings.h"
 
 const float GameSettings::skyZ = 1.0f;
+const float GameSettings::treeZ = 0.95f;
 const float GameSettings::gravityArrowZ = 0.9f;
 const float GameSettings::frogZ = 0.8f;
 const float GameSettings::panelZ = 0.0f;

@@ -51,7 +51,6 @@
     <ClCompile Include="Frog.cpp" />
     <ClCompile Include="SitaTyuukan.cpp" />
     <ClCompile Include="SitaSentan.cpp" />
-    <ClCompile Include="SitaClone.cpp" />
     <ClCompile Include="Daikokuten.cpp" />
     <ClCompile Include="LogoSceneManager.cpp" />
   </ItemGroup>
@@ -104,7 +103,6 @@
     <ClInclude Include="Frog.h" />
     <ClInclude Include="SitaTyuukan.h" />
     <ClInclude Include="SitaSentan.h" />
-    <ClInclude Include="SitaClone.h" />
     <ClInclude Include="Daikokuten.h" />
     <ClInclude Include="LogoSceneManager.h" />
   </ItemGroup>

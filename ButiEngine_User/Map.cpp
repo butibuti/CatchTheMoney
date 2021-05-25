@@ -59,6 +59,7 @@ void ButiEngine::Map::PutTile()
 	const int panelWidthBlock = GameSettings::panelWidth / GameSettings::blockSize;
 
 	int coreCount = 0;
+	int panelCount = 0;
 
 	for (unsigned int x = 0; x < mapSize.x; x++)
 	{
@@ -72,7 +73,9 @@ void ButiEngine::Map::PutTile()
 
 			frontPanel = GetManager().lock()->AddObjectFromCereal("Panel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
 			frontPanel.lock()->SetObjectName("Panel_Front");
-			frontPanel.lock()->GetGameComponent<Panel>()->SetDrawObjectSky(false);
+			auto fPanel = frontPanel.lock()->GetGameComponent<Panel>();
+			fPanel->SetDrawObjectSky(false);
+			fPanel->SetDrawObjectTree(panelCount, false);
 			parentPanelComponent->SetFrontPanel(frontPanel);
 			shp_panelManager->AddFrontPanel(frontPanel);
 
@@ -91,7 +94,9 @@ void ButiEngine::Map::PutTile()
 			backPanel = GetManager().lock()
 				->AddObjectFromCereal("Panel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
 			backPanel.lock()->SetObjectName("Panel_Back");
-			backPanel.lock()->GetGameComponent<Panel>()->SetDrawObjectSky(true);
+			auto bPanel = backPanel.lock()->GetGameComponent<Panel>();
+			bPanel->SetDrawObjectSky(true);
+			bPanel->SetDrawObjectTree(panelCount, true);
 			parentPanelComponent->SetBackPanel(backPanel);
 			shp_panelManager->AddBackPanel(backPanel);
 
@@ -101,6 +106,8 @@ void ButiEngine::Map::PutTile()
 				frontPanel.lock()->GetGameComponent<Panel>()->Lock(false);
 				backPanel.lock()->GetGameComponent<Panel>()->Lock(true);
 			}
+
+			panelCount++;
 
 			framePos.x += GameSettings::windowWidth * 0.5f;
 			frameScale.y *= -1;

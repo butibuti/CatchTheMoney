@@ -204,7 +204,6 @@
     <ClCompile Include="SelectScreen.cpp" />
     <ClCompile Include="SelectZanzo.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
-    <ClCompile Include="SitaClone.cpp" />
     <ClCompile Include="SitaSentan.cpp" />
     <ClCompile Include="SitaTyuukan.cpp" />
     <ClCompile Include="SquareParticleEmitter.cpp" />
@@ -260,7 +259,6 @@
     <ClInclude Include="SelectScreen.h" />
     <ClInclude Include="SelectZanzo.h" />
     <ClInclude Include="ShakeComponent.h" />
-    <ClInclude Include="SitaClone.h" />
     <ClInclude Include="SitaSentan.h" />
     <ClInclude Include="SitaTyuukan.h" />
     <ClInclude Include="SquareParticleEmitter.h" />

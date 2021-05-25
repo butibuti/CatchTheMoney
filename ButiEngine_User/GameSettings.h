@@ -29,6 +29,7 @@ public:
 	static const int lockPanel = 100;
 
 	static const float skyZ;
+	static const float treeZ;
 	static const float gravityArrowZ;
 	static const float frogZ;
 	static const float panelZ;

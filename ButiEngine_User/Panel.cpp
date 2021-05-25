@@ -133,7 +133,7 @@ void ButiEngine::Panel::SetDrawObjectSky(bool arg_back)
 {
 	Vector3 scale;
 	scale.x = GameSettings::panelWidth;
-	scale.y = GameSettings::panelHeight;
+	scale.y = GameSettings::panelHeight - GameSettings::blockSize * 2;
 	scale.z = 1.0f;
 
 	std::string name = "Sky_Front";
@@ -152,7 +152,7 @@ void ButiEngine::Panel::Lock(bool arg_back)
 
 	Vector3 scale;
 	scale.x = GameSettings::panelWidth;
-	scale.y = GameSettings::panelHeight;
+	scale.y = GameSettings::panelHeight - GameSettings::blockSize * 2;
 	scale.z = 1.0f;
 
 	if (arg_back)
@@ -160,8 +160,43 @@ void ButiEngine::Panel::Lock(bool arg_back)
 		scale.y *= -1;
 	}
 
-	wkp_drawObjectSky = GetManager().lock()->AddObjectFromCereal("Lock", ObjectFactory::Create<Transform>(Vector3(0, 0, -2.0f), Vector3::Zero, scale));
-	wkp_drawObjectSky.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+	wkp_drawObjectLock = GetManager().lock()->AddObjectFromCereal("Lock", ObjectFactory::Create<Transform>(Vector3(0, 0, -2.0f), Vector3::Zero, scale));
+	wkp_drawObjectLock.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+}
+
+void ButiEngine::Panel::SetDrawObjectTree(int arg_treeNum, bool arg_back)
+{
+	Vector3 scale;
+	scale.x = GameSettings::panelWidth;
+	scale.y = GameSettings::panelHeight - GameSettings::blockSize * 2;
+	scale.z = 1.0f;
+
+	std::string season = "Spring";
+	if (arg_treeNum == 1)
+	{
+		season = "Summer";
+	}
+	else if (arg_treeNum == 2)
+	{
+		season = "Autumn";
+	}
+	else if (arg_treeNum == 3)
+	{
+		season = "Winter";
+	}
+
+	std::string name = "Tree_" + season;
+	if (arg_back)
+	{
+		name += "_Back";
+	}
+	else
+	{
+		name += "_Front";
+	}
+
+	wkp_drawObjectTree = GetManager().lock()->AddObjectFromCereal(name, ObjectFactory::Create<Transform>(Vector3(0, 0, GameSettings::treeZ), Vector3::Zero, scale));
+	wkp_drawObjectTree.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 }
 
 void ButiEngine::Panel::AddTransformAnimation(int arg_frame)

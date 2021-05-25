@@ -572,6 +572,6 @@ void ButiEngine::Player::OnCollisionFrog(std::weak_ptr<GameObject> arg_frog)
 
 void ButiEngine::Player::OnCollisionSita(std::weak_ptr<GameObject> arg_sita)
 {
-	if (wkp_holdFrog.lock()) { return; }
-	int a = 0;
+	if (wkp_holdFrog.lock() || !grounded) { return; }
+	isClear = true;
 }
