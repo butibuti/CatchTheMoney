@@ -108,9 +108,11 @@ namespace ButiEngine {
 		void GrabFrog(std::weak_ptr<GameObject> arg_frog);
 		void ReleaseFrog();
 		void Animation();
+		void CorrectionFrog(std::weak_ptr<GameObject> arg_frog);
 
 		void OnCollisionGoal(std::weak_ptr<GameObject> arg_goal);
 		void OnCollisionCore(std::weak_ptr<GameObject> arg_core);
+		void OnCollisionSita(std::weak_ptr<GameObject> arg_sita);
 	};
 }
 

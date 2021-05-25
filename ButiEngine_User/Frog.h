@@ -26,7 +26,13 @@ namespace ButiEngine {
 		void SetDefaultGravity(bool arg_top);
 		void SetGravity(float arg_gravity) { gravity = arg_gravity; }
 		bool IsGrabbed() { return grabbed; }
-		void SetGrabbed(bool arg_flag) { grabbed = arg_flag; }
+		void SetGrabbed(bool arg_flag)
+		{
+			grabbed = arg_flag;
+			animation = true;
+		}
+
+		static float GetSitaLength() { return sitaLength; }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB;
@@ -43,6 +49,9 @@ namespace ButiEngine {
 		bool grounded;
 		bool nearPlayer;
 		bool grabbed;
+		bool animation;
+		float progress;
+		static float sitaLength;
 
 		void CreateSita();
 		void CheckGravity();
@@ -54,6 +63,7 @@ namespace ButiEngine {
 		void StorePlayer();
 		void CheckHitPlayer();
 		void FollowPlayer();
+		void Animation();
 	};
 
 }

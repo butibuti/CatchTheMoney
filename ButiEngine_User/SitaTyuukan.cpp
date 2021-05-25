@@ -1,9 +1,12 @@
 #include "stdafx_u.h"
 #include "SitaTyuukan.h"
 #include "GameSettings.h"
+#include"SitaSentan.h"
 
 void ButiEngine::SitaTyuukan::OnUpdate()
 {
+	wkp_sentan.lock()->GetGameComponent<SitaSentan>()->Move();
+
 	Vector3 frogPos = wkp_frog.lock()->transform->GetWorldPosition();
 	Vector3 sentanPos = wkp_sentan.lock()->transform->GetWorldPosition();
 	Vector3 frogScale = wkp_frog.lock()->transform->GetWorldScale();

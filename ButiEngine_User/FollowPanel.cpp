@@ -2,7 +2,6 @@
 #include "FollowPanel.h"
 #include"PauseManager.h"
 #include"PanelManager.h"
-#include"GravityCore.h"
 #include"GameSettings.h"
 #include"Panel.h"
 #include"ParentPanel.h"
@@ -11,7 +10,6 @@
 
 void ButiEngine::FollowPanel::OnUpdate()
 {
-	auto core = gameObject.lock()->GetGameComponent<GravityCore>();
 	if (StageManager::GetMode() == GameMode::Edit)
 	{
 		pause = true;

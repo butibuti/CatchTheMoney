@@ -10,6 +10,8 @@
 #include"TalkText.h"
 #include"Player.h"
 
+float ButiEngine::Frog::sitaLength;
+
 void ButiEngine::Frog::OnUpdate()
 {
 	StorePlayer();
@@ -27,6 +29,7 @@ void ButiEngine::Frog::OnUpdate()
 	MoveY();
 	CheckGravity();
 	FollowPlayer();
+	Animation();
 }
 
 void ButiEngine::Frog::OnSet()
@@ -51,10 +54,12 @@ void ButiEngine::Frog::Start()
 	gravity = -GameSettings::gravity;
 	grounded = false;
 	nearPlayer = false;
+	progress = 1.0f;
 }
 
 void ButiEngine::Frog::OnShowUI()
 {
+	GUI::Text("%f", gameObject.lock()->transform->GetWorldPosition().z);
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Frog::Clone()
@@ -83,15 +88,11 @@ void ButiEngine::Frog::CreateSita()
 	tyuukan->SetFrog(gameObject);
 	tyuukan->SetSentan(wkp_sita_sentan);
 
-	wkp_sita_sentan.lock()->GetGameComponent<SitaSentan>()->StoreFrog(gameObject);
+	wkp_sita_sentan.lock()->GetGameComponent<SitaSentan>()->SetFrog(gameObject);
 
 	wkp_sita_sentan.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
 	wkp_sita_sentan.lock()->transform->SetLocalScale(Vector3(1, 1, 1));
-	float sitaLength = GameSettings::blockSize * 50;
-	Vector3 sentanPosition = Vector3::Zero;
-	sentanPosition.x = sitaLength / gameObject.lock()->transform->GetWorldScale().x;
-	sentanPosition.z = 0.01f;
-	wkp_sita_sentan.lock()->transform->SetLocalPosition(sentanPosition);
+	sitaLength = GameSettings::blockSize * 50;
 }
 
 void ButiEngine::Frog::CheckGravity()
@@ -151,7 +152,15 @@ void ButiEngine::Frog::SetZ()
 	auto closestPanel = gameObject.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 	auto playerClosestPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 
-	if (closestPanel.lock() == playerClosestPanel.lock()) { return; }
+	if (closestPanel.lock() == playerClosestPanel.lock())
+	{
+		if (grabbed)
+		{
+			float z = wkp_player.lock()->transform->GetWorldPosition().z + (GameSettings::frogZ - GameSettings::playerZ);
+			//gameObject.lock()->transform->SetWorldPostionZ(z);
+		}
+		return; 
+	}
 
 	gameObject.lock()->transform->SetLocalPostionZ(GameSettings::frogZ - 3.0f);
 
@@ -278,7 +287,7 @@ void ButiEngine::Frog::FollowPlayer()
 	}
 
 	targetPos.y = playerPos.y + difference;
-	gameObject.lock()->transform->SetWorldPosition(targetPos);
+	gameObject.lock()->transform->SetWorldPostionY(targetPos.y);
 
 	Vector3 scale = gameObject.lock()->transform->GetLocalScale();
 	Vector3 playerScale = wkp_player.lock()->transform->GetLocalScale();
@@ -288,4 +297,43 @@ void ButiEngine::Frog::FollowPlayer()
 		scale.x *= -1;
 		gameObject.lock()->transform->SetLocalScale(scale);
 	}
+
+	if (GameDevice::GetInput()->CheckKey(Keys::U))
+	{
+		sitaLength += 1.0f;
+	}
+	else if (GameDevice::GetInput()->CheckKey(Keys::J))
+	{
+		sitaLength -= 1.0f;
+	}
+}
+
+void ButiEngine::Frog::Animation()
+{
+	if (!animation) { return; }
+
+
+	if (grabbed)
+	{
+		progress -= 0.05f;
+	}
+	else
+	{
+		progress += 0.05f;
+	}
+
+	if (progress < 0.0f)
+	{
+		progress = 0.0f;
+		animation = false;
+	}
+	else if (progress > 1.0f)
+	{
+		progress = 1.0f;
+		animation = false;
+	}
+
+	const float MAX_SITA_LENGTH = GameSettings::blockSize * 50;
+
+	sitaLength = progress * MAX_SITA_LENGTH;
 }
