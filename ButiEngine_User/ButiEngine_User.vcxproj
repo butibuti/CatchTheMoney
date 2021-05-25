@@ -92,6 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions> /bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -106,6 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions> /bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -125,6 +127,7 @@
       <PrecompiledHeaderFile>stdafx_u.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalOptions> /bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,6 +148,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Libs\Library;$(SolutionDir)Libs\Library\cereal\include;$(SolutionDir)..\imgui;$(ProjectDir);$(SolutionDir)ButiEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalOptions> /bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>NotSet</SubSystem>
@@ -170,6 +174,7 @@
     <ClCompile Include="DebugController.cpp" />
     <ClCompile Include="DefaultGameComponent.cpp" />
     <ClCompile Include="FollowPanel.cpp" />
+    <ClCompile Include="Frog.cpp" />
     <ClCompile Include="GrabTextWindow.cpp" />
     <ClCompile Include="GravityCore.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -186,7 +191,10 @@
     <ClCompile Include="ParentSelectPanel.cpp" />
     <ClCompile Include="PauseButton.cpp" />
     <ClCompile Include="PauseManager.cpp" />
-    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Player.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /bigobj %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'"> /bigobj %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
     <ClCompile Include="ReverseText.cpp" />
     <ClCompile Include="SceneChangeAnimation.cpp" />
     <ClCompile Include="ScrollManager.cpp" />
@@ -195,6 +203,9 @@
     <ClCompile Include="SelectScreen.cpp" />
     <ClCompile Include="SelectZanzo.cpp" />
     <ClCompile Include="ShakeComponent.cpp" />
+    <ClCompile Include="SitaClone.cpp" />
+    <ClCompile Include="SitaSentan.cpp" />
+    <ClCompile Include="SitaTyuukan.cpp" />
     <ClCompile Include="SquareParticleEmitter.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="StageSelect.cpp" />
@@ -221,6 +232,7 @@
     <ClInclude Include="Daikokuten.h" />
     <ClInclude Include="DebugController.h" />
     <ClInclude Include="FollowPanel.h" />
+    <ClInclude Include="Frog.h" />
     <ClInclude Include="GrabTextWindow.h" />
     <ClInclude Include="GravityCore.h" />
     <ClInclude Include="InputManager.h" />
@@ -246,6 +258,9 @@
     <ClInclude Include="SelectScreen.h" />
     <ClInclude Include="SelectZanzo.h" />
     <ClInclude Include="ShakeComponent.h" />
+    <ClInclude Include="SitaClone.h" />
+    <ClInclude Include="SitaSentan.h" />
+    <ClInclude Include="SitaTyuukan.h" />
     <ClInclude Include="SquareParticleEmitter.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="StageSelect.h" />

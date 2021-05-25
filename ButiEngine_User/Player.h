@@ -31,9 +31,16 @@ namespace ButiEngine {
 		bool IsClear() { return isClear; }
 		float GetGravity() { return gravity; }
 		std::weak_ptr<GameObject> GetHoldCore() { return wkp_holdCore; }
+		std::weak_ptr<GameObject> GetHoldFrog() { return wkp_holdFrog; }
 		std::weak_ptr<GameObject> GetPredictionLine() { return wkp_predictionLine; }
 		bool IsHitCore() { return hitCore; }
+		bool IsHitFrog() { return hitFrog; }
+		void ResetHitFrog() { hitFrog = false; }
 		bool IsFreeze() { return freeze; }
+
+		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> GetAABB() { return shp_AABB; }
+
+		void OnCollisionFrog(std::weak_ptr<GameObject> arg_frog);
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<PanelManager> shp_panelManager;
@@ -45,6 +52,7 @@ namespace ButiEngine {
 
 		std::weak_ptr<GameObject> wkp_predictionLine;
 		std::weak_ptr<GameObject> wkp_holdCore;
+		std::weak_ptr<GameObject> wkp_holdFrog;
 
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
 
@@ -84,6 +92,7 @@ namespace ButiEngine {
 		bool freeze;
 		bool jump;
 		bool hitCore;
+		bool hitFrog;
 		int jumpInputFrame;
 
 		void Control();
@@ -96,12 +105,15 @@ namespace ButiEngine {
 		void BackY();
 		void GrabGravityCore(std::weak_ptr<GameObject> arg_core);
 		void ReleaseGravityCore();
+		void GrabFrog(std::weak_ptr<GameObject> arg_frog);
+		void ReleaseFrog();
 		void Animation();
+		void CorrectionFrog(std::weak_ptr<GameObject> arg_frog);
 
 		void OnCollisionGoal(std::weak_ptr<GameObject> arg_goal);
 		void OnCollisionCore(std::weak_ptr<GameObject> arg_core);
+		void OnCollisionSita(std::weak_ptr<GameObject> arg_sita);
 	};
-
 }
 
 BUTI_REGIST_GAMECOMPONENT(Player);

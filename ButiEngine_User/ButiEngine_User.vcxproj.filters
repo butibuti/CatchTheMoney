@@ -48,6 +48,10 @@
     <ClCompile Include="AbuttonAnimation.cpp" />
     <ClCompile Include="PauseButton.cpp" />
     <ClCompile Include="TitleLogo.cpp" />
+    <ClCompile Include="Frog.cpp" />
+    <ClCompile Include="SitaTyuukan.cpp" />
+    <ClCompile Include="SitaSentan.cpp" />
+    <ClCompile Include="SitaClone.cpp" />
     <ClCompile Include="Daikokuten.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +100,10 @@
     <ClInclude Include="AbuttonAnimation.h" />
     <ClInclude Include="TitleLogo.h" />
     <ClInclude Include="PauseButton.h" />
+    <ClInclude Include="Frog.h" />
+    <ClInclude Include="SitaTyuukan.h" />
+    <ClInclude Include="SitaSentan.h" />
+    <ClInclude Include="SitaClone.h" />
     <ClInclude Include="Daikokuten.h" />
   </ItemGroup>
 </Project>

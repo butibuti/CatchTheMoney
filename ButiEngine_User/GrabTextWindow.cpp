@@ -10,7 +10,9 @@ void ButiEngine::GrabTextWindow::OnUpdate()
 	if (wkp_player.lock())
 	{
 		auto player = wkp_player.lock()->GetGameComponent<Player>();
-		if (!player->GetHoldCore().lock() && player->IsHitCore())
+		bool noGrab = (!player->GetHoldCore().lock() && !player->GetHoldFrog().lock());
+		if (noGrab && player->IsHitCore() ||
+			noGrab && player->IsHitFrog())
 		{
 			//gameObject.lock()->transform->SetWorldPosition(initPos);
 			currentScale = MAX_SCALE;
