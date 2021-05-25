@@ -26,6 +26,7 @@ void ButiEngine::Frog::OnUpdate()
 	if (!nearPlayer) { return; }
 	MoveY();
 	CheckGravity();
+	FollowPlayer();
 }
 
 void ButiEngine::Frog::OnSet()
@@ -158,6 +159,7 @@ void ButiEngine::Frog::SetZ()
 
 void ButiEngine::Frog::MoveY()
 {
+	if (grabbed) { return; }
 	if (!grounded)
 	{
 		velocity.y += gravity;
@@ -258,5 +260,32 @@ void ButiEngine::Frog::CheckHitPlayer()
 	if (Geometry::BoxHit::IsHitBox_AABB(*shp_AABB, *playerAABB))
 	{
 		player->OnCollisionFrog(gameObject);
+	}
+}
+
+void ButiEngine::Frog::FollowPlayer()
+{
+	if (!grabbed) { return; }
+
+	Vector3 playerPos = wkp_player.lock()->transform->GetWorldPosition();
+	Vector3 targetPos = gameObject.lock()->transform->GetWorldPosition();
+	float playerGravity = wkp_player.lock()->GetGameComponent<Player>()->GetGravity();
+	float difference = 16.0f;
+
+	if (playerGravity > 0)
+	{
+		difference *= -1;
+	}
+
+	targetPos.y = playerPos.y + difference;
+	gameObject.lock()->transform->SetWorldPosition(targetPos);
+
+	Vector3 scale = gameObject.lock()->transform->GetLocalScale();
+	Vector3 playerScale = wkp_player.lock()->transform->GetLocalScale();
+
+	if (playerScale.x < 0 != scale.x < 0)
+	{
+		scale.x *= -1;
+		gameObject.lock()->transform->SetLocalScale(scale);
 	}
 }

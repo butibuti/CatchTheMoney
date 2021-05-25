@@ -11,6 +11,7 @@
 #include "TalkText.h"
 #include "Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
 #include"StageManager.h"
+#include"Frog.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -148,12 +149,18 @@ void ButiEngine::Player::Control()
 		}
 		if (InputManager::OnPushRightKey())
 		{
-			animation = ButiEngine::Player::WALK;
+			if (!wkp_holdFrog.lock())
+			{
+				animation = ButiEngine::Player::WALK;
+			}
 			velocity.x = 3.0f;
 		}
 		else if (InputManager::OnPushLeftKey())
 		{
-			animation = ButiEngine::Player::WALK;
+			if (!wkp_holdFrog.lock())
+			{
+				animation = ButiEngine::Player::WALK;
+			}
 			velocity.x = -3.0f;
 		}
 		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
@@ -166,7 +173,7 @@ void ButiEngine::Player::Control()
 
 	if (grounded)
 	{
-		if ((InputManager::OnTriggerJumpKey() || jumpInputFrame > 0) && !isClear)
+		if ((InputManager::OnTriggerJumpKey() || jumpInputFrame > 0) && !isClear && !wkp_holdFrog.lock())
 		{
 			jumpInputFrame = 0;
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_jump, GameSettings::masterVolume);
@@ -181,6 +188,7 @@ void ButiEngine::Player::Control()
 		if (InputManager::OnTriggerGrabKey())
 		{
 			ReleaseGravityCore();
+			ReleaseFrog();
 		}
 	}
 	else
@@ -266,6 +274,7 @@ void ButiEngine::Player::OnJump()
 void ButiEngine::Player::Move()
 {
 	if (freeze) { return; }
+	if (wkp_holdFrog.lock()) { return; }
 	
 	OnJump();
 	hitCore = false;
@@ -470,10 +479,32 @@ void ButiEngine::Player::ReleaseGravityCore()
 
 void ButiEngine::Player::GrabFrog(std::weak_ptr<GameObject> arg_frog)
 {
+	if (!wkp_holdFrog.lock() && !pushGrabKeyFrame)
+	{
+		//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, 0.1f);
+		int closestPanelNum = gameObject.lock()->GetGameComponent<FollowPanel>()
+			->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
+		int frogClosestPanelNum = arg_frog.lock()->GetGameComponent<FollowPanel>()
+			->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
+
+		if (closestPanelNum != frogClosestPanelNum) { return; }
+		wkp_holdFrog = arg_frog;
+		wkp_holdFrog.lock()->GetGameComponent<Frog>()->SetGrabbed(true);
+	}
 }
 
 void ButiEngine::Player::ReleaseFrog()
 {
+	if (wkp_holdFrog.lock())
+	{
+		//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_orosu, 0.1f);
+		wkp_holdFrog.lock()->GetGameComponent<Frog>()->SetGrabbed(false);
+		Vector3 frogPos = wkp_holdFrog.lock()->transform->GetWorldPosition();
+		frogPos.y = gameObject.lock()->transform->GetWorldPosition().y;
+		wkp_holdFrog.lock()->transform->SetWorldPosition(frogPos);
+		wkp_holdFrog = std::weak_ptr<GameObject>();
+		pushGrabKeyFrame = true;
+	}
 }
 
 void ButiEngine::Player::OnCollisionGoal(std::weak_ptr<GameObject> arg_goal)
