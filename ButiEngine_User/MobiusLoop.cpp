@@ -126,8 +126,9 @@ void ButiEngine::MobiusLoop::BackXRight(Vector3& arg_velocity)
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == wkp_right.lock()) { continue; }
-			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos) { continue; }
-			if ((*itr)->GetGameObjectName().find("GravityCore") != std::string::npos) { continue; }
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Goal")) { continue; }
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "GravityCore")) { continue; }
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Frog")) { continue; }
 
 			float widthHalf = (*itr)->transform->GetWorldScale().x * 0.5f;
 			if (arg_velocity.x > 0)
@@ -157,8 +158,9 @@ void ButiEngine::MobiusLoop::BackYRight(Vector3& arg_velocity)
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == wkp_right.lock()) { continue; }
-			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos) { continue; }
-			if ((*itr)->GetGameObjectName().find("GravityCore") != std::string::npos) { continue; }
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Goal")) { continue; }
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "GravityCore")) { continue; }
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Frog")) { continue; }
 
 			if (arg_velocity.y > 0)
 			{
@@ -187,7 +189,9 @@ void ButiEngine::MobiusLoop::BackXLeft(Vector3& arg_velocity)
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == wkp_left.lock()) { continue; }
-			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos) { continue; }
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Goal")) { continue; }
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "GravityCore")) { continue; }
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Frog")) { continue; }
 
 			float widthHalf = (*itr)->transform->GetWorldScale().x * 0.5f;
 			if (arg_velocity.x > 0)
@@ -217,7 +221,9 @@ void ButiEngine::MobiusLoop::BackYLeft(Vector3& arg_velocity)
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
 			if ((*itr) == wkp_left.lock()) { continue; }
-			if ((*itr)->GetGameObjectName().find("Goal") != std::string::npos) { continue; }
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Goal")) { continue; }
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "GravityCore")) { continue; }
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Frog")) { continue; }
 
 			if (arg_velocity.y > 0)
 			{

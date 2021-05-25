@@ -62,6 +62,8 @@ void ButiEngine::Player::Start()
 	freeze = true;
 	jump = false;
 	jumpInputFrame = 0;
+	hitCore = false;
+	hitFrog = false;
 
 	if (!GameSettings::isTitle)
 	{
@@ -267,6 +269,7 @@ void ButiEngine::Player::Move()
 	
 	OnJump();
 	hitCore = false;
+	hitFrog = false;
 
 	if (abs(velocity.x) > abs(velocity.y))
 	{
@@ -465,6 +468,14 @@ void ButiEngine::Player::ReleaseGravityCore()
 	}
 }
 
+void ButiEngine::Player::GrabFrog(std::weak_ptr<GameObject> arg_frog)
+{
+}
+
+void ButiEngine::Player::ReleaseFrog()
+{
+}
+
 void ButiEngine::Player::OnCollisionGoal(std::weak_ptr<GameObject> arg_goal)
 {
 	isClear = true;
@@ -479,5 +490,17 @@ void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
 	if (InputManager::OnTriggerGrabKey() && grounded)
 	{
 		GrabGravityCore(arg_core);
+	}
+}
+
+void ButiEngine::Player::OnCollisionFrog(std::weak_ptr<GameObject> arg_frog)
+{
+	if (grounded)
+	{
+		hitFrog = true;
+	}
+	if (InputManager::OnTriggerGrabKey() && grounded)
+	{
+		GrabFrog(arg_frog);
 	}
 }

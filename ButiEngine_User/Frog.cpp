@@ -8,6 +8,7 @@
 #include"PauseManager.h"
 #include"StageManager.h"
 #include"TalkText.h"
+#include"Player.h"
 
 void ButiEngine::Frog::OnUpdate()
 {
@@ -36,7 +37,7 @@ void ButiEngine::Frog::Start()
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 
 	CreateSita();
-	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 10.0f), gameObject.lock()->transform);
+	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 1.0f), gameObject.lock()->transform);
 
 	wkp_bottom = GetManager().lock()->AddObject(ObjectFactory::Create<Transform>(), "Frog_Bottom");
 	wkp_bottom.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
@@ -165,6 +166,7 @@ void ButiEngine::Frog::MoveY()
 	shp_AABB->Update();
 	shp_bottomAABB->Update();
 	BackY();
+	CheckHitPlayer();
 
 	auto hitObjects = GetCollisionManager().lock()->GetWillHitObjects(shp_bottomAABB, 0);
 	if (hitObjects.size() == 0)
@@ -244,5 +246,17 @@ void ButiEngine::Frog::StorePlayer()
 	if (!wkp_player.lock())
 	{
 		wkp_player = GetManager().lock()->GetGameObject("Player");
+	}
+}
+
+void ButiEngine::Frog::CheckHitPlayer()
+{
+	auto player = wkp_player.lock()->GetGameComponent<Player>();
+	auto playerAABB = player->GetAABB();
+
+	player->ResetHitFrog();
+	if (Geometry::BoxHit::IsHitBox_AABB(*shp_AABB, *playerAABB))
+	{
+		player->OnCollisionFrog(gameObject);
 	}
 }

@@ -49,6 +49,7 @@ namespace ButiEngine {
 		void BackY();
 		void Interlock();
 		void StorePlayer();
+		void CheckHitPlayer();
 	};
 
 }
