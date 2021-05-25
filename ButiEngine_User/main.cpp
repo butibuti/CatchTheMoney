@@ -22,9 +22,15 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	auto app = CreateEditorApplicationInstance("Editor", WindowPopType::max,1080,700, false);
 	GameDevice::Initialize();
 	GameDevice::GetInput()->Initialize(app);
+	app->PreLoadResources();
+#ifdef DEBUG
 
 	app->InitLoadResources();
 	app->GetSceneManager()->LoadScene_Init("Title");
+#else
+	app->GetSceneManager()->LoadScene_Init("Logo");
+#endif
+	
 
 	app->GetGraphicDevice()->SetClearColor(Vector4(107.0f / 255.0f,43.0f / 255.0f,189.0f / 255.0f, 1.0f));
 	int returnCode = app->Run();
