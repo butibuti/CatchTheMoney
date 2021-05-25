@@ -302,6 +302,14 @@ void ButiEngine::Player::Move()
 	{
 		grounded = false;
 	}
+	else if (hitObjects.size() == 1)
+	{
+		if (StringHelper::Contains(hitObjects[0]->GetGameObjectName(), "Goal") ||
+			StringHelper::Contains(hitObjects[0]->GetGameObjectName(), "Sita"))
+		{
+			grounded = false;
+		}
+	}
 
 }
 

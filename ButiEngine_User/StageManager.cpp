@@ -146,7 +146,7 @@ void ButiEngine::StageManager::Start()
 		wkp_talkText = GetManager().lock()->AddObjectFromCereal("ReverseTalkText", ObjectFactory::Create<Transform>(Vector3(0, -330, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
 		CommonTextObject();
 	}
-	else if (StageSelect::GetStageNum() == 6 && !GameSettings::isTitle)
+	else if (StageSelect::GetStageNum() == 7 && !GameSettings::isTitle)
 	{
 		wkp_talkText = GetManager().lock()->AddObjectFromCereal("GravityTalkText", ObjectFactory::Create<Transform>(Vector3(0, -330, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
 		CommonTextObject();
@@ -368,7 +368,7 @@ void ButiEngine::StageManager::CreateUI()
 	shp_buttonNext = wkp_buttonNext.lock()->GetGameComponent<ClearButton>();
 	shp_buttonSelect = wkp_buttonSelect.lock()->GetGameComponent<ClearButton>();
 
-	if (stageNum >= 6)
+	if (stageNum >= 7)
 	{
 		wkp_grab = GetManager().lock()->AddObjectFromCereal("BTextWindow");
 	}
