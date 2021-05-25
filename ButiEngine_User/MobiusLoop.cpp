@@ -38,7 +38,7 @@ void ButiEngine::MobiusLoop::Start()
 	}
 	if (name == "Player")
 	{
-		shp_AABB_right = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 1.0f), wkp_right.lock()->transform);
+		shp_AABB_right = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 10.0f), wkp_right.lock()->transform);
 	}
 
 	wkp_left = GetManager().lock()->AddObject(std::make_shared<Transform>(), name + "_Left");
@@ -52,7 +52,7 @@ void ButiEngine::MobiusLoop::Start()
 	}
 	if (name == "Player")
 	{
-		shp_AABB_left = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 1.0f), wkp_left.lock()->transform);
+		shp_AABB_left = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 10.0f), wkp_left.lock()->transform);
 	}
 
 	if (StringHelper::Contains(name, "Panel"))
@@ -71,8 +71,6 @@ void ButiEngine::MobiusLoop::OnCollision(std::weak_ptr<GameObject> arg_other)
 
 void ButiEngine::MobiusLoop::OnShowUI()
 {
-	GUI::Text("Right:%f", wkp_right.lock()->transform->GetWorldPosition().z);
-	GUI::Text("Left:%f", wkp_left.lock()->transform->GetWorldPosition().z);
 }
 
 void ButiEngine::MobiusLoop::ShowGUI()
@@ -95,8 +93,7 @@ void ButiEngine::MobiusLoop::SwitchPosition()
 	float x = gameObject.lock()->transform->GetWorldPosition().x;
 	auto right = wkp_right;
 	auto left = wkp_left;
-	if (gameObject.lock()->transform->GetWorldScale().x < 0 &&
-		!StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "Frog"))
+	if (gameObject.lock()->transform->GetWorldScale().x < 0)
 	{
 		right = wkp_left;
 		left = wkp_right;

@@ -44,14 +44,14 @@ void ButiEngine::Frog::Start()
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 
 	CreateSita();
-	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 1000.0f), gameObject.lock()->transform);
+	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 10.0f), gameObject.lock()->transform);
 
 	wkp_bottom = GetManager().lock()->AddObject(ObjectFactory::Create<Transform>(), "Frog_Bottom");
 	wkp_bottom.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
 	wkp_bottom.lock()->transform->SetLocalPosition(Vector3(0.0f, -0.75f, 0.0f));
 	wkp_bottom.lock()->transform->SetLocalScale(Vector3(1.0f, 0.25f, 1.0f));
 
-	shp_bottomAABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 1000.0f), wkp_bottom.lock()->transform);
+	shp_bottomAABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 10.0f), wkp_bottom.lock()->transform);
 
 	velocity = Vector3::Zero;
 	grounded = false;
@@ -302,10 +302,10 @@ void ButiEngine::Frog::Animation()
 	float moveX = 0.0f;
 	if (gameObject.lock()->transform->GetWorldScale().x < 0)
 	{
-		moveX = 20.0f;
+		moveX = 30.0f;
 		if (!grabbed)
 		{
-			moveX = -20.0f;
+			moveX = -30.0f;
 			targetX -= GameSettings::blockSize * 50;
 			if (targetX < -GameSettings::windowWidth * 0.5f)
 			{
@@ -315,10 +315,10 @@ void ButiEngine::Frog::Animation()
 	}
 	else if(gameObject.lock()->transform->GetWorldScale().x > 0)
 	{
-		moveX = -20.0f;
+		moveX = -30.0f;
 		if (!grabbed)
 		{
-			moveX = 20.0f;
+			moveX = 30.0f;
 			targetX += GameSettings::blockSize * 50;
 			if (targetX > GameSettings::windowWidth * 0.5f)
 			{
@@ -330,7 +330,7 @@ void ButiEngine::Frog::Animation()
 	wkp_sita_sentan.lock()->transform->SetWorldPostionX(x);
 
 	Vector3 pos = wkp_sita_sentan.lock()->transform->GetWorldPosition();
-	if (abs(pos.x - targetX) < 1.0f)
+	if (abs(pos.x - targetX) < 30.0f)
 	{
 		wkp_sita_sentan.lock()->transform->SetWorldPostionX(targetX);
 		animation = false;
