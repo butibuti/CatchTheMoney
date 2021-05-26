@@ -16,7 +16,7 @@ void ButiEngine::Daikokuten::Start()
 
 void ButiEngine::Daikokuten::TalkScale()
 {
-	gameObject.lock()->transform->SetLocalScale(Vector3(200, 200, 200));
+	gameObject.lock()->transform->SetLocalScale(Vector3(100, 100, 100));
 }
 
 void ButiEngine::Daikokuten::NormalScale()

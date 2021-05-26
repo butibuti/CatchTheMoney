@@ -41,33 +41,16 @@ void ButiEngine::ParentDaikokuten::OnSet()
 void ButiEngine::ParentDaikokuten::Start()
 {
 	isChange = false;
+	isOneLoop = false;
 	animationCount = 0;
 	previousPos = Vector3::Zero;
 	currentPos = Vector3::Zero;
-
-
-	//auto objName = gameObject.lock()->GetGameObjectName();
-	//if (objName == "Daikokuten_Stay")
-	//{
-	//}
-	//else if (objName == "Daikokuten_Appear")
-	//{
-	//}
-	//else if (objName == "Daikokuten_Reaction")
-	//{
-	//}
-	//else if (objName == "Daikokuten_Hand_R")
-	//{
-	//}
-	//else if (objName == "Daikokuten_Hand_L")
-	//{
-	//}
 }
 
 void ButiEngine::ParentDaikokuten::TalkAppear()
 {
-	gameObject.lock()->transform->SetLocalPostionZ(-1300);
-	currentPos.y = -1750;
+	gameObject.lock()->transform->SetLocalPostionZ(-1500);
+	currentPos.y = -1800;
 }
 
 void ButiEngine::ParentDaikokuten::Appear()
@@ -106,6 +89,11 @@ void ButiEngine::ParentDaikokuten::Disappear()
 
 }
 
+void ButiEngine::ParentDaikokuten::Reaction()
+{
+	isOneLoop = true;
+}
+
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::ParentDaikokuten::Clone()
 {
 	return ObjectFactory::Create<ParentDaikokuten>();
@@ -128,7 +116,35 @@ void ButiEngine::ParentDaikokuten::AppearUpdate()
 
 void ButiEngine::ParentDaikokuten::ReactionUpdate()
 {
+	if (!isOneLoop)
+	{
+		return;
+	}
+	const float initPos = 0;
+	const float movePos = -180;
 
+	auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
+	if (!anim && !isChange)
+	{
+		//o‚é‚Æ‚«
+		anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+		anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+		anim->GetTargetTransform()->SetLocalPostionZ(movePos);
+		anim->SetSpeed(0.2f);
+		anim->SetEaseType(Easing::EasingType::EaseOut);
+		isChange = true;
+	}
+	else if (!anim)
+	{
+		//ˆø‚­‚Æ‚«
+		anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+		anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+		anim->GetTargetTransform()->SetLocalPostionZ(initPos);
+		anim->SetSpeed(0.2f);
+		anim->SetEaseType(Easing::EasingType::EaseIn);
+		isChange = false;
+		isOneLoop = false;
+	}
 }
 
 void ButiEngine::ParentDaikokuten::RHandUpdate()

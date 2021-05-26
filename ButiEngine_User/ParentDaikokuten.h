@@ -14,6 +14,7 @@ namespace ButiEngine {
 		void TalkAppear();
 		void Appear();
 		void Disappear();
+		void Reaction();
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)
@@ -22,6 +23,7 @@ namespace ButiEngine {
 		}
 	private:
 		bool isChange;
+		bool isOneLoop;
 		int animationCount;
 		Vector3 currentPos;
 		Vector3 previousPos;
