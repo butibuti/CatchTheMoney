@@ -68,6 +68,7 @@ void ButiEngine::ScrollManager::OnUpdate()
 	//previousScroll = previousScroll * (1.0f - 0.15f) + currentScroll * 0.15f;
 
 	wkp_screenScroll.lock()->Get().lightDir.x = previousScroll;
+	wkp_sideScroll.lock()->Get().lightDir.x = -previousScroll;
 }
 
 void ButiEngine::ScrollManager::OnSet()
@@ -80,6 +81,8 @@ void ButiEngine::ScrollManager::Start()
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	scrollSpeed = 4.0f;
 	wkp_screenScroll = gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
+	wkp_sideScroll=GetManager().lock()->GetGameObject("MobiusSide").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
+
 
 	isCurrentEdit = (StageManager::GetMode() == GameMode::Edit);
 	isPreviousEdit = isCurrentEdit;
