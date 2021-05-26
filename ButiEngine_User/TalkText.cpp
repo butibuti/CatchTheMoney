@@ -6,6 +6,7 @@
 #include "Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
 #include"PauseManager.h"
 #include "GameSettings.h"
+#include "ParentDaikokuten.h"
 #include "Daikokuten.h"
 
 bool ButiEngine::TalkText::isDelete = false;
@@ -45,17 +46,17 @@ void ButiEngine::TalkText::OnUpdate()
 		else
 		{
 			isDelete = true;
-			wkp_daikokutenHead.lock()->GetGameComponent<Daikokuten>()->Disappear();
-			wkp_daikokutenHandLeft.lock()->GetGameComponent<Daikokuten>()->Disappear();
-			wkp_daikokutenHandRight.lock()->GetGameComponent<Daikokuten>()->Disappear();
+			wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+			wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+			wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
 		}
 	}
 	if (InputManager::OnTextSkipKey())
 	{
 		isDelete = true;
-		wkp_daikokutenHead.lock()->GetGameComponent<Daikokuten>()->Disappear();
-		wkp_daikokutenHandLeft.lock()->GetGameComponent<Daikokuten>()->Disappear();
-		wkp_daikokutenHandRight.lock()->GetGameComponent<Daikokuten>()->Disappear();
+		wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+		wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+		wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
 	}
 	if(waitTime <= WAIT_FRAME)
 	{
@@ -75,13 +76,15 @@ void ButiEngine::TalkText::Start()
 	se_bigText = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Daikokuten_Big.wav");
 	se_normalText = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Daikokuten_Small.wav");
 
-	wkp_daikokutenHead = GetManager().lock()->GetGameObject("Daikokuten");
-	wkp_daikokutenHandLeft = GetManager().lock()->GetGameObject("DaikokutenHand_L");
-	wkp_daikokutenHandRight = GetManager().lock()->GetGameObject("DaikokutenHand_R");
+	wkp_daikokuten = GetManager().lock()->GetGameObject("Daikokuten");
+	wkp_daikokutenAppear = GetManager().lock()->GetGameObject("Daikokuten_Appear");
+	wkp_daikokutenRHand = GetManager().lock()->GetGameObject("Daikokuten_Appear_R");
+	wkp_daikokutenLHand = GetManager().lock()->GetGameObject("Daikokuten_Appear_L");
 
-	wkp_daikokutenHead.lock()->GetGameComponent<Daikokuten>()->TalkAppear();
-	wkp_daikokutenHandLeft.lock()->GetGameComponent<Daikokuten>()->Appear();
-	wkp_daikokutenHandRight.lock()->GetGameComponent<Daikokuten>()->Appear();
+	wkp_daikokuten.lock()->GetGameComponent<Daikokuten>()->TalkScale();
+	wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->TalkAppear();
+	wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
+	wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
 
 	textCount = 0;
 	waitTime = 0;

@@ -188,6 +188,7 @@
     <ClCompile Include="NumberComponent.cpp" />
     <ClCompile Include="Panel.cpp" />
     <ClCompile Include="PanelManager.cpp" />
+    <ClCompile Include="ParentDaikokuten.cpp" />
     <ClCompile Include="ParentPanel.cpp" />
     <ClCompile Include="ParentSelectPanel.cpp" />
     <ClCompile Include="PauseButton.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="NumberComponent.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="PanelManager.h" />
+    <ClInclude Include="ParentDaikokuten.h" />
     <ClInclude Include="ParentPanel.h" />
     <ClInclude Include="ParentSelectPanel.h" />
     <ClInclude Include="PauseButton.h" />

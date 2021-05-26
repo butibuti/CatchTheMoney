@@ -59,9 +59,19 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_buttonSelect;
 		std::weak_ptr<GameObject> wkp_textWindow;
 		std::weak_ptr<GameObject> wkp_talkText;
+
 		std::weak_ptr<GameObject> wkp_daikokutenHead;
 		std::weak_ptr<GameObject> wkp_daikokutenHandLeft;
 		std::weak_ptr<GameObject> wkp_daikokutenHandRight;
+
+		std::weak_ptr<GameObject> wkp_daikokutenStay;
+		std::weak_ptr<GameObject> wkp_daikokutenAppear;
+		std::weak_ptr<GameObject> wkp_daikokutenReaction;
+		std::weak_ptr<GameObject> wkp_daikokutenRHand;
+		std::weak_ptr<GameObject> wkp_daikokutenLHand;
+		std::weak_ptr<GameObject> wkp_daikokutenRAppear;
+		std::weak_ptr<GameObject> wkp_daikokutenLAppear;
+
 
 		SoundTag bgm;
 		SoundTag se_clear;
