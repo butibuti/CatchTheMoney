@@ -50,6 +50,7 @@ namespace ButiEngine {
 
 		std::weak_ptr<GameObject> wkp_stageNumber;
 		std::weak_ptr<GameObject> wkp_player;
+		std::weak_ptr<GameObject> wkp_frog;
 		std::weak_ptr<GameObject> wkp_fadeObject;
 		std::weak_ptr<GameObject> wkp_x;
 		std::weak_ptr<GameObject> wkp_edit;
@@ -100,6 +101,8 @@ namespace ButiEngine {
 		void ChangeUIAlpha();
 		void ClearButtonUpdate();
 		void CommonTextObject();
+		void StorePlayer();
+		void StoreFrog();
 
 		std::shared_ptr<Timer> shp_markedBlockAnimationtimer=nullptr;
 		std::shared_ptr< CBuffer <Fog>> markedAnimationParam=nullptr;

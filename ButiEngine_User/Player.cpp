@@ -591,6 +591,7 @@ void ButiEngine::Player::OnCollisionFrog(std::weak_ptr<GameObject> arg_frog)
 
 void ButiEngine::Player::OnCollisionSita(std::weak_ptr<GameObject> arg_sita)
 {
-	if (wkp_holdFrog.lock() || !grounded) { return; }
+	if (wkp_holdFrog.lock() || velocity.y != 0) { return; }
 	isClear = true;
+	gameObject.lock()->transform->SetWorldPostionZ(GameSettings::frameZ + 0.1f);
 }

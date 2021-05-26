@@ -9,7 +9,7 @@ void ButiEngine::SitaSentan::OnUpdate()
 {
 	SetX();
 	gameObject.lock()->transform->SetWorldPostionY(wkp_frog.lock()->transform->GetWorldPosition().y);
-	gameObject.lock()->transform->SetWorldPostionZ(wkp_frog.lock()->transform->GetWorldPosition().z + 0.01f);
+	SetZ();
 }
 
 void ButiEngine::SitaSentan::OnSet()
@@ -30,6 +30,11 @@ void ButiEngine::SitaSentan::OnShowUI()
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::SitaSentan::Clone()
 {
 	return ObjectFactory::Create<SitaSentan>();
+}
+
+void ButiEngine::SitaSentan::SetZ()
+{
+	gameObject.lock()->transform->SetWorldPostionZ(wkp_frog.lock()->transform->GetWorldPosition().z + 0.01f);
 }
 
 void ButiEngine::SitaSentan::SetX()
