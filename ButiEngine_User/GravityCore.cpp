@@ -72,9 +72,9 @@ void ButiEngine::GravityCore::AddGravity()
 
 void ButiEngine::GravityCore::StorePlayer()
 {
-	if (!wkp_player.lock())
+	if (!wkp_target.lock())
 	{
-		wkp_player = GetManager().lock()->GetGameObject("Player");
+		wkp_target = GetManager().lock()->GetGameObject("Player");
 	}
 }
 
@@ -82,9 +82,9 @@ void ButiEngine::GravityCore::FollowPlayer()
 {
 	if (!grabbed) { return; }
 
-	Vector3 playerPos = wkp_player.lock()->transform->GetWorldPosition();
+	Vector3 playerPos = wkp_target.lock()->transform->GetWorldPosition();
 	Vector3 targetPos = playerPos;
-	float playerGravity = wkp_player.lock()->GetGameComponent<Player>()->GetGravity();
+	float playerGravity = wkp_target.lock()->GetGameComponent<Player>()->GetGravity();
 	float difference = 16.0f;
 
 	if (playerGravity > 0)

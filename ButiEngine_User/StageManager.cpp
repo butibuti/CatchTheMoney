@@ -31,13 +31,13 @@ ButiEngine::GameMode ButiEngine::StageManager::mode;
 
 void ButiEngine::StageManager::OnUpdate()
 {
-	if (!wkp_player.lock())
+	if (!wkp_target.lock())
 	{
-		wkp_player = GetManager().lock()->GetGameObject("Player");
+		wkp_target = GetManager().lock()->GetGameObject("Player");
 		return;
 	}
 
-	if (wkp_player.lock()->GetGameComponent<Player>()->IsClear())
+	if (wkp_target.lock()->GetGameComponent<Player>()->IsClear())
 	{
 		if (clearAnimationFrame >= CLEAR_FRAME)
 		{
@@ -306,9 +306,9 @@ void ButiEngine::StageManager::ModeChange()
 		if (shp_panelManager->IsAnimation()) { return; }
 		if (shp_pauseManager->IsPause()) { return; }
 		if (StageSelect::GetStageNum() == 0) { return; }
-		if (wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock()) { return; }
-		if (wkp_player.lock()->GetGameComponent<Player>()->IsClear()) { return; }
-		if (wkp_player.lock()->GetGameComponent<Player>()->IsFreeze()) { return; }
+		if (wkp_target.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock()) { return; }
+		if (wkp_target.lock()->GetGameComponent<Player>()->IsClear()) { return; }
+		if (wkp_target.lock()->GetGameComponent<Player>()->IsFreeze()) { return; }
 
 		shp_scrollManager->ResetScroll();
 		
@@ -325,7 +325,7 @@ void ButiEngine::StageManager::ModeChange()
 
 			shp_particleEmitter->SetIsEdit(true);
 
-			auto nowPosX = wkp_player.lock()->transform->GetWorldPosition();
+			auto nowPosX = wkp_target.lock()->transform->GetWorldPosition();
 			particleScrollOffset = nowPosX.x-shp_panelManager->GetClosestPanel(nowPosX.x).lock()->transform->GetWorldPosition().x;
 
 			particleScrollOffset = 360 * (particleScrollOffset / (float)GameSettings::windowWidth);
@@ -393,7 +393,7 @@ void ButiEngine::StageManager::CreateUI()
 
 void ButiEngine::StageManager::ChangeUIAlpha()
 {
-	bool isLock = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock();
+	bool isLock = wkp_target.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock();
 
 	float alpha = 1.0f;
 	if (isLock)

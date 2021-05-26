@@ -108,7 +108,7 @@ void ButiEngine::SquareParticleEmitter::EditUpdate()
         vec_frameParts[i].time += speedMin*0.5f;
 
         Vector3 leftThickness= (leftDownEdge-leftUpEdge).GetCross(MathHelper::GetMobiusPoint(MathHelper::ToRadian(rotation + -circleLength+180-1.0f), -1) * radius-leftUpEdge).GetNormalize()*thickness;
-        Vector3 rightThickness=(rightDownEdge - rightUpEdge).GetCross(MathHelper::GetMobiusPoint(MathHelper::ToRadian(rotation + circleLength+180 - 1.0f), -1) * radius - rightUpEdge).GetNormalize()*thickness;
+        Vector3 rightThickness=(rightDownEdge - rightUpEdge).GetCross(MathHelper::GetMobiusPoint(MathHelper::ToRadian(rotation + circleLength+180 + 1.0f), -1) * radius - rightUpEdge).GetNormalize()*-thickness;
         switch (vec_frameParts[i].mode)
         {
         case MoveMode::Move_TopLineFront:

@@ -7,9 +7,9 @@ void ButiEngine::GrabTextWindow::OnUpdate()
 	const float MAX_SCALE = 240;
 	const float MIN_SCALE = 0;
 	StorePlayer();
-	if (wkp_player.lock())
+	if (wkp_target.lock())
 	{
-		auto player = wkp_player.lock()->GetGameComponent<Player>();
+		auto player = wkp_target.lock()->GetGameComponent<Player>();
 		bool noGrab = (!player->GetHoldCore().lock() && !player->GetHoldFrog().lock());
 		if (noGrab && player->IsHitCore() ||
 			noGrab && player->IsHitFrog())
@@ -55,8 +55,8 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::GrabTextWindow::Clone()
 
 void ButiEngine::GrabTextWindow::StorePlayer()
 {
-	if (!wkp_player.lock())
+	if (!wkp_target.lock())
 	{
-		wkp_player = GetManager().lock()->GetGameObject("Player");
+		wkp_target = GetManager().lock()->GetGameObject("Player");
 	}
 }

@@ -48,6 +48,8 @@ void ButiEngine::Panel::Start()
 	once = true;
 
 	se_cancel = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/GravityCancel.wav");
+
+	
 }
 
 void ButiEngine::Panel::OnShowUI()
@@ -121,7 +123,7 @@ void ButiEngine::Panel::OnChangeGravity(bool arg_scroll)
 	}
 
 	bool playerGrab = false;
-	if (wkp_player.lock() && wkp_player.lock()->GetGameComponent<Player>()->GetHoldCore().lock())
+	if (wkp_target.lock() && wkp_target.lock()->GetGameComponent<Player>()->GetHoldCore().lock())
 	{
 		playerGrab = true;
 	}
@@ -228,8 +230,8 @@ void ButiEngine::Panel::AddTransformAnimation(int arg_frame)
 
 void ButiEngine::Panel::StorePlayer()
 {
-	if (!wkp_player.lock())
+	if (!wkp_target.lock())
 	{
-		wkp_player = GetManager().lock()->GetGameObject("Player");
+		wkp_target = GetManager().lock()->GetGameObject("Player");
 	}
 }

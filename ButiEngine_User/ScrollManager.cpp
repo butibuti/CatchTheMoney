@@ -11,16 +11,18 @@
 
 void ButiEngine::ScrollManager::OnUpdate()
 {
-	if (!wkp_player.lock())
+
+	if (!wkp_target.lock())
 	{
-		wkp_player = GetManager().lock()->GetGameObject("Player");
+		wkp_target = GetManager().lock()->GetGameObject(targetName);
 		return;
 	}
+
 
 	isPreviousEdit = isCurrentEdit;
 	isCurrentEdit = (StageManager::GetMode() == GameMode::Edit);
 
-	Vector3 position = wkp_player.lock()->transform->GetWorldPosition();
+	Vector3 position = wkp_target.lock()->transform->GetWorldPosition();
 	currentScroll = (position.x / GameSettings::windowWidth);
 	//scrollPosition.x = position.x;
 
@@ -68,7 +70,7 @@ void ButiEngine::ScrollManager::OnUpdate()
 	//previousScroll = previousScroll * (1.0f - 0.15f) + currentScroll * 0.15f;
 
 	wkp_screenScroll.lock()->Get().lightDir.x = previousScroll;
-	wkp_sideScroll.lock()->Get().lightDir.x = -previousScroll;
+	wkp_sideScroll.lock()->Get().lightDir.x = previousScroll;
 }
 
 void ButiEngine::ScrollManager::OnSet()
@@ -86,17 +88,30 @@ void ButiEngine::ScrollManager::Start()
 
 	isCurrentEdit = (StageManager::GetMode() == GameMode::Edit);
 	isPreviousEdit = isCurrentEdit;
+
 }
 
 void ButiEngine::ScrollManager::OnShowUI()
 {
-	Vector3 position = wkp_player.lock()->transform->GetWorldPosition();
+	Vector3 position = wkp_target.lock()->transform->GetWorldPosition();
 	auto playerUvPos = (position.x / GameSettings::windowWidth);
 	GUI::Text("PlayerPositionX   : %f ", playerUvPos);
 	GUI::Text("currentScroll     : %f ", currentScroll);
 	GUI::Text("previousScroll    : %f ", previousScroll);
 	GUI::Text("currentScrollRight: %f ", currentScrollRight);
 	GUI::Text("currentScrollLeft : %f ", currentScrollLeft);
+}
+
+void ButiEngine::ScrollManager::SetTarget(const std::string& arg_targetName)
+{
+	targetName = arg_targetName;
+
+	wkp_target = GetManager().lock()->GetGameObject(targetName);
+}
+
+void ButiEngine::ScrollManager::SetTarget(std::shared_ptr<GameObject> arg_target)
+{
+	wkp_target = arg_target;
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::ScrollManager::Clone()
@@ -128,7 +143,7 @@ void ButiEngine::ScrollManager::MoveScroll()
 
 void ButiEngine::ScrollManager::BackScroll()
 {
-	Vector3 playerPosition = wkp_player.lock()->transform->GetWorldPosition();
+	Vector3 playerPosition = wkp_target.lock()->transform->GetWorldPosition();
 	currentScrollRight = ((playerPosition.x + 640.0f) / GameSettings::windowWidth);
 	currentScrollLeft = ((playerPosition.x - 640.0f) / GameSettings::windowWidth);
 	if (isPreviousEdit && !isCurrentEdit)
@@ -172,10 +187,10 @@ void ButiEngine::ScrollManager::BackScroll()
 
 		if (abs(minDistance) > abs(backDistance))
 		{
-			float positionX = wkp_player.lock()->transform->GetWorldPosition().x;
-			float positionY = wkp_player.lock()->transform->GetWorldPosition().y;
-			float positionZ = wkp_player.lock()->transform->GetWorldPosition().z;
-			auto scale = wkp_player.lock()->transform->GetLocalScale();
+			float positionX = wkp_target.lock()->transform->GetWorldPosition().x;
+			float positionY = wkp_target.lock()->transform->GetWorldPosition().y;
+			float positionZ = wkp_target.lock()->transform->GetWorldPosition().z;
+			auto scale = wkp_target.lock()->transform->GetLocalScale();
 			scale.y = -scale.y;
 			//プレイヤーをワープさせる
 			Vector3 position = Vector3(positionX - 640.0f, -positionY, positionZ);
@@ -183,17 +198,17 @@ void ButiEngine::ScrollManager::BackScroll()
 			{
 				position = Vector3(positionX + 640.0f, -positionY, positionZ);
 			}
-			wkp_player.lock()->transform->SetWorldPosition(position);
-			wkp_player.lock()->GetGameComponent<Player>()->ReverseGravity();
-			wkp_player.lock()->transform->SetLocalScale(scale);
-			auto holdCore = wkp_player.lock()->GetGameComponent<Player>()->GetHoldCore();
+			wkp_target.lock()->transform->SetWorldPosition(position);
+			wkp_target.lock()->GetGameComponent<Player>()->ReverseGravity();
+			wkp_target.lock()->transform->SetLocalScale(scale);
+			auto holdCore = wkp_target.lock()->GetGameComponent<Player>()->GetHoldCore();
 			if (holdCore.lock())
 			{
 				holdCore.lock()->GetGameComponent<BackDraw>()->SwitchGravityCore(true);
 				holdCore.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->OnChangeGravity(true);
 			}
 			
-			Vector3 playerPosition_ = wkp_player.lock()->transform->GetWorldPosition();
+			Vector3 playerPosition_ = wkp_target.lock()->transform->GetWorldPosition();
 			currentScroll = (playerPosition_.x / GameSettings::windowWidth);
 		}
 	}
@@ -226,5 +241,5 @@ float* ButiEngine::ScrollManager::LoopDistance(const float arg_prev, const float
 
 void ButiEngine::ScrollManager::ResetScroll()
 {
-	scrollPosition = wkp_player.lock()->transform->GetWorldPosition();
+	scrollPosition = wkp_target.lock()->transform->GetWorldPosition();
 }

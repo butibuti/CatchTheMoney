@@ -42,7 +42,7 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_sita_tyuukan;
 		std::weak_ptr<GameObject> wkp_sita_sentan;
 		std::weak_ptr<GameObject> wkp_bottom;
-		std::weak_ptr<GameObject> wkp_player;
+		std::weak_ptr<GameObject> wkp_target;
 
 		Vector3 velocity;
 		float gravity;

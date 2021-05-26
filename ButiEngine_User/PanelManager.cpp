@@ -195,9 +195,9 @@ void ButiEngine::PanelManager::Control()
 
 void ButiEngine::PanelManager::StorePlayer()
 {
-	if (!wkp_player.lock())
+	if (!wkp_target.lock())
 	{
-		wkp_player = GetManager().lock()->GetGameObject("Player");
+		wkp_target = GetManager().lock()->GetGameObject("Player");
 	}
 }
 
@@ -208,7 +208,7 @@ void ButiEngine::PanelManager::SwapPanelNum(int arg_num1, int arg_num2, int arg_
 	{
 		(*itr).lock()->GetGameComponent<MobiusLoop>()->SwitchPosition();
 	}
-	wkp_player.lock()->GetGameComponent<MobiusLoop>()->SwitchPosition();
+	wkp_target.lock()->GetGameComponent<MobiusLoop>()->SwitchPosition();
 
 
 	int index1 = arg_num1;
@@ -260,7 +260,7 @@ void ButiEngine::PanelManager::SwapPanelNum(int arg_num1, int arg_num2, int arg_
 
 void ButiEngine::PanelManager::SwapRight(int arg_frame)
 {
-	auto currentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
+	auto currentPanel = wkp_target.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 	int currentIndex = currentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
 	int rightPanelIndex = currentIndex + 1;
 	if (rightPanelIndex >= GameSettings::panelCount)
@@ -286,7 +286,7 @@ void ButiEngine::PanelManager::SwapRight(int arg_frame)
 
 void ButiEngine::PanelManager::SwapLeft(int arg_frame)
 {
-	auto currentPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
+	auto currentPanel = wkp_target.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
 	int currentIndex = currentPanel.lock()->GetGameComponent<Panel>()->GetPanelNum();
 	int leftPanelIndex = currentIndex - 1;
 	if (leftPanelIndex < 0)

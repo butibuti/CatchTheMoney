@@ -14,7 +14,7 @@ void ButiEngine::PauseManager::OnUpdate()
 {
 	if (GameSettings::isTitle) { return; }
 	StorePlayer();
-	if (wkp_player.lock() && wkp_player.lock()->GetGameComponent<Player>()->IsClear()) { return; }
+	if (wkp_target.lock() && wkp_target.lock()->GetGameComponent<Player>()->IsClear()) { return; }
 	if (InputManager::OnTriggerOpenMenuKey() && !pushPauseKey)
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_pick, GameSettings::masterVolume);
@@ -286,8 +286,8 @@ void ButiEngine::PauseManager::AddScaleAnimation(std::weak_ptr<GameObject> arg_o
 
 void ButiEngine::PauseManager::StorePlayer()
 {
-	if (!wkp_player.lock())
+	if (!wkp_target.lock())
 	{
-		wkp_player = GetManager().lock()->GetGameObject("Player");
+		wkp_target = GetManager().lock()->GetGameObject("Player");
 	}
 }

@@ -14,7 +14,7 @@ void ButiEngine::FollowPanel::OnUpdate()
 	{
 		pause = true;
 		waitFrame++;
-		if (waitFrame == 2 && gameObject.lock() == wkp_player.lock())
+		if (waitFrame == 2 && gameObject.lock() == wkp_target.lock())
 		{
 			panelInitZ = wkp_closestPanel.lock()->transform->GetWorldPosition().z;
 			wkp_closestPanel.lock()->transform->TranslateZ(-3.0f);
@@ -27,7 +27,7 @@ void ButiEngine::FollowPanel::OnUpdate()
 		}
 		return;
 	}
-	else if (wkp_player.lock() && pause && wkp_closestPanel.lock() == wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock())
+	else if (wkp_target.lock() && pause && wkp_closestPanel.lock() == wkp_target.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock())
 	{
 		waitFrame = 0;
 		pause = false;
@@ -90,8 +90,8 @@ void ButiEngine::FollowPanel::Correction()
 
 void ButiEngine::FollowPanel::StorePlayer()
 {
-	if (!wkp_player.lock())
+	if (!wkp_target.lock())
 	{
-		wkp_player = GetManager().lock()->GetGameObject("Player");
+		wkp_target = GetManager().lock()->GetGameObject("Player");
 	}
 }

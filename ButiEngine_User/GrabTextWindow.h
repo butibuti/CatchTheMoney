@@ -19,7 +19,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
-		std::weak_ptr<GameObject> wkp_player;
+		std::weak_ptr<GameObject> wkp_target;
 		std::weak_ptr<GameObject> wkp_b;
 
 		float currentScale;

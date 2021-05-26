@@ -35,7 +35,7 @@ namespace ButiEngine {
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 
-		std::weak_ptr<GameObject> wkp_player;
+		std::weak_ptr<GameObject> wkp_target;
 
 		std::weak_ptr<GameObject> wkp_right;
 		std::weak_ptr<GameObject> wkp_left;

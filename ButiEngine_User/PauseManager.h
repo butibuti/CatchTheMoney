@@ -26,7 +26,7 @@ namespace ButiEngine {
 		const int RESET = 1;
 		const int SELECT = 2;
 
-		std::weak_ptr<GameObject> wkp_player;
+		std::weak_ptr<GameObject> wkp_target;
 		std::weak_ptr<GameObject> wkp_text;
 		std::weak_ptr<GameObject> wkp_background;
 		std::weak_ptr<GameObject> wkp_button_back;

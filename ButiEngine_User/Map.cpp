@@ -73,6 +73,7 @@ void ButiEngine::Map::PutTile()
 
 			frontPanel = GetManager().lock()->AddObjectFromCereal("Panel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
 			frontPanel.lock()->SetObjectName("Panel_Front");
+
 			auto fPanel = frontPanel.lock()->GetGameComponent<Panel>();
 			fPanel->SetDrawObjectSky(false);
 			fPanel->SetDrawObjectTree(panelCount, false);
@@ -94,6 +95,13 @@ void ButiEngine::Map::PutTile()
 			backPanel = GetManager().lock()
 				->AddObjectFromCereal("Panel", ObjectFactory::Create<Transform>(panelPos, Vector3::Zero, 1.0f));
 			backPanel.lock()->SetObjectName("Panel_Back");
+
+
+			auto frontSidePanel = GetManager().lock()->AddObjectFromCereal("Ground_side");
+			frontSidePanel.lock()->transform->SetBaseTransform(frontPanel.lock()->transform, true);
+			auto backSidePanel = GetManager().lock()->AddObjectFromCereal("Sky_side");
+			backSidePanel.lock()->transform->SetBaseTransform(backPanel.lock()->transform, true);
+
 			auto bPanel = backPanel.lock()->GetGameComponent<Panel>();
 			bPanel->SetDrawObjectSky(true);
 			bPanel->SetDrawObjectTree(panelCount, true);

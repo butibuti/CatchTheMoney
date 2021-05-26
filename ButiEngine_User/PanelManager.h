@@ -43,7 +43,7 @@ namespace ButiEngine {
 		std::vector<std::weak_ptr<GameObject>> vec_backPanels;
 		std::vector<std::weak_ptr<GameObject>> vec_panels;
 
-		std::weak_ptr<GameObject> wkp_player;
+		std::weak_ptr<GameObject> wkp_target;
 
 		SoundTag se_panelLimit;
 		SoundTag se_slide0;

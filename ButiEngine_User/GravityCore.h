@@ -36,7 +36,7 @@ namespace ButiEngine {
 		std::shared_ptr<PanelManager> shp_panelManager;
 		std::shared_ptr<FollowPanel> shp_followPanel;
 
-		std::weak_ptr<GameObject> wkp_player;
+		std::weak_ptr<GameObject> wkp_target;
 
 		int coreNum;
 		float gravity;

@@ -27,7 +27,7 @@ namespace ButiEngine {
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<PanelManager> shp_panelManager;
 
-		std::weak_ptr<GameObject> wkp_player;
+		std::weak_ptr<GameObject> wkp_target;
 		std::weak_ptr<GameObject> wkp_closestPanel;
 
 		int waitFrame;

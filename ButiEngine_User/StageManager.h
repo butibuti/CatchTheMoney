@@ -49,7 +49,7 @@ namespace ButiEngine {
 		std::shared_ptr< SquareParticleEmitter> shp_particleEmitter;
 
 		std::weak_ptr<GameObject> wkp_stageNumber;
-		std::weak_ptr<GameObject> wkp_player;
+		std::weak_ptr<GameObject> wkp_target;
 		std::weak_ptr<GameObject> wkp_fadeObject;
 		std::weak_ptr<GameObject> wkp_x;
 		std::weak_ptr<GameObject> wkp_edit;

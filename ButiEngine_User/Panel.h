@@ -52,7 +52,7 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_drawObjectFrame;
 		std::weak_ptr<GameObject> wkp_drawObjectLock;
 		std::weak_ptr<GameObject> wkp_drawObjectTree;
-		std::weak_ptr<GameObject> wkp_player;
+		std::weak_ptr<GameObject> wkp_target;
 		std::weak_ptr<GameObject> wkp_parentPanel;
 
 		SoundTag se_cancel;
