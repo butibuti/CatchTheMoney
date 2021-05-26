@@ -19,12 +19,21 @@ void ButiEngine::TalkText::OnUpdate()
 		return;
 	}
 
+	if (!wkp_camera.lock())
+	{
+		wkp_camera = GetManager().lock()->GetGameObject("Camera");
+		wkp_cameraUI = GetManager().lock()->GetGameObject("UICamera");
+		return;
+	}
+
 	if (shp_pauseManager->IsPause()) { return; }
 
-	const int ONCE_FRAME = 24;
+	const int ONCE_FRAME = 20;
 	if (onceFrame == ONCE_FRAME)
 	{
-		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction();
+		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 30);
+		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 30);
+		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(true);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
 		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 30);
 	}
@@ -108,7 +117,9 @@ void ButiEngine::TalkText::TextEffect()
 {
 	if (StageSelect::GetStageNum() == 0)
 	{
-		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction();
+		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(false);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
 		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
 	}
@@ -119,7 +130,7 @@ void ButiEngine::TalkText::TextEffect()
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_normalText, GameSettings::masterVolume);
 			return;
 		}
-		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction();
+		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(false);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
 		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
 	}
@@ -127,7 +138,7 @@ void ButiEngine::TalkText::TextEffect()
 	{
 		if (textCount == 0)
 		{
-			wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction();
+			wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(false);
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
 			GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
 			return;

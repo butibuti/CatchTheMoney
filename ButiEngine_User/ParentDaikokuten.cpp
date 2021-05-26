@@ -42,7 +42,9 @@ void ButiEngine::ParentDaikokuten::Start()
 {
 	isChange = false;
 	isOneLoop = false;
+	isReactionScale = false;
 	animationCount = 0;
+	movePos = 0;
 	previousPos = Vector3::Zero;
 	currentPos = Vector3::Zero;
 }
@@ -89,8 +91,9 @@ void ButiEngine::ParentDaikokuten::Disappear()
 
 }
 
-void ButiEngine::ParentDaikokuten::Reaction()
+void ButiEngine::ParentDaikokuten::Reaction(bool arg_isReactionScale)
 {
+	isReactionScale = arg_isReactionScale;
 	isOneLoop = true;
 }
 
@@ -101,10 +104,32 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::ParentDaikokuten::Clone()
 
 void ButiEngine::ParentDaikokuten::StayUpdate()
 {
-	const float LERP_SCALE = 0.02f;
-	previousPos.y = previousPos.y * (1.0f - LERP_SCALE) + currentPos.y * LERP_SCALE;
-	gameObject.lock()->transform->SetLocalPostionY(previousPos.y);
-	ChangeTimer(0, 100);
+	//const float LERP_SCALE = 0.02f;
+	//previousPos.y = previousPos.y * (1.0f - LERP_SCALE) + currentPos.y * LERP_SCALE;
+	//gameObject.lock()->transform->SetLocalPostionY(previousPos.y);
+	//ChangeTimer(0, 100);
+
+	LoopAnimation(0, 50, false);
+
+	//auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
+	//if (!anim && !isChange)
+	//{
+	//	anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+	//	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+	//	anim->GetTargetTransform()->SetLocalPostionY(50);
+	//	anim->SetSpeed(0.0083f);
+	//	anim->SetEaseType(Easing::EasingType::EaseInOut);
+	//	isChange = true;
+	//}
+	//else if (!anim)
+	//{
+	//	anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+	//	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+	//	anim->GetTargetTransform()->SetLocalPostionY(0);
+	//	anim->SetSpeed(0.0083f);
+	//	anim->SetEaseType(Easing::EasingType::EaseInOut);
+	//	isChange = false;
+	//}
 }
 
 void ButiEngine::ParentDaikokuten::AppearUpdate()
@@ -120,8 +145,18 @@ void ButiEngine::ParentDaikokuten::ReactionUpdate()
 	{
 		return;
 	}
-	const float initPos = 0;
-	const float movePos = -180;
+
+	float speed = 0;
+	if (isReactionScale)
+	{
+		movePos = -100;
+		speed = 0.05f;
+	}
+	else
+	{
+		movePos = -50;
+		speed = 0.15f;
+	}
 
 	auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
 	if (!anim && !isChange)
@@ -130,8 +165,8 @@ void ButiEngine::ParentDaikokuten::ReactionUpdate()
 		anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
 		anim->SetTargetTransform(gameObject.lock()->transform->Clone());
 		anim->GetTargetTransform()->SetLocalPostionZ(movePos);
-		anim->SetSpeed(0.2f);
-		anim->SetEaseType(Easing::EasingType::EaseOut);
+		anim->SetSpeed(speed);
+		anim->SetEaseType(Easing::EasingType::EaseOutExpo);
 		isChange = true;
 	}
 	else if (!anim)
@@ -139,9 +174,9 @@ void ButiEngine::ParentDaikokuten::ReactionUpdate()
 		//ˆø‚­‚Æ‚«
 		anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
 		anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-		anim->GetTargetTransform()->SetLocalPostionZ(initPos);
-		anim->SetSpeed(0.2f);
-		anim->SetEaseType(Easing::EasingType::EaseIn);
+		anim->GetTargetTransform()->SetLocalPostionZ(0);
+		anim->SetSpeed(speed);
+		anim->SetEaseType(Easing::EasingType::EaseInExpo);
 		isChange = false;
 		isOneLoop = false;
 	}
@@ -149,18 +184,62 @@ void ButiEngine::ParentDaikokuten::ReactionUpdate()
 
 void ButiEngine::ParentDaikokuten::RHandUpdate()
 {
-	const float LERP_SCALE = 0.02f;
-	previousPos.x = previousPos.x * (1.0f - LERP_SCALE) + currentPos.x * LERP_SCALE;
-	gameObject.lock()->transform->SetLocalPostionX(previousPos.x);
-	ChangeTimer(0, 50);
+	//const float LERP_SCALE = 0.02f;
+	//previousPos.x = previousPos.x * (1.0f - LERP_SCALE) + currentPos.x * LERP_SCALE;
+	//gameObject.lock()->transform->SetLocalPostionX(previousPos.x);
+	//ChangeTimer(0, 50);
+
+	LoopAnimation(0, 100, true);
+
+	//auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
+	//if (!anim && !isChange)
+	//{
+	//	anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+	//	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+	//	anim->GetTargetTransform()->SetLocalPostionX(100);
+	//	anim->SetSpeed(0.0083f);
+	//	anim->SetEaseType(Easing::EasingType::EaseInOut);
+	//	isChange = true;
+	//}
+	//else if (!anim)
+	//{
+	//	anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+	//	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+	//	anim->GetTargetTransform()->SetLocalPostionX(0);
+	//	anim->SetSpeed(0.0083f);
+	//	anim->SetEaseType(Easing::EasingType::EaseInOut);
+	//	isChange = false;
+	//}
 }
 
 void ButiEngine::ParentDaikokuten::LHandUpdate()
 {
-	const float LERP_SCALE = 0.02f;
-	previousPos.x = previousPos.x * (1.0f - LERP_SCALE) + currentPos.x * LERP_SCALE;
-	gameObject.lock()->transform->SetLocalPostionX(previousPos.x);
-	ChangeTimer(0, -50);
+	//const float LERP_SCALE = 0.02f;
+	//previousPos.x = previousPos.x * (1.0f - LERP_SCALE) + currentPos.x * LERP_SCALE;
+	//gameObject.lock()->transform->SetLocalPostionX(previousPos.x);
+	//ChangeTimer(0, -50);
+
+	LoopAnimation(0, -100, true);
+
+	//auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
+	//if (!anim && !isChange)
+	//{
+	//	anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+	//	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+	//	anim->GetTargetTransform()->SetLocalPostionX(-100);
+	//	anim->SetSpeed(0.0083f);
+	//	anim->SetEaseType(Easing::EasingType::EaseInOut);
+	//	isChange = true;
+	//}
+	//else if (!anim)
+	//{
+	//	anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+	//	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+	//	anim->GetTargetTransform()->SetLocalPostionX(0);
+	//	anim->SetSpeed(0.0083f);
+	//	anim->SetEaseType(Easing::EasingType::EaseInOut);
+	//	isChange = false;
+	//}
 }
 
 void ButiEngine::ParentDaikokuten::RAppearUpdate()
@@ -195,5 +274,42 @@ void ButiEngine::ParentDaikokuten::ChangeTimer(const float arg_startPos, const f
 	if (animationCount > 60 || animationCount < 0)
 	{
 		isChange = !isChange;
+	}
+}
+
+void ButiEngine::ParentDaikokuten::LoopAnimation(const float arg_startPos, const float arg_endPos, bool arg_isX)
+{
+	auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
+	if (!anim && !isChange)
+	{
+		anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+		anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+		if (arg_isX)
+		{
+			anim->GetTargetTransform()->SetLocalPostionX(arg_endPos);
+		}
+		else
+		{
+			anim->GetTargetTransform()->SetLocalPostionY(arg_endPos);
+		}
+		anim->SetSpeed(0.0166f);
+		anim->SetEaseType(Easing::EasingType::EaseInOut);
+		isChange = true;
+	}
+	else if (!anim)
+	{
+		anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+		anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+		if (arg_isX)
+		{
+			anim->GetTargetTransform()->SetLocalPostionX(arg_startPos);
+		}
+		else
+		{
+			anim->GetTargetTransform()->SetLocalPostionY(arg_startPos);
+		}
+		anim->SetSpeed(0.0166f);
+		anim->SetEaseType(Easing::EasingType::EaseInOut);
+		isChange = false;
 	}
 }

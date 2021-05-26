@@ -14,7 +14,7 @@ namespace ButiEngine {
 		void TalkAppear();
 		void Appear();
 		void Disappear();
-		void Reaction();
+		void Reaction(bool arg_isReactionScale);
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)
@@ -24,7 +24,9 @@ namespace ButiEngine {
 	private:
 		bool isChange;
 		bool isOneLoop;
+		bool isReactionScale;
 		int animationCount;
+		float movePos;
 		Vector3 currentPos;
 		Vector3 previousPos;
 
@@ -36,6 +38,7 @@ namespace ButiEngine {
 		void RAppearUpdate();
 		void LAppearUpdate();
 		void ChangeTimer(const float arg_startPos, const float arg_endPos);
+		void LoopAnimation(const float arg_startPos, const float arg_endPos, bool arg_isX);
 	};
 
 }
