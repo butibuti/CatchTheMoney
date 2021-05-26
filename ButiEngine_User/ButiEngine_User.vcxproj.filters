@@ -53,6 +53,7 @@
     <ClCompile Include="SitaSentan.cpp" />
     <ClCompile Include="Daikokuten.cpp" />
     <ClCompile Include="LogoSceneManager.cpp" />
+    <ClCompile Include="ParentDaikokuten.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
@@ -105,5 +106,6 @@
     <ClInclude Include="SitaSentan.h" />
     <ClInclude Include="Daikokuten.h" />
     <ClInclude Include="LogoSceneManager.h" />
+    <ClInclude Include="ParentDaikokuten.h" />
   </ItemGroup>
 </Project>

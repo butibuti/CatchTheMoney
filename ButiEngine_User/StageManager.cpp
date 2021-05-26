@@ -19,6 +19,7 @@
 #include"ControlUI.h"
 #include"TalkText.h"
 #include"Daikokuten.h"
+#include"ParentDaikokuten.h"
 
 //#define OUTPUT_STAGERENDERTARGET
 #ifdef DEBUG
@@ -124,13 +125,29 @@ void ButiEngine::StageManager::Start()
 	shp_cameraController = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraController>();
 
 	CreateUI();
-
-	wkp_daikokutenHead = GetManager().lock()->GetGameObject("Daikokuten");
-	wkp_daikokutenHandLeft = GetManager().lock()->GetGameObject("DaikokutenHand_L");
-	wkp_daikokutenHandRight = GetManager().lock()->GetGameObject("DaikokutenHand_R");
-
 	if (!GameSettings::isTitle)
 	{
+		wkp_daikokutenHead = GetManager().lock()->GetGameObject("Daikokuten");
+		wkp_daikokutenHandLeft = GetManager().lock()->GetGameObject("DaikokutenHand_L");
+		wkp_daikokutenHandRight = GetManager().lock()->GetGameObject("DaikokutenHand_R");
+
+		wkp_daikokutenStay = GetManager().lock()->GetGameObject("Daikokuten_Stay");
+		wkp_daikokutenAppear = GetManager().lock()->GetGameObject("Daikokuten_Appear");
+		wkp_daikokutenReaction = GetManager().lock()->GetGameObject("Daikokuten_Reaction");
+		wkp_daikokutenRHand = GetManager().lock()->GetGameObject("Daikokuten_Hand_R");
+		wkp_daikokutenLHand = GetManager().lock()->GetGameObject("Daikokuten_Hand_L");
+		wkp_daikokutenRAppear = GetManager().lock()->GetGameObject("Daikokuten_Appear_R");
+		wkp_daikokutenLAppear = GetManager().lock()->GetGameObject("Daikokuten_Appear_L");
+
+		wkp_daikokutenAppear.lock()->transform->SetBaseTransform(wkp_daikokutenReaction.lock()->transform);
+		wkp_daikokutenStay.lock()->transform->SetBaseTransform(wkp_daikokutenAppear.lock()->transform);
+		wkp_daikokutenHead.lock()->transform->SetBaseTransform(wkp_daikokutenStay.lock()->transform);
+		wkp_daikokutenRHand.lock()->transform->SetBaseTransform(wkp_daikokutenRAppear.lock()->transform);
+		wkp_daikokutenLHand.lock()->transform->SetBaseTransform(wkp_daikokutenLAppear.lock()->transform);
+		wkp_daikokutenHandRight.lock()->transform->SetBaseTransform(wkp_daikokutenRHand.lock()->transform);
+		wkp_daikokutenHandLeft.lock()->transform->SetBaseTransform(wkp_daikokutenLHand.lock()->transform);
+
+
 		wkp_stageNumber = GetManager().lock()->AddObjectFromCereal("ParentNumber", ObjectFactory::Create<Transform>(Vector3(-550, 350, 0), Vector3::Zero, Vector3(80, 80, 0)));
 		auto numComponent = wkp_stageNumber.lock()->GetGameComponent<NumberComponent>();
 		numComponent->SetNumber(StageSelect::GetStageNum() + 1);
@@ -315,10 +332,10 @@ void ButiEngine::StageManager::ModeChange()
 
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelMode, GameSettings::masterVolume * 3.0f);
 		
-			wkp_daikokutenHead.lock()->GetGameComponent<Daikokuten>()->TalkDisappear();
-			wkp_daikokutenHead.lock()->GetGameComponent<Daikokuten>()->Appear();
-			wkp_daikokutenHandLeft.lock()->GetGameComponent<Daikokuten>()->Appear();
-			wkp_daikokutenHandRight.lock()->GetGameComponent<Daikokuten>()->Appear();
+			wkp_daikokutenHead.lock()->GetGameComponent<Daikokuten>()->NormalScale();
+			wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
+			wkp_daikokutenRAppear.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
+			wkp_daikokutenLAppear.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
 		}
 		else
 		{
@@ -334,9 +351,9 @@ void ButiEngine::StageManager::ModeChange()
 
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_charaMode, GameSettings::masterVolume * 3.0f);
 		
-			wkp_daikokutenHead.lock()->GetGameComponent<Daikokuten>()->Disappear();
-			wkp_daikokutenHandLeft.lock()->GetGameComponent<Daikokuten>()->Disappear();
-			wkp_daikokutenHandRight.lock()->GetGameComponent<Daikokuten>()->Disappear();
+			wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+			wkp_daikokutenRAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+			wkp_daikokutenLAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
 		}
 	}
 }
