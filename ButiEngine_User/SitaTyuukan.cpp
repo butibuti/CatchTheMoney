@@ -2,11 +2,43 @@
 #include "SitaTyuukan.h"
 #include "GameSettings.h"
 #include"SitaSentan.h"
+#include"StageManager.h"
+#include"Frog.h"
 
 void ButiEngine::SitaTyuukan::OnUpdate()
 {
+	Move();
+}
 
+void ButiEngine::SitaTyuukan::OnSet()
+{
+}
+
+void ButiEngine::SitaTyuukan::Start()
+{
+}
+
+void ButiEngine::SitaTyuukan::OnShowUI()
+{
+}
+
+std::shared_ptr<ButiEngine::GameComponent> ButiEngine::SitaTyuukan::Clone()
+{
+	return ObjectFactory::Create<SitaTyuukan>();
+}
+
+void ButiEngine::SitaTyuukan::Move()
+{
 	Vector3 frogPos = wkp_frog.lock()->transform->GetWorldPosition();
+	if (StageManager::GetMode() == GameMode::Edit && wkp_frog.lock()->GetGameComponent<Frog>()->IsGrabbed())
+	{
+		gameObject.lock()->transform->SetWorldPosition(frogPos);
+
+		Vector3 scale = Vector3::Zero;
+		gameObject.lock()->transform->SetLocalScale(scale);
+		return;
+	}
+
 	Vector3 sentanPos = wkp_sentan.lock()->transform->GetWorldPosition();
 	Vector3 frogScale = wkp_frog.lock()->transform->GetWorldScale();
 
@@ -35,21 +67,4 @@ void ButiEngine::SitaTyuukan::OnUpdate()
 	scale.y = 12.0f;
 	scale.z = 1.0f;
 	gameObject.lock()->transform->SetLocalScale(scale);
-}
-
-void ButiEngine::SitaTyuukan::OnSet()
-{
-}
-
-void ButiEngine::SitaTyuukan::Start()
-{
-}
-
-void ButiEngine::SitaTyuukan::OnShowUI()
-{
-}
-
-std::shared_ptr<ButiEngine::GameComponent> ButiEngine::SitaTyuukan::Clone()
-{
-	return ObjectFactory::Create<SitaTyuukan>();
 }

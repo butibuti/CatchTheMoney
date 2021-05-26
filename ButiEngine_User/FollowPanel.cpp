@@ -7,6 +7,8 @@
 #include"ParentPanel.h"
 #include"Player.h"
 #include"StageManager.h"
+#include"Frog.h"
+#include"SitaSentan.h"
 
 void ButiEngine::FollowPanel::OnUpdate()
 {
@@ -37,6 +39,10 @@ void ButiEngine::FollowPanel::OnUpdate()
 	}
 
 	gameObject.lock()->transform->SetBaseTransform(nullptr);
+	if (StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "Frog"))
+	{
+		gameObject.lock()->GetGameComponent<Frog>()->GetSitaSentan().lock()->GetGameComponent<SitaSentan>()->SetZ();
+	}
 
 	StorePlayer();
 	StoreClosestPanel();

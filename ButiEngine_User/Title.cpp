@@ -16,7 +16,7 @@ void ButiEngine::Title::OnUpdate()
 	if (!isOnce)
 	{
 		isOnce = true;
-		wkp_camera.lock()->transform->SetLocalPosition(Vector3(60, 270, -260));
+		wkp_camera.lock()->transform->SetLocalPosition(Vector3(60, 300, -285));
 	}
 
 	if (InputManager::OnTriggerDecisionKey() && !isAnimation)

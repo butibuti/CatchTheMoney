@@ -20,6 +20,8 @@
 #include"TalkText.h"
 #include"Daikokuten.h"
 #include"ParentDaikokuten.h"
+#include"Frog.h"
+#include"Header/GameObjects/DefaultGameComponent/PositionAnimationComponent.h"
 
 //#define OUTPUT_STAGERENDERTARGET
 #ifdef DEBUG
@@ -31,13 +33,11 @@ ButiEngine::GameMode ButiEngine::StageManager::mode;
 
 void ButiEngine::StageManager::OnUpdate()
 {
-	if (!wkp_target.lock())
-	{
-		wkp_target = GetManager().lock()->GetGameObject("Player");
-		return;
-	}
+	if (GameSettings::isTitle) { return; }
+	StorePlayer();
+	StoreFrog();
 
-	if (wkp_target.lock()->GetGameComponent<Player>()->IsClear())
+	if (wkp_player.lock()->GetGameComponent<Player>()->IsClear())
 	{
 		if (clearAnimationFrame >= CLEAR_FRAME)
 		{
@@ -155,17 +155,17 @@ void ButiEngine::StageManager::Start()
 
 	if (StageSelect::GetStageNum() == 0 && !GameSettings::isTitle)
 	{
-		wkp_talkText = GetManager().lock()->AddObjectFromCereal("FirstTalkText", ObjectFactory::Create<Transform>(Vector3(0, -330, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+		wkp_talkText = GetManager().lock()->AddObjectFromCereal("FirstTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
 		CommonTextObject();
 	}
 	else if (StageSelect::GetStageNum() == 3 && !GameSettings::isTitle)
 	{
-		wkp_talkText = GetManager().lock()->AddObjectFromCereal("ReverseTalkText", ObjectFactory::Create<Transform>(Vector3(0, -330, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+		wkp_talkText = GetManager().lock()->AddObjectFromCereal("ReverseTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
 		CommonTextObject();
 	}
 	else if (StageSelect::GetStageNum() == 7 && !GameSettings::isTitle)
 	{
-		wkp_talkText = GetManager().lock()->AddObjectFromCereal("GravityTalkText", ObjectFactory::Create<Transform>(Vector3(0, -330, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+		wkp_talkText = GetManager().lock()->AddObjectFromCereal("GravityTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
 		CommonTextObject();
 	}
 	else
@@ -306,9 +306,10 @@ void ButiEngine::StageManager::ModeChange()
 		if (shp_panelManager->IsAnimation()) { return; }
 		if (shp_pauseManager->IsPause()) { return; }
 		if (StageSelect::GetStageNum() == 0) { return; }
-		if (wkp_target.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock()) { return; }
-		if (wkp_target.lock()->GetGameComponent<Player>()->IsClear()) { return; }
-		if (wkp_target.lock()->GetGameComponent<Player>()->IsFreeze()) { return; }
+		if (wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock()) { return; }
+		if (wkp_player.lock()->GetGameComponent<Player>()->IsClear()) { return; }
+		if (wkp_player.lock()->GetGameComponent<Player>()->IsFreeze()) { return; }
+		if (wkp_frog.lock() && wkp_frog.lock()->GetGameComponent<Frog>()->IsAnimation()) { return; }
 
 		shp_scrollManager->ResetScroll();
 		
@@ -325,7 +326,7 @@ void ButiEngine::StageManager::ModeChange()
 
 			shp_particleEmitter->SetIsEdit(true);
 
-			auto nowPosX = wkp_target.lock()->transform->GetWorldPosition();
+			auto nowPosX = wkp_player.lock()->transform->GetWorldPosition();
 			particleScrollOffset = nowPosX.x-shp_panelManager->GetClosestPanel(nowPosX.x).lock()->transform->GetWorldPosition().x;
 
 			particleScrollOffset = 360 * (particleScrollOffset / (float)GameSettings::windowWidth);
@@ -393,7 +394,9 @@ void ButiEngine::StageManager::CreateUI()
 
 void ButiEngine::StageManager::ChangeUIAlpha()
 {
-	bool isLock = wkp_target.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock();
+	auto closestPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock();
+	if (!closestPanel) { return; }
+	bool isLock = closestPanel->GetGameComponent<Panel>()->IsLock();
 
 	float alpha = 1.0f;
 	if (isLock)
@@ -455,8 +458,24 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 
 void ButiEngine::StageManager::CommonTextObject()
 {
-	wkp_textWindow = GetManager().lock()->AddObjectFromCereal("TextWindow", ObjectFactory::Create<Transform>(Vector3(0, -330, -0.12f), Vector3::Zero, Vector3(1920, 640, 1)));
-	GetManager().lock()->AddObjectFromCereal("Abutton", ObjectFactory::Create<Transform>(Vector3(790, -390, -0.16f), Vector3::Zero, Vector3(180, 180, 1)));
-	GetManager().lock()->AddObjectFromCereal("SkipYbutton", ObjectFactory::Create<Transform>(Vector3(675, -220, -0.16f), Vector3::Zero, Vector3(80, 80, 1)));
-	GetManager().lock()->AddObjectFromCereal("SkipText", ObjectFactory::Create<Transform>(Vector3(780, -220, -0.16f), Vector3::Zero, Vector3(160, 80, 1)));
+	wkp_textWindow = GetManager().lock()->AddObjectFromCereal("TextWindow", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.12f), Vector3::Zero, Vector3(1920, 640, 1)));
+	GetManager().lock()->AddObjectFromCereal("Abutton", ObjectFactory::Create<Transform>(Vector3(790, -380, -0.16f), Vector3::Zero, Vector3(180, 180, 1)));
+	GetManager().lock()->AddObjectFromCereal("SkipYbutton", ObjectFactory::Create<Transform>(Vector3(675, -200, -0.16f), Vector3::Zero, Vector3(80, 80, 1)));
+	GetManager().lock()->AddObjectFromCereal("SkipText", ObjectFactory::Create<Transform>(Vector3(780, -200, -0.16f), Vector3::Zero, Vector3(160, 80, 1)));
+}
+
+void ButiEngine::StageManager::StorePlayer()
+{
+	if (!wkp_player.lock())
+	{
+		wkp_player = GetManager().lock()->GetGameObject("Player");
+	}
+}
+
+void ButiEngine::StageManager::StoreFrog()
+{
+	if (!wkp_frog.lock())
+	{
+		wkp_frog = GetManager().lock()->GetGameObject("Frog");
+	}
 }

@@ -32,6 +32,8 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_daikokutenReaction;
 		std::weak_ptr<GameObject> wkp_daikokutenRHand;
 		std::weak_ptr<GameObject> wkp_daikokutenLHand;
+		std::weak_ptr<GameObject> wkp_camera;
+		std::weak_ptr<GameObject> wkp_cameraUI;
 
 		SoundTag se_bigText;
 		SoundTag se_normalText;

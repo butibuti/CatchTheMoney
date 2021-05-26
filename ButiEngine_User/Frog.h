@@ -32,6 +32,7 @@ namespace ButiEngine {
 			grabbed = arg_flag;
 			animation = true;
 		}
+		bool IsAnimation() { return animation; }
 		std::weak_ptr<GameObject> GetSitaSentan() { return wkp_sita_sentan; }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;

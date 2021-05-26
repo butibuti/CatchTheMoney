@@ -299,13 +299,14 @@ void ButiEngine::Frog::Animation()
 	if (!animation) { return; }
 
 	float targetX = gameObject.lock()->transform->GetWorldPosition().x;
+	float speed = GameSettings::blockSize * 50 / 20;
 	float moveX = 0.0f;
 	if (gameObject.lock()->transform->GetWorldScale().x < 0)
 	{
-		moveX = 30.0f;
+		moveX = speed;
 		if (!grabbed)
 		{
-			moveX = -30.0f;
+			moveX = -speed;
 			targetX -= GameSettings::blockSize * 50;
 			if (targetX < -GameSettings::windowWidth * 0.5f)
 			{
@@ -315,10 +316,10 @@ void ButiEngine::Frog::Animation()
 	}
 	else if(gameObject.lock()->transform->GetWorldScale().x > 0)
 	{
-		moveX = -30.0f;
+		moveX = -speed;
 		if (!grabbed)
 		{
-			moveX = 30.0f;
+			moveX = speed;
 			targetX += GameSettings::blockSize * 50;
 			if (targetX > GameSettings::windowWidth * 0.5f)
 			{
@@ -330,9 +331,11 @@ void ButiEngine::Frog::Animation()
 	wkp_sita_sentan.lock()->transform->SetWorldPostionX(x);
 
 	Vector3 pos = wkp_sita_sentan.lock()->transform->GetWorldPosition();
-	if (abs(pos.x - targetX) < 30.0f)
+	if (abs(pos.x - targetX) < speed)
 	{
 		wkp_sita_sentan.lock()->transform->SetWorldPostionX(targetX);
 		animation = false;
 	}
+
+	wkp_sita_tyuukan.lock()->GetGameComponent<SitaTyuukan>()->Move();
 }
