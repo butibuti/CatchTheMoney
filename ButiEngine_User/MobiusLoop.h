@@ -42,6 +42,8 @@ namespace ButiEngine {
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB_right;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB_left;
 
+		float initScaleX;
+
 		void SetPosition();
 	};
 

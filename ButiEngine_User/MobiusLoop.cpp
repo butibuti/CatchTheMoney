@@ -25,11 +25,11 @@ void ButiEngine::MobiusLoop::Start()
 	{
 		meshDraw = gameObject.lock()->GetGameComponent<MeshDrawComponent_Static>();
 	}
-	float scaleX = gameObject.lock()->transform->GetWorldScale().x;
+	initScaleX = gameObject.lock()->transform->GetWorldScale().x;
 
 	wkp_right = GetManager().lock()->AddObject(std::make_shared<Transform>(), name + "_Right");
 	wkp_right.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-	localPosition.x = GameSettings::windowWidth / scaleX;
+	localPosition.x = GameSettings::windowWidth / initScaleX;
 	wkp_right.lock()->transform->SetLocalPosition(localPosition);
 	wkp_right.lock()->SetGameObjectTag(tag);
 	if (meshDraw)
@@ -43,7 +43,7 @@ void ButiEngine::MobiusLoop::Start()
 
 	wkp_left = GetManager().lock()->AddObject(std::make_shared<Transform>(), name + "_Left");
 	wkp_left.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
-	localPosition.x = -GameSettings::windowWidth / scaleX;
+	localPosition.x = -GameSettings::windowWidth / initScaleX;
 	wkp_left.lock()->transform->SetLocalPosition(localPosition);
 	wkp_left.lock()->SetGameObjectTag(tag);
 	if (meshDraw)
@@ -71,6 +71,15 @@ void ButiEngine::MobiusLoop::OnCollision(std::weak_ptr<GameObject> arg_other)
 
 void ButiEngine::MobiusLoop::OnShowUI()
 {
+	auto right = wkp_right;
+	auto left = wkp_left;
+	if (gameObject.lock()->transform->GetWorldScale().x < 0 != initScaleX < 0)
+	{
+		right = wkp_left;
+		left = wkp_right;
+	}
+	GUI::Text("Right:%f", right.lock()->transform->GetWorldPosition().x);
+	GUI::Text("Left:%f", left.lock()->transform->GetWorldPosition().x);
 }
 
 void ButiEngine::MobiusLoop::ShowGUI()
@@ -93,7 +102,7 @@ void ButiEngine::MobiusLoop::SwitchPosition()
 	float x = gameObject.lock()->transform->GetWorldPosition().x;
 	auto right = wkp_right;
 	auto left = wkp_left;
-	if (gameObject.lock()->transform->GetWorldScale().x < 0)
+	if (gameObject.lock()->transform->GetWorldScale().x < 0 != initScaleX < 0)
 	{
 		right = wkp_left;
 		left = wkp_right;
