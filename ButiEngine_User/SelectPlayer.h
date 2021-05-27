@@ -13,7 +13,8 @@ namespace ButiEngine {
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
-		void IsDecision();
+		void Decision();
+		void Away();
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)
@@ -27,6 +28,7 @@ namespace ButiEngine {
 		int animationFrame;
 		int animationTime;
 		bool isDecision;
+		bool isAway;
 		Vector3 position;
 
 		void DecisionAnimation();

@@ -4,6 +4,11 @@
 
 void ButiEngine::SelectPlayer::OnUpdate()
 {
+	if (isAway)
+	{
+		gameObject.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
+		return;
+	}
 	if (isDecision)
 	{
 		DecisionAnimation();
@@ -41,10 +46,15 @@ void ButiEngine::SelectPlayer::Start()
 	shp_spriteAnimation->SetHorizontalAnim(0);
 }
 
-void ButiEngine::SelectPlayer::IsDecision()
+void ButiEngine::SelectPlayer::Decision()
 {
 	isDecision = true;
 	shp_spriteAnimation->SetHorizontalAnim(1);
+}
+
+void ButiEngine::SelectPlayer::Away()
+{
+	isAway = true;
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::SelectPlayer::Clone()
@@ -67,7 +77,7 @@ void ButiEngine::SelectPlayer::DecisionAnimation()
 	}
 	else if (animationTime == 50)
 	{
-		position = Vector3(300, -120, 0);
+		position = Vector3(100, 400, 0);
 		gameObject.lock()->transform->SetLocalScale(Vector3(80, 80, 1));
 		gameObject.lock()->transform->SetLocalRotation(Vector3(-180, 0, -180));
 	}

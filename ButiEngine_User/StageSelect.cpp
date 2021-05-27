@@ -227,7 +227,7 @@ void ButiEngine::StageSelect::DecisionAnimation()
 
 	if (animationFrame == 89)
 	{
-		wkp_animationPlayer.lock()->GetGameComponent<SelectPlayer>()->IsDecision();
+		wkp_animationPlayer.lock()->GetGameComponent<SelectPlayer>()->Decision();
 	}
 	else if (animationFrame == 60)
 	{
@@ -239,6 +239,11 @@ void ButiEngine::StageSelect::DecisionAnimation()
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_hit, GameSettings::masterVolume);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_dash, GameSettings::masterVolume);
+	}
+	else if (animationFrame == 30)
+	{
+		wkp_animationPlayer.lock()->GetGameComponent<SelectPlayer>()->Away();
+
 	}
 
 	if (animationFrame <= 0)
