@@ -108,8 +108,9 @@ void ButiEngine::StageSelect::Start()
 
 	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
 	se_select = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Select-Click.wav");
-	bgm = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/BGM.wav");
+	bgm = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/BGM2.wav");
 	GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
+	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, GameSettings::masterVolume + 0.5f);
 	auto screen = GetManager().lock()->GetGameObject("SelectScreen").lock();
 	std::string materialSource = "StageSelect_";
 	if (stageNum < 10)
