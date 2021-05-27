@@ -237,13 +237,13 @@ void ButiEngine::StageSelect::DecisionAnimation()
 	}
 	else if (animationFrame == 40)
 	{
+		GetManager().lock()->AddObjectFromCereal("SelectFlash");
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_hit, GameSettings::masterVolume);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_dash, GameSettings::masterVolume);
 	}
-	else if (animationFrame == 30)
+	else if (animationFrame == 35)
 	{
 		wkp_animationPlayer.lock()->GetGameComponent<SelectPlayer>()->Away();
-
 	}
 
 	if (animationFrame <= 0)
