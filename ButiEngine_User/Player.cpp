@@ -26,6 +26,12 @@ void ButiEngine::Player::OnUpdate()
 		return;
 	}
 
+	if (wkp_holdSita.lock())
+	{
+		FollowSita();
+		return;
+	}
+
 	if (!GameSettings::isTitle)
 	{
 		Control();
@@ -54,6 +60,7 @@ void ButiEngine::Player::Start()
 	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 10.0f), gameObject.lock()->transform);
 
 	velocity = Vector3::Zero;
+	sitaDifference = Vector3::Zero;
 	grounded = true;
 	gravity = -GameSettings::gravity;
 	pushGrabKeyFrame = false;
@@ -609,6 +616,11 @@ void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
 void ButiEngine::Player::OnCollisionFrog(std::weak_ptr<GameObject> arg_frog)
 {
 	if (!grounded) { return; }
+	if (wkp_holdSita.lock())
+	{
+		isClear = true;
+		return;
+	}
 
 	int closestPanelNum = gameObject.lock()->GetGameComponent<FollowPanel>()
 		->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
@@ -627,7 +639,7 @@ void ButiEngine::Player::OnCollisionFrog(std::weak_ptr<GameObject> arg_frog)
 
 void ButiEngine::Player::OnCollisionSita(std::weak_ptr<GameObject> arg_sita)
 {
-	if (!grounded || velocity.y != 0) { return; }
+	if (!grounded || velocity.y != 0 || wkp_holdSita.lock()) { return; }
 	hitSita = true;
 	if (InputManager::OnTriggerGrabKey())
 	{
@@ -639,7 +651,19 @@ void ButiEngine::Player::GrabSita(std::weak_ptr<GameObject> arg_sita)
 {
 	if (!wkp_holdFrog.lock() && !wkp_holdCore.lock() && !pushGrabKeyFrame)
 	{
-		isClear = true;
+		wkp_holdSita = arg_sita;
+		sitaDifference = wkp_holdSita.lock()->transform->GetWorldPosition() - gameObject.lock()->transform->GetWorldPosition();
 		gameObject.lock()->transform->SetWorldPostionZ(GameSettings::frogZ + 0.05f);
+		GetManager().lock()->GetGameObject("Frog").lock()->GetGameComponent<Frog>()->PlayAnimation();
+		hitSita = false;
 	}
+}
+
+void ButiEngine::Player::FollowSita()
+{
+	Vector3 targetPos = wkp_holdSita.lock()->transform->GetWorldPosition() - sitaDifference;
+	gameObject.lock()->transform->SetWorldPostionX(targetPos.x);
+	gameObject.lock()->transform->SetWorldPostionY(targetPos.y);
+	shp_AABB->Update();
+	shp_bottomAABB->Update();
 }

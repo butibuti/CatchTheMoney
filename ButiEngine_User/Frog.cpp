@@ -55,7 +55,7 @@ void ButiEngine::Frog::Start()
 	velocity = Vector3::Zero;
 	grounded = false;
 	nearPlayer = false;
-	progress = 1.0f;
+	progress = 0;
 	once = true;
 }
 
@@ -135,17 +135,14 @@ void ButiEngine::Frog::CheckGravity()
 		scale.y *= -1;
 		gameObject.lock()->transform->SetLocalScale(scale);
 	}
-	else if (abs(gravity) > abs(previousGravity))
-	{
-	}
 }
 
 void ButiEngine::Frog::CheckNearPlayer()
 {
-	if (!wkp_target.lock() || nearPlayer) { return; }
+	if (!wkp_player.lock() || nearPlayer) { return; }
 
 	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
-	Vector3 playerPos = wkp_target.lock()->transform->GetWorldPosition();
+	Vector3 playerPos = wkp_player.lock()->transform->GetWorldPosition();
 
 	if (position.x < 0 == playerPos.x < 0)
 	{
@@ -242,16 +239,16 @@ void ButiEngine::Frog::Interlock()
 
 void ButiEngine::Frog::StorePlayer()
 {
-	if (!wkp_target.lock())
+	if (!wkp_player.lock())
 	{
-		wkp_target = GetManager().lock()->GetGameObject("Player");
+		wkp_player = GetManager().lock()->GetGameObject("Player");
 	}
 }
 
 void ButiEngine::Frog::CheckHitPlayer()
 {
-	if (!wkp_target.lock()) { return; }
-	auto player = wkp_target.lock()->GetGameComponent<Player>();
+	if (!wkp_player.lock()) { return; }
+	auto player = wkp_player.lock()->GetGameComponent<Player>();
 	auto playerAABB = player->GetAABB();
 
 	player->ResetHitFrog();
@@ -265,9 +262,9 @@ void ButiEngine::Frog::FollowPlayer()
 {
 	if (!grabbed) { return; }
 
-	Vector3 playerPos = wkp_target.lock()->transform->GetWorldPosition();
+	Vector3 playerPos = wkp_player.lock()->transform->GetWorldPosition();
 	Vector3 targetPos = gameObject.lock()->transform->GetWorldPosition();
-	float playerGravity = wkp_target.lock()->GetGameComponent<Player>()->GetGravity();
+	float playerGravity = wkp_player.lock()->GetGameComponent<Player>()->GetGravity();
 	float difference = 16.0f;
 
 	if (playerGravity > 0)
@@ -279,7 +276,7 @@ void ButiEngine::Frog::FollowPlayer()
 	gameObject.lock()->transform->SetWorldPostionY(targetPos.y);
 
 	Vector3 scale = gameObject.lock()->transform->GetLocalScale();
-	Vector3 playerScale = wkp_target.lock()->transform->GetLocalScale();
+	Vector3 playerScale = wkp_player.lock()->transform->GetLocalScale();
 
 	if (playerScale.x < 0 != scale.x < 0)
 	{
@@ -292,13 +289,17 @@ void ButiEngine::Frog::Animation()
 {
 	if (!animation) { return; }
 
+	const int ANIMATION_FRAME = 200;
+
+	auto playerHoldSita = wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita();
 	float targetX = gameObject.lock()->transform->GetWorldPosition().x;
-	float speed = GameSettings::blockSize * 50 / 20;
+	float speed = GameSettings::blockSize * 50 / ANIMATION_FRAME;
+	progress++;
 	float moveX = 0.0f;
 	if (gameObject.lock()->transform->GetWorldScale().x < 0)
 	{
 		moveX = speed;
-		if (!grabbed)
+		if (!grabbed && !playerHoldSita.lock())
 		{
 			moveX = -speed;
 			targetX -= GameSettings::blockSize * 50;
@@ -311,7 +312,7 @@ void ButiEngine::Frog::Animation()
 	else if(gameObject.lock()->transform->GetWorldScale().x > 0)
 	{
 		moveX = -speed;
-		if (!grabbed)
+		if (!grabbed && !playerHoldSita.lock())
 		{
 			moveX = speed;
 			targetX += GameSettings::blockSize * 50;

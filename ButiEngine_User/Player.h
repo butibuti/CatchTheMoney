@@ -33,6 +33,7 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> GetHoldCore() { return wkp_holdCore; }
 		std::weak_ptr<GameObject> GetHoldFrog() { return wkp_holdFrog; }
 		std::weak_ptr<GameObject> GetHoldGoal() { return wkp_holdGoal; }
+		std::weak_ptr<GameObject> GetHoldSita() { return wkp_holdSita; }
 		std::weak_ptr<GameObject> GetPredictionLine() { return wkp_predictionLine; }
 		bool IsHitCore() { return hitCore; }
 		bool IsHitFrog() { return hitFrog; }
@@ -57,6 +58,7 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_holdCore;
 		std::weak_ptr<GameObject> wkp_holdFrog;
 		std::weak_ptr<GameObject> wkp_holdGoal;
+		std::weak_ptr<GameObject> wkp_holdSita;
 
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
 
@@ -85,6 +87,7 @@ namespace ButiEngine {
 		Animation animation;
 
 		Vector3 velocity;
+		Vector3 sitaDifference;
 
 		int freezeProgressFrame;
 		int animationFrame;
@@ -117,6 +120,7 @@ namespace ButiEngine {
 		void GrabSita(std::weak_ptr<GameObject> arg_sita);
 		void Animation();
 		void CorrectionFrog(std::weak_ptr<GameObject> arg_frog);
+		void FollowSita();
 
 		void OnCollisionGoal(std::weak_ptr<GameObject> arg_goal);
 		void OnCollisionCore(std::weak_ptr<GameObject> arg_core);

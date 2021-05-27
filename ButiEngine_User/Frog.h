@@ -30,7 +30,12 @@ namespace ButiEngine {
 		void SetGrabbed(bool arg_flag)
 		{
 			grabbed = arg_flag;
-			animation = true;
+			PlayAnimation();
+		}
+		void PlayAnimation() 
+		{
+			animation = true; 
+			progress = 0;
 		}
 		bool IsAnimation() { return animation; }
 		std::weak_ptr<GameObject> GetSitaSentan() { return wkp_sita_sentan; }
@@ -43,7 +48,7 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_sita_tyuukan;
 		std::weak_ptr<GameObject> wkp_sita_sentan;
 		std::weak_ptr<GameObject> wkp_bottom;
-		std::weak_ptr<GameObject> wkp_target;
+		std::weak_ptr<GameObject> wkp_player;
 
 		Vector3 velocity;
 		float gravity;
@@ -51,7 +56,7 @@ namespace ButiEngine {
 		bool nearPlayer;
 		bool grabbed;
 		bool animation;
-		float progress;
+		int progress;
 		bool once;
 
 		void CreateSita();

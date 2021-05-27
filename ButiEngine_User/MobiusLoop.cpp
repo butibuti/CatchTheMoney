@@ -2,6 +2,7 @@
 #include "MobiusLoop.h"
 #include"GameSettings.h"
 #include"PauseManager.h"
+#include"Player.h"
 
 void ButiEngine::MobiusLoop::OnUpdate()
 {
@@ -95,6 +96,11 @@ void ButiEngine::MobiusLoop::SwitchPosition()
 {
 	if (StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "PredictionLine") || 
 		StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "Sita_tyuukan"))
+	{
+		return;
+	}
+	if (gameObject.lock()->GetGameObjectName() == "Player" &&
+		gameObject.lock()->GetGameComponent<Player>()->GetHoldSita().lock())
 	{
 		return;
 	}
