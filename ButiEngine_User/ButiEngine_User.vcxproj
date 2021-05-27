@@ -201,6 +201,7 @@
     <ClCompile Include="ReverseText.cpp" />
     <ClCompile Include="SceneChangeAnimation.cpp" />
     <ClCompile Include="ScrollManager.cpp" />
+    <ClCompile Include="SelectFlash.cpp" />
     <ClCompile Include="SelectPanel.cpp" />
     <ClCompile Include="SelectPlayer.cpp" />
     <ClCompile Include="SelectScreen.cpp" />
@@ -258,6 +259,7 @@
     <ClInclude Include="ReverseText.h" />
     <ClInclude Include="SceneChangeAnimation.h" />
     <ClInclude Include="ScrollManager.h" />
+    <ClInclude Include="SelectFlash.h" />
     <ClInclude Include="SelectPanel.h" />
     <ClInclude Include="SelectPlayer.h" />
     <ClInclude Include="SelectScreen.h" />

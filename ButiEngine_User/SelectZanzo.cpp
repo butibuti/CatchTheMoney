@@ -3,19 +3,23 @@
 
 void ButiEngine::SelectZanzo::OnUpdate()
 {
-	if (animationCount == 5)
+	const Vector3 AWAY_POS = Vector3(650, -5000, 0.02f);
+	const int START_FRAME = 2;
+	const int DASH_FRAME = 20;
+	const int DEAD_FRAME = 22;
+	if (animationCount == START_FRAME)
 	{
-		gameObject.lock()->transform->SetLocalPosition(Vector3(650, -5000, 0.02f));
+		gameObject.lock()->transform->SetLocalPosition(AWAY_POS);
 	}
-	else if (animationCount == 20)
+	else if (animationCount == DASH_FRAME)
 	{
-		gameObject.lock()->transform->SetLocalPosition(Vector3(650, -130, 0.02f));
-		gameObject.lock()->transform->SetLocalScale(Vector3(640, 80, 1));
+		gameObject.lock()->transform->SetLocalPosition(Vector3(500, 400, 0.02f));
+		gameObject.lock()->transform->SetLocalScale(Vector3(960, 80, 1));
 		gameObject.lock()->transform->SetLocalRotation(Vector3(-180, 0, -180));
 	}
-	else if (animationCount == 25)
+	else if (animationCount == DEAD_FRAME)
 	{
-		gameObject.lock()->transform->SetLocalPosition(Vector3(650, -5000, 0.02f));
+		gameObject.lock()->transform->SetLocalPosition(AWAY_POS);
 	}
 	animationCount++;
 }

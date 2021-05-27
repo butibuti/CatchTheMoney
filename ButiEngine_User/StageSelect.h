@@ -44,6 +44,9 @@ namespace ButiEngine {
 		SoundTag bgm;
 		SoundTag se_enter;
 		SoundTag se_select;
+		SoundTag se_dash;
+		SoundTag se_hit;
+		SoundTag se_start;
 
 		Vector3 preParentRotation;
 		float childAngle;

@@ -4,17 +4,15 @@ namespace ButiEngine {
 
 	class SpliteAnimationComponent;
 
-	class SelectPlayer :public GameComponent
+	class SelectFlash :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "SelectPlayer";
+			return "SelectFlash";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
-		void Decision();
-		void Away();
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)
@@ -23,17 +21,13 @@ namespace ButiEngine {
 		}
 	private:
 		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
-
-		float velocityX;
+		int life;
 		int animationFrame;
-		int animationTime;
-		bool isDecision;
-		bool isAway;
-		Vector3 position;
-
-		void DecisionAnimation();
+		int awayCount;
+		bool awayFlag;
+		Vector3 initPosition;
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(SelectPlayer);
+BUTI_REGIST_GAMECOMPONENT(SelectFlash);
