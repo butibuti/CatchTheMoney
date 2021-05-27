@@ -6,6 +6,7 @@
 #include"Panel.h"
 #include"PauseManager.h"
 #include"StageManager.h"
+#include"MobiusLoop.h"
 
 void ButiEngine::BackDraw::OnUpdate()
 {
@@ -25,6 +26,7 @@ void ButiEngine::BackDraw::Start()
 	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
 	Vector3 clonePosition = Vector3::Zero;
 	Vector3 scale = gameObject.lock()->transform->GetWorldScale();
+	scale.y *= -1;
 	Matrix4x4 rotation = gameObject.lock()->transform->GetWorldRotation();
 	auto tag = GetTagManager()->GetObjectTag("MapChip");
 	auto meshDraw = gameObject.lock()->GetGameComponent<MeshDrawComponent>();
@@ -39,8 +41,6 @@ void ButiEngine::BackDraw::Start()
 	clonePosition.z = position.z;
 	wkp_right.lock()->transform->SetWorldPosition(clonePosition);
 	wkp_right.lock()->transform->SetLocalScale(scale);
-	wkp_right.lock()->transform->SetWorldRotation(rotation);
-	wkp_right.lock()->transform->RollLocalRotationX_Degrees(180.0f);
 	wkp_right.lock()->SetGameObjectTag(tag);
 	if (meshDraw)
 	{
@@ -52,8 +52,6 @@ void ButiEngine::BackDraw::Start()
 	clonePosition.x = position.x - GameSettings::windowWidth * 0.5f;
 	wkp_left.lock()->transform->SetWorldPosition(clonePosition);
 	wkp_left.lock()->transform->SetLocalScale(scale);
-	wkp_left.lock()->transform->SetWorldRotation(rotation);
-	wkp_left.lock()->transform->RollLocalRotationX_Degrees(180.0f);
 	wkp_left.lock()->SetGameObjectTag(tag);
 	if (meshDraw)
 	{
@@ -63,6 +61,15 @@ void ButiEngine::BackDraw::Start()
 	if (effectUpdater) {
 		wkp_right.lock()->AddGameComponent(effectUpdater->Clone());
 		wkp_left.lock()->AddGameComponent(effectUpdater->Clone());
+	}
+
+	if (name == "PredictionLine")
+	{
+		auto rloop = wkp_right.lock()->AddGameComponent<MobiusLoop>();
+		auto lLoop = wkp_left.lock()->AddGameComponent<MobiusLoop>();
+
+		rloop->Start();
+		lLoop->Start();
 	}
 
 }
@@ -96,6 +103,7 @@ void ButiEngine::BackDraw::Correction()
 	Vector3 clonePosition = Vector3::Zero;
 	Vector3 scale = gameObject.lock()->transform->GetWorldScale();
 	Matrix4x4 rotation = gameObject.lock()->transform->GetWorldRotation();
+	scale.y *= -1;
 	clonePosition.x = position.x + GameSettings::windowWidth * 0.5f;
 	clonePosition.y = -position.y;
 	clonePosition.z = position.z;

@@ -54,6 +54,7 @@
     <ClCompile Include="Daikokuten.cpp" />
     <ClCompile Include="LogoSceneManager.cpp" />
     <ClCompile Include="ParentDaikokuten.cpp" />
+    <ClCompile Include="AnimationPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
@@ -107,5 +108,6 @@
     <ClInclude Include="Daikokuten.h" />
     <ClInclude Include="LogoSceneManager.h" />
     <ClInclude Include="ParentDaikokuten.h" />
+    <ClInclude Include="AnimationPlayer.h" />
   </ItemGroup>
 </Project>

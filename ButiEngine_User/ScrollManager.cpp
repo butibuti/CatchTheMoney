@@ -11,7 +11,7 @@
 
 void ButiEngine::ScrollManager::OnUpdate()
 {
-
+	
 	if (!wkp_target.lock())
 	{
 		wkp_target = GetManager().lock()->GetGameObject(targetName);
