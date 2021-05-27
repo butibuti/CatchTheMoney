@@ -16,7 +16,6 @@
 #include"FollowPanel.h"
 #include"Panel.h"
 #include"ClearButton.h"
-#include"ControlUI.h"
 #include"TalkText.h"
 #include"Daikokuten.h"
 #include"ParentDaikokuten.h"
@@ -41,7 +40,6 @@ void ButiEngine::StageManager::OnUpdate()
 	{
 		if (clearAnimationFrame >= CLEAR_FRAME)
 		{
-			GetManager().lock()->GetGameObject("Control2").lock()->GetGameComponent<ControlUI>()->Stop();
 			if (!wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita().lock())
 			{
 				GetManager().lock()->AddObjectFromCereal("ClearFlash", ObjectFactory::Create<Transform>(Vector3(0.0f, 0.0f, 1000.0f)));
