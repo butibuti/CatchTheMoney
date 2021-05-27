@@ -59,7 +59,7 @@ void ButiEngine::SitaTyuukan::Move()
 	Vector3 pos = Vector3::Zero;
 	pos.x = (frogPos.x + sentanPos.x) * 0.5f;
 	pos.y = frogPos.y;
-	pos.z = sentanPos.z + 0.01f;
+	pos.z = sentanPos.z + 0.1f;
 	gameObject.lock()->transform->SetWorldPosition(pos);
 
 	Vector3 scale = Vector3::Zero;

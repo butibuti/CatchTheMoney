@@ -13,6 +13,7 @@
 #include "Header/GameObjects/DefaultGameComponent/PositionAnimationComponent.h"
 #include"StageManager.h"
 #include"Frog.h"
+#include"SitaSentan.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -593,5 +594,5 @@ void ButiEngine::Player::OnCollisionSita(std::weak_ptr<GameObject> arg_sita)
 {
 	if (wkp_holdFrog.lock() || !grounded || velocity.y != 0) { return; }
 	isClear = true;
-	gameObject.lock()->transform->SetWorldPostionZ(GameSettings::frameZ + 0.1f);
+	gameObject.lock()->transform->SetWorldPostionZ(GameSettings::frogZ + 0.05f);
 }

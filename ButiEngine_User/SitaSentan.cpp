@@ -34,7 +34,7 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::SitaSentan::Clone()
 
 void ButiEngine::SitaSentan::SetZ()
 {
-	gameObject.lock()->transform->SetWorldPostionZ(wkp_frog.lock()->transform->GetWorldPosition().z + 0.01f);
+	gameObject.lock()->transform->SetWorldPostionZ(wkp_frog.lock()->transform->GetWorldPosition().z + 0.1f);
 }
 
 void ButiEngine::SitaSentan::SetX()

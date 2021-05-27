@@ -57,7 +57,6 @@ namespace ButiEngine {
 		void CreateSita();
 		void CheckGravity();
 		void CheckNearPlayer();
-		void SetZ();
 		void MoveY();
 		void BackY();
 		void Interlock();

@@ -19,7 +19,6 @@ void ButiEngine::Frog::OnUpdate()
 		once = false;
 	}
 	Interlock();
-	SetZ();
 	if (shp_pauseManager->IsPause() ||
 		StageManager::GetMode() == GameMode::Edit ||
 		!TalkText::IsDelete())
@@ -105,7 +104,7 @@ void ButiEngine::Frog::CreateSita()
 	{
 		sentanPosition.x += sitaLength;
 	}
-	sentanPosition.z += 0.01f;
+	sentanPosition.z += 0.1f;
 	wkp_sita_sentan.lock()->transform->SetWorldPosition(sentanPosition);
 }
 
@@ -153,11 +152,6 @@ void ButiEngine::Frog::CheckNearPlayer()
 		nearPlayer = true;
 		wkp_backFrog.lock()->GetGameComponent<Frog>()->SetNearPlayer(false);
 	}
-}
-
-void ButiEngine::Frog::SetZ()
-{
-
 }
 
 void ButiEngine::Frog::MoveY()
