@@ -67,6 +67,8 @@ void ButiEngine::Player::Start()
 	jumpInputFrame = 0;
 	hitCore = false;
 	hitFrog = false;
+	hitGoal = false;
+	hitSita = false;
 
 	if (!GameSettings::isTitle)
 	{
@@ -283,6 +285,8 @@ void ButiEngine::Player::Move()
 	OnJump();
 	hitCore = false;
 	hitFrog = false;
+	hitGoal = false;
+	hitSita = false;
 
 	if (abs(velocity.x) > abs(velocity.y))
 	{
@@ -486,17 +490,36 @@ void ButiEngine::Player::CorrectionFrog(std::weak_ptr<GameObject> arg_frog)
 	anim->SetEaseType(Easing::EasingType::Liner);
 }
 
+void ButiEngine::Player::GrabGoal(std::weak_ptr<GameObject> arg_goal)
+{
+	if (!wkp_holdCore.lock() && !wkp_holdFrog.lock() && !pushGrabKeyFrame)
+	{
+		Vector3 playerPos = gameObject.lock()->transform->GetWorldPosition();
+		Vector3 targetPos = arg_goal.lock()->transform->GetWorldPosition();
+		float difference = 16.0f;
+
+		if (gravity > 0)
+		{
+			difference *= -1;
+		}
+
+		targetPos.x = playerPos.x;
+		targetPos.y = playerPos.y + difference;
+		arg_goal.lock()->transform->SetWorldPostionX(targetPos.x);
+		arg_goal.lock()->transform->SetWorldPostionY(targetPos.y);
+
+		wkp_holdGoal = arg_goal;
+
+		isClear = true;
+	}
+}
+
 void ButiEngine::Player::GrabGravityCore(std::weak_ptr<GameObject> arg_core)
 {
 	if (!wkp_holdCore.lock() && !wkp_holdFrog.lock() && !pushGrabKeyFrame)
 	{
 		//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, 0.1f);
-		int closestPanelNum = gameObject.lock()->GetGameComponent<FollowPanel>()
-			->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
-		int coreClosestPanelNum = arg_core.lock()->GetGameComponent<FollowPanel>()
-			->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
 
-		if (closestPanelNum != coreClosestPanelNum) { return; }
 		wkp_holdCore = arg_core;
 		wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(true);
 	}
@@ -521,13 +544,6 @@ void ButiEngine::Player::GrabFrog(std::weak_ptr<GameObject> arg_frog)
 {
 	if (!wkp_holdFrog.lock() && !wkp_holdCore.lock() && !pushGrabKeyFrame)
 	{
-		//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, 0.1f);
-		int closestPanelNum = gameObject.lock()->GetGameComponent<FollowPanel>()
-			->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
-		int frogClosestPanelNum = arg_frog.lock()->GetGameComponent<FollowPanel>()
-			->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
-
-		if (closestPanelNum != frogClosestPanelNum) { return; }
 		wkp_holdFrog = arg_frog;
 		auto frog = wkp_holdFrog.lock()->GetGameComponent<Frog>();
 		frog->SetGrabbed(true);
@@ -562,17 +578,29 @@ void ButiEngine::Player::ReleaseFrog()
 
 void ButiEngine::Player::OnCollisionGoal(std::weak_ptr<GameObject> arg_goal)
 {
-	if (!grounded) { return; }
-	isClear = true;
+	if (!grounded || velocity.y != 0) { return; }
+	hitGoal = true;
+	if (InputManager::OnTriggerGrabKey())
+	{
+		GrabGoal(arg_goal);
+	}
 }
 
 void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
 {
-	if (grounded)
+	if (!grounded) { return; }
+
+	int closestPanelNum = gameObject.lock()->GetGameComponent<FollowPanel>()
+		->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
+	int coreClosestPanelNum = arg_core.lock()->GetGameComponent<FollowPanel>()
+		->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
+
+	if (closestPanelNum == coreClosestPanelNum)
 	{
 		hitCore = true;
 	}
-	if (InputManager::OnTriggerGrabKey() && grounded)
+
+	if (InputManager::OnTriggerGrabKey() && hitCore)
 	{
 		GrabGravityCore(arg_core);
 	}
@@ -580,11 +608,18 @@ void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
 
 void ButiEngine::Player::OnCollisionFrog(std::weak_ptr<GameObject> arg_frog)
 {
-	if (grounded)
+	if (!grounded) { return; }
+
+	int closestPanelNum = gameObject.lock()->GetGameComponent<FollowPanel>()
+		->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
+	int frogClosestPanelNum = arg_frog.lock()->GetGameComponent<FollowPanel>()
+		->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
+
+	if (closestPanelNum == frogClosestPanelNum)
 	{
 		hitFrog = true;
 	}
-	if (InputManager::OnTriggerGrabKey() && grounded)
+	if (InputManager::OnTriggerGrabKey() && hitFrog)
 	{
 		GrabFrog(arg_frog);
 	}
@@ -592,7 +627,19 @@ void ButiEngine::Player::OnCollisionFrog(std::weak_ptr<GameObject> arg_frog)
 
 void ButiEngine::Player::OnCollisionSita(std::weak_ptr<GameObject> arg_sita)
 {
-	if (wkp_holdFrog.lock() || !grounded || velocity.y != 0) { return; }
-	isClear = true;
-	gameObject.lock()->transform->SetWorldPostionZ(GameSettings::frogZ + 0.05f);
+	if (!grounded || velocity.y != 0) { return; }
+	hitSita = true;
+	if (InputManager::OnTriggerGrabKey())
+	{
+		GrabSita(arg_sita);
+	}
+}
+
+void ButiEngine::Player::GrabSita(std::weak_ptr<GameObject> arg_sita)
+{
+	if (!wkp_holdFrog.lock() && !wkp_holdCore.lock() && !pushGrabKeyFrame)
+	{
+		isClear = true;
+		gameObject.lock()->transform->SetWorldPostionZ(GameSettings::frogZ + 0.05f);
+	}
 }

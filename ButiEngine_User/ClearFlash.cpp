@@ -1,9 +1,11 @@
 #include "stdafx_u.h"
 #include "ClearFlash.h"
 #include"Header/GameObjects/DefaultGameComponent/ScaleAnimationComponent.h"
+#include"Player.h"
 
 void ButiEngine::ClearFlash::OnUpdate()
 {
+	StorePlayer();
 	auto transform = gameObject.lock()->transform;
 	if (blinkingCount > 40)
 	{
@@ -47,7 +49,7 @@ void ButiEngine::ClearFlash::ClearScaleAnimation()
 	if (isOnce) return;
 	isOnce = true;
 
-	auto goal = GetManager().lock()->GetGameObject("Goal");
+	auto goal = wkp_player.lock()->GetGameComponent<Player>()->GetHoldGoal();
 	if (!goal.lock())
 	{
 		goal = GetManager().lock()->GetGameObject("Frog");
@@ -65,5 +67,13 @@ void ButiEngine::ClearFlash::ClearScaleAnimation()
 		anim->SetTargetScale(Vector3(50.0f, 50.0f, 0.0f));
 		anim->SetSpeed(0.06f);
 		anim->SetEaseType(Easing::EasingType::EaseOutExpo);
+	}
+}
+
+void ButiEngine::ClearFlash::StorePlayer()
+{
+	if (!wkp_player.lock())
+	{
+		wkp_player = GetManager().lock()->GetGameObject("Player");
 	}
 }

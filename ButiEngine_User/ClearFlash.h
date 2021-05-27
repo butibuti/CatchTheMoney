@@ -18,12 +18,15 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 	private:
+		std::weak_ptr<GameObject> wkp_player;
+
 		bool isOnce;
 		int blinkingCount;
 		Vector3 initPos;
 		Vector3 awayPos;
 
 		void ClearScaleAnimation();
+		void StorePlayer();
 	};
 
 }

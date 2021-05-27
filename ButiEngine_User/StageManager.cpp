@@ -389,10 +389,7 @@ void ButiEngine::StageManager::CreateUI()
 	shp_buttonNext = wkp_buttonNext.lock()->GetGameComponent<ClearButton>();
 	shp_buttonSelect = wkp_buttonSelect.lock()->GetGameComponent<ClearButton>();
 
-	if (stageNum >= 7)
-	{
-		wkp_grab = GetManager().lock()->AddObjectFromCereal("BTextWindow");
-	}
+	wkp_grab = GetManager().lock()->AddObjectFromCereal("BTextWindow");
 }
 
 void ButiEngine::StageManager::ChangeUIAlpha()
