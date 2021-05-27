@@ -15,7 +15,7 @@ namespace ButiEngine {
 		}
 
 		void OnSet()override;
-		std::shared_ptr<ModelDrawData> GetModelData();
+		virtual std::shared_ptr<ModelDrawData> GetModelData();
 		std::shared_ptr<GameComponent> Clone()override;
 		std::shared_ptr<IBoneObject> GetBone();
 		void OnShowUI()override;
@@ -38,8 +38,8 @@ namespace ButiEngine {
 	protected:
 		std::shared_ptr<IBoneObject> shp_bone;
 		void CreateData()override;
-	private:
 		std::shared_ptr<ModelDrawData> shp_modelData;
+	private:
 	};
 
 }

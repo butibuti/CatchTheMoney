@@ -6,3 +6,4 @@
 #include"Header/GameObjects/DefaultGameComponent/ModelDrawComponent.h"
 #include"Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
 #include"Header/GameObjects/DefaultGameComponent/SimpleBoneAnimator.Component.h"
+#include"Header/GameObjects/DefaultGameComponent/OutlineDrawComponent.h"

@@ -475,8 +475,8 @@ namespace ButiEngine {
 			archive(shp_drawInfo);
 		}
 	protected:
-		void ShowDrawSettingsUI();
-		void ShowExCBufferUI();
+		void ShowDrawSettingsUI(std::shared_ptr< DrawInformation >shp_arg_drawInfo=nullptr,const std::string& arg_settingsName="");
+		void ShowExCBufferUI(std::shared_ptr< DrawInformation >shp_arg_drawInfo = nullptr, const std::string& arg_settingsName = "");
 		std::shared_ptr< MeshDrawData > data;
 		virtual void CreateData();
 		MeshTag meshTag;

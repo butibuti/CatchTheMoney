@@ -173,6 +173,30 @@ namespace ButiEngine {
 		std::shared_ptr<Collision::CollisionPrimitive> GetPrimitive() override;
 		unsigned int* GetOctRegistPtr() override;
 	};
+	struct DualDrawData :public MeshDrawData{
+		void Initialize()override;
+		void PreInitialize() override;
+		void Draw()override;
+		void DrawBefore() override;
+		float GetZ()override;
+		void SetInfo() override;
+		void SetInfo_WithoutCommand() override;
+		void BufferUpdate() override;
+		void CommandSet() override;
+		void CommandExecute() override;
+		void SetTransform(std::shared_ptr<Transform>& arg_transform)override;
+		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> GetMeshAABB() override;
+		std::shared_ptr<Collision::CollisionPrimitive_Box_OBB> GetMeshOBB() override;
+		void SetPrimitive(std::shared_ptr<Collision::CollisionPrimitive>arg_prim) override;
+		void SetOctRegistPtr(unsigned int* arg_ptr) override;
+		std::shared_ptr<Collision::CollisionPrimitive> GetPrimitive() override;
+		unsigned int* GetOctRegistPtr() override;
+
+		std::shared_ptr<MeshDrawData> shp_befDrawObj;
+		std::shared_ptr<MeshDrawData> shp_afterDrawObj;
+	};
+
+
 	struct ModelDrawData
 	{
 		std::shared_ptr<IBoneObject> shp_bone;

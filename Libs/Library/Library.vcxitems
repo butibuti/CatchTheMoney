@@ -15,6 +15,7 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\TeamProject\CatchTheMoney\Libs\Library\Header\DirectXMathUse.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\ApplicationCreater.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\Common.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\Common\ButiMath.h" />
@@ -53,6 +54,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\RandomMaker.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\ResourceFileCreater.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\Device\Timer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\OutlineDrawComponent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\PositionAnimationComponent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\RotationAnimationComponent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\ScaleAnimationComponent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\SpliteAnimationComponent.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\DefaultGameComponent.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\MeshDrawComponent.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\MeshDrawComponent_Static.h" />
@@ -60,6 +66,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\Particle_3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\Particle_Standard.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\ShadowComponent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\SimpleBoneAnimator.Component.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\GameComponent.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\GameObject.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\GameObjectTagManager.h" />
@@ -157,12 +164,17 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\MeshDrawComponent.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\MeshDrawComponent_Static.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\ModelDrawComponent.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\OutlineDrawComponent.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\Particle_3D.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\Particle_Standard.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\PositionAnimationComponent.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\PostEffectParamUpdater.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\RotationAnimationComponent.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\ScaleAnimationComponent.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\ShadowComponent.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\SimpleBoneAnimanotorComponent.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\SplineCurveMover.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\SpliteAnimationComponent.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\SucideComponent.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\TransformAnimation.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\UIAnimation.cpp" />
