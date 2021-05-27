@@ -52,7 +52,7 @@ void ButiEngine::ParentDaikokuten::Start()
 void ButiEngine::ParentDaikokuten::TalkAppear()
 {
 	gameObject.lock()->transform->SetLocalPostionZ(-1500);
-	currentPos.y = -1800;
+	currentPos.y = -1750;
 }
 
 void ButiEngine::ParentDaikokuten::Appear()
@@ -149,7 +149,7 @@ void ButiEngine::ParentDaikokuten::ReactionUpdate()
 	float speed = 0;
 	if (isReactionScale)
 	{
-		movePos = -100;
+		movePos = -80;
 		speed = 0.05f;
 	}
 	else

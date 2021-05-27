@@ -108,6 +108,9 @@ void ButiEngine::StageSelect::Start()
 
 	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
 	se_select = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Select-Click.wav");
+	se_dash = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Rat_Dash.wav");
+	se_hit = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Rat_Hit.wav");
+	se_start = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Rat_Start.wav");
 	bgm = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/BGM2.wav");
 	GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
 	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, GameSettings::masterVolume + 0.5f);
@@ -228,7 +231,14 @@ void ButiEngine::StageSelect::DecisionAnimation()
 	}
 	else if (animationFrame == 60)
 	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_dash, GameSettings::masterVolume);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_start, GameSettings::masterVolume);
 		GetManager().lock()->AddObjectFromCereal("SelectZanzo");
+	}
+	else if (animationFrame == 40)
+	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_hit, GameSettings::masterVolume);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_dash, GameSettings::masterVolume);
 	}
 
 	if (animationFrame <= 0)

@@ -73,7 +73,7 @@ namespace ButiEngine {
 		SoundTag se_dash;
 		SoundTag se_grab;
 		SoundTag se_jump;
-		SoundTag se_orosu;
+		SoundTag se_put;
 		SoundTag se_land;
 		SoundTag se_reverse;
 		SoundTag se_powerUp;

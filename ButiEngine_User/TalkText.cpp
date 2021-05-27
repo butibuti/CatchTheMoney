@@ -28,11 +28,11 @@ void ButiEngine::TalkText::OnUpdate()
 
 	if (shp_pauseManager->IsPause()) { return; }
 
-	const int ONCE_FRAME = 20;
+	const int ONCE_FRAME = 24;
 	if (onceFrame == ONCE_FRAME)
 	{
-		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 30);
-		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 30);
+		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(10, 60);
+		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(10, 60);
 		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(true);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
 		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 30);

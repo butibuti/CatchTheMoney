@@ -87,7 +87,7 @@ void ButiEngine::Player::Start()
 	se_dash = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Dash.wav");
 	se_grab = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Grab.wav");
 	se_jump = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Jump.wav");
-	se_orosu = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Orosu.wav");
+	se_put = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Put.wav");
 	se_land = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Land.wav");
 	se_reverse = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/GravityReverse.wav");
 	se_powerUp = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/GravityPowerUp.wav");
@@ -156,7 +156,7 @@ void ButiEngine::Player::Control()
 			{
 				animation = ButiEngine::Player::WALK;
 			}
-			velocity.x = 3.0f;
+			velocity.x = 2.0f;
 		}
 		else if (InputManager::OnPushLeftKey())
 		{
@@ -164,7 +164,7 @@ void ButiEngine::Player::Control()
 			{
 				animation = ButiEngine::Player::WALK;
 			}
-			velocity.x = -3.0f;
+			velocity.x = -2.0f;
 		}
 		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
 		if (velocity.x != 0 && scale.x > 0 != velocity.x > 0)
@@ -489,7 +489,7 @@ void ButiEngine::Player::GrabGravityCore(std::weak_ptr<GameObject> arg_core)
 {
 	if (!wkp_holdCore.lock() && !wkp_holdFrog.lock() && !pushGrabKeyFrame)
 	{
-		//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, 0.1f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, GameSettings::masterVolume);
 		int closestPanelNum = gameObject.lock()->GetGameComponent<FollowPanel>()
 			->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
 		int coreClosestPanelNum = arg_core.lock()->GetGameComponent<FollowPanel>()
@@ -505,7 +505,7 @@ void ButiEngine::Player::ReleaseGravityCore()
 {
 	if (wkp_holdCore.lock())
 	{
-		//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_orosu, 0.1f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_put, GameSettings::masterVolume / 2.0f);
 		wkp_holdCore.lock()->GetGameComponent<GravityCore>()->SetGrabbed(false);
 		Vector3 corePos = gameObject.lock()->transform->GetWorldPosition();
 		int coreNum = wkp_holdCore.lock()->GetGameComponent<GravityCore>()->GetCoreNum();
@@ -520,7 +520,7 @@ void ButiEngine::Player::GrabFrog(std::weak_ptr<GameObject> arg_frog)
 {
 	if (!wkp_holdFrog.lock() && !wkp_holdCore.lock() && !pushGrabKeyFrame)
 	{
-		//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, 0.1f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, GameSettings::masterVolume);
 		int closestPanelNum = gameObject.lock()->GetGameComponent<FollowPanel>()
 			->GetClosestPanel().lock()->GetGameComponent<Panel>()->GetPanelNum();
 		int frogClosestPanelNum = arg_frog.lock()->GetGameComponent<FollowPanel>()
@@ -547,7 +547,7 @@ void ButiEngine::Player::ReleaseFrog()
 {
 	if (wkp_holdFrog.lock())
 	{
-		//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_orosu, 0.1f);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_put, GameSettings::masterVolume / 2.0f);
 		auto frog = wkp_holdFrog.lock()->GetGameComponent<Frog>();
 		frog->SetGrabbed(false);
 		frog->GetBackFrog().lock()->GetGameComponent<Frog>()->SetGrabbed(false);
