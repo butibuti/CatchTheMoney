@@ -24,6 +24,7 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_fadeObject;
 		std::weak_ptr<GameObject> wkp_titleLogo;
 
+		SoundTag bgm;
 		SoundTag se_enter;
 		SoundTag se_zoomOut;
 

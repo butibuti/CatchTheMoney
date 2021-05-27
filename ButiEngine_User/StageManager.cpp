@@ -203,8 +203,11 @@ void ButiEngine::StageManager::Start()
 	se_select = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Select-Click.wav");
 	se_panelMode = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Panel_Pick.wav");
 	se_charaMode = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Panel_Drop.wav");
+	if (!GameSettings::isTitle)
+	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, GameSettings::masterVolume);
+	}
 
-	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, 0.1f);
 	const int stageNum = StageSelect::GetStageNum();
 	nextSceneName = "Stage" + std::to_string(stageNum + 1);
 
