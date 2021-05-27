@@ -73,7 +73,6 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_daikokutenRAppear;
 		std::weak_ptr<GameObject> wkp_daikokutenLAppear;
 
-
 		SoundTag bgm;
 		SoundTag se_clear;
 		SoundTag se_enter;

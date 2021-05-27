@@ -45,6 +45,7 @@ namespace ButiEngine {
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> GetAABB() { return shp_AABB; }
 
 		void OnCollisionFrog(std::weak_ptr<GameObject> arg_frog);
+		void FollowSita();
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<PanelManager> shp_panelManager;
@@ -120,7 +121,6 @@ namespace ButiEngine {
 		void GrabSita(std::weak_ptr<GameObject> arg_sita);
 		void Animation();
 		void CorrectionFrog(std::weak_ptr<GameObject> arg_frog);
-		void FollowSita();
 
 		void OnCollisionGoal(std::weak_ptr<GameObject> arg_goal);
 		void OnCollisionCore(std::weak_ptr<GameObject> arg_core);

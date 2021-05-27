@@ -42,7 +42,10 @@ void ButiEngine::StageManager::OnUpdate()
 		if (clearAnimationFrame >= CLEAR_FRAME)
 		{
 			GetManager().lock()->GetGameObject("Control2").lock()->GetGameComponent<ControlUI>()->Stop();
-			GetManager().lock()->AddObjectFromCereal("ClearFlash", ObjectFactory::Create<Transform>(Vector3(0.0f,0.0f,1000.0f)));
+			if (!wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita().lock())
+			{
+				GetManager().lock()->AddObjectFromCereal("ClearFlash", ObjectFactory::Create<Transform>(Vector3(0.0f, 0.0f, 1000.0f)));
+			}
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_clear, GameSettings::masterVolume);
 		}
 		else if (clearAnimationFrame == CLEAR_FRAME - 10)
@@ -284,7 +287,7 @@ void ButiEngine::StageManager::OnGoal()
 		StageSelect::SetStageNum(nextStageNum);
 	}
 #ifdef _DEBUG
-	if (GameDevice::GetInput()->TriggerKey(Keys::C))
+	if (GameDevice::GetInput()->TriggerKey(Keys::C) && GameDevice::GetInput()->CheckKey(Keys::LeftCtrl))
 	{
 		StageSelect::SetRemoveStageName("none");
 		shp_map->DestoryBlock();

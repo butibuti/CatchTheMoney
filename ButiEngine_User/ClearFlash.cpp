@@ -52,6 +52,7 @@ void ButiEngine::ClearFlash::ClearScaleAnimation()
 	auto goal = wkp_player.lock()->GetGameComponent<Player>()->GetHoldGoal();
 	if (!goal.lock())
 	{
+		//return;
 		goal = GetManager().lock()->GetGameObject("Frog");
 	}
 	auto goalPosition = goal.lock()->transform->GetWorldPosition();

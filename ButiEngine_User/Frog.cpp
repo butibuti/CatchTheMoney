@@ -289,7 +289,7 @@ void ButiEngine::Frog::Animation()
 {
 	if (!animation) { return; }
 
-	const int ANIMATION_FRAME = 200;
+	const int ANIMATION_FRAME = 30;
 
 	auto playerHoldSita = wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita();
 	float targetX = gameObject.lock()->transform->GetWorldPosition().x;
@@ -333,4 +333,8 @@ void ButiEngine::Frog::Animation()
 	}
 
 	wkp_sita_tyuukan.lock()->GetGameComponent<SitaTyuukan>()->Move();
+	if (wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita().lock())
+	{
+		wkp_player.lock()->GetGameComponent<Player>()->FollowSita();
+	}
 }

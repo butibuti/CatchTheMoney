@@ -20,15 +20,10 @@ void ButiEngine::Player::OnUpdate()
 	if (shp_pauseManager->IsPause() ||
 		StageManager::GetMode() == GameMode::Edit ||
 		isClear ||
-		!TalkText::IsDelete())
+		!TalkText::IsDelete() ||
+		wkp_holdSita.lock())
 	{
 
-		return;
-	}
-
-	if (wkp_holdSita.lock())
-	{
-		FollowSita();
 		return;
 	}
 
