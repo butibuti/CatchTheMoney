@@ -363,6 +363,13 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\ShadowComponent.h">
       <Filter>header\GameObjects\DefaultGameComponent</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\TeamProject\CatchTheMoney\Libs\Library\Header\DirectXMathUse.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\OutlineDrawComponent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\PositionAnimationComponent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\RotationAnimationComponent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\ScaleAnimationComponent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\SpliteAnimationComponent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Header\GameObjects\DefaultGameComponent\SimpleBoneAnimator.Component.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Source\Common\Camera.cpp">
@@ -655,5 +662,10 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\ShadowComponent.cpp">
       <Filter>source\GameObjects\DefaultGameComponent</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\OutlineDrawComponent.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\PositionAnimationComponent.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\RotationAnimationComponent.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\ScaleAnimationComponent.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\GameObjects\DefaultGameComponent\SpliteAnimationComponent.cpp" />
   </ItemGroup>
 </Project>
