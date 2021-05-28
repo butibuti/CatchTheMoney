@@ -24,6 +24,9 @@ namespace ButiEngine {
 	private:
 		std::weak_ptr<GameObject> wkp_frog;
 
+		Vector3 initScale;
+		float progress;
+
 		void SetX();
 	};
 

@@ -44,7 +44,7 @@ namespace ButiEngine {
 
 		float initScaleX;
 
-		void SetPosition();
+		void SetSitaPosition();
 	};
 
 }

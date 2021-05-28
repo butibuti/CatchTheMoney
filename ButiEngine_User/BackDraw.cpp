@@ -107,6 +107,10 @@ void ButiEngine::BackDraw::Correction()
 	clonePosition.x = position.x + GameSettings::windowWidth * 0.5f;
 	clonePosition.y = -position.y;
 	clonePosition.z = position.z;
+	if (StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "PredictionLine"))
+	{
+		clonePosition.z += 0.001f;
+	}
 	wkp_right.lock()->transform->SetWorldPosition(clonePosition);
 	wkp_right.lock()->transform->SetLocalScale(scale);
 	clonePosition.x = position.x - GameSettings::windowWidth * 0.5f;

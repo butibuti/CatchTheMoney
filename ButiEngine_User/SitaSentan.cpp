@@ -18,6 +18,7 @@ void ButiEngine::SitaSentan::OnSet()
 
 void ButiEngine::SitaSentan::Start()
 {
+	initScale = gameObject.lock()->transform->GetWorldScale();
 }
 
 void ButiEngine::SitaSentan::OnShowUI()

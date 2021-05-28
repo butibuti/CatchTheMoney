@@ -6,7 +6,7 @@
 
 void ButiEngine::MobiusLoop::OnUpdate()
 {
-	SetPosition();
+	SetSitaPosition();
 	SwitchPosition();
 }
 
@@ -31,6 +31,10 @@ void ButiEngine::MobiusLoop::Start()
 	wkp_right = GetManager().lock()->AddObject(std::make_shared<Transform>(), name + "_Right");
 	wkp_right.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
 	localPosition.x = GameSettings::windowWidth / initScaleX;
+	if (name == "PredictionLine")
+	{
+		localPosition.z = 0.001f;
+	}
 	wkp_right.lock()->transform->SetLocalPosition(localPosition);
 	wkp_right.lock()->SetGameObjectTag(tag);
 	if (meshDraw)
@@ -256,7 +260,7 @@ void ButiEngine::MobiusLoop::BackYLeft(Vector3& arg_velocity)
 	}
 }
 
-void ButiEngine::MobiusLoop::SetPosition()
+void ButiEngine::MobiusLoop::SetSitaPosition()
 {
 	if (!StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "Sita_tyuukan")) { return; }
 
