@@ -57,6 +57,7 @@ void ButiEngine::StageManager::OnUpdate()
 		clearAnimationFrame--;
 	}
 
+	FrogEatAnimation();
 	OnGoal();
 	ModeChange();
 	ChangeUIAlpha();
@@ -154,24 +155,54 @@ void ButiEngine::StageManager::Start()
 		numComponent->SetNumber(StageSelect::GetStageNum() + 1);
 	}
 
-	if (StageSelect::GetStageNum() == 0 && !GameSettings::isTitle)
 	{
-		wkp_talkText = GetManager().lock()->AddObjectFromCereal("FirstTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
-		CommonTextObject();
-	}
-	else if (StageSelect::GetStageNum() == 3 && !GameSettings::isTitle)
-	{
-		wkp_talkText = GetManager().lock()->AddObjectFromCereal("ReverseTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
-		CommonTextObject();
-	}
-	else if (StageSelect::GetStageNum() == 7 && !GameSettings::isTitle)
-	{
-		wkp_talkText = GetManager().lock()->AddObjectFromCereal("GravityTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
-		CommonTextObject();
-	}
-	else
-	{
-		TalkText::Delete();
+		auto stageNum = StageSelect::GetStageNum();
+		if (stageNum == TalkStageNum::FIRST_TALK && !GameSettings::isTitle)
+		{
+			//最初の会話用テキスト追加
+			wkp_talkText = GetManager().lock()->AddObjectFromCereal("FirstTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+			CommonTextObject();
+		}
+		else if(stageNum == TalkStageNum::PANEL_TALK && !GameSettings::isTitle)
+		{
+			//パネル移動説明用テキスト追加
+			wkp_talkText = GetManager().lock()->AddObjectFromCereal("PanelTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+			CommonTextObject();
+		}
+		else if (stageNum == TalkStageNum::REVERSE_TALK && !GameSettings::isTitle)
+		{
+			//反転説明用テキスト追加
+			wkp_talkText = GetManager().lock()->AddObjectFromCereal("ReverseTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+			CommonTextObject();
+		}
+		else if (stageNum == TalkStageNum::REVERSE_RE_TALK && !GameSettings::isTitle)
+		{
+			//反転再警告用テキスト追加
+			wkp_talkText = GetManager().lock()->AddObjectFromCereal("ReverseRemindTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+			CommonTextObject();
+		}
+		else if (stageNum == TalkStageNum::GRAVITY_TALK && !GameSettings::isTitle)
+		{
+			//重力コア説明用テキスト追加
+			wkp_talkText = GetManager().lock()->AddObjectFromCereal("GravityTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+			CommonTextObject();
+		}
+		else if (stageNum == TalkStageNum::FROG_TALK && !GameSettings::isTitle)
+		{
+			frogEatAnimationCount = 120;
+			TalkText::Revive();
+		}
+		else if (stageNum == TalkStageNum::LAST_TALK && !GameSettings::isTitle)
+		{
+			//最後の会話用テキスト追加
+			wkp_talkText = GetManager().lock()->AddObjectFromCereal("LastTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+			CommonTextObject();
+		}
+		else
+		{
+			//テキスト出さないステージはDelete
+			TalkText::Delete();
+		}
 	}
 
 	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 0, -0.7f), Vector3::Zero, Vector3(1920, 1080, 1)));
@@ -463,6 +494,20 @@ void ButiEngine::StageManager::CommonTextObject()
 	GetManager().lock()->AddObjectFromCereal("Abutton", ObjectFactory::Create<Transform>(Vector3(790, -380, -0.16f), Vector3::Zero, Vector3(180, 180, 1)));
 	GetManager().lock()->AddObjectFromCereal("SkipYbutton", ObjectFactory::Create<Transform>(Vector3(675, -200, -0.16f), Vector3::Zero, Vector3(80, 80, 1)));
 	GetManager().lock()->AddObjectFromCereal("SkipText", ObjectFactory::Create<Transform>(Vector3(780, -200, -0.16f), Vector3::Zero, Vector3(160, 80, 1)));
+}
+
+void ButiEngine::StageManager::FrogEatAnimation()
+{
+	if (StageSelect::GetStageNum() != 13 || frogEatAnimationCount <= 0) return;
+
+	frogEatAnimationCount--;
+
+	if (frogEatAnimationCount == 1)
+	{
+		//カエル説明用テキスト追加
+		wkp_talkText = GetManager().lock()->AddObjectFromCereal("FrogTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+		CommonTextObject();
+	}
 }
 
 void ButiEngine::StageManager::StorePlayer()

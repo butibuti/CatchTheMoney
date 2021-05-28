@@ -84,6 +84,7 @@ namespace ButiEngine {
 
 		int clearAnimationFrame;
 		int fadeCount;
+		int frogEatAnimationCount;
 		bool isNext;
 		bool isOnce;
 		const int CLEAR_FRAME = 90;
@@ -100,6 +101,7 @@ namespace ButiEngine {
 		void ChangeUIAlpha();
 		void ClearButtonUpdate();
 		void CommonTextObject();
+		void FrogEatAnimation();
 		void StorePlayer();
 		void StoreFrog();
 

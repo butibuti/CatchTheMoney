@@ -5,6 +5,17 @@ namespace ButiEngine {
 	class SpliteAnimationComponent;
 	class PauseManager;
 
+	enum TalkStageNum
+	{
+		FIRST_TALK = 0,
+		PANEL_TALK = 1,
+		REVERSE_TALK = 3,
+		REVERSE_RE_TALK = 5,
+		GRAVITY_TALK = 7,
+		FROG_TALK = 13,
+		LAST_TALK = 21,
+	};
+
 	class TalkText :public GameComponent
 	{
 	public:
@@ -14,6 +25,7 @@ namespace ButiEngine {
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
+		void ReTalk();
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)
@@ -23,6 +35,7 @@ namespace ButiEngine {
 
 		static bool IsDelete() { return isDelete; }
 		static void Delete();
+		static void Revive();
 	private:
 		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 		std::shared_ptr<PauseManager> shp_pauseManager;
@@ -41,6 +54,8 @@ namespace ButiEngine {
 		int textCount;
 		int waitTime;
 		int onceFrame;
+		Vector3 initPos;
+
 		static bool isDelete;
 
 		void TextEffect();

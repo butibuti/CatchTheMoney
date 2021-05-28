@@ -18,6 +18,10 @@ void ButiEngine::TalkText::OnUpdate()
 		gameObject.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
 		return;
 	}
+	else
+	{
+		gameObject.lock()->transform->SetLocalPosition(initPos);
+	}
 
 	if (!wkp_camera.lock())
 	{
@@ -31,11 +35,11 @@ void ButiEngine::TalkText::OnUpdate()
 	const int ONCE_FRAME = 24;
 	if (onceFrame == ONCE_FRAME)
 	{
-		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(10, 60);
-		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(10, 60);
+		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 40);
+		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 40);
 		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(true);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
-		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 30);
+		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 40);
 	}
 	if (onceFrame <= ONCE_FRAME)
 	{
@@ -48,6 +52,7 @@ void ButiEngine::TalkText::OnUpdate()
 	{
 		waitTime = 0;
 		textCount++;
+
 		if (textCount < shp_spriteAnimation->GetVarticalSplitScale())
 		{
 			TextEffect();
@@ -97,9 +102,16 @@ void ButiEngine::TalkText::Start()
 	wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
 	wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
 
+	initPos = gameObject.lock()->transform->GetLocalPosition();
+
 	textCount = 0;
 	waitTime = 0;
 	onceFrame = 0;
+	isDelete = false;
+}
+
+void ButiEngine::TalkText::ReTalk()
+{
 	isDelete = false;
 }
 
@@ -113,9 +125,17 @@ void ButiEngine::TalkText::Delete()
 	isDelete = true;
 }
 
+void ButiEngine::TalkText::Revive()
+{
+	isDelete = false;
+}
+
 void ButiEngine::TalkText::TextEffect()
 {
-	if (StageSelect::GetStageNum() == 0)
+	auto stageNum = StageSelect::GetStageNum();
+	if (stageNum == TalkStageNum::FIRST_TALK ||
+		stageNum == TalkStageNum::PANEL_TALK ||
+		stageNum == TalkStageNum::REVERSE_RE_TALK)
 	{
 		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
 		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
@@ -123,7 +143,7 @@ void ButiEngine::TalkText::TextEffect()
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
 		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
 	}
-	else if (StageSelect::GetStageNum() == 3)
+	else if (stageNum == TalkStageNum::REVERSE_TALK)
 	{
 		if (textCount == 4 || textCount == 6)
 		{
@@ -134,15 +154,17 @@ void ButiEngine::TalkText::TextEffect()
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
 		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
 	}
-	else if (StageSelect::GetStageNum() == 7)
+	else if (stageNum == TalkStageNum::GRAVITY_TALK ||
+		     stageNum == TalkStageNum::FROG_TALK)
 	{
-		if (textCount == 0)
-		{
-			wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(false);
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
-			GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
-			return;
-		}
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_normalText, GameSettings::masterVolume);
+	}
+	else if (stageNum == TalkStageNum::LAST_TALK)
+	{
+		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(true);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
+		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
 	}
 }
