@@ -1,20 +1,21 @@
 #include "stdafx_u.h"
 #include "GrabTextWindow.h"
 #include"Player.h"
-
+#include"GameSettings.h"
 void ButiEngine::GrabTextWindow::OnUpdate()
 {
-	const float MAX_SCALE = 240;
+	const float MAX_SCALE = 150;
 	const float MIN_SCALE = 0;
 	StorePlayer();
 	if (wkp_target.lock())
 	{
-		auto player = wkp_target.lock()->GetGameComponent<Player>();
-		bool noGrab = (!player->GetHoldCore().lock() && !player->GetHoldFrog().lock());
-		if (noGrab && player->IsHitCore() ||
-			noGrab && player->IsHitFrog() ||
-			noGrab && player->IsHitGoal() ||
-			noGrab && player->IsHitSita())
+		auto core = shp_player->GetHoldCore().lock();
+		auto frog = shp_player->GetHoldFrog().lock();
+		bool noGrab = (!core && !frog);
+		if (noGrab && shp_player->IsHitCore() ||
+			noGrab && shp_player->IsHitFrog() ||
+			noGrab && shp_player->IsHitGoal() ||
+			noGrab && shp_player->IsHitSita())
 		{
 			//gameObject.lock()->transform->SetWorldPosition(initPos);
 			currentScale = MAX_SCALE;
@@ -25,6 +26,23 @@ void ButiEngine::GrabTextWindow::OnUpdate()
 			currentScale = MIN_SCALE;
 		}
 	}
+
+	auto yRatio= (wkp_target.lock()->transform->GetWorldPosition().y+ GameSettings::windowHeight*0.5f)/(float)GameSettings::windowHeight ;
+
+	yRatio -= 1.0f;
+
+	auto position = MathHelper::GetMobiusPoint(MathHelper::ToRadian(0), yRatio) * 125.0f;
+
+	position *= wkp_screen.lock()->transform->GetMatrix();
+
+	vpMatrix = shp_camera->GetViewProjectionMatrix();
+
+	position *= vpMatrix;
+
+	position.z = 0.0f;
+
+	position.x += 100.0f;
+	gameObject.lock()->transform->SetLocalPosition(position);
 
 	previousScale = previousScale * (1.0f - 0.3f) + currentScale * 0.3f;
 
@@ -44,6 +62,9 @@ void ButiEngine::GrabTextWindow::Start()
 
 	previousScale = 0;
 	currentScale = 0;
+
+	shp_camera = GetCamera("Camera");
+	wkp_screen= GetManager().lock()->GetGameObject("Screen").lock();
 }
 
 void ButiEngine::GrabTextWindow::OnShowUI()
@@ -60,5 +81,6 @@ void ButiEngine::GrabTextWindow::StorePlayer()
 	if (!wkp_target.lock())
 	{
 		wkp_target = GetManager().lock()->GetGameObject("Player");
+		shp_player = wkp_target.lock()->GetGameComponent<Player>();
 	}
 }
