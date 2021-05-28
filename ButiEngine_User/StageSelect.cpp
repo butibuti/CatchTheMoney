@@ -7,10 +7,12 @@
 #include "SelectPlayer.h"
 #include "SceneChangeAnimation.h"
 #include "GameSettings.h"
+#include"PauseManager.h"
 
 int ButiEngine::StageSelect::stageNum = 0;
 int ButiEngine::StageSelect::maxStageNum = 23; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
 std::string ButiEngine::StageSelect::removeStageName = "none";
+bool ButiEngine::StageSelect::isAnimation;
 
 void ButiEngine::StageSelect::OnUpdate()
 {
@@ -19,7 +21,7 @@ void ButiEngine::StageSelect::OnUpdate()
 	auto parentSelectPanel = wkp_parentSelectPanel.lock()->GetGameComponent<ParentSelectPanel>();
 	if (intervalFrame > 20 && !isAnimation)
 	{
-		if (InputManager::OnPushRightKey())
+		if (InputManager::OnPushRightKey() && !shp_pauseManager->IsPause())
 		{
 			intervalFrame = 0;
 			OnPushRight();
@@ -34,7 +36,7 @@ void ButiEngine::StageSelect::OnUpdate()
 			screen->GetGameComponent<MeshDrawComponent>()->SetMaterialTag(MaterialTag(materialSource + std::to_string(stageNum)), 0);
 			screen->GetGameComponent<MeshDrawComponent>()->ReRegist();
 		}
-		else if (InputManager::OnPushLeftKey())
+		else if (InputManager::OnPushLeftKey() && !shp_pauseManager->IsPause())
 		{
 			intervalFrame = 0;
 			OnPushLeft();
@@ -48,7 +50,7 @@ void ButiEngine::StageSelect::OnUpdate()
 			screen->GetGameComponent<MeshDrawComponent>()->SetMaterialTag(MaterialTag(materialSource + std::to_string(stageNum)),0);
 			screen->GetGameComponent<MeshDrawComponent>()->ReRegist();
 		}
-		if (InputManager::OnSkipKey())
+		if (InputManager::OnSkipKey() && !shp_pauseManager->IsPause())
 		{
 			intervalFrame = 0;
 			OnPushSkip();
@@ -81,6 +83,9 @@ void ButiEngine::StageSelect::OnSet()
 
 void ButiEngine::StageSelect::Start()
 {
+	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
+
+	GameSettings::isStageSelect = true;
 	isOnece = false;
 	isAnimation = false;
 	animationFrame = 90;
@@ -203,6 +208,8 @@ void ButiEngine::StageSelect::OnPushSkip()
 
 void ButiEngine::StageSelect::OnDecision()
 {
+	GameSettings::isStageSelect = false;
+	isAnimation = false;
 	auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
 	std::string sceneName = "Stage" + std::to_string(stageNum);
 	sceneManager->RemoveScene(sceneName);
@@ -212,7 +219,7 @@ void ButiEngine::StageSelect::OnDecision()
 
 void ButiEngine::StageSelect::DecisionAnimation()
 {
-	if (InputManager::OnTriggerDecisionKey() && !isAnimation)
+	if (InputManager::OnTriggerDecisionKey() && !isAnimation && !shp_pauseManager->IsPause())
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_enter, GameSettings::masterVolume);
 		isAnimation = true;

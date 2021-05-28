@@ -44,6 +44,7 @@ public:
 	static const float masterVolume;
 
 	static bool isTitle;
+	static bool isStageSelect;
 
 private:
 	GameSettings();

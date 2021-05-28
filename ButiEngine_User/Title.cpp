@@ -5,9 +5,13 @@
 #include "TitleLogo.h"
 #include "GameSettings.h"
 #include "CameraController.h"
+#include"PauseManager.h"
+
+bool ButiEngine::Title::isAnimation;
 
 void ButiEngine::Title::OnUpdate()
 {
+	if (shp_PauseManager->IsPause()) { return; }
 	if (!wkp_camera.lock())
 	{
 		wkp_camera = GetManager().lock()->GetGameObject("Camera");
@@ -48,6 +52,7 @@ void ButiEngine::Title::OnUpdate()
 	if (nextSceneCount > 45)
 	{
 		GameSettings::isTitle = false;
+		isAnimation = false;
 		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
 		sceneManager->LoadScene("StageSelect");
 		sceneManager->ChangeScene("StageSelect");
@@ -62,6 +67,8 @@ void ButiEngine::Title::OnSet()
 
 void ButiEngine::Title::Start()
 {
+	shp_PauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
+
 	GameSettings::isTitle = true;
 	isAnimation = false;
 	nextFlag = false;

@@ -9,12 +9,15 @@
 #include"Header/GameObjects/DefaultGameComponent/ScaleAnimationComponent.h"
 #include"Player.h"
 #include "GameSettings.h"
+#include"GameExitMenu.h"
 
 void ButiEngine::PauseManager::OnUpdate()
 {
 	if (GameSettings::isTitle) { return; }
+	if (GameSettings::isStageSelect) { return; }
+	if (GameExitMenu::IsOpenMenu()) { return; }
 	StorePlayer();
-	if (wkp_target.lock() && wkp_target.lock()->GetGameComponent<Player>()->IsClear()) { return; }
+	if (wkp_player.lock() && wkp_player.lock()->GetGameComponent<Player>()->IsClear()) { return; }
 	if (InputManager::OnTriggerOpenMenuKey() && !pushPauseKey)
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_pick, GameSettings::masterVolume);
@@ -43,11 +46,22 @@ void ButiEngine::PauseManager::OnSet()
 
 void ButiEngine::PauseManager::Start()
 {
-	wkp_text = GetManager().lock()->AddObjectFromCereal("PauseText");
-	wkp_background = GetManager().lock()->AddObjectFromCereal("PauseBackground");
-	wkp_button_back = GetManager().lock()->AddObjectFromCereal("PauseButton_Back");
-	wkp_button_reset = GetManager().lock()->AddObjectFromCereal("PauseButton_Reset");
-	wkp_button_select = GetManager().lock()->AddObjectFromCereal("PauseButton_Select");
+	if (GameSettings::isStageSelect)
+	{
+		wkp_text = GetManager().lock()->AddObjectFromCereal("PauseText_1");
+		wkp_background = GetManager().lock()->AddObjectFromCereal("PauseBackground_1");
+		wkp_button_back = GetManager().lock()->AddObjectFromCereal("PauseButton_Back_1");
+		wkp_button_reset = GetManager().lock()->AddObjectFromCereal("PauseButton_Reset_1");
+		wkp_button_select = GetManager().lock()->AddObjectFromCereal("PauseButton_Select_1");
+	}
+	else
+	{
+		wkp_text = GetManager().lock()->AddObjectFromCereal("PauseText");
+		wkp_background = GetManager().lock()->AddObjectFromCereal("PauseBackground");
+		wkp_button_back = GetManager().lock()->AddObjectFromCereal("PauseButton_Back");
+		wkp_button_reset = GetManager().lock()->AddObjectFromCereal("PauseButton_Reset");
+		wkp_button_select = GetManager().lock()->AddObjectFromCereal("PauseButton_Select");
+	}
 
 	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
 	se_select = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Select-Click.wav");
@@ -286,8 +300,8 @@ void ButiEngine::PauseManager::AddScaleAnimation(std::weak_ptr<GameObject> arg_o
 
 void ButiEngine::PauseManager::StorePlayer()
 {
-	if (!wkp_target.lock())
+	if (!wkp_player.lock())
 	{
-		wkp_target = GetManager().lock()->GetGameObject("Player");
+		wkp_player = GetManager().lock()->GetGameObject("Player");
 	}
 }

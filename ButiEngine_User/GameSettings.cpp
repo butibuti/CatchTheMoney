@@ -17,6 +17,7 @@ const float GameSettings::gravity = 0.4f;
 const float GameSettings::masterVolume = 0.1f;
 
 bool GameSettings::isTitle = true;
+bool GameSettings::isStageSelect = false;
 
 GameSettings::~GameSettings()
 {

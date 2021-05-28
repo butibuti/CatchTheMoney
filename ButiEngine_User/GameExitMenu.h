@@ -2,47 +2,45 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class PauseManager :public GameComponent
+	class PauseManager;
+
+	class GameExitMenu :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "PauseManager";
+			return "GameExitMenu";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
 		void Start()override;
 		void OnShowUI()override;
-		void OnCollision(std::weak_ptr<GameObject> arg_other)override;
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
 			archive(isActive);
 		}
-		void SetPause(bool arg_flag) { pause = arg_flag; }
-		bool IsPause() { return pause; }
+		static bool IsOpenMenu() { return open; }
 	private:
 		const int ANIMATION_FRAME = 20;
-		const int BACK = 0;
-		const int RESET = 1;
-		const int SELECT = 2;
+		const int EXIT_WAIT_FRAME = 60;
+
+		std::shared_ptr<PauseManager> shp_pauseManager;
 
 		std::weak_ptr<GameObject> wkp_player;
 		std::weak_ptr<GameObject> wkp_text;
 		std::weak_ptr<GameObject> wkp_background;
-		std::weak_ptr<GameObject> wkp_button_back;
-		std::weak_ptr<GameObject> wkp_button_reset;
-		std::weak_ptr<GameObject> wkp_button_select;
+		std::weak_ptr<GameObject> wkp_button_no;
+		std::weak_ptr<GameObject> wkp_button_yes;
 
-		bool isNext;
-		bool pause;
-		bool pause_;
+		static bool open;
+		bool open_;
 		bool disappear;
-		bool pushPauseKey;
+		bool pushMenuKey;
 		int progress;
-		int selectedButton;
-		int fadeCount;
-		bool reset;
+		bool selectYesButton;
+		bool exit;
+		int exitProgressFrame;
 
 		Vector3 initTextPos;
 		Vector3 defaultTextPos;
@@ -57,18 +55,16 @@ namespace ButiEngine {
 		void ButtonAnimation();
 		void SelectButton();
 		void OnDecide();
-		void OnDecideBack();
-		void OnDecideReset();
-		void OnDecideSelect();
+		void OnDecideNo();
+		void OnDecideYes();
 		void AppearUI();
 		void DisappearUI();
-		void FadeUpdate();
-		void ChangeScene(const std::string& arg_sceneName);
 		void AddPositionAnimation(std::weak_ptr<GameObject> arg_object, const Vector3& arg_targetPosition, int frame, Easing::EasingType easingType);
 		void AddScaleAnimation(std::weak_ptr<GameObject> arg_object, const Vector3& arg_targetScale, int frame, Easing::EasingType easingType);
 		void StorePlayer();
+		void Exit();
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(PauseManager);
+BUTI_REGIST_GAMECOMPONENT(GameExitMenu);
