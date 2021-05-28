@@ -299,7 +299,7 @@ void ButiEngine::StageManager::OnGoal()
 		if (nextStageNum > StageSelect::GetMaxStage())
 		{
 			StageSelect::SetRemoveStageName("none");
-			std::string sceneName = "StageSelect";
+			std::string sceneName = "ClearScene";
 			ChangeScene(sceneName);
 		}
 		else
