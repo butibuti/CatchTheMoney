@@ -27,7 +27,10 @@ namespace ButiEngine {
 		std::shared_ptr<PauseManager> shp_pauseManager;
 
 		Vector3 initAxis;
+		Vector3 initRotate;
 		Vector3 rotation;
+		Vector3 curRotation;
+		Vector3 preRotation;
 		Vector2 preMousePos;
 		Vector2 currMousePos;
 		const float deadZone = 0.3f;
@@ -37,6 +40,7 @@ namespace ButiEngine {
 		int cameraResetFrame;
 
 		void Control();
+		void Reset();
 	};
 
 }

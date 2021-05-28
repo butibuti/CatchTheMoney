@@ -63,6 +63,11 @@ namespace ButiEngine {
 		void TextEffect();
 		void NormalTalk();
 		void AbnormalTalk();
+		void FrogInterval();
+		bool SetCamera();
+		bool Once();
+		void NextText();
+		void Skip();
 	};
 
 }

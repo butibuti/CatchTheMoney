@@ -13,23 +13,13 @@ bool ButiEngine::TalkText::isDelete = false;
 
 void ButiEngine::TalkText::OnUpdate()
 {
+	//ポーズ中は処理を通さない
 	if (shp_pauseManager->IsPause()) { return; }
 
-	const int MAX_INTERVAL_TIME = 180;
-	if (isInterval && intervalTime <= MAX_INTERVAL_TIME)
-	{
-		intervalTime++;
-	}
-	if (intervalTime == MAX_INTERVAL_TIME)
-	{
-		isDelete = false;
-		shp_spriteAnimation->UpdateVarticalAnim(1);
-		wkp_daikokuten.lock()->GetGameComponent<Daikokuten>()->TalkScale();
-		wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->TalkAppear();
-		wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
-		wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
-	}
+	//カエルの会話後に一定時間経過でもう一度テキストを呼び戻す
+	FrogInterval();
 
+	//画面外に飛ばすか
 	if (isDelete)
 	{
 		gameObject.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
@@ -40,56 +30,17 @@ void ButiEngine::TalkText::OnUpdate()
 		gameObject.lock()->transform->SetLocalPosition(initPos);
 	}
 
-	if (!wkp_camera.lock())
-	{
-		wkp_camera = GetManager().lock()->GetGameObject("Camera");
-		wkp_cameraUI = GetManager().lock()->GetGameObject("UICamera");
-		return;
-	}
+	//カメラをセット
+	if (SetCamera())return;
 
-	const int ONCE_FRAME = 24;
-	if (onceFrame == ONCE_FRAME)
-	{
-		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 40);
-		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 40);
-		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(true);
-		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
-		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 40);
-	}
-	if (onceFrame <= ONCE_FRAME)
-	{
-		onceFrame++;
-		return;
-	}
+	//テキスト生成時に一度だけ行う処理
+	if (Once()) return;
 
-	const int WAIT_FRAME = 12;
-	if (InputManager::OnTriggerDecisionKey() && waitTime > WAIT_FRAME)
-	{
-		waitTime = 0;
-		textCount++;
-		if (StageSelect::GetStageNum() != 13)
-		{
-			NormalTalk();
-		}
-		else
-		{
-			AbnormalTalk();
-		}
-		
-	}
-	if (InputManager::OnTextSkipKey())
-	{
-		isDelete = true;
-		wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
-		wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
-		wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
-	}
-	if(waitTime <= WAIT_FRAME)
-	{
-		waitTime++;
-	}
+	//テキストを進める
+	NextText();
 
-
+	//テキストを飛ばす
+	Skip();
 }
 
 void ButiEngine::TalkText::OnSet()
@@ -147,6 +98,7 @@ void ButiEngine::TalkText::Revive()
 
 void ButiEngine::TalkText::TextEffect()
 {
+	//ステージに応じて会話に付ける演出を変える
 	auto stageNum = StageSelect::GetStageNum();
 	if (stageNum == TalkStageNum::FIRST_TALK ||
 		stageNum == TalkStageNum::PANEL_TALK ||
@@ -186,6 +138,7 @@ void ButiEngine::TalkText::TextEffect()
 
 void ButiEngine::TalkText::NormalTalk()
 {
+	//通常時の会話
 	if (textCount < shp_spriteAnimation->GetVarticalSplitScale())
 	{
 		TextEffect();
@@ -202,6 +155,7 @@ void ButiEngine::TalkText::NormalTalk()
 
 void ButiEngine::TalkText::AbnormalTalk()
 {
+	//カエル説明時の例外処理
 	if (!isInterval)
 	{
 		if (textCount < shp_spriteAnimation->GetVarticalSplitScale() - 1)
@@ -228,4 +182,89 @@ void ButiEngine::TalkText::AbnormalTalk()
 		wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
 	}
 
+}
+
+void ButiEngine::TalkText::FrogInterval()
+{
+	//再び現れるまでの時間
+	const int MAX_INTERVAL_TIME = 120;
+
+	if (isInterval && intervalTime <= MAX_INTERVAL_TIME)
+	{
+		intervalTime++;
+	}
+	if (intervalTime == MAX_INTERVAL_TIME)
+	{
+		isDelete = false;
+		shp_spriteAnimation->UpdateVarticalAnim(1);
+		wkp_daikokuten.lock()->GetGameComponent<Daikokuten>()->TalkScale();
+		wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->TalkAppear();
+		wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
+		wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
+	}
+}
+
+bool ButiEngine::TalkText::SetCamera()
+{
+	if (!wkp_camera.lock())
+	{
+		wkp_camera = GetManager().lock()->GetGameObject("Camera");
+		wkp_cameraUI = GetManager().lock()->GetGameObject("UICamera");
+		return true;
+	}
+	return false;
+}
+
+bool ButiEngine::TalkText::Once()
+{
+	//少し遅らせる
+	const int ONCE_FRAME = 24;
+	if (onceFrame == ONCE_FRAME)
+	{
+		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 40);
+		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 40);
+		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(true);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
+		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 40);
+	}
+	if (onceFrame <= ONCE_FRAME)
+	{
+		onceFrame++;
+		return true;
+	}
+	return false;
+}
+
+void ButiEngine::TalkText::NextText()
+{
+	const int WAIT_FRAME = 12;
+	if (InputManager::OnTriggerDecisionKey() && waitTime > WAIT_FRAME)
+	{
+		waitTime = 0;
+		textCount++;
+		if (StageSelect::GetStageNum() != 13)
+		{
+			NormalTalk();
+		}
+		else
+		{
+			AbnormalTalk();
+		}
+
+	}
+	if (waitTime <= WAIT_FRAME)
+	{
+		waitTime++;
+	}
+}
+
+void ButiEngine::TalkText::Skip()
+{
+	if (InputManager::OnTextSkipKey())
+	{
+		isDelete = true;
+		wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+		wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+		wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+	}
 }
