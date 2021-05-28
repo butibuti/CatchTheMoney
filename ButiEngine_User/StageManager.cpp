@@ -73,8 +73,6 @@ void ButiEngine::StageManager::OnUpdate()
 
 	if (shp_markedBlockAnimationtimer->Update()) {
 		shp_markedBlockAnimationtimer->Reset();
-
-
 		markedAnimationParam->Get().worldAnimationParam.x += 0.5f;
 
 		if (markedAnimationParam->Get().worldAnimationParam.x >= 1.0f) {

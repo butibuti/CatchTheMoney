@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="AbuttonAnimation.cpp" />
     <ClCompile Include="BackDraw.cpp" />
+    <ClCompile Include="BackGroundMobius.cpp" />
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="ChildNumber.cpp" />
     <ClCompile Include="ClearBand.cpp" />
@@ -225,6 +226,7 @@
   <ItemGroup>
     <ClInclude Include="AbuttonAnimation.h" />
     <ClInclude Include="BackDraw.h" />
+    <ClInclude Include="BackGroundMobius.h" />
     <ClInclude Include="ChildNumber.h" />
     <ClInclude Include="ClearBand.h" />
     <ClInclude Include="ClearButton.h" />
