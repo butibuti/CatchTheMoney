@@ -54,11 +54,15 @@ namespace ButiEngine {
 		int textCount;
 		int waitTime;
 		int onceFrame;
+		int intervalTime;
+		bool isInterval;
 		Vector3 initPos;
 
 		static bool isDelete;
 
 		void TextEffect();
+		void NormalTalk();
+		void AbnormalTalk();
 	};
 
 }

@@ -13,6 +13,23 @@ bool ButiEngine::TalkText::isDelete = false;
 
 void ButiEngine::TalkText::OnUpdate()
 {
+	if (shp_pauseManager->IsPause()) { return; }
+
+	const int MAX_INTERVAL_TIME = 180;
+	if (isInterval && intervalTime <= MAX_INTERVAL_TIME)
+	{
+		intervalTime++;
+	}
+	if (intervalTime == MAX_INTERVAL_TIME)
+	{
+		isDelete = false;
+		shp_spriteAnimation->UpdateVarticalAnim(1);
+		wkp_daikokuten.lock()->GetGameComponent<Daikokuten>()->TalkScale();
+		wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->TalkAppear();
+		wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
+		wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
+	}
+
 	if (isDelete)
 	{
 		gameObject.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
@@ -29,8 +46,6 @@ void ButiEngine::TalkText::OnUpdate()
 		wkp_cameraUI = GetManager().lock()->GetGameObject("UICamera");
 		return;
 	}
-
-	if (shp_pauseManager->IsPause()) { return; }
 
 	const int ONCE_FRAME = 24;
 	if (onceFrame == ONCE_FRAME)
@@ -52,19 +67,15 @@ void ButiEngine::TalkText::OnUpdate()
 	{
 		waitTime = 0;
 		textCount++;
-
-		if (textCount < shp_spriteAnimation->GetVarticalSplitScale())
+		if (StageSelect::GetStageNum() != 13)
 		{
-			TextEffect();
-			shp_spriteAnimation->UpdateVarticalAnim(1);
+			NormalTalk();
 		}
 		else
 		{
-			isDelete = true;
-			wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
-			wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
-			wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+			AbnormalTalk();
 		}
+		
 	}
 	if (InputManager::OnTextSkipKey())
 	{
@@ -77,6 +88,8 @@ void ButiEngine::TalkText::OnUpdate()
 	{
 		waitTime++;
 	}
+
+
 }
 
 void ButiEngine::TalkText::OnSet()
@@ -107,7 +120,9 @@ void ButiEngine::TalkText::Start()
 	textCount = 0;
 	waitTime = 0;
 	onceFrame = 0;
+	intervalTime = 0;
 	isDelete = false;
+	isInterval = false;
 }
 
 void ButiEngine::TalkText::ReTalk()
@@ -167,4 +182,50 @@ void ButiEngine::TalkText::TextEffect()
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
 		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
 	}
+}
+
+void ButiEngine::TalkText::NormalTalk()
+{
+	if (textCount < shp_spriteAnimation->GetVarticalSplitScale())
+	{
+		TextEffect();
+		shp_spriteAnimation->UpdateVarticalAnim(1);
+	}
+	else
+	{
+		isDelete = true;
+		wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+		wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+		wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+	}
+}
+
+void ButiEngine::TalkText::AbnormalTalk()
+{
+	if (!isInterval)
+	{
+		if (textCount < shp_spriteAnimation->GetVarticalSplitScale() - 1)
+		{
+			TextEffect();
+			shp_spriteAnimation->UpdateVarticalAnim(1);
+		}
+		else
+		{
+			isInterval = true;
+			isDelete = true;
+			TextEffect();
+			wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+			wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+			wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+		}
+	}
+	else
+	{
+		isDelete = true;
+		TextEffect();
+		wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+		wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+		wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+	}
+
 }
