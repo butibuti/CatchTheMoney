@@ -1,6 +1,7 @@
 #include "stdafx_u.h"
 #include "GrabTextWindow.h"
 #include"Player.h"
+#include"StageManager.h"
 
 void ButiEngine::GrabTextWindow::OnUpdate()
 {
@@ -11,10 +12,11 @@ void ButiEngine::GrabTextWindow::OnUpdate()
 	{
 		auto player = wkp_target.lock()->GetGameComponent<Player>();
 		bool noGrab = (!player->GetHoldCore().lock() && !player->GetHoldFrog().lock());
-		if (noGrab && player->IsHitCore() ||
+		if (StageManager::GetMode() == GameMode::Chara &&
+			(noGrab && player->IsHitCore() ||
 			noGrab && player->IsHitFrog() ||
 			noGrab && player->IsHitGoal() ||
-			noGrab && player->IsHitSita())
+			noGrab && player->IsHitSita()))
 		{
 			//gameObject.lock()->transform->SetWorldPosition(initPos);
 			currentScale = MAX_SCALE;
