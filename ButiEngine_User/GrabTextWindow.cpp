@@ -13,11 +13,13 @@ void ButiEngine::GrabTextWindow::OnUpdate()
 	{
 		auto core = shp_player->GetHoldCore().lock();
 		auto frog = shp_player->GetHoldFrog().lock();
-		bool noGrab = (!core && !frog);
-		if (noGrab && shp_player->IsHitCore() ||
+		auto goal = shp_player->GetHoldGoal().lock();
+		bool noGrab = (!core && !frog&&!goal);
+		if (StageManager::GetMode()==GameMode::Chara&&(
+			noGrab && shp_player->IsHitCore() ||
 			noGrab && shp_player->IsHitFrog() ||
 			noGrab && shp_player->IsHitGoal() ||
-			noGrab && shp_player->IsHitSita())
+			noGrab && shp_player->IsHitSita()))
 		{
 			//gameObject.lock()->transform->SetWorldPosition(initPos);
 			currentScale = MAX_SCALE;
