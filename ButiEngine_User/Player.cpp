@@ -518,7 +518,7 @@ void ButiEngine::Player::GrabGoal(std::weak_ptr<GameObject> arg_goal)
 
 void ButiEngine::Player::GrabGravityCore(std::weak_ptr<GameObject> arg_core)
 {
-	if (!wkp_holdCore.lock() && !wkp_holdFrog.lock() && !pushGrabKeyFrame)
+	if (!wkp_holdCore.lock() && !wkp_holdFrog.lock() && !wkp_holdSita.lock() && !pushGrabKeyFrame)
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, GameSettings::masterVolume);
 
