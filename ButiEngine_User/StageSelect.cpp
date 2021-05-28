@@ -9,7 +9,7 @@
 #include "GameSettings.h"
 
 int ButiEngine::StageSelect::stageNum = 0;
-int ButiEngine::StageSelect::maxStageNum = 23; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
+int ButiEngine::StageSelect::maxStageNum = 21; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
 std::string ButiEngine::StageSelect::removeStageName = "none";
 
 void ButiEngine::StageSelect::OnUpdate()
