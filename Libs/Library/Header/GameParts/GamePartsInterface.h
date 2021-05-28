@@ -424,9 +424,9 @@ namespace ButiEngine
 		virtual void Draw() = 0;
 		virtual void EditCameraUpdate() = 0;
 		virtual void ActiveCollision(const UINT arg_layerCount) = 0;
-		virtual std::weak_ptr<ICamera> GetCamera(const std::string& arg_camName) = 0;
-		virtual std::weak_ptr<ICamera> GetCamera(const UINT arg_camNum = 0) = 0;
-		virtual std::weak_ptr<ICamera> AddCamera(CameraProjProperty& arg_prop, const std::string& arg_cameraName, const bool arg_initActive) = 0;
+		virtual std::shared_ptr<ICamera> GetCamera(const std::string& arg_camName) = 0;
+		virtual std::shared_ptr<ICamera> GetCamera(const UINT arg_camNum = 0) = 0;
+		virtual std::shared_ptr<ICamera> AddCamera(CameraProjProperty& arg_prop, const std::string& arg_cameraName, const bool arg_initActive) = 0;
 		virtual std::weak_ptr<ICollisionManager> GetCollisionManager() = 0;
 		virtual void RemoveCamera(const std::string& arg_camName) = 0;
 		virtual void RemoveCamera(const UINT arg_camNum) = 0;

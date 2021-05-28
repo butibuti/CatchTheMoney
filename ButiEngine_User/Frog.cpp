@@ -15,7 +15,7 @@ void ButiEngine::Frog::OnUpdate()
 	StorePlayer();
 	if (once)
 	{
-		gameObject.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
+		//gameObject.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
 		once = false;
 	}
 	Interlock();

@@ -386,7 +386,7 @@ void ButiEngine::StageManager::ModeChange()
 			shp_cameraController->ZoomIn();
 
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_charaMode, GameSettings::masterVolume * 3.0f);
-		
+
 			wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
 			wkp_daikokutenRAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
 			wkp_daikokutenLAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();

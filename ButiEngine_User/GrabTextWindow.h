@@ -1,7 +1,7 @@
 #pragma once
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
-
+	class Player;
 	class GrabTextWindow :public GameComponent
 	{
 	public:
@@ -21,11 +21,18 @@ namespace ButiEngine {
 	private:
 		std::weak_ptr<GameObject> wkp_target;
 		std::weak_ptr<GameObject> wkp_b;
-
+		std::shared_ptr<Player> shp_player;
+		
+		std::shared_ptr<ICamera> shp_camera;
+		std::weak_ptr<GameObject> wkp_screen;
 		float currentScale;
 		float previousScale;
 
+		Vector3 grabObjectPos;
+
 		Vector3 initPos;
+		Matrix4x4 vpMatrix;
+		
 
 		void StorePlayer();
 	};
