@@ -93,7 +93,7 @@ void ButiEngine::Frog::CreateSita()
 	wkp_sita_sentan.lock()->GetGameComponent<SitaSentan>()->SetFrog(gameObject);
 
 	wkp_sita_sentan.lock()->transform->SetBaseTransform(nullptr);
-	wkp_sita_sentan.lock()->transform->SetLocalScale(Vector3(24.0f, 24.0f, 1));
+	wkp_sita_sentan.lock()->transform->SetLocalScale(Vector3(16.0f, 16.0f, 1));
 	float sitaLength = GameSettings::blockSize * 50;
 	Vector3 sentanPosition = gameObject.lock()->transform->GetWorldPosition();
 	if (gameObject.lock()->transform->GetWorldScale().x < 0)

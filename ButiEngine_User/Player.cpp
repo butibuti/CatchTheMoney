@@ -518,7 +518,7 @@ void ButiEngine::Player::GrabGoal(std::weak_ptr<GameObject> arg_goal)
 
 void ButiEngine::Player::GrabGravityCore(std::weak_ptr<GameObject> arg_core)
 {
-	if (!wkp_holdCore.lock() && !wkp_holdFrog.lock() && !pushGrabKeyFrame)
+	if (!wkp_holdCore.lock() && !wkp_holdFrog.lock() && !wkp_holdSita.lock() && !pushGrabKeyFrame)
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, GameSettings::masterVolume);
 
@@ -650,7 +650,9 @@ void ButiEngine::Player::GrabSita(std::weak_ptr<GameObject> arg_sita)
 		wkp_holdSita = arg_sita;
 		sitaDifference = wkp_holdSita.lock()->transform->GetWorldPosition() - gameObject.lock()->transform->GetWorldPosition();
 		gameObject.lock()->transform->SetWorldPostionZ(GameSettings::frogZ + 0.05f);
-		GetManager().lock()->GetGameObject("Frog").lock()->GetGameComponent<Frog>()->PlayAnimation();
+		auto frog = GetManager().lock()->GetGameObject("Frog").lock()->GetGameComponent<Frog>();
+		frog->PlayAnimation();
+		frog->GetBackFrog().lock()->GetGameComponent<Frog>()->PlayAnimation();
 		hitSita = false;
 	}
 }
