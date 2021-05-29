@@ -65,6 +65,32 @@ void ButiEngine::CameraController::ZoomOut()
     }
 }
 
+void ButiEngine::CameraController::FrogZoomIn()
+{
+    auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
+    if (!anim)
+    {
+        anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+        anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+        anim->GetTargetTransform()->SetWorldPosition(Vector3(200, 100, -500));
+        anim->SetSpeed(1.0f / 40.0f);
+        anim->SetEaseType(Easing::EasingType::EaseOutQuart);
+    }
+}
+
+void ButiEngine::CameraController::FrogZoomOut()
+{
+    auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
+    if (!anim)
+    {
+        anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+        anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+        anim->GetTargetTransform()->SetWorldPosition(Vector3(0, 0, initCameraZ));
+        anim->SetSpeed(1.0f / 40.0f);
+        anim->SetEaseType(Easing::EasingType::EaseOutQuart);
+    }
+}
+
 void ButiEngine::CameraController::TitleZoomOut()
 {
     auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();

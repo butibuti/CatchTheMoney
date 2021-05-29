@@ -2,11 +2,11 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class CameraController :public GameComponent
+	class BackgroundFrame :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "CameraController";
+			return "BackgroundFrame";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -18,23 +18,16 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
-		bool IsAnimation() { return animation; }
-
-		void ZoomIn();
-		void ZoomOut();
-		void FrogZoomIn();
-		void FrogZoomOut();
-		void TitleZoomOut();
 	private:
-		float zoomInFrame;
-		float zoomOutFrame;
-		float titleZoomOutFrame;
-		float moveLength;
-		float initCameraZ;
-
-		bool animation;
+		float velocityX;
+		float addAngle;
+		
+		void SetVelocityRandom();
+		void Move();
+		void Loop();
+		void Rotation();
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(CameraController);
+BUTI_REGIST_GAMECOMPONENT(BackgroundFrame);

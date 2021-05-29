@@ -44,6 +44,10 @@ void ButiEngine::StageManager::OnUpdate()
 			{
 				GetManager().lock()->AddObjectFromCereal("ClearFlash", ObjectFactory::Create<Transform>(Vector3(0.0f, 0.0f, 1000.0f)));
 			}
+			else
+			{
+				wkp_frog.lock()->GetGameComponent<Frog>()->Exprosion();
+			}
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_clear, GameSettings::masterVolume);
 		}
 		else if (clearAnimationFrame == CLEAR_FRAME - 10)
@@ -180,7 +184,7 @@ void ButiEngine::StageManager::Start()
 		}
 		else if (stageNum == TalkStageNum::FROG_TALK && !GameSettings::isTitle)
 		{
-			frogEatAnimationCount = 120;
+			frogEatAnimationCount = 240;
 			TalkText::Revive();
 		}
 		else if (stageNum == TalkStageNum::LAST_TALK && !GameSettings::isTitle)
@@ -487,9 +491,18 @@ void ButiEngine::StageManager::CommonTextObject()
 
 void ButiEngine::StageManager::FrogEatAnimation()
 {
-	if (StageSelect::GetStageNum() != 13 || frogEatAnimationCount <= 0) return;
+	if (StageSelect::GetStageNum() != TalkStageNum::FROG_TALK || frogEatAnimationCount <= 0) return;
 
 	frogEatAnimationCount--;
+	const int ZOOM_IN_START = 230;
+	if (frogEatAnimationCount == ZOOM_IN_START)
+	{
+		shp_cameraController->FrogZoomIn();
+	}
+	else if (frogEatAnimationCount == ZOOM_IN_START - 160)
+	{
+		shp_cameraController->FrogZoomOut();
+	}
 
 	if (frogEatAnimationCount == 1)
 	{

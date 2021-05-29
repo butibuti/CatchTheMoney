@@ -161,7 +161,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AbuttonAnimation.cpp" />
+    <ClCompile Include="AngelFrog.cpp" />
     <ClCompile Include="BackDraw.cpp" />
+    <ClCompile Include="BackgroundFrame.cpp" />
     <ClCompile Include="BackGroundMobius.cpp" />
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="ChildNumber.cpp" />
@@ -226,7 +228,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbuttonAnimation.h" />
+    <ClInclude Include="AngelFrog.h" />
     <ClInclude Include="BackDraw.h" />
+    <ClInclude Include="BackgroundFrame.h" />
     <ClInclude Include="BackGroundMobius.h" />
     <ClInclude Include="ChildNumber.h" />
     <ClInclude Include="ClearBand.h" />
