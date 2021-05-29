@@ -91,9 +91,9 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::BackDraw::Clone()
 
 void ButiEngine::BackDraw::StorePlayer()
 {
-	if (!wkp_target.lock())
+	if (!wkp_player.lock())
 	{
-		wkp_target = GetManager().lock()->GetGameObject("Player");
+		wkp_player = GetManager().lock()->GetGameObject("Player");
 	}
 }
 
@@ -132,9 +132,9 @@ void ButiEngine::BackDraw::SwitchGravityCore(bool arg_scroll)
 	{
 		return;
 	}
-	if (wkp_target.lock())
+	if (wkp_player.lock())
 	{
-		float playerX = wkp_target.lock()->transform->GetWorldPosition().x;
+		float playerX = wkp_player.lock()->transform->GetWorldPosition().x;
 		float rightX = wkp_right.lock()->transform->GetWorldPosition().x;
 		float leftX = wkp_left.lock()->transform->GetWorldPosition().x;
 		Vector3 scale = gameObject.lock()->transform->GetLocalScale();

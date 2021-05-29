@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class PauseManager;
+
 	class StageSelect :public GameComponent
 	{
 	public:
@@ -25,6 +27,7 @@ namespace ButiEngine {
 		static std::string GetRemoveStageName() { return removeStageName; }
 		static void SetStageNum(int arg_stageNum);
 		static void SetRemoveStageName(std::string arg_removeStageName);
+		static bool IsAnimation() { return isAnimation; }
 	private:
 		static int stageNum;
 		static int maxStageNum;
@@ -36,6 +39,8 @@ namespace ButiEngine {
 		void DecisionAnimation();
 		void SelectRotation();
 		void Onece();
+
+		std::shared_ptr<PauseManager> shp_pauseManager;
 
 		std::weak_ptr<GameObject> wkp_parentSelectPanel;
 		std::weak_ptr<GameObject> wkp_animationPlayer;
@@ -54,7 +59,7 @@ namespace ButiEngine {
 		int intervalFrame;
 		int animationFrame;
 		int fadeCount;
-		bool isAnimation;
+		static bool isAnimation;
 		bool isOnece;
 		bool isNext;
 

@@ -2,6 +2,8 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class PauseManager;
+
 	class Title :public GameComponent
 	{
 	public:
@@ -19,7 +21,10 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+		static bool IsAnimation() { return isAnimation; }
 	private:
+		std::shared_ptr<PauseManager> shp_PauseManager;
+
 		std::weak_ptr<GameObject> wkp_camera;
 		std::weak_ptr<GameObject> wkp_fadeObject;
 		std::weak_ptr<GameObject> wkp_titleLogo;
@@ -29,7 +34,7 @@ namespace ButiEngine {
 		SoundTag se_zoomOut;
 
 		bool nextFlag;
-		bool isAnimation;
+		static bool isAnimation;
 		bool isOnce;
 		int nextSceneCount;
 		int animationCount;

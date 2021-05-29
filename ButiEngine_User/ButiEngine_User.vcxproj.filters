@@ -57,6 +57,7 @@
     <ClCompile Include="AnimationPlayer.cpp" />
     <ClCompile Include="SelectFlash.cpp" />
     <ClCompile Include="BackGroundMobius.cpp" />
+    <ClCompile Include="GameExitMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
@@ -113,5 +114,6 @@
     <ClInclude Include="AnimationPlayer.h" />
     <ClInclude Include="SelectFlash.h" />
     <ClInclude Include="BackGroundMobius.h" />
+    <ClInclude Include="GameExitMenu.h" />
   </ItemGroup>
 </Project>

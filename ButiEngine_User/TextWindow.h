@@ -20,6 +20,8 @@ namespace ButiEngine {
 	private:
 		float currentPosY;
 		float previousPosY;
+
+		Vector3 initPos;
 	};
 
 }

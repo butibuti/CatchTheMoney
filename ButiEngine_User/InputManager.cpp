@@ -99,6 +99,12 @@ bool ButiEngine::InputManager::OnPushAnyKey()
 		OnTriggerGrabKey());
 }
 
+bool ButiEngine::InputManager::OnTriggerOpenGameExitMenuKey()
+{
+	return (GameDevice::GetInput()->TriggerKey(Keys::F4) ||
+		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_BACK));
+}
+
 bool ButiEngine::InputManager::OnTriggerMobiusResetRotationKey()
 {
 	return (GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_STICK_RIGHT) ||
@@ -114,7 +120,7 @@ bool ButiEngine::InputManager::OnTriggerModeChangeKey()
 
 bool ButiEngine::InputManager::OnTriggerOpenMenuKey()
 {
-	return (GameDevice::GetInput()->TriggerKey(Keys::Tab) ||
+	return (GameDevice::GetInput()->TriggerKey(Keys::Esc) ||
 		//GameDevice::GetInput()->TriggerKey(Keys::Esc) ||
 		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_START));
 }

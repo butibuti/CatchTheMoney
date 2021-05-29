@@ -1,1 +1,1 @@
-for /l %%x in (1,1,22) do (xcopy Stage0 Stage%%x\ /Y)
+for /l %%x in (1,1,23) do (xcopy Stage0 Stage%%x\ /Y)
