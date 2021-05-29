@@ -121,7 +121,7 @@ namespace ButiEngine {
 			return arg_cbuffer;
 		}
 
-		inline std::shared_ptr<ICBuffer> GetICBuffer(const std::string& arg_bufferName) {
+		virtual inline std::shared_ptr<ICBuffer> GetICBuffer(const std::string& arg_bufferName) {
 
 			for (auto itr =shp_drawInfo-> vec_exCBuffer.begin(); itr !=shp_drawInfo-> vec_exCBuffer.end(); itr++) {
 				if ((*itr)->GetExName() == arg_bufferName) {
@@ -191,6 +191,17 @@ namespace ButiEngine {
 		void SetOctRegistPtr(unsigned int* arg_ptr) override;
 		std::shared_ptr<Collision::CollisionPrimitive> GetPrimitive() override;
 		unsigned int* GetOctRegistPtr() override;
+
+		inline std::shared_ptr<ICBuffer> GetICBuffer(const std::string& arg_bufferName)override {
+			auto end = shp_befDrawObj->shp_drawInfo->vec_exCBuffer.end();
+			for (auto itr = shp_befDrawObj-> shp_drawInfo->vec_exCBuffer.begin(); itr != end; itr++) {
+				if ((*itr)->GetExName() == arg_bufferName) {
+					return *itr;
+				}
+			}
+
+			return nullptr;
+		}
 
 		std::shared_ptr<MeshDrawData> shp_befDrawObj;
 		std::shared_ptr<MeshDrawData> shp_afterDrawObj;

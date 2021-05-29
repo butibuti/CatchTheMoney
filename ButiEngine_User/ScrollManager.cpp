@@ -8,6 +8,7 @@
 #include"FollowPanel.h"
 #include"Panel.h"
 #include"StageManager.h"
+#include"Header/GameObjects/DefaultGameComponent/OutlineDrawComponent.h"
 
 void ButiEngine::ScrollManager::OnUpdate()
 {
@@ -82,7 +83,8 @@ void ButiEngine::ScrollManager::Start()
 	previousScroll = 0;
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	scrollSpeed = 4.0f;
-	wkp_screenScroll = gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
+	auto outlineDraw = gameObject.lock()->GetGameComponent<OutlineMeshDrawComponent>();
+	wkp_screenScroll = outlineDraw->GetCBuffer<LightVariable>("LightBuffer");
 	wkp_sideScroll=GetManager().lock()->GetGameObject("MobiusSide").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
 
 
@@ -93,13 +95,7 @@ void ButiEngine::ScrollManager::Start()
 
 void ButiEngine::ScrollManager::OnShowUI()
 {
-	Vector3 position = wkp_target.lock()->transform->GetWorldPosition();
-	auto playerUvPos = (position.x / GameSettings::windowWidth);
-	GUI::Text("PlayerPositionX   : %f ", playerUvPos);
-	GUI::Text("currentScroll     : %f ", currentScroll);
-	GUI::Text("previousScroll    : %f ", previousScroll);
-	GUI::Text("currentScrollRight: %f ", currentScrollRight);
-	GUI::Text("currentScrollLeft : %f ", currentScrollLeft);
+
 }
 
 void ButiEngine::ScrollManager::SetTarget(const std::string& arg_targetName)

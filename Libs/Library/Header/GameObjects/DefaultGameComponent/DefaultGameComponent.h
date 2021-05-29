@@ -460,7 +460,7 @@ namespace ButiEngine {
 		std::shared_ptr<CBuffer< T>> CreateCBuffer(const std::string& arg_cBufferName, const UINT arg_slot, std::weak_ptr<GraphicDevice> arg_wkp_graphicDevice);
 		template <class T>
 		std::shared_ptr<CBuffer<T>> GetCBuffer(const std::string& arg_cBufferName) {
-			return data->GetThis<DrawData>()->GetCBuffer<T>(arg_cBufferName);
+			return data->GetCBuffer<T>(arg_cBufferName);
 		}
 
 		template<class Archive>

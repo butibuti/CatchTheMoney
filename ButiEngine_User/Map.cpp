@@ -125,6 +125,16 @@ void ButiEngine::Map::PutTile()
 			framePos.y *= -1.0f;
 			tile = GetManager().lock()->AddObjectFromCereal("Cloud_Back", ObjectFactory::Create<Transform>(framePos, Vector3::Zero, frameScale));
 			tile.lock()->transform->SetBaseTransform(backPanel.lock()->transform);
+
+
+			if (!GameSettings::isTitle)
+			{
+				auto frontFrame = GetManager().lock()->AddObjectFromCereal("PanelFrame_Side", ObjectFactory::Create<Transform>(Vector3(0, 0, GameSettings::frameZ), Vector3::Zero, Vector3(1,1,1)));
+				frontFrame.lock()->transform->SetBaseTransform(frontSidePanel.lock()->transform, true);
+				auto backFrame = GetManager().lock()->AddObjectFromCereal("PanelFrame_Side", ObjectFactory::Create<Transform>(Vector3(0, 0, GameSettings::frameZ), Vector3::Zero, Vector3(1, 1, 1)));
+				backFrame.lock()->transform->SetBaseTransform(backSidePanel.lock()->transform, true);
+			}
+
 		}
 
 		for (unsigned int y = 0; y < mapSize.y; y++)
