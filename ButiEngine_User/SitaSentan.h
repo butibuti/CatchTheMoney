@@ -2,6 +2,9 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
+	class SpliteAnimationComponent;
+	class MobiusLoop;
+
 	class SitaSentan :public GameComponent
 	{
 	public:
@@ -23,11 +26,15 @@ namespace ButiEngine {
 		void SetZ();
 	private:
 		std::weak_ptr<GameObject> wkp_frog;
+		std::shared_ptr<MobiusLoop> shp_mobiusLoop;
+		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 
 		Vector3 initScale;
 		float progress;
+		int animationFrame;
 
 		void SetX();
+		void Animation();
 	};
 
 }

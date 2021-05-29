@@ -6,6 +6,8 @@
 #include"Panel.h"
 #include"Player.h"
 #include"StageManager.h"
+#include "MobiusLoop.h"
+#include "Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
 
 void ButiEngine::GravityCore::OnUpdate()
 {
@@ -17,6 +19,7 @@ void ButiEngine::GravityCore::OnUpdate()
 	}
 	RemoveGravity();
 	AddGravity();
+	Animation();
 }
 
 void ButiEngine::GravityCore::OnSet()
@@ -27,7 +30,9 @@ void ButiEngine::GravityCore::Start()
 {
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	shp_panelManager = GetManager().lock()->GetGameObject("PanelManager").lock()->GetGameComponent<PanelManager>();
+	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 	shp_followPanel = gameObject.lock()->GetGameComponent<FollowPanel>();
+	shp_mobiusLoop = gameObject.lock()->GetGameComponent<MobiusLoop>();
 }
 
 void ButiEngine::GravityCore::OnCollision(std::weak_ptr<GameObject> arg_other)
@@ -95,4 +100,16 @@ void ButiEngine::GravityCore::FollowPlayer()
 	targetPos.y += difference;
 	targetPos.z = gameObject.lock()->transform->GetWorldPosition().z;
 	gameObject.lock()->transform->SetWorldPosition(targetPos);
+}
+
+void ButiEngine::GravityCore::Animation()
+{
+	animationFrame++;
+	const int ANIMATION_RATE = 10;
+	if (animationFrame < ANIMATION_RATE) return;
+
+	animationFrame = 0;
+	shp_spriteAnimation->UpdateHorizontalAnim(1);
+	shp_mobiusLoop->GetRight().lock()->GetGameComponent<SpliteAnimationComponent>()->UpdateHorizontalAnim(1);
+	shp_mobiusLoop->GetLeft().lock()->GetGameComponent<SpliteAnimationComponent>()->UpdateHorizontalAnim(1);
 }

@@ -21,6 +21,7 @@ void ButiEngine::Player::OnUpdate()
 		StageManager::GetMode() == GameMode::Edit ||
 		isClear ||
 		!TalkText::IsDelete() ||
+		TalkText::IsNotMove()||
 		wkp_holdSita.lock())
 	{
 

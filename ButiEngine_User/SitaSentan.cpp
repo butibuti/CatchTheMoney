@@ -5,12 +5,17 @@
 #include"Player.h"
 #include"StageManager.h"
 #include"SitaTyuukan.h"
+#include "MobiusLoop.h"
+#include "PauseManager.h"
+#include "Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
 
 void ButiEngine::SitaSentan::OnUpdate()
 {
+	if (PauseManager::IsPause()) return;
 	SetX();
 	gameObject.lock()->transform->SetWorldPostionY(wkp_frog.lock()->transform->GetWorldPosition().y);
 	SetZ();
+	Animation();
 }
 
 void ButiEngine::SitaSentan::OnSet()
@@ -19,7 +24,10 @@ void ButiEngine::SitaSentan::OnSet()
 
 void ButiEngine::SitaSentan::Start()
 {
+	animationFrame = 0;
 	initScale = gameObject.lock()->transform->GetWorldScale();
+	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
+	shp_mobiusLoop = gameObject.lock()->GetGameComponent<MobiusLoop>();
 }
 
 void ButiEngine::SitaSentan::OnShowUI()
@@ -57,4 +65,16 @@ void ButiEngine::SitaSentan::SetX()
 		wkp_frog.lock()->GetGameComponent<Frog>()->GetSitatyuukan().lock()->GetGameComponent<SitaTyuukan>()->Move();
 		gameObject.lock()->transform->SetWorldPostionX(x);
 	}
+}
+
+void ButiEngine::SitaSentan::Animation()
+{
+	animationFrame++;
+	const int ANIMATION_RATE = 10;
+	if (animationFrame < ANIMATION_RATE) return;
+
+	animationFrame = 0;
+	shp_spriteAnimation->UpdateHorizontalAnim(1);
+	shp_mobiusLoop->GetRight().lock()->GetGameComponent<SpliteAnimationComponent>()->UpdateHorizontalAnim(1);
+	shp_mobiusLoop->GetLeft().lock()->GetGameComponent<SpliteAnimationComponent>()->UpdateHorizontalAnim(1);
 }

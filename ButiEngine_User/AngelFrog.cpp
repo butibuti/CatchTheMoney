@@ -3,16 +3,16 @@
 
 void ButiEngine::AngelFrog::OnUpdate()
 {
-	//if (life > 0)
-	//{
-	//	life--;
-	//}
-	//else
-	//{
-	//	//ライフがなくなったら飛ばす
-	//	gameObject.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
-	//	return;
-	//}
+	if (life > 0)
+	{
+		life--;
+	}
+	else
+	{
+		//ライフがなくなったら飛ばす
+		gameObject.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
+		return;
+	}
 	
 	Move();
 
@@ -24,7 +24,7 @@ void ButiEngine::AngelFrog::OnSet()
 
 void ButiEngine::AngelFrog::Start()
 {
-	life = 120;
+	life = 180;
 	accel = 1.0f;
 	position = gameObject.lock()->transform->GetLocalPosition();
 }
@@ -45,21 +45,21 @@ void ButiEngine::AngelFrog::SetUp(float arg_scaleY)
 
 void ButiEngine::AngelFrog::Move()
 {
-	if (accel > 0)
+	/*if (accel > 0)
 	{
-		accel -= 0.02f;
+		accel -= 0.01f;
 	}
 	else
 	{
 		accel = 0;
-	}
+	}*/
 	if (gameObject.lock()->transform->GetLocalScale().y > 0)
 	{
-		position.y += accel;
+		position.y += 1.0f;
 	}
 	else
 	{
-		position.y -= accel;
+		position.y -= 1.0f;
 	}
 
 	gameObject.lock()->transform->SetLocalPosition(position);

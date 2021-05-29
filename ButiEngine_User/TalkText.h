@@ -34,6 +34,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 
+		static bool IsNotMove() { return isNotMove; }
 		static bool IsDelete() { return isDelete; }
 		static void Delete();
 		static void Revive();
@@ -59,6 +60,7 @@ namespace ButiEngine {
 		bool isInterval;
 		Vector3 initPos;
 
+		static bool isNotMove;
 		static bool isDelete;
 
 		void TextEffect();

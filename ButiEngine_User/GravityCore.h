@@ -5,6 +5,8 @@ namespace ButiEngine {
 	class PauseManager;
 	class PanelManager;
 	class FollowPanel;
+	class MobiusLoop;
+	class SpliteAnimationComponent;
 
 	class GravityCore :public GameComponent
 	{
@@ -32,18 +34,22 @@ namespace ButiEngine {
 		void RemoveGravity();
 		void AddGravity();
 	private:
+		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<PanelManager> shp_panelManager;
 		std::shared_ptr<FollowPanel> shp_followPanel;
+		std::shared_ptr<MobiusLoop> shp_mobiusLoop;
 
 		std::weak_ptr<GameObject> wkp_target;
 
 		int coreNum;
+		int animationFrame;
 		float gravity;
 		bool grabbed;
 
 		void StorePlayer();
 		void FollowPlayer();
+		void Animation();
 	};
 
 }

@@ -11,6 +11,7 @@
 #include"Frog.h"
 
 bool ButiEngine::TalkText::isDelete = false;
+bool ButiEngine::TalkText::isNotMove = false;
 
 void ButiEngine::TalkText::OnUpdate()
 {
@@ -75,6 +76,7 @@ void ButiEngine::TalkText::Start()
 	intervalTime = 0;
 	isDelete = false;
 	isInterval = false;
+	isNotMove = false;
 }
 
 void ButiEngine::TalkText::ReTalk()
@@ -168,6 +170,7 @@ void ButiEngine::TalkText::AbnormalTalk()
 		{
 			isInterval = true;
 			isDelete = true;
+			isNotMove = true;
 			TextEffect();
 			wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
 			wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
@@ -177,6 +180,7 @@ void ButiEngine::TalkText::AbnormalTalk()
 	else
 	{
 		isDelete = true;
+		isNotMove = false;
 		TextEffect();
 		wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
 		wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
@@ -267,6 +271,7 @@ void ButiEngine::TalkText::Skip()
 {
 	if (InputManager::OnTextSkipKey())
 	{
+		isNotMove = false;
 		isDelete = true;
 		wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
 		wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
