@@ -8,7 +8,7 @@
 #include "SceneChangeAnimation.h"
 #include "GameSettings.h"
 #include"PauseManager.h"
-
+#include"Header/GameObjects/DefaultGameComponent/OutlineDrawComponent.h"
 int ButiEngine::StageSelect::stageNum = 0;
 int ButiEngine::StageSelect::maxStageNum = 19; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
 std::string ButiEngine::StageSelect::removeStageName = "none";
@@ -36,8 +36,8 @@ void ButiEngine::StageSelect::OnUpdate()
 			{
 				materialSource += "0";
 			}
-			screen->GetGameComponent<MeshDrawComponent>()->SetMaterialTag(MaterialTag(materialSource + std::to_string(stageNum)), 0);
-			screen->GetGameComponent<MeshDrawComponent>()->ReRegist();
+			screen->GetGameComponent<OutlineMeshDrawComponent>()->SetMaterialTag(MaterialTag(materialSource + std::to_string(stageNum)), 0);
+			screen->GetGameComponent<OutlineMeshDrawComponent>()->ReRegist();
 		}
 		else if (InputManager::OnPushLeftKey() && !shp_pauseManager->IsPause())
 		{
@@ -51,8 +51,8 @@ void ButiEngine::StageSelect::OnUpdate()
 			{
 				materialSource += "0";
 			}
-			screen->GetGameComponent<MeshDrawComponent>()->SetMaterialTag(MaterialTag(materialSource + std::to_string(stageNum)),0);
-			screen->GetGameComponent<MeshDrawComponent>()->ReRegist();
+			screen->GetGameComponent<OutlineMeshDrawComponent>()->SetMaterialTag(MaterialTag(materialSource + std::to_string(stageNum)),0);
+			screen->GetGameComponent<OutlineMeshDrawComponent>()->ReRegist();
 		}
 		if (InputManager::OnSkipKey() && !shp_pauseManager->IsPause())
 		{
@@ -68,8 +68,8 @@ void ButiEngine::StageSelect::OnUpdate()
 			{
 				materialSource += "0";
 			}
-			screen->GetGameComponent<MeshDrawComponent>()->SetMaterialTag(MaterialTag(materialSource + std::to_string(stageNum)),0);
-			screen->GetGameComponent<MeshDrawComponent>()->ReRegist();
+			screen->GetGameComponent<OutlineMeshDrawComponent>()->SetMaterialTag(MaterialTag(materialSource + std::to_string(stageNum)),0);
+			screen->GetGameComponent<OutlineMeshDrawComponent>()->ReRegist();
 		}
 	}
 	else
@@ -81,7 +81,7 @@ void ButiEngine::StageSelect::OnUpdate()
 
 	SelectRotation();
 
-	GetManager().lock()->GetApplication().lock()->GetGUIController()->SetGUIObject(GetThis<StageSelect>());
+	
 }
 
 void ButiEngine::StageSelect::OnSet()
@@ -132,8 +132,8 @@ void ButiEngine::StageSelect::Start()
 	{
 		materialSource += "0";
 	}
-	screen->GetGameComponent<MeshDrawComponent>()->SetMaterialTag(MaterialTag(materialSource + std::to_string(stageNum)), 0);
-	screen->GetGameComponent<MeshDrawComponent>()->ReRegist();
+	screen->GetGameComponent<OutlineMeshDrawComponent>()->SetMaterialTag(MaterialTag(materialSource + std::to_string(stageNum)), 0);
+	screen->GetGameComponent<OutlineMeshDrawComponent>()->ReRegist();
 }
 
 void ButiEngine::StageSelect::OnShowUI()
