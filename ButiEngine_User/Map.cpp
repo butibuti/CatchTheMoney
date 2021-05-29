@@ -157,6 +157,8 @@ void ButiEngine::Map::PutTile()
 			{
 				Vector3 playerPos = position;
 				playerPos.z = GameSettings::playerZ;
+				scale.x *= 2.0f;
+				scale.y *= 2.0f;
 				tile = GetManager().lock()->AddObjectFromCereal("Player", ObjectFactory::Create<Transform>(playerPos, Vector3::Zero, scale));
 			}
 			else if (onceOfID == GameSettings::block)
