@@ -8,6 +8,7 @@
 #include "GameSettings.h"
 #include "ParentDaikokuten.h"
 #include "Daikokuten.h"
+#include"Frog.h"
 
 bool ButiEngine::TalkText::isDelete = false;
 
@@ -180,6 +181,10 @@ void ButiEngine::TalkText::AbnormalTalk()
 		wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
 		wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
 		wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+
+		auto frog = GetManager().lock()->GetGameObject("Frog").lock()->GetGameComponent<Frog>();
+		frog->PlayAnimation();
+		frog->GetBackFrog().lock()->GetGameComponent<Frog>()->PlayAnimation();
 	}
 
 }
@@ -266,5 +271,12 @@ void ButiEngine::TalkText::Skip()
 		wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
 		wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
 		wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+
+		if (StageSelect::GetStageNum() == TalkStageNum::FROG_TALK)
+		{
+			auto frog = GetManager().lock()->GetGameObject("Frog").lock()->GetGameComponent<Frog>();
+			frog->PlayAnimation();
+			frog->GetBackFrog().lock()->GetGameComponent<Frog>()->PlayAnimation();
+		}
 	}
 }

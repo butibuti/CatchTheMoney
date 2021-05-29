@@ -46,6 +46,8 @@ namespace ButiEngine {
 
 		void OnCollisionFrog(std::weak_ptr<GameObject> arg_frog);
 		void FollowSita();
+		void SetGrounded(bool arg_flag) { grounded = arg_flag; }
+		void SetJump(bool arg_flag) { jump = arg_flag; }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<PanelManager> shp_panelManager;

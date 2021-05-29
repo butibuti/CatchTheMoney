@@ -210,6 +210,8 @@ void ButiEngine::Player::Control()
 			jumpInputFrame--;
 		}
 		shp_spriteAnimation->SetHorizontalAnim(0);
+		shp_mobiusLoop->GetRight().lock()->GetGameComponent<SpliteAnimationComponent>()->SetHorizontalAnim(0);
+		shp_mobiusLoop->GetLeft().lock()->GetGameComponent<SpliteAnimationComponent>()->SetHorizontalAnim(0);
 		animation = ButiEngine::Player::JUMP;
 	}
 }
@@ -341,9 +343,9 @@ void ButiEngine::Player::MoveY()
 	shp_AABB->Update();
 	shp_bottomAABB->Update();
 	shp_mobiusLoop->UpdateAABB();
-	shp_mobiusLoop->BackYRight(velocity);
+	shp_mobiusLoop->BackYRight(velocity, gravity);
 	shp_AABB->Update();
-	shp_mobiusLoop->BackYLeft(velocity);
+	shp_mobiusLoop->BackYLeft(velocity, gravity);
 	shp_AABB->Update();
 	BackY();
 }
@@ -454,6 +456,8 @@ void ButiEngine::Player::Animation()
 {
 	animationFrame++;
 	shp_spriteAnimation->SetVarticalAnim(animation); //jump
+	shp_mobiusLoop->GetRight().lock()->GetGameComponent<SpliteAnimationComponent>()->SetVarticalAnim(animation);
+	shp_mobiusLoop->GetLeft().lock()->GetGameComponent<SpliteAnimationComponent>()->SetVarticalAnim(animation);
 	if (animationFrame < ANIMATION_RATE) return;
 
 	animationFrame = 0;
@@ -462,12 +466,18 @@ void ButiEngine::Player::Animation()
 	{
 	case ButiEngine::Player::IDLE:
 		shp_spriteAnimation->UpdateHorizontalAnim(1);
+		shp_mobiusLoop->GetRight().lock()->GetGameComponent<SpliteAnimationComponent>()->UpdateHorizontalAnim(1);
+		shp_mobiusLoop->GetLeft().lock()->GetGameComponent<SpliteAnimationComponent>()->UpdateHorizontalAnim(1);
 		break;
 	case ButiEngine::Player::WALK:
 		shp_spriteAnimation->UpdateHorizontalAnim(1);
+		shp_mobiusLoop->GetRight().lock()->GetGameComponent<SpliteAnimationComponent>()->UpdateHorizontalAnim(1);
+		shp_mobiusLoop->GetLeft().lock()->GetGameComponent<SpliteAnimationComponent>()->UpdateHorizontalAnim(1);
 		break;
 	case ButiEngine::Player::JUMP:
 		shp_spriteAnimation->UpdateHorizontalAnim(0);
+		shp_mobiusLoop->GetRight().lock()->GetGameComponent<SpliteAnimationComponent>()->UpdateHorizontalAnim(0);
+		shp_mobiusLoop->GetLeft().lock()->GetGameComponent<SpliteAnimationComponent>()->UpdateHorizontalAnim(0);
 		break;
 	default:
 		break;
@@ -629,6 +639,13 @@ void ButiEngine::Player::OnCollisionFrog(std::weak_ptr<GameObject> arg_frog)
 	if (!grounded) { return; }
 	if (wkp_holdSita.lock())
 	{
+		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
+		float frogScaleY = arg_frog.lock()->transform->GetWorldScale().y;
+		if (frogScaleY < 0 != scale.y < 0)
+		{
+			scale.y *= -1;
+		}
+		gameObject.lock()->transform->SetLocalScale(scale);
 		isClear = true;
 		return;
 	}

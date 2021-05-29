@@ -4,6 +4,7 @@
 #include"GameSettings.h"
 #include"Player.h"
 #include"StageManager.h"
+#include"SitaTyuukan.h"
 
 void ButiEngine::SitaSentan::OnUpdate()
 {
@@ -53,6 +54,7 @@ void ButiEngine::SitaSentan::SetX()
 		{
 			x = wkp_frog.lock()->transform->GetWorldPosition().x;
 		}
+		wkp_frog.lock()->GetGameComponent<Frog>()->GetSitatyuukan().lock()->GetGameComponent<SitaTyuukan>()->Move();
 		gameObject.lock()->transform->SetWorldPostionX(x);
 	}
 }

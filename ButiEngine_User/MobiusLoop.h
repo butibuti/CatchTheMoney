@@ -29,9 +29,9 @@ namespace ButiEngine {
 		void SwitchPosition();
 		void UpdateAABB();
 		void BackXRight(Vector3& arg_velocity);
-		void BackYRight(Vector3& arg_velocity);
+		void BackYRight(Vector3& arg_velocity, float arg_gravity);
 		void BackXLeft(Vector3& arg_velocity);
-		void BackYLeft(Vector3& arg_velocity);
+		void BackYLeft(Vector3& arg_velocity, float arg_gravity);
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 

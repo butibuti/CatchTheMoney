@@ -18,7 +18,7 @@ void ButiEngine::Frog::OnUpdate()
 	StorePlayer();
 	if (once)
 	{
-		//gameObject.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
+		gameObject.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
 		once = false;
 	}
 	Interlock();
@@ -125,18 +125,22 @@ void ButiEngine::Frog::CreateSita()
 	wkp_sita_sentan.lock()->GetGameComponent<SitaSentan>()->SetFrog(gameObject);
 
 	wkp_sita_sentan.lock()->transform->SetBaseTransform(nullptr);
-	wkp_sita_sentan.lock()->transform->SetLocalScale(Vector3(16.0f, 16.0f, 1));
+	wkp_sita_sentan.lock()->transform->SetLocalScale(Vector3(32.0f, 32.0f, 1));
 	float sitaLength = GameSettings::blockSize * 50;
 	Vector3 sentanPosition = gameObject.lock()->transform->GetWorldPosition();
-	if (gameObject.lock()->transform->GetWorldScale().x < 0)
+	if (StageSelect::GetStageNum() != TalkStageNum::FROG_TALK)
 	{
-		sentanPosition.x -= sitaLength;
-	}
-	else if (gameObject.lock()->transform->GetWorldScale().x > 0)
-	{
-		sentanPosition.x += sitaLength;
+		if (gameObject.lock()->transform->GetWorldScale().x < 0)
+		{
+			sentanPosition.x -= sitaLength;
+		}
+		else if (gameObject.lock()->transform->GetWorldScale().x > 0)
+		{
+			sentanPosition.x += sitaLength;
+		}
 	}
 	sentanPosition.z += 0.1f;
+	
 	wkp_sita_sentan.lock()->transform->SetWorldPosition(sentanPosition);
 }
 
@@ -252,6 +256,7 @@ void ButiEngine::Frog::BackY()
 void ButiEngine::Frog::Interlock()
 {
 	if (!nearPlayer || wkp_backFrog.lock()->GetGameComponent<Frog>()->IsNearPlayer()) { return; }
+	if (wkp_player.lock() && wkp_player.lock()->GetGameComponent<Player>()->IsClear()) { return; }
 
 	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
 	Vector3 backPosition = wkp_backFrog.lock()->transform->GetWorldPosition();
@@ -373,6 +378,8 @@ void ButiEngine::Frog::Animation()
 		}
 		wkp_sita_sentan.lock()->transform->SetWorldPostionX(targetX);
 		isAnimation = false;
+
+		wkp_player.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
 	}
 	else
 	{
@@ -399,9 +406,9 @@ void ButiEngine::Frog::SpriteAnimation()
 	{
 		holdAppleCount = 0;
 		isApple = false;
-		animation = Animation::SITA;
-		shp_spriteAnimation->SetVarticalAnim(Frog::SITA);
-		shp_spriteAnimation->SetHorizontalAnim(0);
+		//animation = Animation::SITA;
+		//shp_spriteAnimation->SetVarticalAnim(Frog::SITA);
+		//shp_spriteAnimation->SetHorizontalAnim(0);
 	}
 
 	const int ANIMATION_RATE = 5;
