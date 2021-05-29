@@ -105,8 +105,7 @@ namespace ButiEngine {
 		void StorePlayer();
 		void StoreFrog();
 
-		std::shared_ptr<Timer> shp_markedBlockAnimationtimer=nullptr;
-		std::shared_ptr< CBuffer <Fog>> markedAnimationParam=nullptr;
+
 	};
 
 }

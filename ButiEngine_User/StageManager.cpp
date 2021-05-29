@@ -71,14 +71,7 @@ void ButiEngine::StageManager::OnUpdate()
 	}
 
 
-	if (shp_markedBlockAnimationtimer->Update()) {
-		shp_markedBlockAnimationtimer->Reset();
-		markedAnimationParam->Get().worldAnimationParam.x += 0.5f;
 
-		if (markedAnimationParam->Get().worldAnimationParam.x >= 1.0f) {
-			markedAnimationParam->Get().worldAnimationParam.x = 0.0f;
-		}
-	}
 
 #ifdef OUTPUT_STAGERENDERTARGET 
 #ifdef DEBUG
@@ -244,9 +237,7 @@ void ButiEngine::StageManager::Start()
 #ifdef DEBUG
 	f = 1;
 #endif // DEBUG
-	shp_markedBlockAnimationtimer = ObjectFactory::Create<RelativeTimer>(12);
-	shp_markedBlockAnimationtimer->Start();
-	markedAnimationParam = gameObject.lock()->GetGameObjectManager().lock()->GetScene().lock()->GetRenderer()->GetFogCBuffer();
+
 }
 
 void ButiEngine::StageManager::ShowGUI()
