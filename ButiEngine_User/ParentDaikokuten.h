@@ -25,6 +25,7 @@ namespace ButiEngine {
 		bool isChange;
 		bool isOneLoop;
 		bool isReactionScale;
+		bool isActiveChange;
 		int animationCount;
 		float movePos;
 		Vector3 currentPos;

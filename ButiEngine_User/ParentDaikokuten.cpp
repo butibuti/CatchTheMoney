@@ -1,8 +1,30 @@
 #include "stdafx_u.h"
 #include "ParentDaikokuten.h"
+#include "PauseManager.h"
 
 void ButiEngine::ParentDaikokuten::OnUpdate()
 {
+	if (PauseManager::IsPause())
+	{
+		auto transformAnimation = gameObject.lock()->GetGameComponent<TransformAnimation>();
+		if (transformAnimation)
+		{
+			transformAnimation->SetIsActive(false);
+			isActiveChange = true;
+		}
+		return;
+	}
+
+	if (isActiveChange)
+	{
+		isActiveChange = false;
+		auto transformAnimation = gameObject.lock()->GetGameComponent<TransformAnimation>();
+		if (transformAnimation)
+		{
+			transformAnimation->SetIsActive(true);
+		}
+	}
+
 	auto objName = gameObject.lock()->GetGameObjectName();
 	if (objName == "Daikokuten_Stay")
 	{
@@ -43,6 +65,7 @@ void ButiEngine::ParentDaikokuten::Start()
 	isChange = false;
 	isOneLoop = false;
 	isReactionScale = false;
+	isActiveChange = false;
 	animationCount = 0;
 	movePos = 0;
 	previousPos = Vector3::Zero;

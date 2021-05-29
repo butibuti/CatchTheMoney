@@ -12,8 +12,8 @@ namespace ButiEngine {
 		REVERSE_TALK = 3,
 		REVERSE_RE_TALK = 5,
 		GRAVITY_TALK = 7,
-		FROG_TALK = 12,
-		LAST_TALK = 21,
+		FROG_TALK = 11,
+		LAST_TALK = 19,
 	};
 
 	class TalkText :public GameComponent
