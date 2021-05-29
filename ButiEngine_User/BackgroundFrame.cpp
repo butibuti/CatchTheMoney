@@ -1,9 +1,11 @@
 #include "stdafx_u.h"
 #include "BackgroundFrame.h"
 #include "GameSettings.h"
+#include"PauseManager.h"
 
 void ButiEngine::BackgroundFrame::OnUpdate()
 {
+	if (PauseManager::IsPause()) { return; }
 	Move();
 	Rotation();
 }

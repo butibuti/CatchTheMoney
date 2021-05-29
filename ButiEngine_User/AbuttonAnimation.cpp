@@ -2,9 +2,11 @@
 #include "AbuttonAnimation.h"
 #include "InputManager.h"
 #include "GameSettings.h"
+#include"PauseManager.h"
 
 void ButiEngine::AbuttonAnimation::OnUpdate()
 {
+	if (PauseManager::IsPause()) { return; }
 	const float MIN_SCALE = 140;
 	const float MAX_SCALE = 180;
 

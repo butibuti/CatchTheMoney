@@ -11,6 +11,8 @@
 #include "GameSettings.h"
 #include"GameExitMenu.h"
 
+bool ButiEngine::PauseManager::pause;
+
 void ButiEngine::PauseManager::OnUpdate()
 {
 	if (GameSettings::isTitle) { return; }

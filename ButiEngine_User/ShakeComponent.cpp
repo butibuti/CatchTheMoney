@@ -19,6 +19,7 @@ void ButiEngine::ShakeComponent::OnUpdate()
 	else
 	{
 		ShakeStop();
+		return;
 	}
 
 	Vector3 newRotate = defaultRotate + Vector3(x, y, z);

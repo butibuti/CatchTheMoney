@@ -20,7 +20,7 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 		void SetPause(bool arg_flag) { pause = arg_flag; }
-		bool IsPause() { return pause; }
+		static bool IsPause() { return pause; }
 	private:
 		const int ANIMATION_FRAME = 20;
 		const int BACK = 0;
@@ -35,7 +35,7 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_button_select;
 
 		bool isNext;
-		bool pause;
+		static bool pause;
 		bool pause_;
 		bool disappear;
 		bool pushPauseKey;
