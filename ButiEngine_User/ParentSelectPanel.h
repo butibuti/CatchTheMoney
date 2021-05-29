@@ -12,7 +12,7 @@ namespace ButiEngine {
 		void OnSet()override;
 		void Start()override;
 		void OnCollision(std::weak_ptr<GameObject> arg_other)override;
-		void ChildRotation(float rotate);
+		void ChildRotation(const float rotate,const int arg_selectNum);
 		std::shared_ptr<GameComponent> Clone()override;
 		template<class Archive>
 		void serialize(Archive& archive)

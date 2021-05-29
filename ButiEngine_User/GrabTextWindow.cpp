@@ -45,7 +45,7 @@ void ButiEngine::GrabTextWindow::OnUpdate()
 
 	position.z = 0.0f;
 
-	position.x += 100.0f;
+	position.x -= 100.0f;
 	gameObject.lock()->transform->SetLocalPosition(position);
 
 	previousScale = previousScale * (1.0f - 0.3f) + currentScale * 0.3f;

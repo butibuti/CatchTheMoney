@@ -10,22 +10,25 @@
 #include"PauseManager.h"
 
 int ButiEngine::StageSelect::stageNum = 0;
-int ButiEngine::StageSelect::maxStageNum = 21; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
+int ButiEngine::StageSelect::maxStageNum = 23; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
 std::string ButiEngine::StageSelect::removeStageName = "none";
 bool ButiEngine::StageSelect::isAnimation;
 
+int count=0;
+const float angle = 360.0f / (float)(ButiEngine::StageSelect::maxStageNum + 1) * 2.0f;
 void ButiEngine::StageSelect::OnUpdate()
 {
 	Onece();
-	auto childAngle = 180.0f / (maxStageNum + 1) * 2.0f;
+	const auto childAngle = 180.0f / (ButiEngine::StageSelect::maxStageNum + 1) * 2.0f;
 	auto parentSelectPanel = wkp_parentSelectPanel.lock()->GetGameComponent<ParentSelectPanel>();
 	if (intervalFrame > 20 && !isAnimation)
 	{
 		if (InputManager::OnPushRightKey() && !shp_pauseManager->IsPause())
 		{
+			count++;
 			intervalFrame = 0;
 			OnPushRight();
-			parentSelectPanel->ChildRotation(-childAngle);
+			parentSelectPanel->ChildRotation(-childAngle,stageNum);
 			auto screen = GetManager().lock()->GetGameObject("SelectScreen").lock();
 			screen->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
 			std::string materialSource = "StageSelect_";
@@ -38,9 +41,10 @@ void ButiEngine::StageSelect::OnUpdate()
 		}
 		else if (InputManager::OnPushLeftKey() && !shp_pauseManager->IsPause())
 		{
+			count++;
 			intervalFrame = 0;
 			OnPushLeft();
-			parentSelectPanel->ChildRotation(childAngle);
+			parentSelectPanel->ChildRotation(childAngle,stageNum);
 			auto screen = GetManager().lock()->GetGameObject("SelectScreen").lock();
 			screen->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f); std::string materialSource = "StageSelect_";
 			if (stageNum < 10)
@@ -52,9 +56,12 @@ void ButiEngine::StageSelect::OnUpdate()
 		}
 		if (InputManager::OnSkipKey() && !shp_pauseManager->IsPause())
 		{
+			count++;
 			intervalFrame = 0;
 			OnPushSkip();
-			parentSelectPanel->ChildRotation(-childAngle * ((maxStageNum + 1) / 2));
+			parentSelectPanel->ChildRotation(-childAngle * ((maxStageNum + 1) / 2),stageNum);
+
+
 			auto screen = GetManager().lock()->GetGameObject("SelectScreen").lock();
 			screen->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f); std::string materialSource = "StageSelect_";
 			if (stageNum < 10)
@@ -96,7 +103,7 @@ void ButiEngine::StageSelect::Start()
 
 	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 0, 0), Vector3::Zero, Vector3(1920, 1080, 1)));
 
-	preParentRotation = Vector3::Zero;
+	preParentRotation = stageNum * angle;
 
 	auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
 	if (stageNum <= 0)
@@ -140,7 +147,10 @@ void ButiEngine::StageSelect::ShowGUI()
 	GUI::End();
 
 	GUI::Begin("StageNum");
+	GUI::BulletText("StageNum");
 	GUI::Text(stageNum);
+	GUI::BulletText("Count");
+	GUI::Text(count);
 	GUI::End();
 }
 
@@ -169,8 +179,6 @@ void ButiEngine::StageSelect::SetRemoveStageName(std::string arg_removeStageName
 
 void ButiEngine::StageSelect::OnPushRight()
 {
-	float angle = 360.0f / (float)(maxStageNum + 1) * 2.0f;
-	preParentRotation.y += angle;
 	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, GameSettings::masterVolume);
 
 	stageNum++;
@@ -178,12 +186,11 @@ void ButiEngine::StageSelect::OnPushRight()
 	{
 		stageNum = 0;
 	}
+	preParentRotation = angle * stageNum;
 }
 
 void ButiEngine::StageSelect::OnPushLeft()
 {
-	float angle = 360.0f / (float)(maxStageNum + 1) * 2.0f;
-	preParentRotation.y -= angle;
 	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, GameSettings::masterVolume);
 
 	stageNum--;
@@ -191,12 +198,11 @@ void ButiEngine::StageSelect::OnPushLeft()
 	{
 		stageNum = maxStageNum;
 	}
+	preParentRotation = angle * stageNum;
 }
 
 void ButiEngine::StageSelect::OnPushSkip()
 {
-	float angle = 360.0f / (float)(maxStageNum + 1) * 2.0f;
-	preParentRotation.y += angle * ((maxStageNum + 1) / 2);
 	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, GameSettings::masterVolume);
 
 	stageNum += (maxStageNum + 1) / 2;
@@ -204,6 +210,7 @@ void ButiEngine::StageSelect::OnPushSkip()
 	{
 		stageNum = stageNum - maxStageNum - 1;
 	}
+	preParentRotation = angle * stageNum;
 }
 
 void ButiEngine::StageSelect::OnDecision()
@@ -285,7 +292,7 @@ void ButiEngine::StageSelect::SelectRotation()
 	{
 		anim = wkp_parentSelectPanel.lock()->AddGameComponent<TransformAnimation>();
 		anim->SetTargetTransform(wkp_parentSelectPanel.lock()->transform->Clone());
-		anim->GetTargetTransform()->SetLocalRotation(preParentRotation);
+		anim->GetTargetTransform()->SetLocalRotation(Matrix4x4::RollY(MathHelper::ToRadian( preParentRotation)));
 		anim->SetSpeed(0.1f);
 		anim->SetEaseType(Easing::EasingType::EaseOut);
 	}
@@ -299,11 +306,7 @@ void ButiEngine::StageSelect::Onece()
 	auto parentSelectPanel = wkp_parentSelectPanel.lock()->GetGameComponent<ParentSelectPanel>();
 	auto childAngle = 180.0f / (maxStageNum + 1) * 2.0f;
 	float rotate = childAngle * stageNum;
-	auto angle = 360.0f / (float)(maxStageNum + 1) * 2.0f;
+	preParentRotation = stageNum * angle;
 
-	for (int i = 0; i < stageNum; i++)
-	{
-		preParentRotation.y += angle;
-	}
-	parentSelectPanel->ChildRotation(-rotate);
+	parentSelectPanel->ChildRotation(-rotate,stageNum);
 }

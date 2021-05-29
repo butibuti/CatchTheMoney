@@ -28,9 +28,9 @@ namespace ButiEngine {
 		static void SetStageNum(int arg_stageNum);
 		static void SetRemoveStageName(std::string arg_removeStageName);
 		static bool IsAnimation() { return isAnimation; }
+		static int maxStageNum;
 	private:
 		static int stageNum;
-		static int maxStageNum;
 
 		void OnPushRight();
 		void OnPushLeft();
@@ -53,7 +53,7 @@ namespace ButiEngine {
 		SoundTag se_hit;
 		SoundTag se_start;
 
-		Vector3 preParentRotation;
+		float preParentRotation;
 		float childAngle;
 		const int screenRotateFrame = 40;
 		int intervalFrame;
