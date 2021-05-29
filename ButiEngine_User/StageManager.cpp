@@ -46,7 +46,9 @@ void ButiEngine::StageManager::OnUpdate()
 			}
 			else
 			{
-				wkp_frog.lock()->GetGameComponent<Frog>()->Exprosion();
+				auto frog = wkp_frog.lock()->GetGameComponent<Frog>();
+				frog->Exprosion();
+				frog->GetBackFrog().lock()->GetGameComponent<Frog>()->Exprosion();
 			}
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_clear, GameSettings::masterVolume);
 		}

@@ -3,6 +3,7 @@
 #include"GameSettings.h"
 #include"PauseManager.h"
 #include"Player.h"
+#include"Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
 
 void ButiEngine::MobiusLoop::OnUpdate()
 {
@@ -26,6 +27,7 @@ void ButiEngine::MobiusLoop::Start()
 	{
 		meshDraw = gameObject.lock()->GetGameComponent<MeshDrawComponent_Static>();
 	}
+	auto spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 	initScaleX = gameObject.lock()->transform->GetWorldScale().x;
 
 	wkp_right = GetManager().lock()->AddObject(std::make_shared<Transform>(), name + "_Right");
@@ -41,6 +43,10 @@ void ButiEngine::MobiusLoop::Start()
 	{
 		wkp_right.lock()->AddGameComponent(meshDraw->Clone());
 	}
+	if (spriteAnimation)
+	{
+		wkp_right.lock()->AddGameComponent(spriteAnimation->Clone());
+	}
 	if (name == "Player")
 	{
 		shp_AABB_right = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 10.0f), wkp_right.lock()->transform);
@@ -54,6 +60,10 @@ void ButiEngine::MobiusLoop::Start()
 	if (meshDraw)
 	{
 		wkp_left.lock()->AddGameComponent(meshDraw->Clone());
+	}
+	if (spriteAnimation)
+	{
+		wkp_left.lock()->AddGameComponent(spriteAnimation->Clone());
 	}
 	if (name == "Player")
 	{
@@ -166,8 +176,9 @@ void ButiEngine::MobiusLoop::BackXRight(Vector3& arg_velocity)
 	}
 }
 
-void ButiEngine::MobiusLoop::BackYRight(Vector3& arg_velocity)
+void ButiEngine::MobiusLoop::BackYRight(Vector3& arg_velocity, float arg_gravity)
 {
+	if (gameObject.lock()->GetGameObjectName() != "Player") { return; }
 	auto hitObjects = GetCollisionManager().lock()->GetWillHitObjects(shp_AABB_right, 0);
 
 	if (hitObjects.size() != 0)
@@ -185,12 +196,26 @@ void ButiEngine::MobiusLoop::BackYRight(Vector3& arg_velocity)
 				float backLength = (*itr)->transform->GetWorldPosition().y - GameSettings::blockSize - wkp_right.lock()->transform->GetWorldPosition().y;
 				gameObject.lock()->transform->TranslateY(backLength);
 				shp_AABB_right->Update();
+				if (arg_velocity.y >= 0 == arg_gravity >= 0)
+				{
+					//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 0.1f);
+					auto player = gameObject.lock()->GetGameComponent<Player>();
+					player->SetGrounded(true);
+					player->SetJump(false);
+				}
 			}
 			else if (arg_velocity.y < 0)
 			{
 				float backLength = (*itr)->transform->GetWorldPosition().y + GameSettings::blockSize - wkp_right.lock()->transform->GetWorldPosition().y;
 				gameObject.lock()->transform->TranslateY(backLength);
 				shp_AABB_right->Update();
+				if (arg_velocity.y >= 0 == arg_gravity >= 0)
+				{
+					//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 0.1f);
+					auto player = gameObject.lock()->GetGameComponent<Player>();
+					player->SetGrounded(true);
+					player->SetJump(false);
+				}
 			}
 			arg_velocity.y = 0;
 		}
@@ -229,8 +254,9 @@ void ButiEngine::MobiusLoop::BackXLeft(Vector3& arg_velocity)
 	}
 }
 
-void ButiEngine::MobiusLoop::BackYLeft(Vector3& arg_velocity)
+void ButiEngine::MobiusLoop::BackYLeft(Vector3& arg_velocity, float arg_gravity)
 {
+	if (gameObject.lock()->GetGameObjectName() != "Player") { return; }
 	auto hitObjects = GetCollisionManager().lock()->GetWillHitObjects(shp_AABB_left, 0);
 
 	if (hitObjects.size() != 0)
@@ -248,12 +274,26 @@ void ButiEngine::MobiusLoop::BackYLeft(Vector3& arg_velocity)
 				float backLength = (*itr)->transform->GetWorldPosition().y - GameSettings::blockSize - wkp_left.lock()->transform->GetWorldPosition().y;
 				gameObject.lock()->transform->TranslateY(backLength);
 				shp_AABB_left->Update();
+				if (arg_velocity.y >= 0 == arg_gravity >= 0)
+				{
+					//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 0.1f);
+					auto player = gameObject.lock()->GetGameComponent<Player>();
+					player->SetGrounded(true);
+					player->SetJump(false);
+				}
 			}
 			else if (arg_velocity.y < 0)
 			{
 				float backLength = (*itr)->transform->GetWorldPosition().y + GameSettings::blockSize - wkp_left.lock()->transform->GetWorldPosition().y;
 				gameObject.lock()->transform->TranslateY(backLength);
 				shp_AABB_left->Update();
+				if (arg_velocity.y >= 0 == arg_gravity >= 0)
+				{
+					//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 0.1f);
+					auto player = gameObject.lock()->GetGameComponent<Player>();
+					player->SetGrounded(true);
+					player->SetJump(false);
+				}
 			}
 		}
 		arg_velocity.y = 0;
