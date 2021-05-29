@@ -7,6 +7,7 @@
 #include"StageSelect.h"
 #include"Panel.h"
 #include"Frog.h"
+#include "AngelFrog.h"
 
 void ButiEngine::Map::OnUpdate()
 {
@@ -259,17 +260,23 @@ void ButiEngine::Map::PutTile()
 				frogPos.z = GameSettings::frogZ;
 				Vector3 frogScale = scale * 2.0f;
 				auto front = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				//auto front_angel = GetManager().lock()->AddObjectFromCereal("AngelFrog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
 
 				frogPos.x += GameSettings::windowWidth * 0.5f;
 				frogPos.y *= -1.0f;
 				frogScale.y *= -1.0f;
 				auto back = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
+				//auto back_angel = GetManager().lock()->AddObjectFromCereal("AngelFrog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
 
 				auto front_frog = front.lock()->GetGameComponent<Frog>();
 				auto back_frog = back.lock()->GetGameComponent<Frog>();
+				//auto front_angel_frog = front_angel.lock()->GetGameComponent<AngelFrog>();
+				//auto back_angel_frog = back_angel.lock()->GetGameComponent<AngelFrog>();
 
 				front_frog->SetBackFrog(back);
 				back_frog->SetBackFrog(front);
+				//front_angel_frog->SetBackFrog(back_angel);
+				//back_angel_frog->SetBackFrog(front_angel);
 
 				front_frog->SetDefaultGravity(true);
 				back_frog->SetDefaultGravity(true);

@@ -10,6 +10,7 @@
 #include"TalkText.h"
 #include"Player.h"
 #include "StageSelect.h"
+#include "AngelFrog.h"
 #include "Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
 
 void ButiEngine::Frog::OnUpdate()
@@ -78,6 +79,7 @@ void ButiEngine::Frog::Start()
 	once = true;
 	isAnimation = false;
 	isApple = false;
+	isSpawnAngel = false;
 	progress = 0;
 	animationFrame = 0;
 	onceCount = 0;
@@ -456,7 +458,18 @@ void ButiEngine::Frog::SpriteAnimation()
 		}
 		else
 		{
-			gameObject.lock()->transform->SetLocalPosition(Vector3(0, 0, -3000));
+			if (!isSpawnAngel)
+			{
+				isSpawnAngel = true;
+				auto position = gameObject.lock()->transform->GetLocalPosition();
+				position.z -= 0.02f;
+				auto rotation = gameObject.lock()->transform->GetLocalRotation();
+				auto scale = gameObject.lock()->transform->GetLocalScale();
+				auto angel = GetManager().lock()->AddObjectFromCereal("AngelFrog", ObjectFactory::Create<Transform>(position, rotation, scale));
+			}
+
+			auto posZ = gameObject.lock()->transform->GetLocalPosition().z;
+			gameObject.lock()->transform->SetLocalPosition(Vector3(0, -3000, posZ));
 		}
 		break;
 	default:

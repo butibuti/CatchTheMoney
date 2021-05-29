@@ -5,6 +5,7 @@ namespace ButiEngine {
 	class SpliteAnimationComponent;
 	class PauseManager;
 
+	//会話が発生するステージ番号
 	enum TalkStageNum
 	{
 		FIRST_TALK = 0,

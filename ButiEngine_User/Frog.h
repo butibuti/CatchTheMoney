@@ -71,6 +71,7 @@ namespace ButiEngine {
 		bool isAnimation;
 		bool isApple;
 		bool once;
+		bool isSpawnAngel;
 		int progress;
 		int animationFrame;
 		int onceCount;

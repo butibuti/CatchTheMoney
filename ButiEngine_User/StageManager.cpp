@@ -184,6 +184,7 @@ void ButiEngine::StageManager::Start()
 		}
 		else if (stageNum == TalkStageNum::FROG_TALK && !GameSettings::isTitle)
 		{
+			//カエル説明時のみイレギュラー処理
 			frogEatAnimationCount = 240;
 			TalkText::Revive();
 		}

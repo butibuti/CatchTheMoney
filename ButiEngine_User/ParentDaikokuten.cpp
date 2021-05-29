@@ -6,6 +6,7 @@ void ButiEngine::ParentDaikokuten::OnUpdate()
 {
 	if (PauseManager::IsPause())
 	{
+		//ポーズ中はアニメーションを一時停止する
 		auto transformAnimation = gameObject.lock()->GetGameComponent<TransformAnimation>();
 		if (transformAnimation)
 		{
@@ -15,6 +16,7 @@ void ButiEngine::ParentDaikokuten::OnUpdate()
 		return;
 	}
 
+	//ポーズから復帰したときオブジェクトのアニメーションを再開する
 	if (isActiveChange)
 	{
 		isActiveChange = false;
@@ -25,6 +27,7 @@ void ButiEngine::ParentDaikokuten::OnUpdate()
 		}
 	}
 
+	//それぞれのオブジェクトに応じてUpdateの内容を変える
 	auto objName = gameObject.lock()->GetGameObjectName();
 	if (objName == "Daikokuten_Stay")
 	{
@@ -74,12 +77,14 @@ void ButiEngine::ParentDaikokuten::Start()
 
 void ButiEngine::ParentDaikokuten::TalkAppear()
 {
+	//会話時の大黒天出現処理
 	gameObject.lock()->transform->SetLocalPostionZ(-1500);
 	currentPos.y = -1750;
 }
 
 void ButiEngine::ParentDaikokuten::Appear()
 {
+	//画面外から現れる時の処理
 	auto objName = gameObject.lock()->GetGameObjectName();
 	if (objName == "Daikokuten_Appear")
 	{
@@ -98,6 +103,7 @@ void ButiEngine::ParentDaikokuten::Appear()
 
 void ButiEngine::ParentDaikokuten::Disappear()
 {
+	//画面外に消えていく処理
 	auto objName = gameObject.lock()->GetGameObjectName();
 	if (objName == "Daikokuten_Appear")
 	{
@@ -116,6 +122,7 @@ void ButiEngine::ParentDaikokuten::Disappear()
 
 void ButiEngine::ParentDaikokuten::Reaction(bool arg_isReactionScale)
 {
+	//大黒天にリアクションを付けるときに呼ぶ
 	isReactionScale = arg_isReactionScale;
 	isOneLoop = true;
 }
@@ -127,32 +134,8 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::ParentDaikokuten::Clone()
 
 void ButiEngine::ParentDaikokuten::StayUpdate()
 {
-	//const float LERP_SCALE = 0.02f;
-	//previousPos.y = previousPos.y * (1.0f - LERP_SCALE) + currentPos.y * LERP_SCALE;
-	//gameObject.lock()->transform->SetLocalPostionY(previousPos.y);
-	//ChangeTimer(0, 100);
-
+	//常に上下に動く頭のアニメーション
 	LoopAnimation(0, 50, false);
-
-	//auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
-	//if (!anim && !isChange)
-	//{
-	//	anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
-	//	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-	//	anim->GetTargetTransform()->SetLocalPostionY(50);
-	//	anim->SetSpeed(0.0083f);
-	//	anim->SetEaseType(Easing::EasingType::EaseInOut);
-	//	isChange = true;
-	//}
-	//else if (!anim)
-	//{
-	//	anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
-	//	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-	//	anim->GetTargetTransform()->SetLocalPostionY(0);
-	//	anim->SetSpeed(0.0083f);
-	//	anim->SetEaseType(Easing::EasingType::EaseInOut);
-	//	isChange = false;
-	//}
 }
 
 void ButiEngine::ParentDaikokuten::AppearUpdate()
@@ -207,62 +190,14 @@ void ButiEngine::ParentDaikokuten::ReactionUpdate()
 
 void ButiEngine::ParentDaikokuten::RHandUpdate()
 {
-	//const float LERP_SCALE = 0.02f;
-	//previousPos.x = previousPos.x * (1.0f - LERP_SCALE) + currentPos.x * LERP_SCALE;
-	//gameObject.lock()->transform->SetLocalPostionX(previousPos.x);
-	//ChangeTimer(0, 50);
-
+	//常に左右に動く右手のアニメーション
 	LoopAnimation(0, 100, true);
-
-	//auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
-	//if (!anim && !isChange)
-	//{
-	//	anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
-	//	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-	//	anim->GetTargetTransform()->SetLocalPostionX(100);
-	//	anim->SetSpeed(0.0083f);
-	//	anim->SetEaseType(Easing::EasingType::EaseInOut);
-	//	isChange = true;
-	//}
-	//else if (!anim)
-	//{
-	//	anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
-	//	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-	//	anim->GetTargetTransform()->SetLocalPostionX(0);
-	//	anim->SetSpeed(0.0083f);
-	//	anim->SetEaseType(Easing::EasingType::EaseInOut);
-	//	isChange = false;
-	//}
 }
 
 void ButiEngine::ParentDaikokuten::LHandUpdate()
 {
-	//const float LERP_SCALE = 0.02f;
-	//previousPos.x = previousPos.x * (1.0f - LERP_SCALE) + currentPos.x * LERP_SCALE;
-	//gameObject.lock()->transform->SetLocalPostionX(previousPos.x);
-	//ChangeTimer(0, -50);
-
+	//常に左右に動く左手のアニメーション
 	LoopAnimation(0, -100, true);
-
-	//auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
-	//if (!anim && !isChange)
-	//{
-	//	anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
-	//	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-	//	anim->GetTargetTransform()->SetLocalPostionX(-100);
-	//	anim->SetSpeed(0.0083f);
-	//	anim->SetEaseType(Easing::EasingType::EaseInOut);
-	//	isChange = true;
-	//}
-	//else if (!anim)
-	//{
-	//	anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
-	//	anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-	//	anim->GetTargetTransform()->SetLocalPostionX(0);
-	//	anim->SetSpeed(0.0083f);
-	//	anim->SetEaseType(Easing::EasingType::EaseInOut);
-	//	isChange = false;
-	//}
 }
 
 void ButiEngine::ParentDaikokuten::RAppearUpdate()
@@ -307,6 +242,7 @@ void ButiEngine::ParentDaikokuten::LoopAnimation(const float arg_startPos, const
 	{
 		anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
 		anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+		//縦に動かすか横に動かすか
 		if (arg_isX)
 		{
 			anim->GetTargetTransform()->SetLocalPostionX(arg_endPos);
@@ -323,6 +259,7 @@ void ButiEngine::ParentDaikokuten::LoopAnimation(const float arg_startPos, const
 	{
 		anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
 		anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+		//縦に動かすか横に動かすか
 		if (arg_isX)
 		{
 			anim->GetTargetTransform()->SetLocalPostionX(arg_startPos);

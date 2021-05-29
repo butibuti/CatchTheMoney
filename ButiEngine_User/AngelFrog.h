@@ -17,8 +17,15 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+		void SetBackFrog(std::weak_ptr<GameObject> arg_backFrog) { wkp_backFrog = arg_backFrog; }
+		void SetDefaultGravity(bool arg_top);
+		void SetUp(float arg_scaleY);
 	private:
+		std::weak_ptr<GameObject> wkp_backFrog;
+
 		int life;
+		float accel;
+		Vector3 position;
 
 		void Move();
 	};
