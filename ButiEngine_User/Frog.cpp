@@ -9,6 +9,8 @@
 #include"StageManager.h"
 #include"TalkText.h"
 #include"Player.h"
+#include "StageSelect.h"
+#include "Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
 
 void ButiEngine::Frog::OnUpdate()
 {
@@ -20,14 +22,19 @@ void ButiEngine::Frog::OnUpdate()
 	}
 	Interlock();
 	if (shp_pauseManager->IsPause() ||
-		StageManager::GetMode() == GameMode::Edit ||
-		!TalkText::IsDelete())
+		StageManager::GetMode() == GameMode::Edit)
 	{
 		return;
 	}
 
 	CheckNearPlayer();
 	Animation();
+	if (onceCount < 100 && StageSelect::GetStageNum() == TalkStageNum::FROG_TALK)
+	{
+		onceCount++;
+		return;
+	}
+	SpriteAnimation();
 	if (!nearPlayer) { return; }
 	MoveY();
 	CheckGravity();
@@ -52,11 +59,29 @@ void ButiEngine::Frog::Start()
 
 	shp_bottomAABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 10.0f), wkp_bottom.lock()->transform);
 
+	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
+
+	if (StageSelect::GetStageNum() == TalkStageNum::FROG_TALK)
+	{
+		animation = Animation::EAT_APPLE;
+		shp_spriteAnimation->SetVarticalAnim(Frog::EAT_APPLE);
+	}
+	else
+	{
+		animation = Animation::SITA;
+	}
+
+
 	velocity = Vector3::Zero;
 	grounded = false;
 	nearPlayer = false;
-	progress = 0;
 	once = true;
+	isAnimation = false;
+	isApple = false;
+	progress = 0;
+	animationFrame = 0;
+	onceCount = 0;
+	holdAppleCount = 0;
 }
 
 void ButiEngine::Frog::OnShowUI()
@@ -79,6 +104,11 @@ void ButiEngine::Frog::SetDefaultGravity(bool arg_top)
 	{
 		gravity = GameSettings::gravity;
 	}
+}
+
+void ButiEngine::Frog::Exprosion()
+{
+	animation = Animation::EXPROSION;
 }
 
 void ButiEngine::Frog::CreateSita()
@@ -287,7 +317,7 @@ void ButiEngine::Frog::FollowPlayer()
 
 void ButiEngine::Frog::Animation()
 {
-	if (!animation) { return; }
+	if (!isAnimation) { return; }
 
 	const int ANIMATION_FRAME = 30;
 
@@ -322,19 +352,114 @@ void ButiEngine::Frog::Animation()
 			}
 		}
 	}
+
 	float x = wkp_sita_sentan.lock()->transform->GetWorldPosition().x + moveX;
 	wkp_sita_sentan.lock()->transform->SetWorldPostionX(x);
 
 	Vector3 pos = wkp_sita_sentan.lock()->transform->GetWorldPosition();
 	if (abs(pos.x - targetX) < speed)
 	{
+		if (grabbed)
+		{
+			animation = Animation::IDLE;
+			shp_spriteAnimation->SetHorizontalAnim(0);
+		}
+		else
+		{
+			animation = Animation::SITA;
+			shp_spriteAnimation->SetHorizontalAnim(0);
+		}
 		wkp_sita_sentan.lock()->transform->SetWorldPostionX(targetX);
-		animation = false;
+		isAnimation = false;
+	}
+	else
+	{
+		animation = Animation::SITA;
+		shp_spriteAnimation->SetHorizontalAnim(0);
 	}
 
 	wkp_sita_tyuukan.lock()->GetGameComponent<SitaTyuukan>()->Move();
 	if (wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita().lock())
 	{
 		wkp_player.lock()->GetGameComponent<Player>()->FollowSita();
+	}
+}
+
+void ButiEngine::Frog::SpriteAnimation()
+{
+	animationFrame++;
+
+	if (isApple)
+	{
+		holdAppleCount++;
+	}
+	if (holdAppleCount > 150)
+	{
+		holdAppleCount = 0;
+		isApple = false;
+		animation = Animation::SITA;
+		shp_spriteAnimation->SetVarticalAnim(Frog::SITA);
+		shp_spriteAnimation->SetHorizontalAnim(0);
+	}
+
+	const int ANIMATION_RATE = 5;
+	if (animationFrame < ANIMATION_RATE) return;
+
+	animationFrame = 0;
+
+	const int EAT_APPLE_COUNT = 7;
+	const int IDLE_COUNT = 1;
+	const int EXPROSION_COUNT = 18;
+
+	switch (animation)
+	{
+	case ButiEngine::Frog::EAT_APPLE:
+		shp_spriteAnimation->SetVarticalAnim(Frog::EAT_APPLE);
+		if (shp_spriteAnimation->GetHorizontalAnim() < EAT_APPLE_COUNT)
+		{
+			shp_spriteAnimation->UpdateHorizontalAnim(1);
+		}
+		else
+		{
+			isApple = true;
+		}
+
+		break;
+	case ButiEngine::Frog::IDLE:
+		shp_spriteAnimation->SetVarticalAnim(Frog::IDLE);
+		if (shp_spriteAnimation->GetHorizontalAnim() < IDLE_COUNT)
+		{
+			shp_spriteAnimation->UpdateHorizontalAnim(1);
+		}
+		else
+		{
+			shp_spriteAnimation->SetHorizontalAnim(0);
+		}
+
+		break;
+	case ButiEngine::Frog::SITA:
+		shp_spriteAnimation->SetVarticalAnim(Frog::SITA);
+		if (shp_spriteAnimation->GetHorizontalAnim() < IDLE_COUNT)
+		{
+			shp_spriteAnimation->UpdateHorizontalAnim(1);
+		}
+		else
+		{
+			shp_spriteAnimation->SetHorizontalAnim(0);
+		}
+		break;
+	case ButiEngine::Frog::EXPROSION:
+		shp_spriteAnimation->SetVarticalAnim(Frog::EXPROSION);
+		if (shp_spriteAnimation->GetHorizontalAnim() < EXPROSION_COUNT)
+		{
+			shp_spriteAnimation->UpdateHorizontalAnim(1);
+		}
+		else
+		{
+			gameObject.lock()->transform->SetLocalPosition(Vector3(0, 0, -3000));
+		}
+		break;
+	default:
+		break;
 	}
 }

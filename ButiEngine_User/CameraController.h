@@ -22,7 +22,8 @@ namespace ButiEngine {
 
 		void ZoomIn();
 		void ZoomOut();
-
+		void FrogZoomIn();
+		void FrogZoomOut();
 		void TitleZoomOut();
 	private:
 		float zoomInFrame;

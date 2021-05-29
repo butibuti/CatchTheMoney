@@ -104,7 +104,8 @@ void ButiEngine::ContorolByStick::Control()
 	}
 
 	//コントローラーでぐりぐり
-	if (GetRightStick.x >= deadZone || GetRightStick.x <= -deadZone)
+	if ((GetRightStick.x >= deadZone || GetRightStick.x <= -deadZone) || 
+		(GetRightStick.y >= deadZone || GetRightStick.y <= -deadZone))
 	{
 		isChanged = true;
 		//float moveRotation = -GetRightStick.x * rotationSpeed;
@@ -122,7 +123,8 @@ void ButiEngine::ContorolByStick::Control()
 		}
 
 	}
-	if (GetRightStick.y >= deadZone || GetRightStick.y <= -deadZone)
+	if ((GetRightStick.x >= deadZone || GetRightStick.x <= -deadZone) ||
+		(GetRightStick.y >= deadZone || GetRightStick.y <= -deadZone))
 	{
 		isChanged = true;
 

@@ -187,7 +187,7 @@ void ButiEngine::TalkText::AbnormalTalk()
 void ButiEngine::TalkText::FrogInterval()
 {
 	//çƒÇ—åªÇÍÇÈÇ‹Ç≈ÇÃéûä‘
-	const int MAX_INTERVAL_TIME = 120;
+	const int MAX_INTERVAL_TIME = 60;
 
 	if (isInterval && intervalTime <= MAX_INTERVAL_TIME)
 	{
@@ -242,7 +242,7 @@ void ButiEngine::TalkText::NextText()
 	{
 		waitTime = 0;
 		textCount++;
-		if (StageSelect::GetStageNum() != 13)
+		if (StageSelect::GetStageNum() != TalkStageNum::FROG_TALK)
 		{
 			NormalTalk();
 		}
