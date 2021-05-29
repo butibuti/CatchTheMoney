@@ -18,7 +18,7 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
 
 
-	//auto app = CreateDefaultApplicationInstance("Choose", WindowPopType::max, 1920, 1080, false);
+	//auto app = CreateDefaultApplicationInstance("Choose", WindowPopType::max, 1920, 1080, true);
 	auto app = CreateEditorApplicationInstance("Editor", WindowPopType::max,1080,700, false);
 	GameDevice::Initialize();
 	GameDevice::GetInput()->Initialize(app);
@@ -32,7 +32,7 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
 	
 
-	app->GetGraphicDevice()->SetClearColor(Vector4(107.0f / 255.0f,43.0f / 255.0f,189.0f / 255.0f, 1.0f));
+	app->GetGraphicDevice()->SetClearColor(Vector4(255.0f / 254.0f,43.0f / 250.0f,189.0f / 255.0f, 1.0f));
 	int returnCode = app->Run();
 
 
