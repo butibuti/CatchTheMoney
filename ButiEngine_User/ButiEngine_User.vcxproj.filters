@@ -58,6 +58,7 @@
     <ClCompile Include="SelectFlash.cpp" />
     <ClCompile Include="BackGroundMobius.cpp" />
     <ClCompile Include="GameExitMenu.cpp" />
+    <ClCompile Include="BackgroundFrame.cpp" />
     <ClCompile Include="AngelFrog.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -117,5 +118,6 @@
     <ClInclude Include="BackGroundMobius.h" />
     <ClInclude Include="GameExitMenu.h" />
     <ClInclude Include="AngelFrog.h" />
+    <ClInclude Include="BackgroundFrame.h" />
   </ItemGroup>
 </Project>

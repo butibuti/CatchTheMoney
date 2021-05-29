@@ -494,7 +494,12 @@ void ButiEngine::Player::CorrectionFrog(std::weak_ptr<GameObject> arg_frog)
 
 void ButiEngine::Player::GrabGoal(std::weak_ptr<GameObject> arg_goal)
 {
-	if (!wkp_holdCore.lock() && !wkp_holdFrog.lock() && !pushGrabKeyFrame)
+	auto core = wkp_holdCore.lock();
+	auto frog = wkp_holdFrog.lock();
+	auto sita = wkp_holdSita.lock();
+	auto goal = wkp_holdGoal.lock();
+	bool noGrab = !core && !frog && !sita && !goal;
+	if (noGrab && !pushGrabKeyFrame)
 	{
 		Vector3 playerPos = gameObject.lock()->transform->GetWorldPosition();
 		Vector3 targetPos = arg_goal.lock()->transform->GetWorldPosition();
@@ -518,7 +523,12 @@ void ButiEngine::Player::GrabGoal(std::weak_ptr<GameObject> arg_goal)
 
 void ButiEngine::Player::GrabGravityCore(std::weak_ptr<GameObject> arg_core)
 {
-	if (!wkp_holdCore.lock() && !wkp_holdFrog.lock() && !wkp_holdSita.lock() && !pushGrabKeyFrame)
+	auto core = wkp_holdCore.lock();
+	auto frog = wkp_holdFrog.lock();
+	auto sita = wkp_holdSita.lock();
+	auto goal = wkp_holdGoal.lock();
+	bool noGrab = !core && !frog && !sita && !goal;
+	if (noGrab && !pushGrabKeyFrame)
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, GameSettings::masterVolume);
 
@@ -544,7 +554,12 @@ void ButiEngine::Player::ReleaseGravityCore()
 
 void ButiEngine::Player::GrabFrog(std::weak_ptr<GameObject> arg_frog)
 {
-	if (!wkp_holdFrog.lock() && !wkp_holdCore.lock() && !pushGrabKeyFrame)
+	auto core = wkp_holdCore.lock();
+	auto frog = wkp_holdFrog.lock();
+	auto sita = wkp_holdSita.lock();
+	auto goal = wkp_holdGoal.lock();
+	bool noGrab = !core && !frog && !sita && !goal;
+	if (noGrab && !pushGrabKeyFrame)
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, GameSettings::masterVolume);
 		wkp_holdFrog = arg_frog;
@@ -645,7 +660,12 @@ void ButiEngine::Player::OnCollisionSita(std::weak_ptr<GameObject> arg_sita)
 
 void ButiEngine::Player::GrabSita(std::weak_ptr<GameObject> arg_sita)
 {
-	if (!wkp_holdFrog.lock() && !wkp_holdCore.lock() && !pushGrabKeyFrame)
+	auto core = wkp_holdCore.lock();
+	auto frog = wkp_holdFrog.lock();
+	auto sita = wkp_holdSita.lock();
+	auto goal = wkp_holdGoal.lock();
+	bool noGrab = !core && !frog && !sita && !goal;
+	if (noGrab && !pushGrabKeyFrame)
 	{
 		wkp_holdSita = arg_sita;
 		sitaDifference = wkp_holdSita.lock()->transform->GetWorldPosition() - gameObject.lock()->transform->GetWorldPosition();

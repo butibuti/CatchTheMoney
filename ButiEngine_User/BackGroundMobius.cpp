@@ -1,8 +1,10 @@
 #include "stdafx_u.h"
 #include "BackGroundMobius.h"
+#include"PauseManager.h"
 
 void ButiEngine::BackGroundMobius::OnUpdate()
 {
+    if (PauseManager::IsPause()) { return; }
     time += timePase;
     zAxisRotate += 0.01f;
     auto t =Easing::GetEase(time, rotateEaseType) ;
