@@ -47,6 +47,13 @@ void ButiEngine::SitaSentan::SetZ()
 	gameObject.lock()->transform->SetWorldPostionZ(wkp_frog.lock()->transform->GetWorldPosition().z + 0.1f);
 }
 
+void ButiEngine::SitaSentan::SetAnim(int arg_anim)
+{
+	shp_spriteAnimation->SetVarticalAnim(arg_anim);
+	shp_mobiusLoop->GetRight().lock()->GetGameComponent<SpliteAnimationComponent>()->SetVarticalAnim(arg_anim);
+	shp_mobiusLoop->GetLeft().lock()->GetGameComponent<SpliteAnimationComponent>()->SetVarticalAnim(arg_anim);
+}
+
 void ButiEngine::SitaSentan::SetX()
 {
 	if (StageManager::GetMode() == GameMode::Edit)

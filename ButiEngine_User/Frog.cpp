@@ -33,6 +33,7 @@ void ButiEngine::Frog::OnUpdate()
 	if (onceCount < 100 && StageSelect::GetStageNum() == TalkStageNum::FROG_TALK)
 	{
 		onceCount++;
+		wkp_sita_sentan.lock()->GetGameComponent<SitaSentan>()->SetAnim(1);
 		return;
 	}
 	SpriteAnimation();
@@ -423,6 +424,7 @@ void ButiEngine::Frog::SpriteAnimation()
 	switch (animation)
 	{
 	case ButiEngine::Frog::EAT_APPLE:
+		wkp_sita_sentan.lock()->GetGameComponent<SitaSentan>()->SetAnim(1);
 		shp_spriteAnimation->SetVarticalAnim(Frog::EAT_APPLE);
 		if (shp_spriteAnimation->GetHorizontalAnim() < EAT_APPLE_COUNT)
 		{
@@ -435,6 +437,7 @@ void ButiEngine::Frog::SpriteAnimation()
 
 		break;
 	case ButiEngine::Frog::IDLE:
+		wkp_sita_sentan.lock()->GetGameComponent<SitaSentan>()->SetAnim(1);
 		shp_spriteAnimation->SetVarticalAnim(Frog::IDLE);
 		if (shp_spriteAnimation->GetHorizontalAnim() < IDLE_COUNT)
 		{
@@ -447,6 +450,7 @@ void ButiEngine::Frog::SpriteAnimation()
 
 		break;
 	case ButiEngine::Frog::SITA:
+		wkp_sita_sentan.lock()->GetGameComponent<SitaSentan>()->SetAnim(0);
 		shp_spriteAnimation->SetVarticalAnim(Frog::SITA);
 		if (shp_spriteAnimation->GetHorizontalAnim() < IDLE_COUNT)
 		{

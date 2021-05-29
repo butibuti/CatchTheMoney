@@ -24,6 +24,7 @@ namespace ButiEngine {
 		void SetFrog(std::weak_ptr<GameObject> arg_frog) { wkp_frog = arg_frog; }
 		std::weak_ptr<GameObject> GetFrog() { return wkp_frog; }
 		void SetZ();
+		void SetAnim(int arg_anim);
 	private:
 		std::weak_ptr<GameObject> wkp_frog;
 		std::shared_ptr<MobiusLoop> shp_mobiusLoop;
