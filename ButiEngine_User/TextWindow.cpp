@@ -11,7 +11,7 @@ void ButiEngine::TextWindow::OnUpdate()
 	}
 	else
 	{
-
+		gameObject.lock()->transform->SetLocalPosition(initPos);
 	}
 
 
@@ -23,6 +23,7 @@ void ButiEngine::TextWindow::OnSet()
 
 void ButiEngine::TextWindow::Start()
 {
+	initPos = gameObject.lock()->transform->GetLocalPosition();
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::TextWindow::Clone()

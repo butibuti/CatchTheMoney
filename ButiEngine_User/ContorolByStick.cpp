@@ -15,23 +15,11 @@ void ButiEngine::ContorolByStick::OnUpdate()
 		return;
 	}
 
+	//メビウスぐりぐり
 	Control();
 
 	//カメラリセット
-	if (InputManager::OnTriggerMobiusResetRotationKey())
-	{
-		cameraResetFrame = 0;
-		rotation = Vector3(-25, -25, 0);
-		auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
-		if (!anim)
-		{
-			anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
-			anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-			anim->GetTargetTransform()->SetLocalRotation(rotation);
-			anim->SetSpeed(0.05f);
-			anim->SetEaseType(Easing::EasingType::EaseOutElastic);
-		}
-	}
+	//Reset();
 
 }
 
@@ -48,7 +36,10 @@ void ButiEngine::ContorolByStick::Start()
 	rotationSpeed = 2.0f;
 	returnSpeed = 1.0f;
 	initAxis = -gameObject.lock()->transform->GetUp();
-	rotation = Vector3(-25, -25, 0);
+	initRotate = Vector3(-25, -25, 0);
+	curRotation = initRotate;
+	preRotation = initRotate;
+	rotation = initRotate;
 	currMousePos = Vector2(0, 0);
 	preMousePos = Vector2(0, 0);
 }
@@ -77,53 +68,57 @@ void ButiEngine::ContorolByStick::Control()
 	preMousePos = currMousePos;
 	currMousePos = GameDevice::GetInput()->GetMousePos();
 
+	//マウスでぐりぐり
 	if (GameDevice::GetInput()->GetMouseButton(MouseButtons::LeftClick))
 	{
 		isChanged = true;
 		float moveRotation = (preMousePos.x - currMousePos.x) / 5.0f;
-		rotation.y += moveRotation;
+		curRotation.y += moveRotation;
 
-		if (rotation.y > rotationLimit)
+		if (curRotation.y > rotationLimit)
 		{
-			rotation.y = rotationLimit;
+			curRotation.y = rotationLimit;
 		}
-		else if (rotation.y < -rotationLimit)
+		else if (curRotation.y < -rotationLimit)
 		{
-			rotation.y = -rotationLimit;
+			curRotation.y = -rotationLimit;
 		}
 
 		moveRotation = (preMousePos.y - currMousePos.y) / 5.0f;
-		rotation.x += moveRotation;
+		curRotation.x += moveRotation;
 
-		if (rotation.x > rotationLimit)
+		if (curRotation.x > rotationLimit)
 		{
-			rotation.x = rotationLimit;
+			curRotation.x = rotationLimit;
 		}
-		else if (rotation.x < -rotationLimit)
+		else if (curRotation.x < -rotationLimit)
 		{
-			rotation.x = -rotationLimit;
+			curRotation.x = -rotationLimit;
 		}
 
-		if (isChanged)
-		{
-			transform->SetLocalRotation(rotation);
-		}
+		preRotation = curRotation;
+
+		transform->SetLocalRotation(preRotation);
+
 		return;
 	}
 
+	//コントローラーでぐりぐり
 	if (GetRightStick.x >= deadZone || GetRightStick.x <= -deadZone)
 	{
 		isChanged = true;
-		float moveRotation = -GetRightStick.x * rotationSpeed;
-		rotation.y += moveRotation;
+		//float moveRotation = -GetRightStick.x * rotationSpeed;
+		//rotation.y += moveRotation;
 
-		if (rotation.y > rotationLimit)
+		curRotation.y = -GetRightStick.x * rotationLimit;
+
+		if (curRotation.y > rotationLimit)
 		{
-			rotation.y = rotationLimit;
+			curRotation.y = rotationLimit;
 		}
-		else if (rotation.y < -rotationLimit)
+		else if (curRotation.y < -rotationLimit)
 		{
-			rotation.y = -rotationLimit;
+			curRotation.y = -rotationLimit;
 		}
 
 	}
@@ -131,21 +126,46 @@ void ButiEngine::ContorolByStick::Control()
 	{
 		isChanged = true;
 
-		float moveRotation = GetRightStick.y * rotationSpeed;
-		rotation.x += moveRotation;
+		//float moveRotation = GetRightStick.y * rotationSpeed;
+		//rotation.x += moveRotation;
 
-		if (rotation.x > rotationLimit)
+		curRotation.x = GetRightStick.y * rotationLimit;
+
+		if (curRotation.x > rotationLimit)
 		{
-			rotation.x = rotationLimit;
+			curRotation.x = rotationLimit;
 		}
-		else if (rotation.x < -rotationLimit)
+		else if (curRotation.x < -rotationLimit)
 		{
-			rotation.x = -rotationLimit;
+			curRotation.x = -rotationLimit;
 		}
 	}
 
-	if (isChanged)
+	const float LERP_SCALE = 0.2f;
+	preRotation.y = preRotation.y * (1.0f - LERP_SCALE) + curRotation.y * LERP_SCALE;
+	preRotation.x = preRotation.x * (1.0f - LERP_SCALE) + curRotation.x * LERP_SCALE;
+
+	if (!isChanged)
 	{
-		transform->SetLocalRotation(rotation);
+		curRotation = initRotate;
+	}
+	transform->SetLocalRotation(preRotation);
+}
+
+void ButiEngine::ContorolByStick::Reset()
+{
+	if (InputManager::OnTriggerMobiusResetRotationKey())
+	{
+		cameraResetFrame = 0;
+		rotation = initRotate;
+		auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
+		if (!anim)
+		{
+			anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
+			anim->SetTargetTransform(gameObject.lock()->transform->Clone());
+			anim->GetTargetTransform()->SetLocalRotation(rotation);
+			anim->SetSpeed(0.05f);
+			anim->SetEaseType(Easing::EasingType::EaseOutElastic);
+		}
 	}
 }
