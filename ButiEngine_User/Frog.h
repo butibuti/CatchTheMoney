@@ -3,6 +3,7 @@
 namespace ButiEngine {
 
 	class PauseManager;
+	class SpliteAnimationComponent;
 
 	class Frog :public GameComponent
 	{
@@ -34,15 +35,17 @@ namespace ButiEngine {
 		}
 		void PlayAnimation() 
 		{
-			animation = true; 
+			isAnimation = true; 
 			progress = 0;
 		}
-		bool IsAnimation() { return animation; }
+		void Exprosion();
+		bool IsAnimation() { return isAnimation; }
 		std::weak_ptr<GameObject> GetSitaSentan() { return wkp_sita_sentan; }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_bottomAABB;
+		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 
 		std::weak_ptr<GameObject> wkp_backFrog;
 		std::weak_ptr<GameObject> wkp_sita_tyuukan;
@@ -50,14 +53,28 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_bottom;
 		std::weak_ptr<GameObject> wkp_player;
 
+		enum Animation
+		{
+			EAT_APPLE,
+			IDLE,
+			SITA,
+			EXPROSION,
+		};
+
+		Animation animation;
+
 		Vector3 velocity;
 		float gravity;
 		bool grounded;
 		bool nearPlayer;
 		bool grabbed;
-		bool animation;
-		int progress;
+		bool isAnimation;
+		bool isApple;
 		bool once;
+		int progress;
+		int animationFrame;
+		int onceCount;
+		int holdAppleCount;
 
 		void CreateSita();
 		void CheckGravity();
@@ -69,6 +86,7 @@ namespace ButiEngine {
 		void CheckHitPlayer();
 		void FollowPlayer();
 		void Animation();
+		void SpriteAnimation();
 	};
 
 }
