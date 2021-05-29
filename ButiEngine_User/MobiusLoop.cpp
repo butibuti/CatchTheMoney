@@ -49,7 +49,7 @@ void ButiEngine::MobiusLoop::Start()
 	}
 	if (name == "Player")
 	{
-		shp_AABB_right = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 10.0f), wkp_right.lock()->transform);
+		shp_AABB_right = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 10.0f), wkp_right.lock()->transform);
 	}
 
 	wkp_left = GetManager().lock()->AddObject(std::make_shared<Transform>(), name + "_Left");
@@ -67,7 +67,7 @@ void ButiEngine::MobiusLoop::Start()
 	}
 	if (name == "Player")
 	{
-		shp_AABB_left = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.999f, 0.999f, 10.0f), wkp_left.lock()->transform);
+		shp_AABB_left = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 10.0f), wkp_left.lock()->transform);
 	}
 
 	if (StringHelper::Contains(name, "Panel"))
