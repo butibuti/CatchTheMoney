@@ -2,14 +2,11 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class SpliteAnimationComponent;
-	class MobiusLoop;
-
-	class SitaSentan :public GameComponent
+	class FrogParts :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "SitaSentan";
+			return "FrogParts";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -22,23 +19,18 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 		void SetFrog(std::weak_ptr<GameObject> arg_frog) { wkp_frog = arg_frog; }
-		std::weak_ptr<GameObject> GetFrog() { return wkp_frog; }
-		void SetZ();
-		void SetAnim(int arg_anim);
+		void Explosion(const Vector3& arg_position);
 	private:
 		std::weak_ptr<GameObject> wkp_frog;
-		std::shared_ptr<MobiusLoop> shp_mobiusLoop;
-		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 
-		Vector3 initScale;
-		float progress;
-		int animationFrame;
+		Vector3 velocity;
+		float gravity;
+		int life;
 
-		void SetScale();
-		void SetX();
-		void Animation();
+		void Move();
+		void Rotation();
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(SitaSentan);
+BUTI_REGIST_GAMECOMPONENT(FrogParts);

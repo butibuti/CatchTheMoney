@@ -42,6 +42,7 @@ namespace ButiEngine {
 		bool IsAnimation() { return isAnimation; }
 		std::weak_ptr<GameObject> GetSitaSentan() { return wkp_sita_sentan; }
 		std::weak_ptr<GameObject> GetSitatyuukan() { return wkp_sita_tyuukan; }
+		float GetGravity() { return gravity; }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB;
@@ -54,7 +55,6 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_bottom;
 		std::weak_ptr<GameObject> wkp_player;
 		std::weak_ptr<GameObject> wkp_angel;
-		std::vector<std::weak_ptr<GameObject>> vec_wkp_arms;
 		std::vector<std::weak_ptr<GameObject>> vec_wkp_parts;
 
 		enum Animation

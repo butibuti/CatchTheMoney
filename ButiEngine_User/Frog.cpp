@@ -12,6 +12,7 @@
 #include "StageSelect.h"
 #include "AngelFrog.h"
 #include "Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
+#include"FrogParts.h"
 
 void ButiEngine::Frog::OnUpdate()
 {
@@ -72,6 +73,34 @@ void ButiEngine::Frog::Start()
 	auto angelFrogComponent = wkp_angel.lock()->GetGameComponent<AngelFrog>();
 	angelFrogComponent->Start();
 	angelFrogComponent->SetIsActive(false);
+
+	int partType = 0;
+	for (int i = 0; i < 12; i++)
+	{
+		auto partScale = Vector3(16.0f, 16.0f, 1.0f);
+		std::string name = "FrogArm";
+		if (partType == 1)
+		{
+			name = "FrogPart";
+			partScale.x = 8.0f;
+			partScale.y = 8.0f;
+		}
+		else if (partType == 2)
+		{
+			name = "FrogHara";
+			partScale.x = 8.0f;
+			partScale.y = 8.0f;
+		}
+		partType++;
+		const int MAX_PART = 3;
+		if (partType == MAX_PART)
+		{
+			partType = 0;
+		}
+		auto parts = GetManager().lock()->AddObjectFromCereal(name, ObjectFactory::Create<Transform>(position, Vector3::Zero, partScale));
+		parts.lock()->GetGameComponent<FrogParts>()->SetFrog(gameObject);
+		vec_wkp_parts.push_back(parts);
+	}
 
 	if (StageSelect::GetStageNum() == TalkStageNum::FROG_TALK)
 	{
@@ -395,6 +424,13 @@ void ButiEngine::Frog::Animation()
 		isAnimation = false;
 
 		wkp_player.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
+		gameObject.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->ReResist();
+
+		if (playerHoldSita.lock())
+		{
+			Exprosion();
+			wkp_backFrog.lock()->GetGameComponent<Frog>()->Exprosion();
+		}
 	}
 	else
 	{
@@ -403,7 +439,7 @@ void ButiEngine::Frog::Animation()
 	}
 
 	wkp_sita_tyuukan.lock()->GetGameComponent<SitaTyuukan>()->Move();
-	if (wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita().lock())
+	if (playerHoldSita.lock())
 	{
 		wkp_player.lock()->GetGameComponent<Player>()->FollowSita();
 	}
@@ -490,6 +526,14 @@ void ButiEngine::Frog::SpriteAnimation()
 				position.z -= 0.02f;
 				wkp_angel.lock()->transform->SetLocalPosition(position);
 				wkp_angel.lock()->GetGameComponent<AngelFrog>()->SetIsActive(true);
+
+				position.z -= 3.0f;
+				auto end = vec_wkp_parts.end();
+				for (auto itr = vec_wkp_parts.begin(); itr != end; ++itr)
+				{
+					position.z -= 0.01f;
+					(*itr).lock()->GetGameComponent<FrogParts>()->Explosion(position);
+				}
 			}
 
 			Vector3 position = gameObject.lock()->transform->GetWorldPosition();

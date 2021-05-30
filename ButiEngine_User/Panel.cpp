@@ -7,12 +7,6 @@
 void ButiEngine::Panel::OnUpdate()
 {
 	StorePlayer();
-	if (once)
-	{
-		//wkp_drawObjectSky.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
-		//wkp_drawObjectTree.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
-		once = false;
-	}
 	if (gameObject.lock()->GetGameComponent<TransformAnimation>())
 	{
 		animation = true;
@@ -206,6 +200,12 @@ void ButiEngine::Panel::SetDrawObjectTree(int arg_treeNum, bool arg_back)
 
 	wkp_drawObjectTree = GetManager().lock()->AddObjectFromCereal(name, ObjectFactory::Create<Transform>(Vector3(0, 0, GameSettings::treeZ), Vector3::Zero, scale));
 	wkp_drawObjectTree.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
+}
+
+void ButiEngine::Panel::ReResist()
+{
+	wkp_drawObjectSky.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
+	wkp_drawObjectTree.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
 }
 
 void ButiEngine::Panel::AddTransformAnimation(int arg_frame)

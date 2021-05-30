@@ -38,17 +38,7 @@ void ButiEngine::StageManager::OnUpdate()
 	const int GOAL_LATE_FRAME = 20;
 	if (wkp_player.lock()->GetGameComponent<Player>()->IsClear())
 	{
-		if (clearAnimationFrame >= CLEAR_FRAME)
-		{
-			if (wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita().lock())
-			{
-				auto frog = wkp_frog.lock()->GetGameComponent<Frog>();
-				frog->Exprosion();
-				frog->GetBackFrog().lock()->GetGameComponent<Frog>()->Exprosion();
-				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_clear, GameSettings::masterVolume);
-			}
-		}
-		else if (clearAnimationFrame == CLEAR_FRAME - GOAL_LATE_FRAME)
+		if (clearAnimationFrame == CLEAR_FRAME - GOAL_LATE_FRAME)
 		{
 			if (!wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita().lock())
 			{
@@ -58,7 +48,7 @@ void ButiEngine::StageManager::OnUpdate()
 		}
 		else if (clearAnimationFrame == CLEAR_FRAME - 10 - GOAL_LATE_FRAME)
 		{
-			GetManager().lock()->AddObjectFromCereal("ClearBand");
+			//GetManager().lock()->AddObjectFromCereal("ClearBand");
 		}
 		else if (clearAnimationFrame == CLEAR_FRAME - 30 - GOAL_LATE_FRAME)
 		{

@@ -46,6 +46,7 @@ namespace ButiEngine {
 		void Lock(bool arg_back);
 		bool IsLock() { return lock; }
 		void SetDrawObjectTree(int arg_treeNum, bool arg_back);
+		void ReResist();
 	private:
 		std::weak_ptr<GameObject> wkp_drawObjectGravity;
 		std::weak_ptr<GameObject> wkp_drawObjectSky;

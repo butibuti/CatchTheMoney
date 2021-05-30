@@ -12,6 +12,7 @@
 void ButiEngine::SitaSentan::OnUpdate()
 {
 	if (PauseManager::IsPause()) return;
+	SetScale();
 	SetX();
 	gameObject.lock()->transform->SetWorldPostionY(wkp_frog.lock()->transform->GetWorldPosition().y);
 	SetZ();
@@ -52,6 +53,21 @@ void ButiEngine::SitaSentan::SetAnim(int arg_anim)
 	shp_spriteAnimation->SetVarticalAnim(arg_anim);
 	shp_mobiusLoop->GetRight().lock()->GetGameComponent<SpliteAnimationComponent>()->SetVarticalAnim(arg_anim);
 	shp_mobiusLoop->GetLeft().lock()->GetGameComponent<SpliteAnimationComponent>()->SetVarticalAnim(arg_anim);
+}
+
+void ButiEngine::SitaSentan::SetScale()
+{
+	Vector3 scale = gameObject.lock()->transform->GetLocalScale();
+	Vector3 frogScale = wkp_frog.lock()->transform->GetWorldScale();
+	if (scale.x < 0 != frogScale.x < 0)
+	{
+		scale.x *= -1;
+	}
+	if (scale.y < 0 == frogScale.y < 0)
+	{
+		scale.y *= -1;
+	}
+	gameObject.lock()->transform->SetLocalScale(scale);
 }
 
 void ButiEngine::SitaSentan::SetX()
