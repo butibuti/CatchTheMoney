@@ -29,6 +29,8 @@ void ButiEngine::Title::OnUpdate()
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_zoomOut, GameSettings::masterVolume * 3.0f);
 		wkp_titleLogo.lock()->GetGameComponent<TitleLogo>()->AnimationStart();
 		wkp_camera.lock()->GetGameComponent<CameraController>()->TitleZoomOut();
+		shp_FrameGenerateTimer->Start();
+		GenerateBackGroundFrame();
 		isAnimation = true;
 	}
 	if (isAnimation)
@@ -59,6 +61,9 @@ void ButiEngine::Title::OnUpdate()
 		//sceneManager->LoadScene("Stage0");
 		//sceneManager->ChangeScene("Stage0");
 	}
+	if (shp_FrameGenerateTimer->Update()) {
+		GenerateBackGroundFrame();
+	}
 }
 
 void ButiEngine::Title::OnSet()
@@ -87,6 +92,7 @@ void ButiEngine::Title::Start()
 
 	auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
 	sceneManager->LoadScene("Stage0");
+	shp_FrameGenerateTimer = ObjectFactory::Create<RelativeTimer>(1);
 }
 
 void ButiEngine::Title::OnShowUI()
@@ -100,4 +106,15 @@ void ButiEngine::Title::OnCollision(std::weak_ptr<GameObject> arg_other)
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Title::Clone()
 {
 	return ObjectFactory::Create<Title>();
+}
+
+void ButiEngine::Title::GenerateBackGroundFrame()
+{
+	for (int i = 0; i <2; i++) {
+		auto frame= GetManager().lock()->AddObjectFromCereal("BackGroundFrame_Title").lock();
+
+
+		frame->transform->SetLocalPostionZ(i * 0.01f);
+
+	}
 }

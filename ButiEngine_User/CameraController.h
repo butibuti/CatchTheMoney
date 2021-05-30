@@ -25,14 +25,16 @@ namespace ButiEngine {
 		void FrogZoomIn();
 		void FrogZoomOut();
 		void TitleZoomOut();
+
+		void MobiusZoomIn(const Vector3& position , const float arg_frame);
 	private:
 		float zoomInFrame;
 		float zoomOutFrame;
 		float titleZoomOutFrame;
+		float titleZoomInFrame;
 		float moveLength;
 		float initCameraZ;
-
-		bool animation;
+		bool animation,isTitleZoomIn;
 	};
 
 }

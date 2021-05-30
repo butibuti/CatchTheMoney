@@ -193,6 +193,9 @@ void ButiEngine::GameExitMenu::OnDecideNo()
 {
 	wkp_button_no.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
 
+	if (shp_particleEmitter) {
+		shp_particleEmitter->SetIsPause(false);
+	}
 	pushMenuKey = true;
 	DisappearUI();
 }

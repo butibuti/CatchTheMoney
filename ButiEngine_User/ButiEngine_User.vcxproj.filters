@@ -60,6 +60,7 @@
     <ClCompile Include="GameExitMenu.cpp" />
     <ClCompile Include="BackgroundFrame.cpp" />
     <ClCompile Include="AngelFrog.cpp" />
+    <ClCompile Include="BackGroundFrame_Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
@@ -119,5 +120,6 @@
     <ClInclude Include="GameExitMenu.h" />
     <ClInclude Include="AngelFrog.h" />
     <ClInclude Include="BackgroundFrame.h" />
+    <ClInclude Include="BackGroundFrame_Title.h" />
   </ItemGroup>
 </Project>
