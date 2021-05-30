@@ -62,6 +62,7 @@
     <ClCompile Include="AngelFrog.cpp" />
     <ClCompile Include="BackGroundFrame_Title.cpp" />
     <ClCompile Include="FrogParts.cpp" />
+    <ClCompile Include="TutorialSelect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
@@ -123,5 +124,6 @@
     <ClInclude Include="BackgroundFrame.h" />
     <ClInclude Include="BackGroundFrame_Title.h" />
     <ClInclude Include="FrogParts.h" />
+    <ClInclude Include="TutorialSelect.h" />
   </ItemGroup>
 </Project>

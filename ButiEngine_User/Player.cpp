@@ -111,6 +111,7 @@ void ButiEngine::Player::Start()
 
 	gameObject.lock()->RegistReactionComponent(GetThis<GameComponent>());
 
+	se_not = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/PanelLimit.wav");
 	se_dash = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Dash.wav");
 	se_grab = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Grab.wav");
 	se_jump = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Jump.wav");
@@ -156,6 +157,7 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 void ButiEngine::Player::Control()
 {
 	animation = ButiEngine::Player::IDLE;
+
 	if (freeze)
 	{
 		freezeProgressFrame++;
@@ -170,6 +172,8 @@ void ButiEngine::Player::Control()
 
 	pushGrabKeyFrame = false;
 	velocity.x = 0.0f;
+
+	if (isTutorial) return;
 
 	if (!isClear)
 	{
@@ -223,6 +227,10 @@ void ButiEngine::Player::Control()
 	}
 	else
 	{
+		if (InputManager::OnTriggerGrabKey())
+		{
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_not, GameSettings::masterVolume);
+		}
 		if (InputManager::OnTriggerJumpKey())
 		{
 			jumpInputFrame = COYOTE_TIME;
@@ -564,7 +572,6 @@ void ButiEngine::Player::GrabGoal(std::weak_ptr<GameObject> arg_goal)
 		if (StageSelect::GetStageNum() == TalkStageNum::REVERSE_TALK)
 		{
 			isTutorial = true;
-
 		}
 		else
 		{
@@ -734,6 +741,7 @@ void ButiEngine::Player::GrabSita(std::weak_ptr<GameObject> arg_sita)
 	bool noGrab = !core && !frog && !sita && !goal;
 	if (noGrab && !pushGrabKeyFrame)
 	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, GameSettings::masterVolume);
 		wkp_holdSita = arg_sita;
 		sitaDifference = wkp_holdSita.lock()->transform->GetWorldPosition() - gameObject.lock()->transform->GetWorldPosition();
 		gameObject.lock()->transform->SetWorldPostionZ(GameSettings::frogZ + 0.05f);

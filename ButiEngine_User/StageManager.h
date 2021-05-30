@@ -73,6 +73,11 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_daikokutenRAppear;
 		std::weak_ptr<GameObject> wkp_daikokutenLAppear;
 
+		std::weak_ptr<GameObject> wkp_tutorialNo;
+		std::weak_ptr<GameObject> wkp_tutorialYes;
+		std::weak_ptr<GameObject> wkp_tutorialTextWindow;
+		std::weak_ptr<GameObject> wkp_reverseCheckText;
+
 		SoundTag bgm;
 		SoundTag se_clear;
 		SoundTag se_enter;
@@ -87,6 +92,8 @@ namespace ButiEngine {
 		int frogEatAnimationCount;
 		bool isNext;
 		bool isOnce;
+		bool isAddTutorial;
+		bool isTutorialSelect;
 		const int CLEAR_FRAME = 90;
 		float particleScrollOffset;
 		Vector3 modeUIPosition;
@@ -104,7 +111,7 @@ namespace ButiEngine {
 		void FrogEatAnimation();
 		void StorePlayer();
 		void StoreFrog();
-
+		void TutorialMode();
 
 	};
 
