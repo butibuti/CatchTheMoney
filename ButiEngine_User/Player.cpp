@@ -705,6 +705,7 @@ void ButiEngine::Player::GrabSita(std::weak_ptr<GameObject> arg_sita)
 	bool noGrab = !core && !frog && !sita && !goal;
 	if (noGrab && !pushGrabKeyFrame)
 	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, GameSettings::masterVolume);
 		wkp_holdSita = arg_sita;
 		sitaDifference = wkp_holdSita.lock()->transform->GetWorldPosition() - gameObject.lock()->transform->GetWorldPosition();
 		gameObject.lock()->transform->SetWorldPostionZ(GameSettings::frogZ + 0.05f);

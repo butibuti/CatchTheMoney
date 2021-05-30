@@ -488,7 +488,9 @@ void ButiEngine::Frog::SpriteAnimation()
 				isSpawnAngel = true;
 				auto position = gameObject.lock()->transform->GetLocalPosition();
 				position.z -= 0.02f;
+				auto scale = gameObject.lock()->transform->GetLocalScale();
 				wkp_angel.lock()->transform->SetLocalPosition(position);
+				wkp_angel.lock()->transform->SetLocalScale(scale);
 				wkp_angel.lock()->GetGameComponent<AngelFrog>()->SetIsActive(true);
 			}
 
