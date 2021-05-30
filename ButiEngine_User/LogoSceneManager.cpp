@@ -23,17 +23,17 @@ void ButiEngine::LogoSceneManager::OnUpdate()
 
 void ButiEngine::LogoSceneManager::OnSet()
 {
-    if (!shp_timer) {
-        shp_timer = ObjectFactory::Create<RelativeTimer>(60.0f);
-    }
-    if (!shp_transTimer) {
-        shp_transTimer= ObjectFactory::Create<RelativeTimer>(60.0f);
-    }
 }
 
 void ButiEngine::LogoSceneManager::Start()
 {
     shp_logoBuffer = gameObject.lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
+    if (!shp_timer) {
+        shp_timer = ObjectFactory::Create<RelativeTimer>(60.0f);
+    }
+    if (!shp_transTimer) {
+        shp_transTimer = ObjectFactory::Create<RelativeTimer>(60.0f);
+    }
     shp_timer->Start();
 }
 

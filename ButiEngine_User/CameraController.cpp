@@ -123,29 +123,41 @@ void ButiEngine::CameraController::TitleZoomOut()
 void ButiEngine::CameraController::MobiusZoomIn(const Vector3& position,const float arg_frame)
 {
     auto anim = gameObject.lock()->GetGameComponent<TransformAnimation>();
+    Vector3 pos = position;
     if (!anim)
     {
-
         auto scrollManager = GetManager().lock()->GetGameObject("Screen").lock();
         auto scroll = scrollManager->GetGameComponent<ScrollManager>();
-        auto currentScroll= scroll->GetCurrentScroll();
+        auto currentScroll= scroll->GetCurrentScroll()* GameSettings::windowWidth;
 
-        auto yRatio = (position.y + GameSettings::windowHeight * 0.5f) / (float)GameSettings::windowHeight;
-        auto xRatio = ((currentScroll-position.x) + GameSettings::windowWidth * 0.5f) / (float)GameSettings::windowWidth;
+        auto yRatio = ((pos.y + GameSettings::windowHeight * 0.5f) / (float)GameSettings::windowHeight)*2.0f;
+        auto xRatio =- (( pos.x- currentScroll)) / (float)GameSettings::windowWidth;
         yRatio -= 1.0f;
-        auto position = MathHelper::GetMobiusPoint(MathHelper::ToRadian(xRatio*360), yRatio) * 125.0f;
+        auto mobiusPosposition = MathHelper::GetMobiusPoint(MathHelper::ToRadian(xRatio*360), yRatio) * 125.0f;
 
-        position *= scrollManager ->transform->GetMatrix();
+        Vector3 position;
 
-        auto  vpMatrix = GetCamera("Camera") ->GetViewProjectionMatrix();
+        auto normal= MathHelper::GetMobiusNormal(MathHelper::ToRadian(xRatio * 360), yRatio) * -400 * scrollManager->transform->GetWorldRotation();
+        if (normal.z > 0) {
+            normal *= -1;
+        }
+        position = ((mobiusPosposition)*  scrollManager ->transform->GetMatrix())+normal;
 
-        position *= vpMatrix;
 
-        position.z = 0.0f;
+
         anim = gameObject.lock()->AddGameComponent<TransformAnimation>();
         anim->SetTargetTransform(gameObject.lock()->transform->Clone());
-        anim->GetTargetTransform()->SetWorldPosition(Vector3(200, 100, -500));
+        anim->GetTargetTransform()->SetWorldPosition(Vector3(position.x, position.y,position.z));
+        anim->GetTargetTransform()->SetLookAtRotation(mobiusPosposition* scrollManager->transform->GetMatrix());
+        anim->GetTargetTransform()->TranslateY(-100);
         anim->SetSpeed(1.0f / arg_frame);
         anim->SetEaseType(Easing::EasingType::EaseOutQuart);
+
+        auto daikokutenHead = GetManager().lock()->GetGameObject("Daikokuten").lock();
+        auto daikokutenHand_L = GetManager().lock()->GetGameObject("DaikokutenHand_L").lock();
+        auto daikokutenHand_R = GetManager().lock()->GetGameObject("DaikokutenHand_R").lock();
+        daikokutenHead->transform->SetLocalPostionX(10000000000000);
+        daikokutenHand_L->transform->SetLocalPostionX(10000000000000);
+        daikokutenHand_R->transform->SetLocalPostionX(10000000000000);
     }
 }

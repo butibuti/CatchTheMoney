@@ -32,7 +32,7 @@ void ButiEngine::SelectZanzo::Start()
 {
 	animationCount = 0;
 	gameObject.lock()->transform->SetLocalPosition(Vector3(320,-400,0.02f));
-	gameObject.lock()->transform->SetLocalScale(Vector3(1600, 160, 1));
+	gameObject.lock()->transform->SetLocalScale(Vector3(1600, 320, 1));
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::SelectZanzo::Clone()

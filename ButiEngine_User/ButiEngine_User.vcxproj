@@ -269,6 +269,7 @@
     <ClInclude Include="PauseManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerController.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ReverseText.h" />
     <ClInclude Include="SceneChangeAnimation.h" />
     <ClInclude Include="ScrollManager.h" />
@@ -290,6 +291,12 @@
     <ClInclude Include="Title.h" />
     <ClInclude Include="TitleLogo.h" />
     <ClInclude Include="TutorialSelect.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ButiEngine_User.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="favicon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

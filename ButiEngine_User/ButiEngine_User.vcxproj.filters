@@ -125,5 +125,12 @@
     <ClInclude Include="BackGroundFrame_Title.h" />
     <ClInclude Include="FrogParts.h" />
     <ClInclude Include="TutorialSelect.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ButiEngine_User.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="favicon.ico" />
   </ItemGroup>
 </Project>
