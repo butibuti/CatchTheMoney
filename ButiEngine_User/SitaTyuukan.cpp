@@ -42,17 +42,20 @@ void ButiEngine::SitaTyuukan::Move()
 	Vector3 sentanPos = wkp_sentan.lock()->transform->GetWorldPosition();
 	Vector3 frogScale = wkp_frog.lock()->transform->GetWorldScale();
 
-	//sita no sentan ga kaeru no mae ni aru ka
-	float difference = sentanPos.x - frogPos.x;
-	if (frogScale.x < 0 != difference < 0)
+	if (StageManager::GetMode() != GameMode::Edit)
 	{
-		if (difference < 0)
+		//sita no sentan ga kaeru no mae ni aru ka
+		float difference = sentanPos.x - frogPos.x;
+		if (frogScale.x < 0 != difference < 0)
 		{
-			sentanPos.x += GameSettings::windowWidth;
-		}
-		else if (difference > 0)
-		{
-			sentanPos.x -= GameSettings::windowWidth;
+			if (difference < 0)
+			{
+				sentanPos.x += GameSettings::windowWidth;
+			}
+			else if (difference > 0)
+			{
+				sentanPos.x -= GameSettings::windowWidth;
+			}
 		}
 	}
 

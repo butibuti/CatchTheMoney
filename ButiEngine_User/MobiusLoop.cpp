@@ -4,6 +4,7 @@
 #include"PauseManager.h"
 #include"Player.h"
 #include"Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
+#include"StageManager.h"
 
 void ButiEngine::MobiusLoop::OnUpdate()
 {
@@ -302,7 +303,11 @@ void ButiEngine::MobiusLoop::BackYLeft(Vector3& arg_velocity, float arg_gravity)
 
 void ButiEngine::MobiusLoop::SetSitaPosition()
 {
-	if (!StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "Sita_tyuukan")) { return; }
+	if (!StringHelper::Contains(gameObject.lock()->GetGameObjectName(), "Sita_tyuukan") || 
+		StageManager::GetMode() == GameMode::Edit)
+	{
+		return; 
+	}
 
 	Vector3 localPosition = Vector3::Zero;
 

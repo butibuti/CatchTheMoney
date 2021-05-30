@@ -71,6 +71,7 @@ void ButiEngine::SitaSentan::SetX()
 		}
 		wkp_frog.lock()->GetGameComponent<Frog>()->GetSitatyuukan().lock()->GetGameComponent<SitaTyuukan>()->Move();
 		gameObject.lock()->transform->SetWorldPostionX(x);
+		wkp_frog.lock()->GetGameComponent<Frog>()->GetSitatyuukan().lock()->GetGameComponent<SitaTyuukan>()->Move();
 	}
 }
 
