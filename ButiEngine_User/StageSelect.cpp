@@ -101,7 +101,7 @@ void ButiEngine::StageSelect::Start()
 	wkp_parentSelectPanel = GetManager().lock()->GetGameObject("ParentSelectPanel");
 	wkp_animationPlayer = GetManager().lock()->AddObjectFromCereal("AnimationPlayer");
 
-	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 0, 0), Vector3::Zero, Vector3(1920, 1080, 1)));
+	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 0, 0), Vector3::Zero, Vector3(2112, 1188, 1)));
 
 	preParentRotation = stageNum * angle;
 
@@ -273,7 +273,7 @@ void ButiEngine::StageSelect::DecisionAnimation()
 	}
 	if (fadeCount == 1)
 	{
-		GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 1080, 0), Vector3::Zero, Vector3(1920, 1080, 1)));
+		GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 1134, 0), Vector3::Zero, Vector3(2112, 1188, 1)));
 	}
 
 	if (fadeCount > 30)

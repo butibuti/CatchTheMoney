@@ -48,7 +48,7 @@ void ButiEngine::Title::OnUpdate()
 	}
 	if (nextSceneCount == 1)
 	{
-		GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 1080, 0), Vector3::Zero, Vector3(1920, 1080, 1)));
+		GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 1134, 0), Vector3::Zero, Vector3(2112, 1188, 1)));
 	}
 
 	if (nextSceneCount > 45)

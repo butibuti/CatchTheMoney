@@ -3,11 +3,11 @@
 
 void ButiEngine::SceneChangeAnimation::OnUpdate()
 {
-	if (lateCount > 0)
-	{
-		lateCount--;
-		return;
-	}
+	//if (lateCount > 0)
+	//{
+	//	lateCount--;
+	//	return;
+	//}
 
 	if (life > 0)
 	{
@@ -33,11 +33,11 @@ void ButiEngine::SceneChangeAnimation::OnSet()
 void ButiEngine::SceneChangeAnimation::Start()
 {
 	lateCount = 3;
-	life = 45;
+	life = 44;
 
 	position = gameObject.lock()->transform->GetLocalPosition();
 
-	pointPosY = position.y - 1085.0f;
+	pointPosY = position.y - 1134.0f;
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::SceneChangeAnimation::Clone()

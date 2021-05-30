@@ -207,7 +207,7 @@ void ButiEngine::StageManager::Start()
 		}
 	}
 
-	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 0, -0.7f), Vector3::Zero, Vector3(1920, 1080, 1)));
+	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 0, -0.7f), Vector3::Zero, Vector3(2112, 1188, 1)));
 
 	shp_map->PutTile();
 
@@ -287,7 +287,7 @@ void ButiEngine::StageManager::OnGoal()
 	}
 	if (fadeCount == 1)
 	{
-		GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 1080, -0.7f), Vector3::Zero, Vector3(1920, 1080, 1)));
+		GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 1134, -0.7f), Vector3::Zero, Vector3(2112, 1188, 1)));
 	}
 	if (fadeCount > 30)
 	{
