@@ -63,6 +63,16 @@ void ButiEngine::Frog::Start()
 
 	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 
+	auto position = gameObject.lock()->transform->GetLocalPosition();
+	position.y -= 3000;
+	position.z -= 0.02f;
+	auto rotation = gameObject.lock()->transform->GetLocalRotation();
+	auto scale = gameObject.lock()->transform->GetLocalScale();
+	wkp_angel = GetManager().lock()->AddObjectFromCereal("AngelFrog", ObjectFactory::Create<Transform>(position, rotation, scale));
+	auto angelFrogComponent = wkp_angel.lock()->GetGameComponent<AngelFrog>();
+	angelFrogComponent->Start();
+	angelFrogComponent->SetIsActive(false);
+
 	if (StageSelect::GetStageNum() == TalkStageNum::FROG_TALK)
 	{
 		animation = Animation::EAT_APPLE;
@@ -327,11 +337,15 @@ void ButiEngine::Frog::Animation()
 {
 	if (!isAnimation) { return; }
 
-	const int ANIMATION_FRAME = 30;
+	int animationFrame = 30;
 
 	auto playerHoldSita = wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita();
+	if (playerHoldSita.lock())
+	{
+		animationFrame = 40;
+	}
 	float targetX = gameObject.lock()->transform->GetWorldPosition().x;
-	float speed = GameSettings::blockSize * 50 / ANIMATION_FRAME;
+	float speed = GameSettings::blockSize * 50 / animationFrame;
 	progress++;
 	float moveX = 0.0f;
 	if (gameObject.lock()->transform->GetWorldScale().x < 0)
@@ -474,13 +488,13 @@ void ButiEngine::Frog::SpriteAnimation()
 				isSpawnAngel = true;
 				auto position = gameObject.lock()->transform->GetLocalPosition();
 				position.z -= 0.02f;
-				auto rotation = gameObject.lock()->transform->GetLocalRotation();
-				auto scale = gameObject.lock()->transform->GetLocalScale();
-				auto angel = GetManager().lock()->AddObjectFromCereal("AngelFrog", ObjectFactory::Create<Transform>(position, rotation, scale));
+				wkp_angel.lock()->transform->SetLocalPosition(position);
+				wkp_angel.lock()->GetGameComponent<AngelFrog>()->SetIsActive(true);
 			}
 
-			auto posZ = gameObject.lock()->transform->GetLocalPosition().z;
-			gameObject.lock()->transform->SetLocalPosition(Vector3(0, -3000, posZ));
+			Vector3 position = gameObject.lock()->transform->GetWorldPosition();
+			position.y = -3000;
+			gameObject.lock()->transform->SetWorldPosition(position);
 		}
 		break;
 	default:

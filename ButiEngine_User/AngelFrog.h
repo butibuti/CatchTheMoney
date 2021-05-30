@@ -25,7 +25,7 @@ namespace ButiEngine {
 
 		int life;
 		float accel;
-		Vector3 position;
+		Vector3 velocity;
 
 		void Move();
 	};

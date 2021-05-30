@@ -26,7 +26,7 @@ void ButiEngine::AngelFrog::Start()
 {
 	life = 180;
 	accel = 1.0f;
-	position = gameObject.lock()->transform->GetLocalPosition();
+	velocity = Vector3::Zero;
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::AngelFrog::Clone()
@@ -53,14 +53,15 @@ void ButiEngine::AngelFrog::Move()
 	{
 		accel = 0;
 	}*/
+	velocity = Vector3::Zero;
 	if (gameObject.lock()->transform->GetLocalScale().y > 0)
 	{
-		position.y += 1.0f;
+		velocity.y += 1.0f;
 	}
 	else
 	{
-		position.y -= 1.0f;
+		velocity.y -= 1.0f;
 	}
 
-	gameObject.lock()->transform->SetLocalPosition(position);
+	gameObject.lock()->transform->Translate(velocity);
 }
