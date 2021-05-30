@@ -54,7 +54,7 @@ void ButiEngine::StageManager::OnUpdate()
 		}
 		else if (clearAnimationFrame == CLEAR_FRAME - 10)
 		{
-			GetManager().lock()->AddObjectFromCereal("ClearBand");
+			//GetManager().lock()->AddObjectFromCereal("ClearBand");
 		}
 		else if (clearAnimationFrame == CLEAR_FRAME - 30)
 		{

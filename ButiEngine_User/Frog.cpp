@@ -63,6 +63,16 @@ void ButiEngine::Frog::Start()
 
 	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 
+	auto position = gameObject.lock()->transform->GetLocalPosition();
+	position.y -= 3000;
+	position.z -= 0.02f;
+	auto rotation = gameObject.lock()->transform->GetLocalRotation();
+	auto scale = gameObject.lock()->transform->GetLocalScale();
+	wkp_angel = GetManager().lock()->AddObjectFromCereal("AngelFrog", ObjectFactory::Create<Transform>(position, rotation, scale));
+	auto angelFrogComponent = wkp_angel.lock()->GetGameComponent<AngelFrog>();
+	angelFrogComponent->Start();
+	angelFrogComponent->SetIsActive(false);
+
 	if (StageSelect::GetStageNum() == TalkStageNum::FROG_TALK)
 	{
 		animation = Animation::EAT_APPLE;
@@ -478,9 +488,8 @@ void ButiEngine::Frog::SpriteAnimation()
 				isSpawnAngel = true;
 				auto position = gameObject.lock()->transform->GetLocalPosition();
 				position.z -= 0.02f;
-				auto rotation = gameObject.lock()->transform->GetLocalRotation();
-				auto scale = gameObject.lock()->transform->GetLocalScale();
-				auto angel = GetManager().lock()->AddObjectFromCereal("AngelFrog", ObjectFactory::Create<Transform>(position, rotation, scale));
+				wkp_angel.lock()->transform->SetLocalPosition(position);
+				wkp_angel.lock()->GetGameComponent<AngelFrog>()->SetIsActive(true);
 			}
 
 			Vector3 position = gameObject.lock()->transform->GetWorldPosition();

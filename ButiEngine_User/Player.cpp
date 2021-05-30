@@ -648,6 +648,9 @@ void ButiEngine::Player::OnCollisionFrog(std::weak_ptr<GameObject> arg_frog)
 			scale.y *= -1;
 		}
 		gameObject.lock()->transform->SetLocalScale(scale);
+		Vector3 frogPos = arg_frog.lock()->transform->GetWorldPosition();
+		frogPos.z = gameObject.lock()->transform->GetWorldPosition().z;
+		gameObject.lock()->transform->SetWorldPosition(frogPos);
 		isClear = true;
 		return;
 	}
