@@ -20,6 +20,7 @@
 #include"Daikokuten.h"
 #include"ParentDaikokuten.h"
 #include"Frog.h"
+#include "TutorialSelect.h"
 #include"Header/GameObjects/DefaultGameComponent/PositionAnimationComponent.h"
 
 //#define OUTPUT_STAGERENDERTARGET
@@ -35,8 +36,20 @@ void ButiEngine::StageManager::OnUpdate()
 	if (GameSettings::isTitle) { return; }
 	StorePlayer();
 	StoreFrog();
+
 	const int GOAL_LATE_FRAME = 20;
-	if (wkp_player.lock()->GetGameComponent<Player>()->IsClear())
+	auto player = wkp_player.lock()->GetGameComponent<Player>();
+	if (player->IsTutorial() && !isAddTutorial)
+	{
+		isAddTutorial = true;
+		wkp_tutorialNo = GetManager().lock()->AddObjectFromCereal("Tutorial_No", ObjectFactory::Create<Transform>(Vector3(650, 40, 0), Vector3::Zero, Vector3(200, 76, 1)));
+		wkp_tutorialYes = GetManager().lock()->AddObjectFromCereal("Tutorial_Yes", ObjectFactory::Create<Transform>(Vector3(650, -84, 0), Vector3::Zero, Vector3(200, 76, 1)));
+		wkp_tutorialTextWindow = GetManager().lock()->AddObjectFromCereal("TutorialTextWindow", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.12f), Vector3::Zero, Vector3(1920, 640, 1)));
+		wkp_reverseCheckText = GetManager().lock()->AddObjectFromCereal("ReverseCheckTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+	
+	}
+
+	if (player->IsClear() && !player->IsTutorial())
 	{
 		if (clearAnimationFrame >= CLEAR_FRAME)
 		{
@@ -67,10 +80,9 @@ void ButiEngine::StageManager::OnUpdate()
 		clearAnimationFrame--;
 	}
 
-	////////////////////////////////////////////////////////////////
-	if (wkp_player.lock()->GetGameComponent<Player>()->IsTutorial())
+	if (player->IsTutorial())
 	{
-
+		TutorialMode();
 	}
 
 
@@ -127,6 +139,8 @@ void ButiEngine::StageManager::Start()
 	fadeCount = 0;
 	isNext = false;
 	isOnce = false;
+	isAddTutorial = false;
+	isTutorialSelect = false;
 
 	shp_map = GetManager().lock()->GetGameObject("Map").lock()->GetGameComponent<Map>();
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
@@ -180,8 +194,15 @@ void ButiEngine::StageManager::Start()
 		else if (stageNum == TalkStageNum::REVERSE_TALK && !GameSettings::isTitle)
 		{
 			//反転説明用テキスト追加
-			wkp_talkText = GetManager().lock()->AddObjectFromCereal("ReverseTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
-			CommonTextObject();
+			if (GameSettings::isTutorialInit)
+			{
+				wkp_talkText = GetManager().lock()->AddObjectFromCereal("ReverseSecondTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+			}
+			else
+			{
+				wkp_talkText = GetManager().lock()->AddObjectFromCereal("ReverseTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+			}
+            CommonTextObject();
 		}
 		else if (stageNum == TalkStageNum::REVERSE_RE_TALK && !GameSettings::isTitle)
 		{
@@ -339,6 +360,7 @@ void ButiEngine::StageManager::ChangeScene(const std::string& arg_sceneName)
 	sceneManager->RemoveScene(arg_sceneName);
 	sceneManager->LoadScene(arg_sceneName);
 	sceneManager->ChangeScene(arg_sceneName);
+	GameSettings::isTutorialInit = false;
 }
 
 void ButiEngine::StageManager::ModeChange()
@@ -540,5 +562,49 @@ void ButiEngine::StageManager::StoreFrog()
 	if (!wkp_frog.lock())
 	{
 		wkp_frog = GetManager().lock()->GetGameObject("Frog");
+	}
+}
+
+void ButiEngine::StageManager::TutorialMode()
+{
+	if (PauseManager::IsPause())return;
+
+	if (InputManager::OnTriggerUpKey() || InputManager::OnTriggerDownKey())
+	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_select, GameSettings::masterVolume);
+		isTutorialSelect = !isTutorialSelect;
+		wkp_tutorialNo.lock()->GetGameComponent<TutorialSelect>()->SetNowSelect(isTutorialSelect);
+		wkp_tutorialYes.lock()->GetGameComponent<TutorialSelect>()->SetNowSelect(isTutorialSelect);
+	}
+	if (InputManager::OnTriggerDecisionKey())
+	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_enter, GameSettings::masterVolume);
+		if (!isTutorialSelect)
+		{
+			//もう一回！
+			GameSettings::isTutorialInit = true;
+			shp_pauseManager->OnDecideReset();
+		}
+		else
+		{
+			//バッチリ！！
+			wkp_player.lock()->GetGameComponent<Player>()->Clear();
+			wkp_player.lock()->GetGameComponent<Player>()->ExitTutorial();
+			GameSettings::isTutorialInit = false;
+		}
+
+		if (wkp_tutorialNo.lock()->GetGameComponent<TransformAnimation>())
+		{
+			wkp_tutorialNo.lock()->GetGameComponent<TransformAnimation>()->SetIsActive(false);
+		}
+		if (wkp_tutorialYes.lock()->GetGameComponent<TransformAnimation>())
+		{
+			wkp_tutorialYes.lock()->GetGameComponent<TransformAnimation>()->SetIsActive(false);
+		}
+
+		wkp_tutorialNo.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
+		wkp_tutorialYes.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
+		wkp_tutorialTextWindow.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
+		wkp_reverseCheckText.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
 	}
 }

@@ -87,6 +87,20 @@ bool ButiEngine::InputManager::OnTriggerLeftKey()
 		(currentLeftStick.x <= -DEADZONE && previousLeftStick.x > -DEADZONE));
 }
 
+bool ButiEngine::InputManager::OnTriggerUpKey()
+{
+	return (GameDevice::GetInput()->TriggerKey(Keys::W) ||
+		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_UP) ||
+		(currentLeftStick.y >= DEADZONE && previousLeftStick.y < DEADZONE));
+}
+
+bool ButiEngine::InputManager::OnTriggerDownKey()
+{
+	return (GameDevice::GetInput()->TriggerKey(Keys::S) ||
+		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_DOWN) ||
+		(currentLeftStick.y <= -DEADZONE && previousLeftStick.y > -DEADZONE));
+}
+
 bool ButiEngine::InputManager::OnPushAnyKey()
 {
 	return (OnPushRightKey() ||

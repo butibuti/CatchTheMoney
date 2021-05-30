@@ -226,6 +226,7 @@
     <ClCompile Include="TextWindow.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="TitleLogo.cpp" />
+    <ClCompile Include="TutorialSelect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbuttonAnimation.h" />
@@ -286,6 +287,7 @@
     <ClInclude Include="TextWindow.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="TitleLogo.h" />
+    <ClInclude Include="TutorialSelect.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

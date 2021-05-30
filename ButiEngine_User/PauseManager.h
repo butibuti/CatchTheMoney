@@ -19,6 +19,7 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+		void OnDecideReset();
 		void SetPause(bool arg_flag) { pause = arg_flag; }
 		static bool IsPause() { return pause; }
 	private:
@@ -60,7 +61,6 @@ namespace ButiEngine {
 		void SelectButton();
 		void OnDecide();
 		void OnDecideBack();
-		void OnDecideReset();
 		void OnDecideSelect();
 		void AppearUI();
 		void DisappearUI();

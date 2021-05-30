@@ -43,6 +43,8 @@ namespace ButiEngine {
 		bool IsHitGoal() { return hitGoal; }
 		bool IsHitSita() { return hitSita; }
 		void ResetHitFrog() { hitFrog = false; }
+		void Clear() { isClear = true; }
+		void ExitTutorial() { isTutorial = false; }
 		bool IsFreeze() { return freeze; }
 
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> GetAABB() { return shp_AABB; }

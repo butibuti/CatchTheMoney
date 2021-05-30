@@ -25,6 +25,8 @@ namespace ButiEngine {
 		static bool OnPushLeftKey();
 		static bool OnTriggerRightKey();
 		static bool OnTriggerLeftKey();
+		static bool OnTriggerUpKey();
+		static bool OnTriggerDownKey();
 		static bool OnPushAnyKey();
 		static bool OnTriggerOpenGameExitMenuKey();
 

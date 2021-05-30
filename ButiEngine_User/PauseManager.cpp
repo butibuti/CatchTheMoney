@@ -194,6 +194,7 @@ void ButiEngine::PauseManager::OnDecide()
 
 	if (InputManager::OnTriggerDecisionKey())
 	{
+		GameSettings::isTutorialInit = false;
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_enter, GameSettings::masterVolume);
 		if (selectedButton == BACK)
 		{

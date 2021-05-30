@@ -140,6 +140,7 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 void ButiEngine::Player::Control()
 {
 	animation = ButiEngine::Player::IDLE;
+
 	if (freeze)
 	{
 		freezeProgressFrame++;
@@ -154,6 +155,8 @@ void ButiEngine::Player::Control()
 
 	pushGrabKeyFrame = false;
 	velocity.x = 0.0f;
+
+	if (isTutorial) return;
 
 	if (!isClear)
 	{
@@ -537,7 +540,6 @@ void ButiEngine::Player::GrabGoal(std::weak_ptr<GameObject> arg_goal)
 		if (StageSelect::GetStageNum() == TalkStageNum::REVERSE_TALK)
 		{
 			isTutorial = true;
-
 		}
 		else
 		{

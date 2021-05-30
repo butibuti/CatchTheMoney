@@ -127,7 +127,11 @@ void ButiEngine::TalkText::TextEffect()
 	else if (stageNum == TalkStageNum::REVERSE_TALK && GameSettings::isTutorialInit)
 	{
 		//チュートリアルもう一度
-
+		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(false);
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
+		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
 	}
 	else if (stageNum == TalkStageNum::GRAVITY_TALK ||
 		     stageNum == TalkStageNum::FROG_TALK)
@@ -231,6 +235,10 @@ bool ButiEngine::TalkText::SetCamera()
 
 bool ButiEngine::TalkText::Once()
 {
+	if (GameSettings::isTutorialInit)
+	{
+		return false;
+	}
 	//少し遅らせる
 	const int ONCE_FRAME = 24;
 	if (onceFrame == ONCE_FRAME)
