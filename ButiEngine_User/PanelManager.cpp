@@ -168,8 +168,7 @@ void ButiEngine::PanelManager::Control()
 		vec_histories.push_back(LEFT);
 		currentIndex = vec_histories.size() - 1;
 	}
-
-	if (InputManager::OnTriggerResetPanelKey())
+	else if (InputManager::OnTriggerResetPanelKey())
 	{
 		if (moveNum == 0 || vec_histories.size() == 0)
 		{
@@ -179,18 +178,18 @@ void ButiEngine::PanelManager::Control()
 		}
 		reset = true;
 	}
-	if (vec_histories.size() == 0)
-	{
-		return;
-	}
-	if (InputManager::OnTriggerUndoKey())
-	{
-		Undo();
-	}
-	else if (InputManager::OnTriggerRedoKey())
-	{
-		Redo();
-	}
+	//if (vec_histories.size() == 0)
+	//{
+	//	return;
+	//}
+	//if (InputManager::OnTriggerUndoKey())
+	//{
+	//	Undo();
+	//}
+	//else if (InputManager::OnTriggerRedoKey())
+	//{
+	//	Redo();
+	//}
 }
 
 void ButiEngine::PanelManager::StorePlayer()
