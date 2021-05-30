@@ -24,6 +24,11 @@ void ButiEngine::TalkText::OnUpdate()
 	//‰æ–ÊŠO‚É”ò‚Î‚·‚©
 	if (isDelete)
 	{
+		if (StageSelect::GetStageNum()==0&& !isGeneratedControl) {
+			GetManager().lock()->AddObjectFromCereal("Control");
+			isGeneratedControl = true;
+		}
+
 		gameObject.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
 		return;
 	}

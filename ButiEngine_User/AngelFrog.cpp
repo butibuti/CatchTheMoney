@@ -27,6 +27,8 @@ void ButiEngine::AngelFrog::Start()
 	life = 180;
 	accel = 1.0f;
 	velocity = Vector3::Zero;
+	auto meshDraw = gameObject.lock()->GetGameComponent<MeshDrawComponent>();
+	shp_alpha = meshDraw->GetCBuffer<LightVariable>("LightBuffer");
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::AngelFrog::Clone()
@@ -62,6 +64,9 @@ void ButiEngine::AngelFrog::Move()
 	{
 		velocity.y -= 1.0f;
 	}
+	alphaTime += 0.02f;
+
+	shp_alpha->Get().lightDir.w = 1.0f- Easing::EaseInCirc(alphaTime);
 
 	gameObject.lock()->transform->Translate(velocity);
 }

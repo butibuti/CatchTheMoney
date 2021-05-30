@@ -62,7 +62,7 @@ namespace ButiEngine {
 
 		static bool isNotMove;
 		static bool isDelete;
-
+		bool isGeneratedControl=false;
 		void TextEffect();
 		void NormalTalk();
 		void AbnormalTalk();

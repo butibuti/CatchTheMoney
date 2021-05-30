@@ -433,7 +433,6 @@ void ButiEngine::StageManager::CreateUI()
 
 	if (stageNum == 0)
 	{
-		GetManager().lock()->AddObjectFromCereal("Control");
 	}
 	else
 	{

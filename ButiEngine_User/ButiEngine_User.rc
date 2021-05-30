@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// “ú–{Œê (“ú–{) resources
+// ï¿½ï¿½ï¿½{ï¿½ï¿½ (ï¿½ï¿½ï¿½{) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
 LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
@@ -52,9 +52,9 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON1               ICON                    "D:\\K019G1120\\2nd\\TeamProject\\CatchTheMoney\\ButiEngine_User\\favicon.ico"
+IDI_ICON1               ICON                    ".\\favicon.ico"
 
-#endif    // “ú–{Œê (“ú–{) resources
+#endif    // ï¿½ï¿½ï¿½{ï¿½ï¿½ (ï¿½ï¿½ï¿½{) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

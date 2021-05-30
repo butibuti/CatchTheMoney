@@ -7,7 +7,7 @@ void ButiEngine::LogoSceneManager::OnUpdate()
     logoTime += logoApperanceSpeed;
     shp_logoBuffer->Get().lightDir.w = Easing::Parabola(logoTime);
     if (shp_timer->Update()) {
-        GetManager().lock()->AddObjectFromCereal("LogoSceneScreenObject", ObjectFactory::Create<Transform>(Vector3(0, 1080, 0.1), Vector3::Zero, Vector3(1920, 1080, 1)));
+        GetManager().lock()->AddObjectFromCereal("LogoSceneScreenObject", ObjectFactory::Create<Transform>(Vector3(0, 1134, 0.1), Vector3::Zero, Vector3(2112, 1188, 1)));
 
         shp_transTimer->Start();
     }
