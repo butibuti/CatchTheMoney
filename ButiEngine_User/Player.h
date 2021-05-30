@@ -90,6 +90,7 @@ namespace ButiEngine {
 		SoundTag se_jump;
 		SoundTag se_put;
 		SoundTag se_land;
+		SoundTag se_not;
 		SoundTag se_reverse;
 		SoundTag se_powerUp;
 

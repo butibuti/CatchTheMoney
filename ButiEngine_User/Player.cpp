@@ -95,6 +95,7 @@ void ButiEngine::Player::Start()
 
 	gameObject.lock()->RegistReactionComponent(GetThis<GameComponent>());
 
+	se_not = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/PanelLimit.wav");
 	se_dash = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Dash.wav");
 	se_grab = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Grab.wav");
 	se_jump = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Jump.wav");
@@ -210,6 +211,10 @@ void ButiEngine::Player::Control()
 	}
 	else
 	{
+		if (InputManager::OnTriggerGrabKey())
+		{
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_not, GameSettings::masterVolume);
+		}
 		if (InputManager::OnTriggerJumpKey())
 		{
 			jumpInputFrame = COYOTE_TIME;
