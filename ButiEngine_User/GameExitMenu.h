@@ -4,6 +4,7 @@ namespace ButiEngine {
 
 	class PauseManager;
 
+	class SquareParticleEmitter;
 	class GameExitMenu :public GameComponent
 	{
 	public:
@@ -51,6 +52,7 @@ namespace ButiEngine {
 		SoundTag se_select;
 		SoundTag se_pick;
 
+		std::shared_ptr<SquareParticleEmitter> shp_particleEmitter;
 		void SwitchPause();
 		void ButtonAnimation();
 		void SelectButton();

@@ -10,6 +10,7 @@
 #include"Player.h"
 #include "GameSettings.h"
 #include"GameExitMenu.h"
+#include"SquareParticleEmitter.h"
 
 bool ButiEngine::PauseManager::pause;
 
@@ -29,10 +30,17 @@ void ButiEngine::PauseManager::OnUpdate()
 			progress = 0;
 			selectedButton = BACK;
 			disappear = false;
+			if (shp_particleEmitter) {
+				shp_particleEmitter->SetIsPause(true);
+			}
 			AppearUI();
+
 		}
 		else
 		{
+			if (shp_particleEmitter) {
+				shp_particleEmitter->SetIsPause(false);
+			}
 			DisappearUI();
 		}
 	}
@@ -83,6 +91,12 @@ void ButiEngine::PauseManager::Start()
 	fadeCount = 0;
 	reset = false;
 	disappear = false;
+
+	auto emiitter = GetManager().lock()->GetGameObject("SquareParticleEmitter");
+	if (emiitter.lock()) {
+		shp_particleEmitter = emiitter.lock()->GetGameComponent  <SquareParticleEmitter>();
+	}
+	
 }
 
 void ButiEngine::PauseManager::OnShowUI()
