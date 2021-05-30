@@ -19,6 +19,8 @@ namespace ButiEngine {
 		}
 	private:
 		Vector3 position;
+		int lateCount;
+		int life;
 		float pointPosY;
 	};
 

@@ -3,7 +3,25 @@
 
 void ButiEngine::SceneChangeAnimation::OnUpdate()
 {
-	position.y = position.y * (1.0f - 0.15f) + pointPosY * 0.15f;
+	if (lateCount > 0)
+	{
+		lateCount--;
+		return;
+	}
+
+	if (life > 0)
+	{
+		life--;
+	}
+	else
+	{
+		position.y = -4000;
+		gameObject.lock()->transform->SetLocalPosition(position);
+		return;
+	}
+
+	const float LERP_SCALE = 0.18f;
+	position.y = position.y * (1.0f - LERP_SCALE) + pointPosY * LERP_SCALE;
 
 	gameObject.lock()->transform->SetLocalPosition(position);
 }
@@ -14,9 +32,12 @@ void ButiEngine::SceneChangeAnimation::OnSet()
 
 void ButiEngine::SceneChangeAnimation::Start()
 {
+	lateCount = 3;
+	life = 45;
+
 	position = gameObject.lock()->transform->GetLocalPosition();
 
-	pointPosY = position.y - 1080.0f;
+	pointPosY = position.y - 1085.0f;
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::SceneChangeAnimation::Clone()
