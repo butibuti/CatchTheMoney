@@ -6,7 +6,7 @@
 
 void ButiEngine::ContorolByStick::OnUpdate()
 {
-	if (shp_pauseManager->IsPause()) { return; }
+	if (shp_pauseManager->IsPause() || isClear) { return; }
 
 	bool isCameraResetFrame = cameraResetFrame < 10;
 	if (isCameraResetFrame || GameSettings::isTitle)
@@ -31,6 +31,7 @@ void ButiEngine::ContorolByStick::Start()
 {
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 
+	isClear = false;
 	cameraResetFrame = 0;
 	rotationLimit = 60.0f;
 	rotationSpeed = 2.0f;

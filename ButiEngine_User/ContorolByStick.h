@@ -23,6 +23,8 @@ namespace ButiEngine {
 			archive(rotationSpeed);
 			archive(returnSpeed);
 		}
+		void Clear() { isClear = true; }
+
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 
@@ -38,6 +40,7 @@ namespace ButiEngine {
 		float rotationSpeed;
 		float returnSpeed;
 		int cameraResetFrame;
+		bool isClear;
 
 		void Control();
 		void Reset();

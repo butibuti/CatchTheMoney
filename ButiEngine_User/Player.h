@@ -6,6 +6,8 @@ namespace ButiEngine {
 	class PanelManager;
 	class MobiusLoop;
 	class SpliteAnimationComponent;
+	class ContorolByStick;
+
 	class Player :public GameComponent
 	{
 	public:
@@ -51,6 +53,7 @@ namespace ButiEngine {
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<PanelManager> shp_panelManager;
+		std::shared_ptr<ContorolByStick> shp_contorolManager;
 		std::shared_ptr<MobiusLoop> shp_mobiusLoop;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB;
 

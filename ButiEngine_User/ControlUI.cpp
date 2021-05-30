@@ -3,18 +3,21 @@
 #include"InputManager.h"
 #include"PauseManager.h"
 #include"TalkText.h"
+#include "Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
 
 void ButiEngine::ControlUI::OnUpdate()
 {
-	if (stop || 
-		shp_pauseManager->IsPause() ||
+	if (shp_pauseManager->IsPause() ||
 		!TalkText::IsDelete())
 	{
 		return; 
 	}
-	Animation();
-	OnNoPush();
-	OnPushAnyKey();
+
+
+	SpriteAnimation();
+	//Animation();
+	//OnNoPush();
+	//OnPushAnyKey();
 }
 
 void ButiEngine::ControlUI::OnSet()
@@ -24,8 +27,10 @@ void ButiEngine::ControlUI::OnSet()
 void ButiEngine::ControlUI::Start()
 {
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
+	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 	initScale = gameObject.lock()->transform->GetWorldScale();
 	progress = 0.0f;
+	animationFrame = 0;
 }
 
 void ButiEngine::ControlUI::OnShowUI()
@@ -71,4 +76,14 @@ void ButiEngine::ControlUI::OnPushAnyKey()
 	{
 		animation = false;
 	}
+}
+
+void ButiEngine::ControlUI::SpriteAnimation()
+{
+	animationFrame++;
+	const int ANIMATION_RATE = 10;
+	if (animationFrame < ANIMATION_RATE) return;
+
+	animationFrame = 0;
+	shp_spriteAnimation->UpdateHorizontalAnim(1);
 }

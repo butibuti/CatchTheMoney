@@ -14,6 +14,7 @@
 #include"StageManager.h"
 #include"Frog.h"
 #include"SitaSentan.h"
+#include "ContorolByStick.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -51,6 +52,7 @@ void ButiEngine::Player::Start()
 {
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	shp_panelManager = GetManager().lock()->GetGameObject("PanelManager").lock()->GetGameComponent<PanelManager>();
+	shp_contorolManager = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ContorolByStick>();
 	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 	shp_mobiusLoop = gameObject.lock()->GetGameComponent<MobiusLoop>();
 	shp_AABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 10.0f), gameObject.lock()->transform);
@@ -527,7 +529,8 @@ void ButiEngine::Player::GrabGoal(std::weak_ptr<GameObject> arg_goal)
 		arg_goal.lock()->transform->SetWorldPostionY(targetPos.y);
 
 		wkp_holdGoal = arg_goal;
-
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, GameSettings::masterVolume);
+		shp_contorolManager->Clear();
 		isClear = true;
 	}
 }
@@ -648,6 +651,7 @@ void ButiEngine::Player::OnCollisionFrog(std::weak_ptr<GameObject> arg_frog)
 		}
 		gameObject.lock()->transform->SetLocalScale(scale);
 		isClear = true;
+		shp_contorolManager->Clear();
 		return;
 	}
 

@@ -189,10 +189,11 @@ bool ButiEngine::InputManager::OnGameStartKey()
 
 bool ButiEngine::InputManager::OnSkipKey()
 {
+	const float DEADZONE_SUPER = 0.8f;
 	return (GameDevice::GetInput()->TriggerKey(Keys::W) ||
 		GameDevice::GetInput()->TriggerKey(Keys::S) ||
 		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_UP) ||
 		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_DOWN) ||
-		(currentLeftStick.y >= DEADZONE && previousLeftStick.y < DEADZONE) ||
-		(currentLeftStick.y <= -DEADZONE && previousLeftStick.y > -DEADZONE));
+		(currentLeftStick.y >= DEADZONE_SUPER && previousLeftStick.y < DEADZONE_SUPER) ||
+		(currentLeftStick.y <= -DEADZONE_SUPER && previousLeftStick.y > -DEADZONE_SUPER));
 }
