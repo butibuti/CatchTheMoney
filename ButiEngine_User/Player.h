@@ -95,6 +95,7 @@ namespace ButiEngine {
 		SoundTag se_not;
 		SoundTag se_reverse;
 		SoundTag se_powerUp;
+		SoundTag se_frogIn;
 
 		Animation animation;
 

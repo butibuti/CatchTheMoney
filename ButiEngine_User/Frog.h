@@ -61,7 +61,7 @@ namespace ButiEngine {
 		SoundTag se_explosion;
 		SoundTag se_extend;
 		SoundTag se_sitaOut;
-		SoundTag se_sitaIn;
+		SoundTag se_eat;
 
 		enum Animation
 		{

@@ -77,7 +77,7 @@ void ButiEngine::Frog::Start()
 	se_explosion = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Kaeru_Explosion1.wav");
 	se_extend = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Kaeru_Extend.wav");
 	se_sitaOut = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/sita_Extend.wav");
-	se_sitaIn = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/sita_Shrink.wav");
+	se_eat = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Kaeru_Eat.wav");
 
 	int partType = 0;
 	for (int i = 0; i < 12; i++)
@@ -422,7 +422,7 @@ void ButiEngine::Frog::Animation()
 			animation = Animation::IDLE;
 			shp_spriteAnimation->SetHorizontalAnim(0);
 			isOutSita = false;
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_sitaIn, GameSettings::masterVolume);
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_eat, GameSettings::masterVolume);
 		}
 		else
 		{
@@ -493,6 +493,11 @@ void ButiEngine::Frog::SpriteAnimation()
 		shp_spriteAnimation->SetVarticalAnim(Frog::EAT_APPLE);
 		if (shp_spriteAnimation->GetHorizontalAnim() < EAT_APPLE_COUNT)
 		{
+			const int EAT_SE_FRAME = 3;
+			if (shp_spriteAnimation->GetHorizontalAnim() == EAT_SE_FRAME)
+			{
+				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_eat, GameSettings::masterVolume);
+			}
 			shp_spriteAnimation->UpdateHorizontalAnim(1);
 		}
 		else
@@ -531,9 +536,10 @@ void ButiEngine::Frog::SpriteAnimation()
 		shp_spriteAnimation->SetVarticalAnim(Frog::EXPROSION);
 		if (shp_spriteAnimation->GetHorizontalAnim() < EXPROSION_COUNT)
 		{
-			if (shp_spriteAnimation->GetHorizontalAnim() == 1)
+			const int EAT_SE_FRAME = 0;
+			if (shp_spriteAnimation->GetHorizontalAnim() == EAT_SE_FRAME)
 			{
-				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_sitaIn, GameSettings::masterVolume);
+				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_eat, GameSettings::masterVolume);
 			}
 			else if (shp_spriteAnimation->GetHorizontalAnim() == EXPROSION_COUNT - 8)
 			{
