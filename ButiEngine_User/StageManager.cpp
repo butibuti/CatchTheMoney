@@ -50,11 +50,23 @@ void ButiEngine::StageManager::OnUpdate()
 		}
 		else if (clearAnimationFrame == CLEAR_FRAME - GOAL_LATE_FRAME)
 		{
-			if (!wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita().lock())
+			Vector3 zoomInPosition;
+
+			zoomInPosition = wkp_player.lock()->transform->GetWorldPosition();
+			auto frog = wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita().lock();
+			if (!frog)
 			{
+
+
 				GetManager().lock()->AddObjectFromCereal("ClearFlash", ObjectFactory::Create<Transform>(Vector3(0.0f, 0.0f, 1000.0f)));
 				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_clear, GameSettings::masterVolume);
 			}
+			else {
+
+
+			}
+			auto cameraController = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraController>();
+			cameraController->MobiusZoomIn(zoomInPosition, 30);
 		}
 		else if (clearAnimationFrame == CLEAR_FRAME - 10 - GOAL_LATE_FRAME)
 		{

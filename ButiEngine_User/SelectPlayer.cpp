@@ -40,7 +40,7 @@ void ButiEngine::SelectPlayer::Start()
 	velocityX = -1.0f;
 	position = Vector3(-400, -400, 0);
 	gameObject.lock()->transform->SetLocalPosition(position);
-	gameObject.lock()->transform->SetLocalScale(Vector3(160, 160, 0));
+	gameObject.lock()->transform->SetLocalScale(Vector3(320, 320, 0));
 	gameObject.lock()->transform->SetLocalRotation(Vector3(0, 0, 0));
 	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 	shp_spriteAnimation->SetHorizontalAnim(0);
