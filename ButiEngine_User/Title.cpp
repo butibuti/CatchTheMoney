@@ -88,7 +88,7 @@ void ButiEngine::Title::Start()
 	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
 	se_zoomOut = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Title.wav");
 
-	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, GameSettings::masterVolume + 0.3f);
+	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, GameSettings::masterVolume + 0.1f);
 
 	auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
 	sceneManager->LoadScene("Stage0");
