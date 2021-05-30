@@ -54,6 +54,8 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_bottom;
 		std::weak_ptr<GameObject> wkp_player;
 		std::weak_ptr<GameObject> wkp_angel;
+		std::vector<std::weak_ptr<GameObject>> vec_wkp_arms;
+		std::vector<std::weak_ptr<GameObject>> vec_wkp_parts;
 
 		enum Animation
 		{
