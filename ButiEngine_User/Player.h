@@ -66,6 +66,8 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_holdFrog;
 		std::weak_ptr<GameObject> wkp_holdGoal;
 		std::weak_ptr<GameObject> wkp_holdSita;
+		std::weak_ptr<GameObject> wkp_swallowFrog;
+		std::weak_ptr<GameObject> wkp_apple;
 
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
 
@@ -95,6 +97,7 @@ namespace ButiEngine {
 
 		Vector3 velocity;
 		Vector3 sitaDifference;
+		Vector3 defaultScale;
 
 		int freezeProgressFrame;
 		int animationFrame;
@@ -128,10 +131,12 @@ namespace ButiEngine {
 		void GrabSita(std::weak_ptr<GameObject> arg_sita);
 		void Animation();
 		void CorrectionFrog(std::weak_ptr<GameObject> arg_frog);
+		void OnSwallowedFrog();
 
 		void OnCollisionGoal(std::weak_ptr<GameObject> arg_goal);
 		void OnCollisionCore(std::weak_ptr<GameObject> arg_core);
 		void OnCollisionSita(std::weak_ptr<GameObject> arg_sita);
+
 	};
 }
 

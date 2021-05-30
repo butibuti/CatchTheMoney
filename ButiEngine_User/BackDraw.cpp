@@ -7,6 +7,8 @@
 #include"PauseManager.h"
 #include"StageManager.h"
 #include"MobiusLoop.h"
+#include"Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
+#include"AnimationPlayer.h"
 
 void ButiEngine::BackDraw::OnUpdate()
 {
@@ -46,8 +48,6 @@ void ButiEngine::BackDraw::Start()
 	{
 		wkp_right.lock()->AddGameComponent(meshDraw->Clone());
 	}
-
-
 	wkp_left = GetManager().lock()->AddObject(std::make_shared<Transform>(), name + "_Back_Left");
 	clonePosition.x = position.x - GameSettings::windowWidth * 0.5f;
 	wkp_left.lock()->transform->SetWorldPosition(clonePosition);
@@ -61,6 +61,16 @@ void ButiEngine::BackDraw::Start()
 	if (effectUpdater) {
 		wkp_right.lock()->AddGameComponent(effectUpdater->Clone());
 		wkp_left.lock()->AddGameComponent(effectUpdater->Clone());
+	}
+
+	if (name == "Apple")
+	{
+		auto spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
+		auto animationPlayer = gameObject.lock()->GetGameComponent<AnimationPlayer>();
+		wkp_right.lock()->AddGameComponent(spriteAnimation->Clone());
+		wkp_left.lock()->AddGameComponent(spriteAnimation->Clone());
+		wkp_right.lock()->AddGameComponent(animationPlayer->Clone());
+		wkp_left.lock()->AddGameComponent(animationPlayer->Clone());
 	}
 
 	if (name == "PredictionLine")

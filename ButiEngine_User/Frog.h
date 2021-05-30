@@ -43,6 +43,7 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> GetSitaSentan() { return wkp_sita_sentan; }
 		std::weak_ptr<GameObject> GetSitatyuukan() { return wkp_sita_tyuukan; }
 		float GetGravity() { return gravity; }
+		bool IsExplosion() { return isExplosion; }
 	private:
 		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB;
@@ -80,6 +81,7 @@ namespace ButiEngine {
 		int animationFrame;
 		int onceCount;
 		int holdAppleCount;
+		bool isExplosion;
 
 		void CreateSita();
 		void CheckGravity();

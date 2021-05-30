@@ -43,9 +43,9 @@ void ButiEngine::FrogParts::Explosion(const Vector3& arg_position)
 {
 	life = 180;
 	velocity.x = ButiRandom::GetRandom(-2.0f, 2.0f, 100);
-	velocity.y = ButiRandom::GetRandom(-7.0f, 7.0f, 100);
+	velocity.y = ButiRandom::GetRandom(-5.0f, 5.0f, 100);
 	velocity.z = 0;
-	gravity = wkp_frog.lock()->GetGameComponent<Frog>()->GetGravity() * 1.2f;
+	gravity = wkp_frog.lock()->GetGameComponent<Frog>()->GetGravity() * 0.7f;
 	gameObject.lock()->transform->SetWorldPosition(arg_position);
 }
 

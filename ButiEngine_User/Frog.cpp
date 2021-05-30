@@ -120,6 +120,7 @@ void ButiEngine::Frog::Start()
 	isAnimation = false;
 	isApple = false;
 	isSpawnAngel = false;
+	isExplosion = false;
 	progress = 0;
 	animationFrame = 0;
 	onceCount = 0;
@@ -423,8 +424,9 @@ void ButiEngine::Frog::Animation()
 		wkp_sita_sentan.lock()->transform->SetWorldPostionX(targetX);
 		isAnimation = false;
 
-		wkp_player.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
-		gameObject.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->ReResist();
+		//wkp_player.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
+		//gameObject.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->Resist();
+		//gameObject.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->ReResist();
 
 		if (playerHoldSita.lock())
 		{
@@ -512,6 +514,7 @@ void ButiEngine::Frog::SpriteAnimation()
 		}
 		break;
 	case ButiEngine::Frog::EXPROSION:
+		wkp_sita_sentan.lock()->GetGameComponent<SitaSentan>()->SetAnim(1);
 		shp_spriteAnimation->SetVarticalAnim(Frog::EXPROSION);
 		if (shp_spriteAnimation->GetHorizontalAnim() < EXPROSION_COUNT)
 		{
@@ -527,13 +530,14 @@ void ButiEngine::Frog::SpriteAnimation()
 				wkp_angel.lock()->transform->SetLocalPosition(position);
 				wkp_angel.lock()->GetGameComponent<AngelFrog>()->SetIsActive(true);
 
-				position.z -= 3.0f;
+				position.z -= 0.1f;
 				auto end = vec_wkp_parts.end();
 				for (auto itr = vec_wkp_parts.begin(); itr != end; ++itr)
 				{
 					position.z -= 0.01f;
 					(*itr).lock()->GetGameComponent<FrogParts>()->Explosion(position);
 				}
+				isExplosion = true;
 			}
 
 			Vector3 position = gameObject.lock()->transform->GetWorldPosition();

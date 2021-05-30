@@ -21,16 +21,27 @@
 void ButiEngine::Player::OnUpdate()
 {
 	if (shp_pauseManager->IsPause() ||
-		StageManager::GetMode() == GameMode::Edit ||
-		isClear ||
-		!TalkText::IsDelete() ||
-		TalkText::IsNotMove()||
-		wkp_holdSita.lock())
+		StageManager::GetMode() == GameMode::Edit)
 	{
-
 		return;
 	}
-
+	OnSwallowedFrog();
+	if (!TalkText::IsDelete() ||
+		TalkText::IsNotMove() ||
+		wkp_swallowFrog.lock() ||
+		wkp_holdSita.lock() ||
+		isClear) 
+	{
+		if (wkp_predictionLine.lock())
+		{
+			wkp_predictionLine.lock()->transform->SetLocalScale(Vector3::Zero);
+		}
+		return; 
+	}
+	if (wkp_predictionLine.lock())
+	{
+		wkp_predictionLine.lock()->transform->SetLocalScale(Vector3(25.0f, 0.5f, 1.0f));
+	}
 	if (!GameSettings::isTitle)
 	{
 		Control();
@@ -91,6 +102,11 @@ void ButiEngine::Player::Start()
 	wkp_bottom.lock()->transform->SetLocalScale(Vector3(1.0f, 0.5f, 10.0f));
 	
 	shp_bottomAABB = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 1.0f), wkp_bottom.lock()->transform);
+
+	wkp_apple = GetManager().lock()->AddObjectFromCereal("Apple");
+	wkp_apple.lock()->transform->SetBaseTransform(gameObject.lock()->transform);
+	wkp_apple.lock()->transform->SetLocalPosition(Vector3(0, 0.5f, 0.001f));
+	wkp_apple.lock()->transform->SetLocalScale(Vector3(0, 0, 0));
 	
 
 	gameObject.lock()->RegistReactionComponent(GetThis<GameComponent>());
@@ -508,6 +524,17 @@ void ButiEngine::Player::CorrectionFrog(std::weak_ptr<GameObject> arg_frog)
 	anim->SetEaseType(Easing::EasingType::Liner);
 }
 
+void ButiEngine::Player::OnSwallowedFrog()
+{
+	if (!wkp_swallowFrog.lock()) { return; }
+	if (wkp_swallowFrog.lock()->GetGameComponent<Frog>()->IsExplosion())
+	{
+		gameObject.lock()->transform->SetLocalScale(defaultScale);
+
+		wkp_apple.lock()->transform->SetLocalScale(Vector3(1, 1, 1));
+	}
+}
+
 void ButiEngine::Player::GrabGoal(std::weak_ptr<GameObject> arg_goal)
 {
 	auto core = wkp_holdCore.lock();
@@ -652,6 +679,7 @@ void ButiEngine::Player::OnCollisionCore(std::weak_ptr<GameObject> arg_core)
 void ButiEngine::Player::OnCollisionFrog(std::weak_ptr<GameObject> arg_frog)
 {
 	if (!grounded) { return; }
+	if (wkp_swallowFrog.lock()) { return; }
 	if (wkp_holdSita.lock())
 	{
 		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
@@ -665,6 +693,9 @@ void ButiEngine::Player::OnCollisionFrog(std::weak_ptr<GameObject> arg_frog)
 		frogPos.z = gameObject.lock()->transform->GetWorldPosition().z;
 		gameObject.lock()->transform->SetWorldPosition(frogPos);
 		isClear = true;
+		wkp_swallowFrog = arg_frog;
+		defaultScale = gameObject.lock()->transform->GetLocalScale();
+		gameObject.lock()->transform->SetLocalScale(Vector3(0, 0, 0));
 		shp_contorolManager->Clear();
 		return;
 	}

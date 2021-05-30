@@ -202,9 +202,15 @@ void ButiEngine::Panel::SetDrawObjectTree(int arg_treeNum, bool arg_back)
 	wkp_drawObjectTree.lock()->transform->SetBaseTransform(gameObject.lock()->transform, true);
 }
 
+void ButiEngine::Panel::Resist()
+{
+	//wkp_drawObjectSky.lock()->GetGameComponent<MeshDrawComponent>()->Regist();
+	wkp_drawObjectTree.lock()->GetGameComponent<MeshDrawComponent>()->Regist();
+}
+
 void ButiEngine::Panel::ReResist()
 {
-	wkp_drawObjectSky.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
+	//wkp_drawObjectSky.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
 	wkp_drawObjectTree.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
 }
 
