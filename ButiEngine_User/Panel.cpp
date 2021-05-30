@@ -9,8 +9,8 @@ void ButiEngine::Panel::OnUpdate()
 	StorePlayer();
 	if (once)
 	{
-		//wkp_drawObjectSky.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
-		//wkp_drawObjectTree.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
+		wkp_drawObjectSky.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
+		wkp_drawObjectTree.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
 		once = false;
 	}
 	if (gameObject.lock()->GetGameComponent<TransformAnimation>())

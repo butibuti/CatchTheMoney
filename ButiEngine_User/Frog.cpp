@@ -327,11 +327,15 @@ void ButiEngine::Frog::Animation()
 {
 	if (!isAnimation) { return; }
 
-	const int ANIMATION_FRAME = 30;
+	int animationFrame = 30;
 
 	auto playerHoldSita = wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita();
+	if (playerHoldSita.lock())
+	{
+		animationFrame = 40;
+	}
 	float targetX = gameObject.lock()->transform->GetWorldPosition().x;
-	float speed = GameSettings::blockSize * 50 / ANIMATION_FRAME;
+	float speed = GameSettings::blockSize * 50 / animationFrame;
 	progress++;
 	float moveX = 0.0f;
 	if (gameObject.lock()->transform->GetWorldScale().x < 0)
@@ -479,8 +483,9 @@ void ButiEngine::Frog::SpriteAnimation()
 				auto angel = GetManager().lock()->AddObjectFromCereal("AngelFrog", ObjectFactory::Create<Transform>(position, rotation, scale));
 			}
 
-			auto posZ = gameObject.lock()->transform->GetLocalPosition().z;
-			gameObject.lock()->transform->SetLocalPosition(Vector3(0, -3000, posZ));
+			Vector3 position = gameObject.lock()->transform->GetWorldPosition();
+			position.y = -3000;
+			gameObject.lock()->transform->SetWorldPosition(position);
 		}
 		break;
 	default:
