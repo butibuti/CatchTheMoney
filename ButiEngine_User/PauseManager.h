@@ -1,7 +1,7 @@
 #pragma once
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
-
+	class SquareParticleEmitter;
 	class PauseManager :public GameComponent
 	{
 	public:
@@ -33,6 +33,8 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_button_back;
 		std::weak_ptr<GameObject> wkp_button_reset;
 		std::weak_ptr<GameObject> wkp_button_select;
+
+		std::shared_ptr<SquareParticleEmitter> shp_particleEmitter;
 
 		bool isNext;
 		static bool pause;

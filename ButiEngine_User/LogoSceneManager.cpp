@@ -8,7 +8,6 @@ void ButiEngine::LogoSceneManager::OnUpdate()
     shp_logoBuffer->Get().lightDir.w = Easing::Parabola(logoTime);
     if (shp_timer->Update()) {
         GetManager().lock()->AddObjectFromCereal("LogoSceneScreenObject", ObjectFactory::Create<Transform>(Vector3(0, 1080, 0.1), Vector3::Zero, Vector3(1920, 1080, 1)));
-        
 
         shp_transTimer->Start();
     }
@@ -16,6 +15,7 @@ void ButiEngine::LogoSceneManager::OnUpdate()
 
         auto app = GetManager().lock()->GetApplication().lock();
         app->InitLoadResources();
+        app->GetGraphicDevice()->SetClearColor(Vector4((255.0f / 255.0f), (254.0f / 255.0f), (250.0f / 255.0f), 1.0f));
         app->GetSceneManager()->LoadScene("Title");
         app->GetSceneManager()->ChangeScene("Title");
     }

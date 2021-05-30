@@ -94,7 +94,7 @@ void ButiEngine::SquareParticleEmitter::SetIsEdit(const bool arg_isEdit)
 
 void ButiEngine::SquareParticleEmitter::SetIsPause(const bool arg_isPause)
 {
-    isPause = false;
+    isPause = arg_isPause;
 }
 
 void ButiEngine::SquareParticleEmitter::EditUpdate()

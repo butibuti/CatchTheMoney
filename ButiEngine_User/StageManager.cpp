@@ -241,6 +241,7 @@ void ButiEngine::StageManager::Start()
 	const int stageNum = StageSelect::GetStageNum();
 	nextSceneName = "Stage" + std::to_string(stageNum + 1);
 
+	GetManager().lock()->GetApplication().lock() ->GetGraphicDevice()->SetClearColor(Vector4((255.0f / 255.0f), (254.0f / 255.0f), (250.0f / 255.0f), 1.0f));
 #ifdef DEBUG
 	f = 1;
 #endif // DEBUG

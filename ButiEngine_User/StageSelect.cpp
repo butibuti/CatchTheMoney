@@ -134,6 +134,8 @@ void ButiEngine::StageSelect::Start()
 	}
 	screen->GetGameComponent<OutlineMeshDrawComponent>()->SetMaterialTag(MaterialTag(materialSource + std::to_string(stageNum)), 0);
 	screen->GetGameComponent<OutlineMeshDrawComponent>()->ReRegist();
+
+	GetManager().lock()->GetApplication().lock() ->GetGraphicDevice()->SetClearColor(Vector4((250.0f / 255.0f), (254.0f / 255.0f), (255.0f / 255.0f), 1.0f));
 }
 
 void ButiEngine::StageSelect::OnShowUI()

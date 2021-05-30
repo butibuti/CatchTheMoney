@@ -10,6 +10,7 @@
 #include"Player.h"
 #include"Title.h"
 #include"StageSelect.h"
+#include"SquareParticleEmitter.h"
 
 bool ButiEngine::GameExitMenu::open;
 
@@ -34,11 +35,17 @@ void ButiEngine::GameExitMenu::OnUpdate()
 			progress = 0;
 			selectYesButton = false;
 			disappear = false;
+			if (shp_particleEmitter) {
+				shp_particleEmitter->SetIsPause(true);
+			}
 			AppearUI();
 		}
 		else
 		{
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_pick, GameSettings::masterVolume);
+			if (shp_particleEmitter) {
+				shp_particleEmitter->SetIsPause(false);
+			}
 			DisappearUI();
 		}
 	}
@@ -87,6 +94,10 @@ void ButiEngine::GameExitMenu::Start()
 	selectYesButton = false;
 	exit = false;
 	disappear = false;
+	auto emiitter = GetManager().lock()->GetGameObject("SquareParticleEmitter");
+	if (emiitter.lock()) {
+		shp_particleEmitter = emiitter.lock()->GetGameComponent  <SquareParticleEmitter>();
+	}
 }
 
 void ButiEngine::GameExitMenu::OnShowUI()
