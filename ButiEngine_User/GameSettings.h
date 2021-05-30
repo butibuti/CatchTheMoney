@@ -45,6 +45,7 @@ public:
 
 	static bool isTitle;
 	static bool isStageSelect;
+	static bool isTutorialInit;
 
 private:
 	GameSettings();

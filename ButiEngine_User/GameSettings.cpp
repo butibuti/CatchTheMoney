@@ -18,6 +18,7 @@ const float GameSettings::masterVolume = 0.1f;
 
 bool GameSettings::isTitle = true;
 bool GameSettings::isStageSelect = false;
+bool GameSettings::isTutorialInit = false;
 
 GameSettings::~GameSettings()
 {

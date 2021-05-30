@@ -31,6 +31,7 @@ namespace ButiEngine {
 		}
 
 		bool IsClear() { return isClear; }
+		bool IsTutorial() { return isTutorial; }
 		float GetGravity() { return gravity; }
 		std::weak_ptr<GameObject> GetHoldCore() { return wkp_holdCore; }
 		std::weak_ptr<GameObject> GetHoldFrog() { return wkp_holdFrog; }
@@ -99,6 +100,7 @@ namespace ButiEngine {
 		int animationFrame;
 		int jumpFrame;
 		bool isClear;
+		bool isTutorial;
 		bool grounded;
 		float gravity;
 		bool pushGrabKeyFrame;

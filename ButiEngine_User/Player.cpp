@@ -16,6 +16,7 @@
 #include"SitaSentan.h"
 #include"ScrollManager.h"
 #include "ContorolByStick.h"
+#include "StageSelect.h"
 
 void ButiEngine::Player::OnUpdate()
 {
@@ -64,6 +65,7 @@ void ButiEngine::Player::Start()
 	gravity = -GameSettings::gravity;
 	pushGrabKeyFrame = false;
 	isClear = false;
+	isTutorial = false;
 	freezeProgressFrame = 0;
 	jumpFrame = 0;
 	animationFrame = 0;
@@ -532,7 +534,15 @@ void ButiEngine::Player::GrabGoal(std::weak_ptr<GameObject> arg_goal)
 		wkp_holdGoal = arg_goal;
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, GameSettings::masterVolume);
 		shp_contorolManager->Clear();
-		isClear = true;
+		if (StageSelect::GetStageNum() == TalkStageNum::REVERSE_TALK)
+		{
+			isTutorial = true;
+
+		}
+		else
+		{
+			isClear = true;
+		}
 	}
 }
 

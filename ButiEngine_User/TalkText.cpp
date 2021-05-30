@@ -113,7 +113,7 @@ void ButiEngine::TalkText::TextEffect()
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
 		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
 	}
-	else if (stageNum == TalkStageNum::REVERSE_TALK)
+	else if (stageNum == TalkStageNum::REVERSE_TALK && !GameSettings::isTutorialInit)
 	{
 		if (textCount == 4 || textCount == 6)
 		{
@@ -123,6 +123,11 @@ void ButiEngine::TalkText::TextEffect()
 		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(false);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
 		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+	}
+	else if (stageNum == TalkStageNum::REVERSE_TALK && GameSettings::isTutorialInit)
+	{
+		//チュートリアルもう一度
+
 	}
 	else if (stageNum == TalkStageNum::GRAVITY_TALK ||
 		     stageNum == TalkStageNum::FROG_TALK)

@@ -67,6 +67,13 @@ void ButiEngine::StageManager::OnUpdate()
 		clearAnimationFrame--;
 	}
 
+	////////////////////////////////////////////////////////////////
+	if (wkp_player.lock()->GetGameComponent<Player>()->IsTutorial())
+	{
+
+	}
+
+
 	FrogEatAnimation();
 	OnGoal();
 	ModeChange();
