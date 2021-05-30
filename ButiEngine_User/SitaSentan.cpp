@@ -45,7 +45,7 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::SitaSentan::Clone()
 
 void ButiEngine::SitaSentan::SetZ()
 {
-	gameObject.lock()->transform->SetWorldPostionZ(wkp_frog.lock()->transform->GetWorldPosition().z + 0.1f);
+	gameObject.lock()->transform->SetWorldPostionZ(wkp_frog.lock()->transform->GetWorldPosition().z + addZ);
 }
 
 void ButiEngine::SitaSentan::SetAnim(int arg_anim)
@@ -72,22 +72,34 @@ void ButiEngine::SitaSentan::SetScale()
 
 void ButiEngine::SitaSentan::SetX()
 {
+	float frogScaleX = wkp_frog.lock()->transform->GetWorldScale().x;
+	float sitaLength = GameSettings::blockSize * 50 - 5.5f;
+	float x = wkp_frog.lock()->transform->GetWorldPosition().x + 5.5f +  sitaLength;
+	auto frog = wkp_frog.lock()->GetGameComponent<Frog>();
 	if (StageManager::GetMode() == GameMode::Edit)
 	{
-		float frogScaleX = wkp_frog.lock()->transform->GetWorldScale().x;
-		float x = wkp_frog.lock()->transform->GetWorldPosition().x + GameSettings::blockSize * 50;
 		if (frogScaleX < 0)
 		{
-			x = wkp_frog.lock()->transform->GetWorldPosition().x - GameSettings::blockSize * 50;
+			x = wkp_frog.lock()->transform->GetWorldPosition().x - 5.5f - sitaLength;
 		}
-
-		if (wkp_frog.lock()->GetGameComponent<Frog>()->IsGrabbed())
-		{
-			x = wkp_frog.lock()->transform->GetWorldPosition().x;
-		}
-		wkp_frog.lock()->GetGameComponent<Frog>()->GetSitatyuukan().lock()->GetGameComponent<SitaTyuukan>()->Move();
+		frog->GetSitatyuukan().lock()->GetGameComponent<SitaTyuukan>()->Move();
 		gameObject.lock()->transform->SetWorldPostionX(x);
-		wkp_frog.lock()->GetGameComponent<Frog>()->GetSitatyuukan().lock()->GetGameComponent<SitaTyuukan>()->Move();
+		frog->GetSitatyuukan().lock()->GetGameComponent<SitaTyuukan>()->Move();
+	}
+	if (frog->IsGrabbed() && !frog->IsAnimation())
+	{
+		x = wkp_frog.lock()->transform->GetWorldPosition().x;
+		if (frogScaleX > 0)
+		{
+			x += 5.5f;
+		}
+		else if (frogScaleX < 0)
+		{
+			x -= 5.5f;
+		}
+		frog->GetSitatyuukan().lock()->GetGameComponent<SitaTyuukan>()->Move();
+		gameObject.lock()->transform->SetWorldPostionX(x);
+		frog->GetSitatyuukan().lock()->GetGameComponent<SitaTyuukan>()->Move();
 	}
 }
 

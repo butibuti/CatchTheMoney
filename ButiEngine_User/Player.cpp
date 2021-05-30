@@ -689,8 +689,10 @@ void ButiEngine::Player::OnCollisionFrog(std::weak_ptr<GameObject> arg_frog)
 {
 	if (!grounded) { return; }
 	if (wkp_swallowFrog.lock()) { return; }
+	auto sita = arg_frog.lock()->GetGameComponent<Frog>()->GetSitaSentan();
 	if (wkp_holdSita.lock())
 	{
+		if (wkp_holdSita.lock() != sita.lock()) { return; }
 		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
 		float frogScaleY = arg_frog.lock()->transform->GetWorldScale().y;
 		if (frogScaleY < 0 != scale.y < 0)
@@ -758,6 +760,7 @@ void ButiEngine::Player::GrabSita(std::weak_ptr<GameObject> arg_sita)
 
 void ButiEngine::Player::FollowSita()
 {
+	if (isClear) { return; }
 	Vector3 targetPos = wkp_holdSita.lock()->transform->GetWorldPosition() - sitaDifference;
 	gameObject.lock()->transform->SetWorldPostionX(targetPos.x);
 	gameObject.lock()->transform->SetWorldPostionY(targetPos.y);

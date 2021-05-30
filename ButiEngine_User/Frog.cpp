@@ -38,6 +38,11 @@ void ButiEngine::Frog::OnUpdate()
 		return;
 	}
 	SpriteAnimation();
+	if (wkp_player.lock() && wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita().lock())
+	{
+		CheckHitPlayer();
+		return;
+	}
 	if (!nearPlayer) { return; }
 	MoveY();
 	CheckGravity();
@@ -167,11 +172,20 @@ void ButiEngine::Frog::CreateSita()
 
 	wkp_sita_sentan.lock()->transform->SetBaseTransform(nullptr);
 	wkp_sita_sentan.lock()->transform->SetLocalScale(Vector3(32.0f, 32.0f, 1));
-	float sitaLength = GameSettings::blockSize * 50;
+	float sitaLength = GameSettings::blockSize * 50 - 5.5f;
 	Vector3 sentanPosition = gameObject.lock()->transform->GetWorldPosition();
+	float scaleX = gameObject.lock()->transform->GetWorldScale().x;
+	if (scaleX < 0)
+	{
+		sentanPosition.x -= 5.5f;
+	}
+	else if (scaleX > 0)
+	{
+		sentanPosition.x += 5.5f;
+	}
 	if (StageSelect::GetStageNum() != TalkStageNum::FROG_TALK)
 	{
-		if (gameObject.lock()->transform->GetWorldScale().x < 0)
+		if (scaleX < 0)
 		{
 			sentanPosition.x -= sitaLength;
 		}
@@ -180,7 +194,9 @@ void ButiEngine::Frog::CreateSita()
 			sentanPosition.x += sitaLength;
 		}
 	}
-	sentanPosition.z += 0.1f;
+	sentanPosition.z -= 0.3f;
+	wkp_sita_sentan.lock()->GetGameComponent<SitaSentan>()->SetAddZ(-0.3f);
+
 	
 	wkp_sita_sentan.lock()->transform->SetWorldPosition(sentanPosition);
 }
@@ -217,6 +233,7 @@ void ButiEngine::Frog::CheckGravity()
 void ButiEngine::Frog::CheckNearPlayer()
 {
 	if (!wkp_player.lock() || nearPlayer) { return; }
+	if (wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita().lock()) { return; }
 
 	Vector3 position = gameObject.lock()->transform->GetWorldPosition();
 	Vector3 playerPos = wkp_player.lock()->transform->GetWorldPosition();
@@ -266,6 +283,10 @@ void ButiEngine::Frog::BackY()
 			{
 				continue;
 			}
+			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Player"))
+			{
+				continue;
+			}
 
 			if (velocity.y > 0)
 			{
@@ -304,6 +325,7 @@ void ButiEngine::Frog::Interlock()
 
 	position.x = backPosition.x;
 	position.y *= -1;
+	position.z += 0.001f;
 
 	wkp_backFrog.lock()->transform->SetWorldPosition(position);
 
@@ -375,7 +397,17 @@ void ButiEngine::Frog::Animation()
 		animationFrame = 40;
 	}
 	float targetX = gameObject.lock()->transform->GetWorldPosition().x;
-	float speed = GameSettings::blockSize * 50 / animationFrame;
+	float scaleX = gameObject.lock()->transform->GetWorldScale().x;
+	if (scaleX > 0)
+	{
+		targetX += 5.5f;
+	}
+	else if (scaleX < 0)
+	{
+		targetX -= 5.5f;
+	}
+	float sitaLength = GameSettings::blockSize * 50 - 5.5f;
+	float speed = sitaLength / animationFrame;
 	progress++;
 	float moveX = 0.0f;
 	if (gameObject.lock()->transform->GetWorldScale().x < 0)
@@ -384,7 +416,7 @@ void ButiEngine::Frog::Animation()
 		if (!grabbed && !playerHoldSita.lock())
 		{
 			moveX = -speed;
-			targetX -= GameSettings::blockSize * 50;
+			targetX -= sitaLength;
 			if (targetX < -GameSettings::windowWidth * 0.5f)
 			{
 				targetX += GameSettings::windowWidth;
@@ -397,7 +429,7 @@ void ButiEngine::Frog::Animation()
 		if (!grabbed && !playerHoldSita.lock())
 		{
 			moveX = speed;
-			targetX += GameSettings::blockSize * 50;
+			targetX += sitaLength;
 			if (targetX > GameSettings::windowWidth * 0.5f)
 			{
 				targetX -= GameSettings::windowWidth;
@@ -436,6 +468,18 @@ void ButiEngine::Frog::Animation()
 	}
 	else
 	{
+		if (abs(pos.x - targetX) < GameSettings::panelWidth)
+		{
+			auto sita = wkp_sita_sentan.lock()->GetGameComponent<SitaSentan>();
+			if (grabbed)
+			{
+				sita->SetAddZ(0.1f);
+			}
+			else
+			{
+				sita->SetAddZ(-0.3f);
+			}
+		}
 		animation = Animation::SITA;
 		shp_spriteAnimation->SetHorizontalAnim(0);
 	}

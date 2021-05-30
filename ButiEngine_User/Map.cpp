@@ -276,6 +276,7 @@ void ButiEngine::Map::PutTile()
 
 				frogPos.x += GameSettings::windowWidth * 0.5f;
 				frogPos.y *= -1.0f;
+				frogPos.z -= 0.001f;
 				frogScale.y *= -1.0f;
 				auto back = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
 				//auto back_angel = GetManager().lock()->AddObjectFromCereal("AngelFrog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
@@ -303,6 +304,7 @@ void ButiEngine::Map::PutTile()
 
 				frogPos.x += GameSettings::windowWidth * 0.5f;
 				frogPos.y *= -1.0f;
+				frogPos.z -= 0.001f;
 				frogScale.y *= -1.0f;
 				auto back = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
 
@@ -325,6 +327,7 @@ void ButiEngine::Map::PutTile()
 
 				frogPos.x += GameSettings::windowWidth * 0.5f;
 				frogPos.y *= -1.0f;
+				frogPos.z -= 0.001f;
 				frogScale.y *= -1.0f;
 				auto back = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
 
@@ -348,6 +351,7 @@ void ButiEngine::Map::PutTile()
 
 				frogPos.x += GameSettings::windowWidth * 0.5f;
 				frogPos.y *= -1.0f;
+				frogPos.z -= 0.001f;
 				frogScale.y *= -1.0f;
 				auto back = GetManager().lock()->AddObjectFromCereal("Frog", ObjectFactory::Create<Transform>(frogPos, Vector3::Zero, frogScale));
 

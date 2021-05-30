@@ -38,6 +38,10 @@ void ButiEngine::MobiusLoop::Start()
 	{
 		localPosition.z = 0.001f;
 	}
+	/*else if (name == "Sita_tyuukan")
+	{
+		localPosition.z = -0.7f;
+	}*/
 	wkp_right.lock()->transform->SetLocalPosition(localPosition);
 	wkp_right.lock()->SetGameObjectTag(tag);
 	if (meshDraw)
@@ -70,8 +74,7 @@ void ButiEngine::MobiusLoop::Start()
 	{
 		shp_AABB_left = ObjectFactory::Create<Collision::CollisionPrimitive_Box_AABB>(Vector3(0.499f, 0.499f, 10.0f), wkp_left.lock()->transform);
 	}
-
-	if (StringHelper::Contains(name, "Panel"))
+	else if (StringHelper::Contains(name, "Panel"))
 	{
 		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
 		Vector3 cloneScale = scale;
@@ -314,8 +317,8 @@ void ButiEngine::MobiusLoop::SetSitaPosition()
 	float scaleX = gameObject.lock()->transform->GetWorldScale().x;
 
 	localPosition.x = GameSettings::windowWidth / scaleX;
-	wkp_right.lock()->transform->SetLocalPosition(localPosition);
+	wkp_right.lock()->transform->SetLocalPostionX(localPosition.x);
 
 	localPosition.x = -GameSettings::windowWidth / scaleX;
-	wkp_left.lock()->transform->SetLocalPosition(localPosition);
+	wkp_left.lock()->transform->SetLocalPostionX(localPosition.x);
 }
