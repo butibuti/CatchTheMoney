@@ -164,6 +164,7 @@
     <ClCompile Include="AngelFrog.cpp" />
     <ClCompile Include="BackDraw.cpp" />
     <ClCompile Include="BackgroundFrame.cpp" />
+    <ClCompile Include="BackGroundFrame_Title.cpp" />
     <ClCompile Include="BackGroundMobius.cpp" />
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="ChildNumber.cpp" />
@@ -231,6 +232,7 @@
     <ClInclude Include="AngelFrog.h" />
     <ClInclude Include="BackDraw.h" />
     <ClInclude Include="BackgroundFrame.h" />
+    <ClInclude Include="BackGroundFrame_Title.h" />
     <ClInclude Include="BackGroundMobius.h" />
     <ClInclude Include="ChildNumber.h" />
     <ClInclude Include="ClearBand.h" />

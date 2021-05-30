@@ -215,6 +215,9 @@ void ButiEngine::PauseManager::OnDecideBack()
 	wkp_button_back.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
 
 	pushPauseKey = true;
+	if (shp_particleEmitter) {
+		shp_particleEmitter->SetIsPause(false);
+	}
 	DisappearUI();
 }
 

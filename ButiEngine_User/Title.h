@@ -22,12 +22,14 @@ namespace ButiEngine {
 			archive(isActive);
 		}
 		static bool IsAnimation() { return isAnimation; }
+		void GenerateBackGroundFrame();
 	private:
 		std::shared_ptr<PauseManager> shp_PauseManager;
 
 		std::weak_ptr<GameObject> wkp_camera;
 		std::weak_ptr<GameObject> wkp_fadeObject;
 		std::weak_ptr<GameObject> wkp_titleLogo;
+		std::shared_ptr<RelativeTimer> shp_FrameGenerateTimer;
 
 		SoundTag bgm;
 		SoundTag se_enter;
