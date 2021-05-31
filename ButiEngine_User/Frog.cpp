@@ -475,7 +475,7 @@ void ButiEngine::Frog::Animation()
 		{
 			Exprosion();
 			wkp_backFrog.lock()->GetGameComponent<Frog>()->Exprosion();
-			CheckHitPlayer();
+			wkp_player.lock()->GetGameComponent<Player>()->OnCollisionFrog(gameObject);
 		}
 	}
 	else
