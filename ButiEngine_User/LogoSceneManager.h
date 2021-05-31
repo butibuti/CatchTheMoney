@@ -22,9 +22,9 @@ namespace ButiEngine {
 			archive(logoApperanceSpeed);
 		}
 	private:
-		std::shared_ptr<CBuffer<LightVariable>> shp_logoBuffer;
-		std::shared_ptr<RelativeTimer> shp_timer,shp_transTimer;
-		float logoApperanceSpeed,logoTime;
+		std::shared_ptr<CBuffer<LightVariable>> shp_logoBuffer, shp_teamBuffer;
+		std::shared_ptr<RelativeTimer> shp_timer,shp_logoTimer,shp_transTimer;
+		float logoApperanceSpeed,logoTime,teamLogoTime=0.0f;
 	};
 
 }
