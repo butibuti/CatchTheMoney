@@ -4,11 +4,11 @@ namespace ButiEngine {
 
 	class SpliteAnimationComponent;
 
-	class SelectPlayer :public GameComponent
+	class ThanksPlayer :public GameComponent
 	{
 	public:
 		std::string GetGameComponentName()override {
-			return "SelectPlayer";
+			return "ThanksPlayer";
 		}
 		void OnUpdate()override;
 		void OnSet()override;
@@ -30,11 +30,12 @@ namespace ButiEngine {
 		bool isDecision;
 		bool isAway;
 		Vector3 position;
+		SoundTag se_dash;
 
 		void DecisionAnimation();
 	};
 
 }
 
-BUTI_REGIST_GAMECOMPONENT(SelectPlayer);
+BUTI_REGIST_GAMECOMPONENT(ThanksPlayer);
 

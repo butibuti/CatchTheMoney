@@ -56,6 +56,7 @@ void ButiEngine::Title::OnUpdate()
 		GameSettings::isTitle = false;
 		isAnimation = false;
 		auto sceneManager = gameObject.lock()->GetApplication().lock()->GetSceneManager();
+		sceneManager->RemoveScene("StageSelect");
 		sceneManager->LoadScene("StageSelect");
 		sceneManager->ChangeScene("StageSelect");
 		//sceneManager->LoadScene("Stage0");

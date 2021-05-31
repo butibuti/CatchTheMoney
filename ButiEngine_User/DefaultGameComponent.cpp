@@ -7,3 +7,5 @@
 #include"Header/GameObjects/DefaultGameComponent/SpliteAnimationComponent.h"
 #include"Header/GameObjects/DefaultGameComponent/SimpleBoneAnimator.Component.h"
 #include"Header/GameObjects/DefaultGameComponent/OutlineDrawComponent.h"
+#include"Header/GameObjects/DefaultGameComponent/PositionAnimationComponent.h"
+#include"Header/GameObjects/DefaultGameComponent/ScaleAnimationComponent.h"
