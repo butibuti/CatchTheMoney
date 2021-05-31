@@ -751,8 +751,8 @@ void ButiEngine::Player::GrabSita(std::weak_ptr<GameObject> arg_sita)
 		wkp_holdSita = arg_sita;
 		sitaDifference = wkp_holdSita.lock()->transform->GetWorldPosition() - gameObject.lock()->transform->GetWorldPosition();
 		gameObject.lock()->transform->SetWorldPostionZ(GameSettings::frogZ + 0.05f);
-		auto frog = wkp_holdSita.lock()->GetGameComponent<SitaSentan>()->GetFrog();
-		auto frogComponent = GetManager().lock()->GetGameObject("Frog").lock()->GetGameComponent<Frog>();
+		auto frog_ = wkp_holdSita.lock()->GetGameComponent<SitaSentan>()->GetFrog();
+		auto frogComponent = frog_.lock()->GetGameComponent<Frog>();
 		frogComponent->PlayAnimation();
 		frogComponent->GetBackFrog().lock()->GetGameComponent<Frog>()->PlayAnimation();
 		GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ScrollManager>()->SetIsActive(false);

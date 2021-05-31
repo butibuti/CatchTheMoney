@@ -40,7 +40,10 @@ void ButiEngine::Frog::OnUpdate()
 	SpriteAnimation();
 	if (wkp_player.lock() && wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita().lock())
 	{
-		CheckHitPlayer();
+		if (wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita().lock() == wkp_sita_sentan.lock())
+		{
+			CheckHitPlayer();
+		}
 		return;
 	}
 	if (!nearPlayer) { return; }
@@ -472,6 +475,7 @@ void ButiEngine::Frog::Animation()
 		{
 			Exprosion();
 			wkp_backFrog.lock()->GetGameComponent<Frog>()->Exprosion();
+			CheckHitPlayer();
 		}
 	}
 	else
