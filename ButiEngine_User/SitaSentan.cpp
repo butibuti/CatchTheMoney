@@ -46,6 +46,9 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::SitaSentan::Clone()
 void ButiEngine::SitaSentan::SetZ()
 {
 	gameObject.lock()->transform->SetWorldPostionZ(wkp_frog.lock()->transform->GetWorldPosition().z + addZ);
+
+	wkp_frog.lock()->GetGameComponent<Frog>()->GetSitatyuukan().lock()->GetGameComponent<SitaTyuukan>()->Move();
+
 }
 
 void ButiEngine::SitaSentan::SetAnim(int arg_anim)
