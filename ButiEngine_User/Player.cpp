@@ -121,7 +121,7 @@ void ButiEngine::Player::Start()
 	se_land = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Land.wav");
 	se_reverse = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/GravityReverse.wav");
 	se_powerUp = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/GravityPowerUp.wav");
-
+	se_frogIn = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/sita_Shrink.wav");
 	}
 
 void ButiEngine::Player::OnCollisionEnter(std::weak_ptr<GameObject> arg_other)
@@ -622,6 +622,7 @@ void ButiEngine::Player::GrabFrog(std::weak_ptr<GameObject> arg_frog)
 	bool noGrab = !core && !frog && !sita && !goal;
 	if (noGrab && !pushGrabKeyFrame)
 	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_frogIn, GameSettings::masterVolume);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, GameSettings::masterVolume);
 		wkp_holdFrog = arg_frog;
 		auto frog = wkp_holdFrog.lock()->GetGameComponent<Frog>();
@@ -743,6 +744,7 @@ void ButiEngine::Player::GrabSita(std::weak_ptr<GameObject> arg_sita)
 	bool noGrab = !core && !frog && !sita && !goal;
 	if (noGrab && !pushGrabKeyFrame)
 	{
+		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_frogIn, GameSettings::masterVolume);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_grab, GameSettings::masterVolume);
 		wkp_holdSita = arg_sita;
 		sitaDifference = wkp_holdSita.lock()->transform->GetWorldPosition() - gameObject.lock()->transform->GetWorldPosition();

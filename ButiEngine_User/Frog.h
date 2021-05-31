@@ -58,6 +58,11 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_angel;
 		std::vector<std::weak_ptr<GameObject>> vec_wkp_parts;
 
+		SoundTag se_explosion;
+		SoundTag se_extend;
+		SoundTag se_sitaOut;
+		SoundTag se_eat;
+
 		enum Animation
 		{
 			EAT_APPLE,
@@ -77,6 +82,7 @@ namespace ButiEngine {
 		bool isApple;
 		bool once;
 		bool isSpawnAngel;
+		bool isOutSita;
 		int progress;
 		int animationFrame;
 		int onceCount;

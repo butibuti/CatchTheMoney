@@ -245,7 +245,7 @@ bool ButiEngine::TalkText::Once()
 		return false;
 	}
 	//­‚µ’x‚ç‚¹‚é
-	const int ONCE_FRAME = 24;
+	const int ONCE_FRAME = 44;
 	if (onceFrame == ONCE_FRAME)
 	{
 		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 40);

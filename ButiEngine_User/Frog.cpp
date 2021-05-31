@@ -74,6 +74,11 @@ void ButiEngine::Frog::Start()
 	angelFrogComponent->Start();
 	angelFrogComponent->SetIsActive(false);
 
+	se_explosion = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Kaeru_Explosion1.wav");
+	se_extend = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Kaeru_Extend.wav");
+	se_sitaOut = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/sita_Extend.wav");
+	se_eat = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Kaeru_Eat.wav");
+
 	int partType = 0;
 	for (int i = 0; i < 12; i++)
 	{
@@ -121,6 +126,7 @@ void ButiEngine::Frog::Start()
 	isApple = false;
 	isSpawnAngel = false;
 	isExplosion = false;
+	isOutSita = false;
 	progress = 0;
 	animationFrame = 0;
 	onceCount = 0;
@@ -415,6 +421,8 @@ void ButiEngine::Frog::Animation()
 		{
 			animation = Animation::IDLE;
 			shp_spriteAnimation->SetHorizontalAnim(0);
+			isOutSita = false;
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_eat, GameSettings::masterVolume);
 		}
 		else
 		{
@@ -436,6 +444,11 @@ void ButiEngine::Frog::Animation()
 	}
 	else
 	{
+		if (!isOutSita)
+		{
+			isOutSita = true;
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_sitaOut, GameSettings::masterVolume * 0.5f);
+		}
 		animation = Animation::SITA;
 		shp_spriteAnimation->SetHorizontalAnim(0);
 	}
@@ -480,6 +493,11 @@ void ButiEngine::Frog::SpriteAnimation()
 		shp_spriteAnimation->SetVarticalAnim(Frog::EAT_APPLE);
 		if (shp_spriteAnimation->GetHorizontalAnim() < EAT_APPLE_COUNT)
 		{
+			const int EAT_SE_FRAME = 3;
+			if (shp_spriteAnimation->GetHorizontalAnim() == EAT_SE_FRAME)
+			{
+				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_eat, GameSettings::masterVolume);
+			}
 			shp_spriteAnimation->UpdateHorizontalAnim(1);
 		}
 		else
@@ -518,6 +536,20 @@ void ButiEngine::Frog::SpriteAnimation()
 		shp_spriteAnimation->SetVarticalAnim(Frog::EXPROSION);
 		if (shp_spriteAnimation->GetHorizontalAnim() < EXPROSION_COUNT)
 		{
+			const int EAT_SE_FRAME = 0;
+			if (shp_spriteAnimation->GetHorizontalAnim() == EAT_SE_FRAME)
+			{
+				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_eat, GameSettings::masterVolume);
+			}
+			else if (shp_spriteAnimation->GetHorizontalAnim() == EXPROSION_COUNT - 8)
+			{
+				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_extend, GameSettings::masterVolume * 0.5f);
+			}
+			else if (shp_spriteAnimation->GetHorizontalAnim() == EXPROSION_COUNT - 1)
+			{
+				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_explosion, GameSettings::masterVolume * 0.5f);
+			}
+
 			shp_spriteAnimation->UpdateHorizontalAnim(1);
 		}
 		else
