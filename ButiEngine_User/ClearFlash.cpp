@@ -2,6 +2,7 @@
 #include "ClearFlash.h"
 #include"Header/GameObjects/DefaultGameComponent/ScaleAnimationComponent.h"
 #include"Player.h"
+#include"GameSettings.h"
 
 void ButiEngine::ClearFlash::OnUpdate()
 {
@@ -9,18 +10,18 @@ void ButiEngine::ClearFlash::OnUpdate()
 	auto transform = gameObject.lock()->transform;
 	if (blinkingCount > 40)
 	{
-		transform->SetLocalPosition(awayPos);
+		transform->SetWorldPosition(awayPos);
 		return;
 	}
 
 	blinkingCount++;
 	if (!(blinkingCount % 4))
 	{
-		transform->SetLocalPosition(awayPos);
+		transform->SetWorldPosition(awayPos);
 	}
 	else
 	{
-		transform->SetLocalPosition(initPos);
+		transform->SetWorldPosition(initPos);
 	}
 
 	ClearScaleAnimation();
@@ -56,9 +57,9 @@ void ButiEngine::ClearFlash::ClearScaleAnimation()
 		goal = GetManager().lock()->GetGameObject("Frog");
 	}
 	auto goalPosition = goal.lock()->transform->GetWorldPosition();
-	goalPosition.z -= 0.01f;
-	gameObject.lock()->transform->SetLocalPosition(goalPosition);
-	initPos = gameObject.lock()->transform->GetLocalPosition();
+	goalPosition.z = GameSettings::playerZ - 1.0f;
+	gameObject.lock()->transform->SetWorldPosition(goalPosition);
+	initPos = gameObject.lock()->transform->GetWorldPosition();
 
 	auto anim = gameObject.lock()->GetGameComponent<ScaleAnimation>();
 	if (!anim)

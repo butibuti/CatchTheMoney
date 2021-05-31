@@ -25,6 +25,7 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> GetFrog() { return wkp_frog; }
 		void SetZ();
 		void SetAnim(int arg_anim);
+		void SetAddZ(float arg_z) { addZ = arg_z; }
 	private:
 		std::weak_ptr<GameObject> wkp_frog;
 		std::shared_ptr<MobiusLoop> shp_mobiusLoop;
@@ -33,6 +34,7 @@ namespace ButiEngine {
 		Vector3 initScale;
 		float progress;
 		int animationFrame;
+		float addZ;
 
 		void SetScale();
 		void SetX();

@@ -42,6 +42,15 @@ void ButiEngine::SitaTyuukan::Move()
 	Vector3 sentanPos = wkp_sentan.lock()->transform->GetWorldPosition();
 	Vector3 frogScale = wkp_frog.lock()->transform->GetWorldScale();
 
+	if (frogScale.x > 0)
+	{
+		frogPos.x += 5.5f;
+	}
+	else if (frogScale.x < 0)
+	{
+		frogPos.x -= 5.5f;
+	}
+
 	if (StageManager::GetMode() != GameMode::Edit)
 	{
 		//sita no sentan ga kaeru no mae ni aru ka
