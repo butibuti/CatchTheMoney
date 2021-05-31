@@ -23,7 +23,7 @@
 #include "TutorialSelect.h"
 #include"Header/GameObjects/DefaultGameComponent/PositionAnimationComponent.h"
 
-//#define OUTPUT_STAGERENDERTARGET
+#define OUTPUT_STAGERENDERTARGET
 #ifdef DEBUG
 
 static int f = 0;

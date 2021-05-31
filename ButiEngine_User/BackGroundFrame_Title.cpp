@@ -17,14 +17,14 @@ void ButiEngine::BackGroundFrame_Title::OnUpdate()
 void ButiEngine::BackGroundFrame_Title::OnSet()
 {
 
+	SetVelocityRandom();
+	SetScaleRandom();
 }
 
 void ButiEngine::BackGroundFrame_Title::Start()
 {
 	shp_sucideTimer = ObjectFactory::Create<RelativeTimer>(36);
 	shp_sucideTimer->Start();
-	SetVelocityRandom();
-	SetScaleRandom();
 }
 
 void ButiEngine::BackGroundFrame_Title::OnShowUI()
@@ -39,12 +39,16 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::BackGroundFrame_Title::Cl
 void ButiEngine::BackGroundFrame_Title::SetVelocityRandom()
 {
 	float speed = ButiRandom::GetRandom(20, 150, 1);
+	if (speed == 0) {
+		speed = 30;
+	}
 
 	velocity.x = ButiRandom::GetRandom(-10, 10, 1);
 	velocity.y = ButiRandom::GetRandom(-10, 10, 1);
 	velocity.z = 0;
 	if (velocity.x == 0 && velocity.y == 0) {
 		velocity.y = -1;
+		velocity.x = 1.0f;
 	}
 
 	velocity.Normalize();
@@ -52,6 +56,7 @@ void ButiEngine::BackGroundFrame_Title::SetVelocityRandom()
 	float scaleX = gameObject.lock()->transform->GetWorldScale().x;
 	const float MAX_SCALE = 960.0f;
 	addAngle = velocity.x * MAX_SCALE / scaleX * -0.125f;
+	Move();
 }
 
 void ButiEngine::BackGroundFrame_Title::SetScaleRandom()

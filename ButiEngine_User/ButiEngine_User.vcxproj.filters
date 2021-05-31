@@ -63,6 +63,9 @@
     <ClCompile Include="BackGroundFrame_Title.cpp" />
     <ClCompile Include="FrogParts.cpp" />
     <ClCompile Include="TutorialSelect.cpp" />
+    <ClCompile Include="Thanks.cpp" />
+    <ClCompile Include="ThanksPlayer.cpp" />
+    <ClCompile Include="ClearZanzo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
@@ -126,6 +129,9 @@
     <ClInclude Include="FrogParts.h" />
     <ClInclude Include="TutorialSelect.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Thanks.h" />
+    <ClInclude Include="ThanksPlayer.h" />
+    <ClInclude Include="ClearZanzo.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ButiEngine_User.rc" />
