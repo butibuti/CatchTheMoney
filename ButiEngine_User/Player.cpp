@@ -224,7 +224,7 @@ void ButiEngine::Player::Control()
 		if (InputManager::OnTriggerGrabKey())
 		{
 			ReleaseGravityCore();
-			ReleaseFrog();
+			//ReleaseFrog();
 		}
 	}
 	else
@@ -721,10 +721,10 @@ void ButiEngine::Player::OnCollisionFrog(std::weak_ptr<GameObject> arg_frog)
 	{
 		hitFrog = true;
 	}
-	if (InputManager::OnTriggerGrabKey() && hitFrog)
-	{
-		GrabFrog(arg_frog);
-	}
+	//if (InputManager::OnTriggerGrabKey() && hitFrog)
+	//{
+	//	GrabFrog(arg_frog);
+	//}
 }
 
 void ButiEngine::Player::OnCollisionSita(std::weak_ptr<GameObject> arg_sita)

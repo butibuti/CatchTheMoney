@@ -12,7 +12,7 @@ namespace ButiEngine {
 		PANEL_TALK = 1,
 		REVERSE_TALK = 3,
 		REVERSE_RE_TALK = 5,
-		GRAVITY_TALK = 7,
+		GRAVITY_TALK = 8,
 		FROG_TALK = 11,
 		LAST_TALK = 19,
 	};
