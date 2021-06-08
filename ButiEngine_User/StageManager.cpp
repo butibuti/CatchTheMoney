@@ -51,7 +51,10 @@ void ButiEngine::StageManager::OnUpdate()
 
 	if (player->IsClear() && !player->IsTutorial())
 	{
-		if (clearAnimationFrame == CLEAR_FRAME - GOAL_LATE_FRAME)
+		const int ADD_FLASH_FRAME = CLEAR_FRAME - GOAL_LATE_FRAME;
+		const int ADD_BAND_FRAME = ADD_FLASH_FRAME - 10;
+		const int ADD_TEXT_FRAME = ADD_BAND_FRAME - 20;
+		if (clearAnimationFrame == ADD_FLASH_FRAME)
 		{
 			Vector3 zoomInPosition;
 
@@ -71,11 +74,11 @@ void ButiEngine::StageManager::OnUpdate()
 			auto cameraController = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraController>();
 			cameraController->MobiusZoomIn(zoomInPosition, 30);
 		}
-		else if (clearAnimationFrame == CLEAR_FRAME - 10 - GOAL_LATE_FRAME)
+		else if (clearAnimationFrame == ADD_BAND_FRAME)
 		{
 			GetManager().lock()->AddObjectFromCereal("ClearBand");
 		}
-		else if (clearAnimationFrame == CLEAR_FRAME - 30 - GOAL_LATE_FRAME)
+		else if (clearAnimationFrame == ADD_TEXT_FRAME)
 		{
 			GetManager().lock()->AddObjectFromCereal("ClearText");
 		}
@@ -179,6 +182,7 @@ void ButiEngine::StageManager::Start()
 		numComponent->SetNumber(StageSelect::GetStageNum() + 1);
 	}
 
+	//会話テキスト
 	{
 		auto stageNum = StageSelect::GetStageNum();
 		if (stageNum == TalkStageNum::FIRST_TALK && !GameSettings::isTitle)
@@ -533,11 +537,12 @@ void ButiEngine::StageManager::FrogEatAnimation()
 
 	frogEatAnimationCount--;
 	const int ZOOM_IN_START = 230;
+	const int ZOOM_OUT_START = ZOOM_IN_START - 160;
 	if (frogEatAnimationCount == ZOOM_IN_START)
 	{
 		shp_cameraController->FrogZoomIn();
 	}
-	else if (frogEatAnimationCount == ZOOM_IN_START - 160)
+	else if (frogEatAnimationCount == ZOOM_OUT_START)
 	{
 		shp_cameraController->FrogZoomOut();
 	}
@@ -603,9 +608,10 @@ void ButiEngine::StageManager::TutorialMode()
 			wkp_tutorialYes.lock()->GetGameComponent<TransformAnimation>()->SetIsActive(false);
 		}
 
-		wkp_tutorialNo.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
-		wkp_tutorialYes.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
-		wkp_tutorialTextWindow.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
-		wkp_reverseCheckText.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
+		const float AWAY_POS = -3000;
+		wkp_tutorialNo.lock()->transform->SetLocalPosition(Vector3(0, AWAY_POS, 0));
+		wkp_tutorialYes.lock()->transform->SetLocalPosition(Vector3(0, AWAY_POS, 0));
+		wkp_tutorialTextWindow.lock()->transform->SetLocalPosition(Vector3(0, AWAY_POS, 0));
+		wkp_reverseCheckText.lock()->transform->SetLocalPosition(Vector3(0, AWAY_POS, 0));
 	}
 }
