@@ -21,6 +21,8 @@ namespace ButiEngine {
 	private:
 		bool isSelect;
 		bool isNowSelect;
+
+		void ScaleAnimation(const Vector3& arg_scale);
 	};
 
 }

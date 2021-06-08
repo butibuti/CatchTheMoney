@@ -48,7 +48,8 @@ void ButiEngine::GrabTextWindow::OnUpdate()
 	position.x -= 100.0f;
 	gameObject.lock()->transform->SetLocalPosition(position);
 
-	previousScale = previousScale * (1.0f - 0.3f) + currentScale * 0.3f;
+	const float LERP_SCALE = 0.3f;
+	previousScale = previousScale * (1.0f - LERP_SCALE) + currentScale * LERP_SCALE;
 
 	gameObject.lock()->transform->SetLocalScale(Vector3(previousScale, previousScale, 1));
 }

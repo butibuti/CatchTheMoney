@@ -374,8 +374,8 @@ void ButiEngine::StageManager::ModeChange()
 		if (shp_pauseManager->IsPause()) { return; }
 		if (StageSelect::GetStageNum() == 0) { return; }
 		if (wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock()) { return; }
-		if (wkp_player.lock()->GetGameComponent<Player>()->IsClear()) { return; }
-		if (wkp_player.lock()->GetGameComponent<Player>()->IsFreeze()) { return; }
+		auto player = wkp_player.lock()->GetGameComponent<Player>();
+		if (player->IsClear() || player->IsFreeze() || player->IsTutorial()) { return; }
 		if (wkp_frog.lock() && wkp_frog.lock()->GetGameComponent<Frog>()->IsAnimation()) { return; }
 
 		shp_scrollManager->ResetScroll();

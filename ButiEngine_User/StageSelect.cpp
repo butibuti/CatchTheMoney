@@ -10,7 +10,7 @@
 #include"PauseManager.h"
 #include"Header/GameObjects/DefaultGameComponent/OutlineDrawComponent.h"
 int ButiEngine::StageSelect::stageNum = 0;
-int ButiEngine::StageSelect::maxStageNum = 19; //LastStageNum - 1  "rewrite to ParentSelectPanel::stageCount"
+int ButiEngine::StageSelect::maxStageNum = 19; //LastStageNum - 1
 std::string ButiEngine::StageSelect::removeStageName = "none";
 bool ButiEngine::StageSelect::isAnimation;
 
@@ -241,23 +241,27 @@ void ButiEngine::StageSelect::DecisionAnimation()
 		GetManager().lock()->GetGameObject("SelectScreen").lock()->GetGameComponent<SelectScreen>()->StartAnimation();
 	}
 
-	if (animationFrame == 89)
+	const int START_FRAME = 89;
+	const int ZANZO_FRAME = 60;
+	const int FLASH_FRAME = 40;
+	const int AWAY_FRAME = 35;
+	if (animationFrame == START_FRAME)
 	{
 		wkp_animationPlayer.lock()->GetGameComponent<SelectPlayer>()->Decision();
 	}
-	else if (animationFrame == 60)
+	else if (animationFrame == ZANZO_FRAME)
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_dash, GameSettings::masterVolume);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_start, GameSettings::masterVolume);
 		GetManager().lock()->AddObjectFromCereal("SelectZanzo");
 	}
-	else if (animationFrame == 40)
+	else if (animationFrame == FLASH_FRAME)
 	{
 		GetManager().lock()->AddObjectFromCereal("SelectFlash");
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_hit, GameSettings::masterVolume);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_dash, GameSettings::masterVolume);
 	}
-	else if (animationFrame == 35)
+	else if (animationFrame == AWAY_FRAME)
 	{
 		wkp_animationPlayer.lock()->GetGameComponent<SelectPlayer>()->Away();
 	}
@@ -276,7 +280,8 @@ void ButiEngine::StageSelect::DecisionAnimation()
 		GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 1134, 0), Vector3::Zero, Vector3(2112, 1188, 1)));
 	}
 
-	if (fadeCount > 30)
+	const int NEXT_SCENE_COUNT = 30;
+	if (fadeCount > NEXT_SCENE_COUNT)
 	{
 		OnDecision();
 	}
