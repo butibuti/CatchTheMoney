@@ -22,13 +22,12 @@ void ButiEngine::Frog::OnUpdate()
 		gameObject.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
 		once = false;
 	}
-	Interlock();
 	if (shp_pauseManager->IsPause() ||
 		StageManager::GetMode() == GameMode::Edit)
 	{
 		return;
 	}
-
+	Interlock();
 	CheckNearPlayer();
 	Animation();
 	if (onceCount < 100 && StageSelect::GetStageNum() == TalkStageNum::FROG_TALK)
