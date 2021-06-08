@@ -468,9 +468,9 @@ void ButiEngine::StageManager::ChangeUIAlpha()
 	}
 	if (shp_XMesh && shp_EditMesh && shp_CharaMesh)
 	{
-		shp_XMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = alpha;
-		shp_EditMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = alpha;
-		shp_CharaMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = alpha;
+		shp_XMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = alpha;
+		shp_EditMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = alpha;
+		shp_CharaMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = alpha;
 	}
 }
 

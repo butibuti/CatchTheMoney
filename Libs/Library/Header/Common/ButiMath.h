@@ -204,8 +204,17 @@ namespace ButiEngine {
 			return output;
 		}
 		inline Matrix4x4 operator*=(const Matrix4x4& other) {
-			*this=(*this) * other;
+			*this = (*this) * other;
 			return *this;
+		}
+		inline bool operator==(const Matrix4x4& other) const{
+			
+
+			return (this->_11 == other._11&& this->_12 == other._12&& this->_13 == other._13&& this->_14 == other._14&&
+				this->_21 == other._21 && this->_22 == other._22 && this->_23 == other._23 && this->_24 == other._24&&
+				this->_31 == other._31 && this->_32 == other._32 && this->_33 == other._33 && this->_34 == other._34&&
+				this->_41 == other._41 && this->_42 == other._42 && this->_43 == other._43 && this->_44 == other._44
+				);
 		}
 
 		inline Vector4& operator [](const unsigned int idx);
@@ -775,6 +784,16 @@ namespace ButiEngine {
 			return !(*this  == other);
 		}
 
+		inline float& operator [](const unsigned int idx)
+		{
+			return *(&x + idx);
+		}
+
+
+		inline float operator [](const unsigned int idx) const
+		{
+			return *(&x + idx);
+		}
 		inline operator Vector3() const;
 		inline operator Vector4() const;
 
@@ -3120,6 +3139,298 @@ namespace ButiEngine {
 
 	void InputCereal(Line& v, const std::string& path);
 
+
+
+}
+
+namespace std {
+	static std::string to_string(const ButiEngine::Vector2& arg_v) {
+		return std::to_string(arg_v.x) + "," + std::to_string(arg_v.y);
+	}
+	static std::string to_string(const ButiEngine::Vector3& arg_v) {
+		return std::to_string(arg_v.x) + "," + std::to_string(arg_v.y) + "," + std::to_string(arg_v.z);
+	}
+	static std::string to_string(const ButiEngine::Vector4& arg_v) {
+		return std::to_string(arg_v.x) + "," + std::to_string(arg_v.y) + "," + std::to_string(arg_v.z) + "," + std::to_string(arg_v.w);
+	}
+	static std::string to_string(const ButiEngine::Quat& arg_v) {
+		return std::to_string(arg_v.x) + "," + std::to_string(arg_v.y) + "," + std::to_string(arg_v.z) + "," + std::to_string(arg_v.w);
+	}
+	static std::string to_string(const ButiEngine::Matrix4x4& arg_v) {
+		return std::to_string(arg_v._11) + "," + std::to_string(arg_v._12) + "," + std::to_string(arg_v._13) + "," + std::to_string(arg_v._14) + "," +
+			std::to_string(arg_v._21) + "," + std::to_string(arg_v._22) + "," + std::to_string(arg_v._23) + "," + std::to_string(arg_v._24) + "," +
+			std::to_string(arg_v._31) + "," + std::to_string(arg_v._32) + "," + std::to_string(arg_v._33) + "," + std::to_string(arg_v._34) + "," +
+			std::to_string(arg_v._41) + "," + std::to_string(arg_v._42) + "," + std::to_string(arg_v._43) + "," + std::to_string(arg_v._44);
+	}
+}
+
+namespace StrConvert {
+	template <typename T>
+	static T ConvertString(const std::string& arg_str) {
+
+		const char* _Ptr = arg_str.c_str();
+		char* _Eptr;
+
+		const long _Ans = _CSTD strtol(_Ptr, &_Eptr, 10);
+
+		if (_Ptr == _Eptr) {
+			//–³Œø‚È•ÏŠ·
+			return 0;
+		}
+
+
+		return static_cast<T>(_Ans);
+	}
+	template <>
+	static float ConvertString(const std::string& arg_str) {
+
+		const char* _Ptr = arg_str.c_str();
+		char* _Eptr;
+		const float _Ans = _CSTD strtof(_Ptr, &_Eptr);
+
+		if (_Ptr == _Eptr) {
+			//–³Œø‚È•ÏŠ·
+			return 0.00f;
+		}
+		return _Ans;
+	}
+	template <>
+	static double ConvertString(const std::string& arg_str) {
+		int& _Errno_ref = errno;
+		const char* _Ptr = arg_str.c_str();
+		char* _Eptr;
+		_Errno_ref = 0;
+		const double _Ans = _CSTD strtod(_Ptr, &_Eptr);
+
+		if (_Ptr == _Eptr) {
+			//–³Œø‚È•ÏŠ·
+			return 0.00;
+		}
+		return _Ans;
+	}
+	template <>
+	static ButiEngine::Vector2 ConvertString(const std::string& arg_str) {
+		auto splited = std::vector<std::string>();
+		int first = 0;
+		int last = arg_str.find_first_of(",");
+		if (last == std::string::npos){
+			//–³Œø‚È•ÏŠ·
+			return ButiEngine::Vector2();
+		}
+		while (first < arg_str.size())
+		{
+			auto subString = arg_str.substr(first, last - first);
+			splited.push_back(subString);
+			first = last + 1;
+			last = arg_str.find_first_of(",", first);
+			if (last == std::string::npos) {
+				last = arg_str.size();
+			}
+		}
+		if (splited.size()<2) {
+			//–³Œø‚È•ÏŠ·
+			return ButiEngine::Vector2();
+		}
+
+
+		const char* _Ptr; 
+		char* _Eptr = nullptr;
+
+		ButiEngine::Vector2 _Ans;
+
+		for (int i = 0; i < 2; i++) {
+
+			_Ptr = splited[i].c_str(); 
+			_Eptr = nullptr;
+			float f = _CSTD strtof(_Ptr, &_Eptr);
+			if (_Ptr == _Eptr) {
+				//–³Œø‚È•ÏŠ·
+				return _Ans;
+			}
+			_Ans[i] = f;
+		}
+
+		return _Ans;
+	}
+	template <>
+	static ButiEngine::Vector3 ConvertString(const std::string& arg_str) {
+		auto splited = std::vector<std::string>();
+		int first = 0;
+		int last = arg_str.find_first_of(",");
+		if (last == std::string::npos) {
+			//–³Œø‚È•ÏŠ·
+			return ButiEngine::Vector3();
+		}
+		while (first < arg_str.size())
+		{
+			auto subString = arg_str.substr(first, last - first);
+			splited.push_back(subString);
+			first = last + 1;
+			last = arg_str.find_first_of(",", first);
+			if (last == std::string::npos) {
+				last = arg_str.size();
+			}
+		}
+		if (splited.size() < 3) {
+			//–³Œø‚È•ÏŠ·
+			return ButiEngine::Vector3();
+		}
+
+
+		const char* _Ptr;
+		char* _Eptr = nullptr;
+
+		ButiEngine::Vector3 _Ans;
+
+		for (int i = 0; i < 3; i++) {
+
+			_Ptr = splited[i].c_str();
+			_Eptr = nullptr;
+			float f = _CSTD strtof(_Ptr, &_Eptr);
+			if (_Ptr == _Eptr) {
+				//–³Œø‚È•ÏŠ·
+				return _Ans;
+			}
+			_Ans[i] = f;
+		}
+
+
+
+		return _Ans;
+	}
+	template <>
+	static ButiEngine::Vector4 ConvertString(const std::string& arg_str) {
+		auto splited = std::vector<std::string>();
+		int first = 0;
+		int last = arg_str.find_first_of(",");
+		if (last == std::string::npos) {
+			//–³Œø‚È•ÏŠ·
+			return ButiEngine::Vector4();
+		}
+		while (first < arg_str.size())
+		{
+			auto subString = arg_str.substr(first, last - first);
+			splited.push_back(subString);
+			first = last + 1;
+			last = arg_str.find_first_of(",", first);
+			if (last == std::string::npos) {
+				last = arg_str.size();
+			}
+		}
+		if (splited.size() < 4) {
+			//–³Œø‚È•ÏŠ·
+			return ButiEngine::Vector4();
+		}
+
+
+		const char* _Ptr;
+		char* _Eptr = nullptr;
+
+		ButiEngine::Vector4 _Ans;
+
+		for (int i = 0; i < 4; i++) {
+
+			_Ptr = splited[i].c_str();
+			_Eptr = nullptr;
+			float f = _CSTD strtof(_Ptr, &_Eptr);
+			if (_Ptr == _Eptr) {
+				//–³Œø‚È•ÏŠ·
+				return _Ans;
+			}
+			_Ans[i] = f;
+		}
+
+
+		return _Ans;
+	}
+	template <>
+	static ButiEngine::Quat ConvertString(const std::string& arg_str) {
+		auto splited = std::vector<std::string>();
+		int first = 0;
+		int last = arg_str.find_first_of(",");
+		if (last == std::string::npos) {
+			//–³Œø‚È•ÏŠ·
+			return ButiEngine::Quat();
+		}
+		while (first < arg_str.size())
+		{
+			auto subString = arg_str.substr(first, last - first);
+			splited.push_back(subString);
+			first = last + 1;
+			last = arg_str.find_first_of(",", first);
+			if (last == std::string::npos) {
+				last = arg_str.size();
+			}
+		}
+		if (splited.size() < 4) {
+			//–³Œø‚È•ÏŠ·
+			return ButiEngine::Quat();		}
+
+
+		const char* _Ptr;
+		char* _Eptr = nullptr;
+
+		ButiEngine::Quat _Ans;
+
+		for (int i = 0; i < 2; i++) {
+
+			_Ptr = splited[i].c_str();
+			_Eptr = nullptr;
+			float f = _CSTD strtof(_Ptr, &_Eptr);
+			if (_Ptr == _Eptr) {
+				//–³Œø‚È•ÏŠ·
+				return _Ans;
+			}
+			_Ans[i] = f;
+		}
+
+
+		return _Ans;
+	}
+	template <>
+	static ButiEngine::Matrix4x4 ConvertString(const std::string& arg_str) {
+
+		auto splited = std::vector<std::string>();
+		int first = 0;
+		int last = arg_str.find_first_of(",");
+		if (last == std::string::npos) {
+			//–³Œø‚È•ÏŠ·
+			return ButiEngine::Matrix4x4();
+		}
+		while (first < arg_str.size())
+		{
+			auto subString = arg_str.substr(first, last - first);
+			splited.push_back(subString);
+			first = last + 1;
+			last = arg_str.find_first_of(",", first);
+			if (last == std::string::npos) {
+				last = arg_str.size();
+			}
+		}
+		if (splited.size() < 16) {
+			//–³Œø‚È•ÏŠ·
+			return ButiEngine::Matrix4x4();
+		}
+		ButiEngine::Matrix4x4 _Ans;
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+
+				int& _Errno_ref = errno;
+				const char* _Ptr = splited[i*4+j].c_str();
+				char* _Eptr;
+				_Errno_ref = 0;
+				float f = _CSTD strtof(_Ptr, &_Eptr);
+				if (_Ptr == _Eptr) {
+					//–³Œø‚È•ÏŠ·
+					return _Ans;
+				}
+				_Ans[i][j] = f;
+			}
+		}
+
+
+		return _Ans;
+	}
 
 
 }

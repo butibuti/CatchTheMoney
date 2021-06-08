@@ -9,9 +9,8 @@ namespace ButiEngine {
 		const unsigned int BIT_FLAG[]{ (1 << 0),(1 << 1),(1 << 2),(1 << 3),(1 << 4),(1 << 5),(1 << 6),(1 << 7),(1 << 8),(1 << 9),(1 << 10),(1 << 11),(1 << 12),(1 << 13),(1 << 14),(1 << 15) };
 	}
 	class IApplication;
-	class Util
+	namespace Util
 	{
-	public:
 		static inline bool GetBitFlag(const int arg_flag, const int arg_bitIndex) {
 			if (arg_bitIndex >= 16 || arg_bitIndex < 0) {
 				return false;
@@ -38,10 +37,10 @@ namespace ButiEngine {
 			return std::abs(out);
 		}
 
-		static void WStringtoMultiByte(const std::wstring & src, std::string& dest);
-		static void ToPNG(const std::string& arg_filePath,void* arg_data,const int width, const int height,const int stride,const int size);
-		static std::string WStringToString(std::wstring oWString);
-		static std::wstring StringToWString(std::string oString);
+		extern void WStringtoMultiByte(const std::wstring & src, std::string& dest);
+		extern void ToPNG(const std::string& arg_filePath,void* arg_data,const int width, const int height,const int stride,const int size);
+		extern std::string WStringToString(std::wstring oWString);
+		extern std::wstring StringToWString(std::string oString);
 		static void MultiBytetoWString(const std::string& src, std::wstring & dest) {
 			size_t i;
 			wchar_t* WCstr = new wchar_t[src.length() + 1];

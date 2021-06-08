@@ -32,6 +32,7 @@ namespace ButiEngine {
 		Vector2 pixelScale;
 		Vector4 worldAnimationParam;
 		Matrix4x4 shadowVP;
+		float Time=0.0;
 		Fog() {
 			memset(this,0,sizeof(256));
 		}
@@ -46,31 +47,52 @@ namespace ButiEngine {
 			archive(fogCoord);
 			archive(worldAnimationParam);
 			archive(shadowVP);
+			archive(Time);
 		}
 
 	};
 
-	struct LightVariable {
-		Vector4 lightDir;// = Vector4(Vector3(-1.0f, -1.0f, 0.0f), 1);
-		LightVariable() {
+	struct ObjectInformation {
+		Vector4 lightDir;
+		Vector4 color=Vector4(1.0f,1.0f,1.0f,1.0f);
+		Vector2 Tiling=Vector2(1.0f,1.0f);
+		Vector2 OffSet;
+		Vector4 ExInfo;
+		ObjectInformation() {
 			memset(this, 0, sizeof(256));
 		};
-		~LightVariable() {
-			int i = 0;
+		~ObjectInformation() {
+
 		}
 
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
 			archive(lightDir);
+			archive(color);
+			archive(Tiling);
+			archive(OffSet);
+			archive(ExInfo);
 		}
 
 		bool ShowUI() { 
-			
-			if (GUI::DragFloat4("Direction",&lightDir.x, 0.01f, -500.0f, 500.0f)) {
-				return true;
+			bool output = false;
+			if (GUI::DragFloat4("LightDirection", lightDir, 0.01f, -500.0f, 500.0f)) {
+				output= true;
 			}
-			return false;
+			if (GUI::DragFloat4("Color", color, 0.01f, -500.0f, 500.0f)) {
+				output = true;
+			}
+			if (GUI::DragFloat2("Tiling",Tiling, 0.01f, -500.0f, 500.0f)) {
+				output = true;
+			}
+			if (GUI::DragFloat2("Offset",OffSet, 0.01f, -500.0f, 500.0f)) {
+				output = true;
+			}
+			if (GUI::DragFloat4("ExInfo",ExInfo, 0.01f, -500.0f, 500.0f)) {
+				output = true;
+			}
+			return output;
 		}
 	};
 	struct GausVariable {

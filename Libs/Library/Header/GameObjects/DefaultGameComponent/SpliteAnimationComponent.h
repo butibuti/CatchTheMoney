@@ -38,7 +38,7 @@ namespace ButiEngine {
 		int varticalSplitScale;
 		int horizontalNum;
 		int varticalNum;
-		std::shared_ptr<CBuffer<LightVariable>> shp_param;
+		std::shared_ptr<CBuffer<ObjectInformation>> shp_param;
 	};
 }
 

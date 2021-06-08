@@ -34,8 +34,8 @@ namespace ButiEngine {
 		std::shared_ptr<PauseManager> shp_pauseManager;
 
 		std::weak_ptr<GameObject> wkp_target;
-		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
-		std::weak_ptr<CBuffer<LightVariable>> wkp_sideScroll;
+		std::weak_ptr<CBuffer<ObjectInformation>> wkp_screenScroll;
+		std::weak_ptr<CBuffer<ObjectInformation>> wkp_sideScroll;
 		float scrollSpeed;
 		float previousScroll;
 		float currentScroll;

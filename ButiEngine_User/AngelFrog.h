@@ -22,7 +22,7 @@ namespace ButiEngine {
 		void SetUp(float arg_scaleY);
 	private:
 		std::weak_ptr<GameObject> wkp_backFrog;
-		std::shared_ptr<CBuffer<LightVariable>>shp_alpha;
+		std::shared_ptr<CBuffer<ObjectInformation >>shp_alpha;
 		int life;
 		float accel,alphaTime;
 		Vector3 velocity;

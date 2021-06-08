@@ -39,7 +39,7 @@ matrix inverse(matrix m) {
     return ret;
 }
 
-cbuffer Object : register(b0)
+cbuffer ObjectMatrix : register(b0)
 {
 	matrix modelMatrix: packoffset(c0);
 	matrix viewMatrix: packoffset(c4);
@@ -62,10 +62,15 @@ cbuffer RendererState:register(b2) {
     float2 pixelScale:packoffset(c2.z);
     float4 worldAnimationParam:packoffset(c3);
     matrix shadowvpMatrix: packoffset(c4);
+    float Time : packoffset(c8);
 }
-cbuffer Light : register(b3)
+cbuffer ObjectInformation : register(b3)
 {
-	float4 lightDir	: packoffset(c0);
+    float4 lightDir	: packoffset(c0);
+    float4 color	: packoffset(c1);
+    float2 Tiling:packoffset(c2);
+    float2 OffSet:packoffset(c2.z);
+    float4 ExInfo:packoffset(c3);
 };
 cbuffer GausParameter : register(b4)
 {
@@ -114,6 +119,18 @@ Texture2D<float> depthTexture_5 : register(t5);
 
 SamplerState mainSampler : register(s0);
 
+float3x3 QuaternionToMatrix(float4 axis) {
+    float3 a = normalize(axis.xyz);
+    axis.w *= 3.14159265;
+    float s = sin(axis.w);
+    float c = cos(axis.w);
+    float r = 1.0 - c;
+    return float3x3(
+        a.x * a.x * r + c, a.y * a.x * r + a.z * s, a.z * a.x * r - a.y * s,
+        a.x * a.y * r - a.z * s, a.y * a.y * r + c, a.z * a.y * r + a.x * s,
+        a.x * a.z * r + a.y * s, a.y * a.z * r - a.x * s, a.z * a.z * r + c
+        );
+}
 
 float3 GetModelPos() {
     return float3(-modelMatrix[0][3], -modelMatrix[1][3], -modelMatrix[2][3]);
@@ -146,8 +163,6 @@ float WhiteNoise(float2 coord) {
 #define FXAA_REDUCE_MUL   (0.125)//1.0/8.0
 #define FXAA_SPAN_MAX     8.0
 
-#define Time lightDir.x
-#define Tiling lightDir.zw
 float3 FxaaPixelShader(float2 posPos, Texture2D tex, float2 rcpFrame)
 {
     float2 uv = posPos + float2(0, -rcpFrame.y);
@@ -241,6 +256,13 @@ struct Vertex_UV_Normal
     float2 uv:TEXCOORD;/*UV*/
     float3 normal : NORMAL;
 };
+struct Vertex_UV_Normal_Tangent
+{
+    float4 position : POSITION;//ƒ|ƒVƒVƒ‡ƒ“
+    float2 uv:TEXCOORD;/*UV*/
+    float3 normal : NORMAL;
+    float4 tangent : tangent;
+};
 
 
 struct Vertex_UV_Normal_SingleBone
@@ -314,6 +336,14 @@ struct Pixel_UV_Normal
     float4 position : SV_POSITION;
     float2 uv:TEXCOORD;
     float3 normal :  NORMAL;
+};
+struct Pixel_UV_Normal_Tangent
+{
+    float4 position : SV_POSITION;
+    float2 uv:TEXCOORD;
+    float3 normal :  NORMAL;
+    float3 binormal :  BINORMAL;
+    float3 tangent :  TANGENT;
 };
 struct Pixel_OutLine
 {

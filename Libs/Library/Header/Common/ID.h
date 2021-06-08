@@ -114,7 +114,7 @@ namespace ButiEngine {
 		{
 		}
 
-		ID<T> ShowGUI(GUI::GuiIO& arg_io) {
+		ID<T> ShowGUI(GUI::GuiIO& arg_io,const std::string& arg_exclusionWord="") {
 
 			if (GUI::InputTextWithHint("SerchStr", "serch", serchStrAry, 256)) {
 				serchStr = serchStrAry;
@@ -125,7 +125,7 @@ namespace ButiEngine {
 			if (serchStr.size() <= 0) {
 
 				for (auto itr = map_shp_resource.begin(); itr != enditr; itr++) {
-					if (GUI::Button(Util::ToUTF8(itr->first).c_str())) {
+					if (GUI::Button(Util::ToUTF8( StringHelper::Remove(  itr->first, arg_exclusionWord)).c_str())) {
 						out = ID<T>(itr->first);
 					}
 

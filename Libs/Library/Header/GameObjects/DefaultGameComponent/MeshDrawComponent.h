@@ -7,7 +7,7 @@
 BUTI_REGIST_CBUFFER(ButiEngine::TestGSVariable);
 
 
-BUTI_REGIST_CBUFFER(ButiEngine::LightVariable);
+BUTI_REGIST_CBUFFER(ButiEngine::ObjectInformation);
 BUTI_REGIST_CBUFFER(ButiEngine::GausVariable);
 
 BUTI_REGIST_CBUFFER(ButiEngine::ParticleParameter);

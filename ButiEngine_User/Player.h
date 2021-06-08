@@ -71,7 +71,7 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_swallowFrog;
 		std::weak_ptr<GameObject> wkp_apple;
 
-		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
+		std::weak_ptr<CBuffer<ObjectInformation>> wkp_screenScroll;
 
 		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 		const float JUMP_FORCE = 3.8f;

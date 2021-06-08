@@ -347,7 +347,7 @@ namespace ButiEngine {
 		}
 	private:
 		Vector4 pase;
-		std::shared_ptr<CBuffer<LightVariable>> shp_param;
+		std::shared_ptr<CBuffer<ObjectInformation>> shp_param;
 	};
 	class SplineCurveMover :public GameComponent
 	{

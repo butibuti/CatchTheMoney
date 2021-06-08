@@ -84,8 +84,8 @@ void ButiEngine::ScrollManager::Start()
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	scrollSpeed = 4.0f;
 	auto outlineDraw = gameObject.lock()->GetGameComponent<OutlineMeshDrawComponent>();
-	wkp_screenScroll = outlineDraw->GetCBuffer<LightVariable>("LightBuffer");
-	wkp_sideScroll=GetManager().lock()->GetGameObject("MobiusSide").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<LightVariable>("LightBuffer");
+	wkp_screenScroll = outlineDraw->GetCBuffer<ObjectInformation>("ObjectInformation");
+	wkp_sideScroll=GetManager().lock()->GetGameObject("MobiusSide").lock()->GetGameComponent<MeshDrawComponent>()->GetCBuffer<ObjectInformation>("ObjectInformation");
 
 
 	isCurrentEdit = (StageManager::GetMode() == GameMode::Edit);
