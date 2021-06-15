@@ -359,7 +359,6 @@ void ButiEngine::Frog::CheckHitPlayer()
 	auto player = wkp_player.lock()->GetGameComponent<Player>();
 	auto playerAABB = player->GetAABB();
 
-	player->ResetHitFrog();
 	if (Geometry::BoxHit::IsHitBox_AABB(*shp_AABB, *playerAABB))
 	{
 		player->OnCollisionFrog(gameObject);

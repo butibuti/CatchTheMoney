@@ -12,12 +12,10 @@ void ButiEngine::GrabTextWindow::OnUpdate()
 	if (wkp_target.lock())
 	{
 		auto core = shp_player->GetHoldCore().lock();
-		auto frog = shp_player->GetHoldFrog().lock();
 		auto goal = shp_player->GetHoldGoal().lock();
-		bool noGrab = (!core && !frog&&!goal);
+		bool noGrab = (!core && !goal);
 		if (StageManager::GetMode()==GameMode::Chara&&(
 			noGrab && shp_player->IsHitCore() ||
-			/*noGrab && shp_player->IsHitFrog() ||*/
 			noGrab && shp_player->IsHitGoal() ||
 			noGrab && shp_player->IsHitSita()))
 		{
