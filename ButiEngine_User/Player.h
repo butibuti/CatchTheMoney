@@ -2,7 +2,6 @@
 #include"Header/GameComponentHeader.h"
 namespace ButiEngine {
 
-	class PauseManager;
 	class PanelManager;
 	class MobiusLoop;
 	class SpliteAnimationComponent;
@@ -34,15 +33,12 @@ namespace ButiEngine {
 		bool IsTutorial() { return isTutorial; }
 		float GetGravity() { return gravity; }
 		std::weak_ptr<GameObject> GetHoldCore() { return wkp_holdCore; }
-		std::weak_ptr<GameObject> GetHoldFrog() { return wkp_holdFrog; }
 		std::weak_ptr<GameObject> GetHoldGoal() { return wkp_holdGoal; }
 		std::weak_ptr<GameObject> GetHoldSita() { return wkp_holdSita; }
 		std::weak_ptr<GameObject> GetPredictionLine() { return wkp_predictionLine; }
 		bool IsHitCore() { return hitCore; }
-		bool IsHitFrog() { return hitFrog; }
 		bool IsHitGoal() { return hitGoal; }
 		bool IsHitSita() { return hitSita; }
-		void ResetHitFrog() { hitFrog = false; }
 		void Clear() { isClear = true; }
 		void ExitTutorial() { isTutorial = false; }
 		bool IsFreeze() { return freeze; }
@@ -64,7 +60,6 @@ namespace ButiEngine {
 
 		std::weak_ptr<GameObject> wkp_predictionLine;
 		std::weak_ptr<GameObject> wkp_holdCore;
-		std::weak_ptr<GameObject> wkp_holdFrog;
 		std::weak_ptr<GameObject> wkp_holdGoal;
 		std::weak_ptr<GameObject> wkp_holdSita;
 		std::weak_ptr<GameObject> wkp_swallowFrog;
@@ -113,7 +108,6 @@ namespace ButiEngine {
 		bool freeze;
 		bool jump;
 		bool hitCore;
-		bool hitFrog;
 		bool hitGoal;
 		bool hitSita;
 		int jumpInputFrame;
@@ -128,18 +122,17 @@ namespace ButiEngine {
 		void BackY();
 		void GrabGravityCore(std::weak_ptr<GameObject> arg_core);
 		void ReleaseGravityCore();
-		void GrabFrog(std::weak_ptr<GameObject> arg_frog);
-		void ReleaseFrog();
 		void GrabGoal(std::weak_ptr<GameObject> arg_goal);
 		void GrabSita(std::weak_ptr<GameObject> arg_sita);
 		void Animation();
-		void CorrectionFrog(std::weak_ptr<GameObject> arg_frog);
+		//カエルに飲み込まれた時
 		void OnSwallowedFrog();
 
 		void OnCollisionGoal(std::weak_ptr<GameObject> arg_goal);
 		void OnCollisionCore(std::weak_ptr<GameObject> arg_core);
 		void OnCollisionSita(std::weak_ptr<GameObject> arg_sita);
-
+		//イベント中だったらtrue
+		bool IsOnEvent();
 	};
 }
 
