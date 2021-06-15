@@ -55,6 +55,7 @@ namespace ButiEngine {
 		std::shared_ptr<MobiusLoop> shp_mobiusLoop;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_AABB;
 
+		//着地判定用
 		std::weak_ptr<GameObject> wkp_bottom;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> shp_bottomAABB;
 
@@ -79,7 +80,6 @@ namespace ButiEngine {
 			WALK,
 			JUMP,
 		};
-
 
 		SoundTag se_dash;
 		SoundTag se_grab;
@@ -111,25 +111,36 @@ namespace ButiEngine {
 		bool hitGoal;
 		bool hitSita;
 		int jumpInputFrame;
-
+		//キー入力関連
 		void Control();
+		//所属しているパネルの重力確認
 		void CheckGravity();
+		//ジャンプしている時
 		void OnJump();
 		void Move();
 		void MoveX();
 		void MoveY();
+		//ブロックにめり込んでいる時、めり込んだ分押し戻す
 		void BackX();
+		//ブロックにめり込んでいる時、めり込んだ分押し戻す
 		void BackY();
+		//重力コアを持つ
 		void GrabGravityCore(std::weak_ptr<GameObject> arg_core);
+		//持っている重力コアを離す
 		void ReleaseGravityCore();
+		//ゴール(リンゴ)を持つ
 		void GrabGoal(std::weak_ptr<GameObject> arg_goal);
+		//カエルの舌を持つ
 		void GrabSita(std::weak_ptr<GameObject> arg_sita);
+		//スプライトアニメーション関連
 		void Animation();
 		//カエルに飲み込まれた時
 		void OnSwallowedFrog();
-
+		//ゴールに当たっている時
 		void OnCollisionGoal(std::weak_ptr<GameObject> arg_goal);
+		//重力コアに当たっている時
 		void OnCollisionCore(std::weak_ptr<GameObject> arg_core);
+		//カエルの舌に当たっている時
 		void OnCollisionSita(std::weak_ptr<GameObject> arg_sita);
 		//イベント中だったらtrue
 		bool IsOnEvent();

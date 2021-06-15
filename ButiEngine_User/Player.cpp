@@ -306,10 +306,12 @@ void ButiEngine::Player::Move()
 	if (freeze) { return; }
 	
 	OnJump();
+
 	hitCore = false;
 	hitGoal = false;
 	hitSita = false;
 
+	//X方向とY方向の移動量を比べて大きいほうから当たっているか計算する
 	if (abs(velocity.x) > abs(velocity.y))
 	{
 		MoveX();
@@ -344,52 +346,67 @@ void ButiEngine::Player::Move()
 
 void ButiEngine::Player::MoveX()
 {
-	//if (velocity.x == 0) { return; }
+	//移動
 	gameObject.lock()->transform->TranslateX(velocity.x);
+	//当たり判定更新
 	shp_AABB->Update();
 	shp_bottomAABB->Update();
+	//メビウスの輪でループする用のクローンの当たり判定更新
 	shp_mobiusLoop->UpdateAABB();
+	//右側のクローンの押し戻し処理
 	shp_mobiusLoop->BackXRight(velocity);
 	shp_AABB->Update();
+	//左側のクローンの押し戻し処理
 	shp_mobiusLoop->BackXLeft(velocity);
 	shp_AABB->Update();
+	//自分の押し戻し処理
 	BackX();
 }
 
 void ButiEngine::Player::MoveY()
 {
-	//if (velocity.y == 0) { return; }
+	//移動
 	gameObject.lock()->transform->TranslateY(velocity.y);
+	//当たり判定更新
 	shp_AABB->Update();
 	shp_bottomAABB->Update();
+	//メビウスの輪でループする用のクローンの当たり判定更新
 	shp_mobiusLoop->UpdateAABB();
+	//右側のクローンの押し戻し処理
 	shp_mobiusLoop->BackYRight(velocity, gravity);
 	shp_AABB->Update();
+	//左側のクローンの押し戻し処理
 	shp_mobiusLoop->BackYLeft(velocity, gravity);
 	shp_AABB->Update();
+	//自分の押し戻し処理
 	BackY();
 }
 
 void ButiEngine::Player::BackX()
 {
+	//当たっているオブジェクトを取得
 	auto hitObjects = GetCollisionManager().lock()->GetWillHitObjects(shp_AABB, 0);
-
+	//何かと当たっていたら
 	if (hitObjects.size() != 0)
 	{
 		auto end = hitObjects.end();
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
+			//当たっているオブジェクトが自分だったら
 			if ((*itr) == gameObject.lock()) { continue; }
+			//当たっているオブジェクトがゴールだったら
 			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Goal"))
 			{
 				OnCollisionGoal((*itr));
 				continue; 
 			}
+			//当たっているオブジェクトが重力コアだったら
 			if (StringHelper::Contains((*itr)->GetGameObjectName(), "GravityCore"))
 			{
 				OnCollisionCore((*itr));
 				continue;
 			}
+			//当たっているオブジェクトがカエルの舌の先端部分だったら
 			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Sita_sentan"))
 			{
 				OnCollisionSita((*itr));
@@ -397,20 +414,25 @@ void ButiEngine::Player::BackX()
 			}
 
 			float widthHalf = (*itr)->transform->GetWorldScale().x * 0.5f;
+			float backLength = 0.0f;
+			//右に移動していたら
 			if (velocity.x > 0)
 			{
-				float backLength = (*itr)->transform->GetWorldPosition().x - widthHalf - GameSettings::blockSize * 0.5f - gameObject.lock()->transform->GetWorldPosition().x;
-				gameObject.lock()->transform->TranslateX(backLength);
-				shp_AABB->Update();
-				shp_bottomAABB->Update();
+				//押し戻す距離を計算
+				backLength = (*itr)->transform->GetWorldPosition().x - widthHalf - GameSettings::blockSize * 0.5f - gameObject.lock()->transform->GetWorldPosition().x;
 			}
+			//左に移動していたら
 			else if (velocity.x < 0)
 			{
-				float backLength = (*itr)->transform->GetWorldPosition().x + widthHalf + GameSettings::blockSize * 0.5f - gameObject.lock()->transform->GetWorldPosition().x;
-				gameObject.lock()->transform->TranslateX(backLength);
-				shp_AABB->Update();
-				shp_bottomAABB->Update();
+				//押し戻す距離を計算
+				backLength = (*itr)->transform->GetWorldPosition().x + widthHalf + GameSettings::blockSize * 0.5f - gameObject.lock()->transform->GetWorldPosition().x;
 			}
+			//計算した距離分押し戻す
+			gameObject.lock()->transform->TranslateX(backLength);
+			//当たり判定更新
+			shp_AABB->Update();
+			shp_bottomAABB->Update();
+			//X方向の移動量をゼロにする
 			velocity.x = 0;
 		}
 	}

@@ -16,7 +16,6 @@ void ButiEngine::GrabTextWindow::OnUpdate()
 		bool noGrab = (!core && !goal);
 		if (StageManager::GetMode()==GameMode::Chara&&(
 			noGrab && shp_player->IsHitCore() ||
-			/*noGrab && shp_player->IsHitFrog() ||*/
 			noGrab && shp_player->IsHitGoal() ||
 			noGrab && shp_player->IsHitSita()))
 		{
