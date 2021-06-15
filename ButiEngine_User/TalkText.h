@@ -73,7 +73,7 @@ namespace ButiEngine {
 		void FrogInterval();
 		bool SetCamera();
 		bool Once();
-		void NextText();
+		void TextProgress();
 		void Skip();
 	};
 
