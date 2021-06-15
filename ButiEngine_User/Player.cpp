@@ -20,9 +20,8 @@
 
 void ButiEngine::Player::OnUpdate()
 {
-
-
-	if (shp_pauseManager->IsPause() ||
+	
+	if (PauseManager::IsPause() ||
 		StageManager::GetMode() == GameMode::Edit)
 	{
 		return;
@@ -65,7 +64,6 @@ void ButiEngine::Player::OnSet()
 
 void ButiEngine::Player::Start()
 {
-	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 	shp_panelManager = GetManager().lock()->GetGameObject("PanelManager").lock()->GetGameComponent<PanelManager>();
 	shp_contorolManager = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ContorolByStick>();
 	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();

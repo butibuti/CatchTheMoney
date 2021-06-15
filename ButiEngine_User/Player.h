@@ -54,7 +54,6 @@ namespace ButiEngine {
 		void SetGrounded(bool arg_flag) { grounded = arg_flag; }
 		void SetJump(bool arg_flag) { jump = arg_flag; }
 	private:
-		std::shared_ptr<PauseManager> shp_pauseManager;
 		std::shared_ptr<PanelManager> shp_panelManager;
 		std::shared_ptr<ContorolByStick> shp_contorolManager;
 		std::shared_ptr<MobiusLoop> shp_mobiusLoop;
