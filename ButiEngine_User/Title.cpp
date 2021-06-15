@@ -37,7 +37,8 @@ void ButiEngine::Title::OnUpdate()
 	{
 		animationCount++;
 	}
-	if (animationCount > 90)
+	const int EVENT_END_FRAME = 90;
+	if (animationCount > EVENT_END_FRAME)
 	{
 		nextFlag = true;
 	}
@@ -51,7 +52,8 @@ void ButiEngine::Title::OnUpdate()
 		GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 1134, 0), Vector3::Zero, Vector3(2112, 1188, 1)));
 	}
 
-	if (nextSceneCount > 45)
+	const int NEXT_FRAME = 45;
+	if (nextSceneCount > NEXT_FRAME)
 	{
 		GameSettings::isTitle = false;
 		isAnimation = false;
@@ -59,8 +61,6 @@ void ButiEngine::Title::OnUpdate()
 		sceneManager->RemoveScene("StageSelect");
 		sceneManager->LoadScene("StageSelect");
 		sceneManager->ChangeScene("StageSelect");
-		//sceneManager->LoadScene("Stage0");
-		//sceneManager->ChangeScene("Stage0");
 	}
 	if (shp_FrameGenerateTimer->Update()) {
 		GenerateBackGroundFrame();

@@ -56,21 +56,15 @@ void ButiEngine::StageManager::OnUpdate()
 		const int ADD_TEXT_FRAME = ADD_BAND_FRAME - 20;
 		if (clearAnimationFrame == ADD_FLASH_FRAME)
 		{
-			Vector3 zoomInPosition;
+			Vector3 zoomInPosition = wkp_player.lock()->transform->GetWorldPosition();
 
-			zoomInPosition = wkp_player.lock()->transform->GetWorldPosition();
 			auto frog = wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita().lock();
 			if (!frog)
 			{
-
-
 				GetManager().lock()->AddObjectFromCereal("ClearFlash", ObjectFactory::Create<Transform>(Vector3(0.0f, 0.0f, 1000.0f)));
 				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_clear, GameSettings::masterVolume);
 			}
-			else {
 
-
-			}
 			auto cameraController = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraController>();
 			cameraController->MobiusZoomIn(zoomInPosition, 30);
 		}
@@ -103,9 +97,6 @@ void ButiEngine::StageManager::OnUpdate()
 
 		shp_particleEmitter->SetRotation(particleScrollOffset+swing);
 	}
-
-
-
 
 #ifdef OUTPUT_STAGERENDERTARGET 
 #ifdef DEBUG
@@ -326,9 +317,6 @@ void ButiEngine::StageManager::OnGoal()
 	if (fadeCount > 30)
 	{
 		shp_map->DestoryBlock();
-		//ChangeScene("StageSelect");
-		//int nextStageNum = StageSelect::GetStageNum() + 1;
-		//StageSelect::SetStageNum(nextStageNum);
 		
 		int nextStageNum = StageSelect::GetStageNum() + 1;
 		if (nextStageNum > StageSelect::GetMaxStage())
@@ -531,6 +519,7 @@ void ButiEngine::StageManager::CommonTextObject()
 	GetManager().lock()->AddObjectFromCereal("SkipText", ObjectFactory::Create<Transform>(Vector3(780, -200, -0.16f), Vector3::Zero, Vector3(160, 80, 1)));
 }
 
+//カエル初回出現時アニメーション
 void ButiEngine::StageManager::FrogEatAnimation()
 {
 	if (StageSelect::GetStageNum() != TalkStageNum::FROG_TALK || frogEatAnimationCount <= 0) return;

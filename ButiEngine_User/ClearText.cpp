@@ -31,7 +31,8 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::ClearText::Clone()
 
 void ButiEngine::ClearText::Animation()
 {
-	if (animationCount > 4)
+	const int ANIMATION_RATE = 4;
+	if (animationCount > ANIMATION_RATE)
 	{
 		animationCount = 0;
 		horizontalNum++;

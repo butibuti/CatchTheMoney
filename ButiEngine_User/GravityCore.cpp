@@ -110,6 +110,7 @@ void ButiEngine::GravityCore::Animation()
 
 	animationFrame = 0;
 	shp_spriteAnimation->UpdateHorizontalAnim(1);
+	//裏側に描画されている重力コアも同様にアニメーションさせる
 	shp_mobiusLoop->GetRight().lock()->GetGameComponent<SpliteAnimationComponent>()->UpdateHorizontalAnim(1);
 	shp_mobiusLoop->GetLeft().lock()->GetGameComponent<SpliteAnimationComponent>()->UpdateHorizontalAnim(1);
 }

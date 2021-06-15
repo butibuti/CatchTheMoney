@@ -33,7 +33,6 @@ void ButiEngine::ContorolByStick::Start()
 
 	isClear = false;
 	cameraResetFrame = 0;
-	rotationLimit = 60.0f;
 	rotationSpeed = 2.0f;
 	returnSpeed = 1.0f;
 	initAxis = -gameObject.lock()->transform->GetUp();
@@ -76,25 +75,25 @@ void ButiEngine::ContorolByStick::Control()
 		float moveRotation = (preMousePos.x - currMousePos.x) / 5.0f;
 		curRotation.y += moveRotation;
 
-		if (curRotation.y > rotationLimit)
+		if (curRotation.y > ROTATION_LIMIT)
 		{
-			curRotation.y = rotationLimit;
+			curRotation.y = ROTATION_LIMIT;
 		}
-		else if (curRotation.y < -rotationLimit)
+		else if (curRotation.y < -ROTATION_LIMIT)
 		{
-			curRotation.y = -rotationLimit;
+			curRotation.y = -ROTATION_LIMIT;
 		}
 
 		moveRotation = (preMousePos.y - currMousePos.y) / 5.0f;
 		curRotation.x += moveRotation;
 
-		if (curRotation.x > rotationLimit)
+		if (curRotation.x > ROTATION_LIMIT)
 		{
-			curRotation.x = rotationLimit;
+			curRotation.x = ROTATION_LIMIT;
 		}
-		else if (curRotation.x < -rotationLimit)
+		else if (curRotation.x < -ROTATION_LIMIT)
 		{
-			curRotation.x = -rotationLimit;
+			curRotation.x = -ROTATION_LIMIT;
 		}
 
 		preRotation = curRotation;
@@ -105,42 +104,42 @@ void ButiEngine::ContorolByStick::Control()
 	}
 
 	//コントローラーでぐりぐり
-	if ((GetRightStick.x >= deadZone || GetRightStick.x <= -deadZone) || 
-		(GetRightStick.y >= deadZone || GetRightStick.y <= -deadZone))
+	if ((GetRightStick.x >= DEAD_ZONE || GetRightStick.x <= -DEAD_ZONE) || 
+		(GetRightStick.y >= DEAD_ZONE || GetRightStick.y <= -DEAD_ZONE))
 	{
 		isChanged = true;
 		//float moveRotation = -GetRightStick.x * rotationSpeed;
 		//rotation.y += moveRotation;
 
-		curRotation.y = -GetRightStick.x * rotationLimit;
+		curRotation.y = -GetRightStick.x * ROTATION_LIMIT;
 
-		if (curRotation.y > rotationLimit)
+		if (curRotation.y > ROTATION_LIMIT)
 		{
-			curRotation.y = rotationLimit;
+			curRotation.y = ROTATION_LIMIT;
 		}
-		else if (curRotation.y < -rotationLimit)
+		else if (curRotation.y < -ROTATION_LIMIT)
 		{
-			curRotation.y = -rotationLimit;
+			curRotation.y = -ROTATION_LIMIT;
 		}
 
 	}
-	if ((GetRightStick.x >= deadZone || GetRightStick.x <= -deadZone) ||
-		(GetRightStick.y >= deadZone || GetRightStick.y <= -deadZone))
+	if ((GetRightStick.x >= DEAD_ZONE || GetRightStick.x <= -DEAD_ZONE) ||
+		(GetRightStick.y >= DEAD_ZONE || GetRightStick.y <= -DEAD_ZONE))
 	{
 		isChanged = true;
 
 		//float moveRotation = GetRightStick.y * rotationSpeed;
 		//rotation.x += moveRotation;
 
-		curRotation.x = GetRightStick.y * rotationLimit;
+		curRotation.x = GetRightStick.y * ROTATION_LIMIT;
 
-		if (curRotation.x > rotationLimit)
+		if (curRotation.x > ROTATION_LIMIT)
 		{
-			curRotation.x = rotationLimit;
+			curRotation.x = ROTATION_LIMIT;
 		}
-		else if (curRotation.x < -rotationLimit)
+		else if (curRotation.x < -ROTATION_LIMIT)
 		{
-			curRotation.x = -rotationLimit;
+			curRotation.x = -ROTATION_LIMIT;
 		}
 	}
 

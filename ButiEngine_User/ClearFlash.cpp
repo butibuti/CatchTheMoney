@@ -8,14 +8,20 @@ void ButiEngine::ClearFlash::OnUpdate()
 {
 	StorePlayer();
 	auto transform = gameObject.lock()->transform;
-	if (blinkingCount > 40)
+
+	//一定時間経過でどこかへ消し飛ばす
+	const int LIFE = 40;
+	if (blinkingCount > LIFE)
 	{
 		transform->SetWorldPosition(awayPos);
 		return;
 	}
 
 	blinkingCount++;
-	if (!(blinkingCount % 4))
+
+	//クリア時に出現するフラッシュの明滅
+	const int BLINK_RATE = 4;
+	if (!(blinkingCount % BLINK_RATE))
 	{
 		transform->SetWorldPosition(awayPos);
 	}
@@ -24,6 +30,7 @@ void ButiEngine::ClearFlash::OnUpdate()
 		transform->SetWorldPosition(initPos);
 	}
 
+	//だんだんと大きくしていく
 	ClearScaleAnimation();
 }
 
@@ -53,7 +60,6 @@ void ButiEngine::ClearFlash::ClearScaleAnimation()
 	auto goal = wkp_player.lock()->GetGameComponent<Player>()->GetHoldGoal();
 	if (!goal.lock())
 	{
-		//return;
 		goal = GetManager().lock()->GetGameObject("Frog");
 	}
 	auto goalPosition = goal.lock()->transform->GetWorldPosition();

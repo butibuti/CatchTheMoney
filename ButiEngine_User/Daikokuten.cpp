@@ -6,6 +6,7 @@
 
 void ButiEngine::Daikokuten::OnUpdate()
 {
+	//ポーズ中は手の動きを止める
 	if (PauseManager::IsPause())
 	{
 		if (gameObject.lock()->GetGameObjectName() == "DaikokutenHand_L" ||
@@ -17,6 +18,7 @@ void ButiEngine::Daikokuten::OnUpdate()
 		return;
 	}
 	
+	//手の動きが止まっていたら動きを再開する
 	if(isActiveChange)
 	{
 		isActiveChange = false;
@@ -41,12 +43,16 @@ void ButiEngine::Daikokuten::Start()
 
 void ButiEngine::Daikokuten::TalkScale()
 {
-	gameObject.lock()->transform->SetLocalScale(Vector3(100, 100, 100));
+	//会話時はステージより前面に来るので小さめにする
+	const float TALK_SCALE = 100;
+	gameObject.lock()->transform->SetLocalScale(Vector3(TALK_SCALE, TALK_SCALE, TALK_SCALE));
 }
 
 void ButiEngine::Daikokuten::NormalScale()
 {
-	gameObject.lock()->transform->SetLocalScale(Vector3(350, 350, 350));
+	//通常時はステージより後方にいるので大きめにする
+	const float NORMAL_SCALE = 350;
+	gameObject.lock()->transform->SetLocalScale(Vector3(NORMAL_SCALE, NORMAL_SCALE, NORMAL_SCALE));
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Daikokuten::Clone()
