@@ -141,8 +141,6 @@ void ButiEngine::Player::ShowGUI()
 
 void ButiEngine::Player::OnShowUI()
 {
-	GUI::Text("velY    : %f", velocity.y);
-	GUI::Text("gravity : %f", gravity);
 }
 
 void ButiEngine::Player::ReverseGravity()
@@ -158,9 +156,10 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Player::Clone()
 void ButiEngine::Player::Control()
 {
 	animation = ButiEngine::Player::IDLE;
-
+	//停止フラグがtrueなら入力を受け付けない
 	if (freeze)
 	{
+		//一定時間経過したら停止フラグをfalseにする
 		freezeProgressFrame++;
 		if (freezeProgressFrame >= FREEZE_FRAME)
 		{
@@ -168,37 +167,37 @@ void ButiEngine::Player::Control()
 		}
 		return;
 	}
+	//イベント時などで移動中だったら入力を受け付けない
 	auto positionAnimation = gameObject.lock()->GetGameComponent<PositionAnimation>();
 	if (positionAnimation) { return; }
 
 	pushGrabKeyFrame = false;
 	velocity.x = 0.0f;
-
+	//チュートリアル時の選択肢が出ていたら入力を受け付けない
 	if (isTutorial) return;
+	//ステージクリア状態なら入力を受け付けない
+	if (isClear) { return; }
 
-	if (!isClear)
+	if (InputManager::OnPushRightKey())
 	{
-		if (InputManager::OnPushRightKey())
-		{
-			animation = ButiEngine::Player::WALK;
-			velocity.x = 2.0f;
-		}
-		else if (InputManager::OnPushLeftKey())
-		{
-			animation = ButiEngine::Player::WALK;
-			velocity.x = -2.0f;
-		}
-		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
-		if (velocity.x != 0 && scale.x > 0 != velocity.x > 0)
-		{
-			scale.x *= -1;
-		}
-		gameObject.lock()->transform->SetLocalScale(scale);
+		animation = ButiEngine::Player::WALK;
+		velocity.x = 2.0f;
 	}
+	else if (InputManager::OnPushLeftKey())
+	{
+		animation = ButiEngine::Player::WALK;
+		velocity.x = -2.0f;
+	}
+	Vector3 scale = gameObject.lock()->transform->GetLocalScale();
+	if (velocity.x != 0 && scale.x > 0 != velocity.x > 0)
+	{
+		scale.x *= -1;
+	}
+	gameObject.lock()->transform->SetLocalScale(scale);
 
 	if (grounded)
 	{
-		if ((InputManager::OnTriggerJumpKey() || jumpInputFrame > 0) && !isClear)
+		if ((InputManager::OnTriggerJumpKey() || jumpInputFrame > 0))
 		{
 			jumpInputFrame = 0;
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_jump, GameSettings::masterVolume);

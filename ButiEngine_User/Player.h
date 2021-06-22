@@ -97,7 +97,10 @@ namespace ButiEngine {
 		Vector3 sitaDifference;
 		Vector3 defaultScale;
 
+		//ステージ開始時の停止フラグ
+		bool freeze;
 		int freezeProgressFrame;
+
 		int animationFrame;
 		int floatingFrame;
 		bool isClear;
@@ -105,7 +108,6 @@ namespace ButiEngine {
 		bool grounded;
 		float gravity;
 		bool pushGrabKeyFrame;
-		bool freeze;
 		bool jump;
 		bool hitCore;
 		bool hitGoal;
