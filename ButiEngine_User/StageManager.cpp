@@ -51,6 +51,7 @@ void ButiEngine::StageManager::OnUpdate()
 
 	if (player->IsClear() && !player->IsTutorial())
 	{
+		//クリア時演出に必要なオブジェクトの追加
 		const int ADD_FLASH_FRAME = CLEAR_FRAME - GOAL_LATE_FRAME;
 		const int ADD_BAND_FRAME = ADD_FLASH_FRAME - 10;
 		const int ADD_TEXT_FRAME = ADD_BAND_FRAME - 20;
@@ -79,6 +80,7 @@ void ButiEngine::StageManager::OnUpdate()
 		clearAnimationFrame--;
 	}
 
+	//ステージ４のチュートリアル
 	if (player->IsTutorial())
 	{
 		TutorialMode();
@@ -144,7 +146,9 @@ void ButiEngine::StageManager::Start()
 	shp_scrollManager = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ScrollManager>();
 	shp_cameraController = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraController>();
 
+	//UI生成
 	CreateUI();
+
 	if (!GameSettings::isTitle)
 	{
 		wkp_daikokutenHead = GetManager().lock()->GetGameObject("Daikokuten");
@@ -292,8 +296,10 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::StageManager::Clone()
 
 void ButiEngine::StageManager::OnGoal()
 {
+	//ゴール時
 	if (clearAnimationFrame == 30)
 	{
+		//クリア時の選択肢出現
 		shp_buttonNext->Appear();
 		if (StageSelect::GetStageNum() != StageSelect::GetMaxStage())
 		{
@@ -302,6 +308,7 @@ void ButiEngine::StageManager::OnGoal()
 	}
 	else if (!clearButtonAnimation && clearAnimationFrame < 0)
 	{
+		//決定時
 		clearButtonAnimation = true;
 		shp_buttonNext->OnSelected();
 	}
@@ -312,8 +319,10 @@ void ButiEngine::StageManager::OnGoal()
 	}
 	if (fadeCount == 1)
 	{
+		//フェードアウト用オブジェクト追加
 		GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 1134, -0.7f), Vector3::Zero, Vector3(2112, 1188, 1)));
 	}
+	//シーンの切り替え
 	if (fadeCount > 30)
 	{
 		shp_map->DestoryBlock();
@@ -321,15 +330,18 @@ void ButiEngine::StageManager::OnGoal()
 		int nextStageNum = StageSelect::GetStageNum() + 1;
 		if (nextStageNum > StageSelect::GetMaxStage())
 		{
+			//最終ステージクリア時、クリアシーンへ
 			StageSelect::SetRemoveStageName("none");
 			std::string sceneName = "ClearScene";
 			ChangeScene(sceneName);
 		}
 		else
 		{
+			//次のステージへ(ステージ名)
 			std::string sceneName = "Stage" + std::to_string(StageSelect::GetStageNum());
 			if (nextSceneName == "StageSelect")
 			{
+				//次のステージ以外へ戻るときはシーン名を"none"
 				sceneName = "none";
 			}
 			StageSelect::SetRemoveStageName(sceneName);
@@ -372,8 +384,11 @@ void ButiEngine::StageManager::ModeChange()
 
 		shp_scrollManager->ResetScroll();
 		
+		//モード切替時
+
 		if (mode == GameMode::Chara)
 		{
+			//キャラモードならエディットモードへ
 			mode = GameMode::Edit;
 
 			wkp_edit.lock()->transform->TranslateZ(1000);
@@ -399,6 +414,7 @@ void ButiEngine::StageManager::ModeChange()
 		}
 		else
 		{
+			//エディットモードならキャラモードへ
 			mode = GameMode::Chara;
 			shp_cameraController->ZoomIn(); 
 
@@ -428,6 +444,7 @@ void ButiEngine::StageManager::CreateUI()
 	}
 	else
 	{
+		//キャラ・エディットモードUI関連の追加
 		wkp_x = GetManager().lock()->AddObjectFromCereal("X");
 		wkp_edit = GetManager().lock()->AddObjectFromCereal("Edit");
 		wkp_chara = GetManager().lock()->AddObjectFromCereal("Chara");
@@ -513,6 +530,7 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 
 void ButiEngine::StageManager::CommonTextObject()
 {
+	//会話時に必要なUIのテンプレート
 	wkp_textWindow = GetManager().lock()->AddObjectFromCereal("TextWindow", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.12f), Vector3::Zero, Vector3(1920, 640, 1)));
 	GetManager().lock()->AddObjectFromCereal("Abutton", ObjectFactory::Create<Transform>(Vector3(790, -380, -0.16f), Vector3::Zero, Vector3(180, 180, 1)));
 	GetManager().lock()->AddObjectFromCereal("SkipYbutton", ObjectFactory::Create<Transform>(Vector3(675, -200, -0.16f), Vector3::Zero, Vector3(80, 80, 1)));
