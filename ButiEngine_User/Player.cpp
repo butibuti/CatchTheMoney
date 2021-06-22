@@ -440,55 +440,71 @@ void ButiEngine::Player::BackX()
 
 void ButiEngine::Player::BackY()
 {
+	//当たっているオブジェクトを取得
 	auto hitObjects = GetCollisionManager().lock()->GetWillHitObjects(shp_AABB, 0);
-
+	//何かと当たっていたら
 	if (hitObjects.size() != 0)
 	{
 		auto end = hitObjects.end();
 		for (auto itr = hitObjects.begin(); itr != end; ++itr)
 		{
+			//当たっているオブジェクトが自分だったらなにもしない
 			if ((*itr) == gameObject.lock()) { continue; }
+			//当たっているオブジェクトがゴールだったら
 			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Goal"))
 			{
 				OnCollisionGoal((*itr));
 				continue;
 			}
+			//当たっているオブジェクトが重力コアだったら
 			if (StringHelper::Contains((*itr)->GetGameObjectName(), "GravityCore"))
 			{
 				continue;
 			}
+			//当たっているオブジェクトがカエルの舌の先端部分だったら
 			if (StringHelper::Contains((*itr)->GetGameObjectName(), "Sita_sentan"))
 			{
 				OnCollisionSita((*itr));
 				continue;
 			}
 
+			float backLength = 0.0f;
+			//上に移動していたら
 			if (velocity.y > 0)
 			{
-				float backLength = (*itr)->transform->GetWorldPosition().y - GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().y;
-				gameObject.lock()->transform->TranslateY(backLength);
-				shp_AABB->Update();
-				shp_bottomAABB->Update();
-				if (velocity.y >= 0 == gravity >= 0)
+				//押し戻す距離を計算
+				backLength = (*itr)->transform->GetWorldPosition().y - GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().y;
+				//移動方向と重力の向きが同じならtrue
+				bool isFall = (velocity.y >= 0) == (gravity >= 0);
+				//落下していたら
+				if (isFall)
 				{
 					//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 0.1f);
 					grounded = true;
 					jump = false;
 				}
 			}
+			//下に移動していたら
 			else if (velocity.y < 0)
 			{
-				float backLength = (*itr)->transform->GetWorldPosition().y + GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().y;
-				gameObject.lock()->transform->TranslateY(backLength);
-				shp_AABB->Update();
-				shp_bottomAABB->Update();
-				if (velocity.y >= 0 == gravity >= 0)
+				//押し戻す距離を計算
+				backLength = (*itr)->transform->GetWorldPosition().y + GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().y;
+				//移動方向と重力の向きが同じならtrue
+				bool isFall = (velocity.y >= 0) == (gravity >= 0);
+				//落下していたら
+				if (isFall)
 				{
 					//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 0.1f);
 					grounded = true;
 					jump = false;
 				}
 			}
+			//計算した距離分押し戻す
+			gameObject.lock()->transform->TranslateY(backLength);
+			//当たり判定更新
+			shp_AABB->Update();
+			shp_bottomAABB->Update();
+			//Y方向の移動量をゼロにする
 			velocity.y = 0;
 		}
 	}
