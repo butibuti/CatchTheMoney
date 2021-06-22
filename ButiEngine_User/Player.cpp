@@ -80,7 +80,7 @@ void ButiEngine::Player::Start()
 	isClear = false;
 	isTutorial = false;
 	freezeProgressFrame = 0;
-	jumpFrame = 0;
+	floatingFrame = 0;
 	animationFrame = 0;
 	animation = ButiEngine::Player::IDLE;
 	freeze = true;
@@ -223,7 +223,7 @@ void ButiEngine::Player::Control()
 		}
 		if (InputManager::OnTriggerJumpKey())
 		{
-			jumpInputFrame = COYOTE_TIME;
+			jumpInputFrame = JUMP_ENTERABLE_FRAME;
 		}
 		if (jumpInputFrame > 0)
 		{
@@ -281,22 +281,27 @@ void ButiEngine::Player::CheckGravity()
 
 void ButiEngine::Player::OnJump()
 {
-	if (jumpFrame != 0)
+	//浮遊時間が残っていたら減らす
+	if (floatingFrame != 0)
 	{
-		jumpFrame--;
+		floatingFrame--;
 	}
 	float prevVelY = velocity.y;
-	if (!grounded && jumpFrame == 0)
+	//空中にいて浮遊時間がなくなったら落下する
+	if (!grounded && floatingFrame == 0)
 	{
 		velocity.y += gravity;
 	}
-	if (jump && jumpFrame == 0)
+	//ジャンプ中で浮遊時間が残っていない時
+	if (jump && floatingFrame == 0)
 	{
+		//上昇から落下に変わった時
 		if ((gravity < 0 && ((prevVelY > 0) != (velocity.y > 0))) ||
 			(gravity > 0 && ((prevVelY < 0) != (velocity.y < 0))))
 		{
 			velocity.y = 0;
-			jumpFrame = FLOATING_FRAME;
+			//浮遊時間を最大にする
+			floatingFrame = MAX_FLOATING_FRAME;
 		}
 	}
 }
@@ -322,26 +327,8 @@ void ButiEngine::Player::Move()
 		MoveY();
 		MoveX();
 	}
-
-	shp_AABB->Update();
-	shp_bottomAABB->Update();
-
-	auto hitObjects = GetCollisionManager().lock()->GetWillHitObjects(shp_bottomAABB, 0);
-	if (hitObjects.size() == 0)
-	{
-		grounded = false;
-	}
-	else if (hitObjects.size() == 1)
-	{
-		if (StringHelper::Contains(hitObjects[0]->GetGameObjectName(), "Goal") ||
-			StringHelper::Contains(hitObjects[0]->GetGameObjectName(), "Sita") ||
-			StringHelper::Contains(hitObjects[0]->GetGameObjectName(), "Frog") ||
-			StringHelper::Contains(hitObjects[0]->GetGameObjectName(), "Gravity"))
-		{
-			grounded = false;
-		}
-	}
-
+	//下にブロックがあるか判定
+	CheckGrounded();
 }
 
 void ButiEngine::Player::MoveX()
@@ -380,6 +367,29 @@ void ButiEngine::Player::MoveY()
 	shp_AABB->Update();
 	//自分の押し戻し処理
 	BackY();
+}
+
+void ButiEngine::Player::CheckGrounded()
+{
+	//足元のオブジェクトを取得
+	auto hitObjects = GetCollisionManager().lock()->GetWillHitObjects(shp_bottomAABB, 0);
+	//何もなかったら着地フラグをfalseにする
+	if (hitObjects.size() == 0)
+	{
+		grounded = false;
+	}
+	//何かと当たっていた場合
+	else if (hitObjects.size() == 1)
+	{
+		//当たっているオブジェクトがゴール、カエルの舌、カエル、重力コア以外だったら着地フラグをfalseにする
+		if (StringHelper::Contains(hitObjects[0]->GetGameObjectName(), "Goal") ||
+			StringHelper::Contains(hitObjects[0]->GetGameObjectName(), "Sita") ||
+			StringHelper::Contains(hitObjects[0]->GetGameObjectName(), "Frog") ||
+			StringHelper::Contains(hitObjects[0]->GetGameObjectName(), "Gravity"))
+		{
+			grounded = false;
+		}
+	}
 }
 
 void ButiEngine::Player::BackX()
@@ -474,31 +484,23 @@ void ButiEngine::Player::BackY()
 			{
 				//押し戻す距離を計算
 				backLength = (*itr)->transform->GetWorldPosition().y - GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().y;
-				//移動方向と重力の向きが同じならtrue
-				bool isFall = (velocity.y >= 0) == (gravity >= 0);
-				//落下していたら
-				if (isFall)
-				{
-					//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 0.1f);
-					grounded = true;
-					jump = false;
-				}
 			}
 			//下に移動していたら
 			else if (velocity.y < 0)
 			{
 				//押し戻す距離を計算
 				backLength = (*itr)->transform->GetWorldPosition().y + GameSettings::blockSize - gameObject.lock()->transform->GetWorldPosition().y;
-				//移動方向と重力の向きが同じならtrue
-				bool isFall = (velocity.y >= 0) == (gravity >= 0);
-				//落下していたら
-				if (isFall)
-				{
-					//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_land, 0.1f);
-					grounded = true;
-					jump = false;
-				}
 			}
+
+			//移動方向と重力の向きが同じならtrue
+			bool isFall = (velocity.y >= 0) == (gravity >= 0);
+			//落下していたら着地処理を行う
+			if (isFall)
+			{
+				grounded = true;
+				jump = false;
+			}
+
 			//計算した距離分押し戻す
 			gameObject.lock()->transform->TranslateY(backLength);
 			//当たり判定更新

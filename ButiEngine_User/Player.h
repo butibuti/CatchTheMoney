@@ -70,10 +70,10 @@ namespace ButiEngine {
 
 		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
 		const float JUMP_FORCE = 3.8f;
-		const int COYOTE_TIME = 10;
+		const int JUMP_ENTERABLE_FRAME = 10;
 		const int FREEZE_FRAME = 10;
 		const int ANIMATION_RATE = 5;
-		const int FLOATING_FRAME = 6;
+		const int MAX_FLOATING_FRAME = 6;
 		enum Animation
 		{
 			IDLE,
@@ -99,7 +99,7 @@ namespace ButiEngine {
 
 		int freezeProgressFrame;
 		int animationFrame;
-		int jumpFrame;
+		int floatingFrame;
 		bool isClear;
 		bool isTutorial;
 		bool grounded;
@@ -120,6 +120,8 @@ namespace ButiEngine {
 		void Move();
 		void MoveX();
 		void MoveY();
+		//下にブロックがあるか確認する
+		void CheckGrounded();
 		//ブロックにめり込んでいる時、めり込んだ分押し戻す
 		void BackX();
 		//ブロックにめり込んでいる時、めり込んだ分押し戻す
