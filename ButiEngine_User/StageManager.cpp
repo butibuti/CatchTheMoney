@@ -156,7 +156,7 @@ void ButiEngine::StageManager::Start()
 	mode = GameMode::Chara;
 	shp_particleEmitter= GetManager().lock()->GetGameObject("SquareParticleEmitter").lock()->GetGameComponent<SquareParticleEmitter>();
 
-	modeUIPosition = Vector3(710.0f, -410.0f, -0.1f);
+	defaultModeUIScale = Vector3(180.0f);
 
 	clearButtonAnimation = false;
 	selectedNext = true;
@@ -292,8 +292,7 @@ void ButiEngine::StageManager::ModeChange()
 	if (wkp_frog.lock() && wkp_frog.lock()->GetGameComponent<Frog>()->IsAnimation()) { return; }
 
 	shp_scrollManager->ResetScroll();
-
-	//モード切替時
+		
 	if (mode == GameMode::Chara)
 	{
 		SetEditMode();
@@ -316,14 +315,16 @@ void ButiEngine::StageManager::CreateUI()
 	{
 		//キャラ・エディットモードUI関連の追加
 		wkp_x = GetManager().lock()->AddObjectFromCereal("X");
-		wkp_edit = GetManager().lock()->AddObjectFromCereal("Edit");
-		wkp_chara = GetManager().lock()->AddObjectFromCereal("Chara");
+		wkp_switchDaikokuten = GetManager().lock()->AddObjectFromCereal("SwitchDaikokuten");
+		wkp_switchNezumi = GetManager().lock()->AddObjectFromCereal("SwitchNezumi");
+		GetManager().lock()->AddObjectFromCereal("SwitchArrow");
 
 		shp_XMesh = wkp_x.lock()->GetGameComponent<MeshDrawComponent>();
-		shp_EditMesh = wkp_edit.lock()->GetGameComponent<MeshDrawComponent>();
-		shp_CharaMesh = wkp_chara.lock()->GetGameComponent<MeshDrawComponent>();
+		shp_switchDaikokutenMesh = wkp_switchDaikokuten.lock()->GetGameComponent<MeshDrawComponent>();
+		shp_switchNezumiMesh = wkp_switchNezumi.lock()->GetGameComponent<MeshDrawComponent>();
 
-		wkp_chara.lock()->transform->TranslateZ(1000);
+		wkp_switchNezumi.lock()->transform->SetLocalScale(216.0f);
+		shp_switchDaikokutenMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = 0.5f;
 	}
 
 	wkp_buttonNext = GetManager().lock()->AddObjectFromCereal("Button_Next");
@@ -336,6 +337,7 @@ void ButiEngine::StageManager::CreateUI()
 
 void ButiEngine::StageManager::ChangeUIAlpha()
 {
+	return;
 	auto closestPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock();
 	if (!closestPanel) { return; }
 	bool isLock = closestPanel->GetGameComponent<Panel>()->IsLock();
@@ -345,11 +347,11 @@ void ButiEngine::StageManager::ChangeUIAlpha()
 	{
 		alpha = 0.5f;
 	}
-	if (shp_XMesh && shp_EditMesh && shp_CharaMesh)
+	if (shp_XMesh && shp_switchDaikokutenMesh && shp_switchNezumiMesh)
 	{
 		shp_XMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = alpha;
-		shp_EditMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = alpha;
-		shp_CharaMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = alpha;
+		shp_switchDaikokutenMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = alpha;
+		shp_switchNezumiMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = alpha;
 	}
 }
 
@@ -618,8 +620,10 @@ void ButiEngine::StageManager::SetEditMode()
 	//キャラモードならエディットモードへ
 	mode = GameMode::Edit;
 
-	wkp_edit.lock()->transform->TranslateZ(1000);
-	wkp_chara.lock()->transform->SetWorldPosition(modeUIPosition);
+	wkp_switchDaikokuten.lock()->transform->SetLocalScale(defaultModeUIScale * 1.2f);
+	wkp_switchNezumi.lock()->transform->SetLocalScale(defaultModeUIScale);
+	shp_switchNezumiMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = 0.5f;
+	shp_switchDaikokutenMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = 1.0f;
 
 	shp_cameraController->ZoomOut();
 	shp_panelManager->ResetMoveNum();
@@ -648,9 +652,11 @@ void ButiEngine::StageManager::SetCharaMode()
 	shp_cameraController->ZoomIn();
 
 	shp_particleEmitter->SetIsEdit(false);
-
-	wkp_chara.lock()->transform->TranslateZ(1000);
-	wkp_edit.lock()->transform->SetWorldPosition(modeUIPosition);
+	//少し大きくする
+	wkp_switchNezumi.lock()->transform->SetLocalScale(defaultModeUIScale * 1.2f);
+	wkp_switchDaikokuten.lock()->transform->SetLocalScale(defaultModeUIScale);
+	shp_switchDaikokutenMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = 0.5f;
+	shp_switchNezumiMesh->GetCBuffer<LightVariable>("LightBuffer")->Get().lightDir.w = 1.0f;
 
 	shp_cameraController->ZoomIn();
 
