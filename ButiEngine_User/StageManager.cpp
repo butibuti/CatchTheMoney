@@ -550,7 +550,11 @@ void ButiEngine::StageManager::AddClearAnimation()
 
 void ButiEngine::StageManager::AddTalkText()
 {
-	if (GameSettings::isTitle)return;
+	if (GameSettings::isTitle)
+	{
+		TalkText::Delete();
+		return;
+	}
 
 	auto stageNum = StageSelect::GetStageNum();
 	if (stageNum == TalkStageNum::FIRST_TALK)
