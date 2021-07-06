@@ -21,20 +21,24 @@ void ButiEngine::TalkText::OnUpdate()
 	//カエルの会話後に一定時間経過でもう一度テキストを呼び戻す
 	FrogInterval();
 
-	//画面外に飛ばすか
+	//会話を出すか出さないか
 	if (isDelete)
 	{
-		if (StageSelect::GetStageNum()==0&& !isGeneratedControl) {
+		if (StageSelect::GetStageNum() == 0 && !isGeneratedControl) {
 			GetManager().lock()->AddObjectFromCereal("Control");
 			isGeneratedControl = true;
 		}
 
+		//出さない場合
+		//画面外に飛ばす
 		const float AWAY_POS = -3000;
 		gameObject.lock()->transform->SetLocalPosition(Vector3(0, AWAY_POS, 0));
 		return;
 	}
 	else
 	{
+		//出す場合
+		//画面内へ
 		gameObject.lock()->transform->SetLocalPosition(initPos);
 	}
 

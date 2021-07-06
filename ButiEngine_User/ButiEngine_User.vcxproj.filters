@@ -66,6 +66,7 @@
     <ClCompile Include="Thanks.cpp" />
     <ClCompile Include="ThanksPlayer.cpp" />
     <ClCompile Include="ClearZanzo.cpp" />
+    <ClCompile Include="TitlePlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
@@ -132,6 +133,7 @@
     <ClInclude Include="Thanks.h" />
     <ClInclude Include="ThanksPlayer.h" />
     <ClInclude Include="ClearZanzo.h" />
+    <ClInclude Include="TitlePlayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ButiEngine_User.rc" />
