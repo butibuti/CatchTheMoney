@@ -41,8 +41,8 @@ namespace ButiEngine {
 		std::shared_ptr<ScrollManager> shp_scrollManager;
 		std::shared_ptr<CameraController> shp_cameraController;
 		std::shared_ptr<MeshDrawComponent> shp_XMesh;
-		std::shared_ptr<MeshDrawComponent> shp_EditMesh;
-		std::shared_ptr<MeshDrawComponent> shp_CharaMesh;
+		std::shared_ptr<MeshDrawComponent> shp_switchDaikokutenMesh;
+		std::shared_ptr<MeshDrawComponent> shp_switchNezumiMesh;
 		std::shared_ptr<ClearButton> shp_buttonNext;
 		std::shared_ptr<ClearButton> shp_buttonSelect;
 		
@@ -53,8 +53,8 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_frog;
 		std::weak_ptr<GameObject> wkp_fadeObject;
 		std::weak_ptr<GameObject> wkp_x;
-		std::weak_ptr<GameObject> wkp_edit;
-		std::weak_ptr<GameObject> wkp_chara;
+		std::weak_ptr<GameObject> wkp_switchDaikokuten;
+		std::weak_ptr<GameObject> wkp_switchNezumi;
 		std::weak_ptr<GameObject> wkp_grab;
 		std::weak_ptr<GameObject> wkp_buttonNext;
 		std::weak_ptr<GameObject> wkp_buttonSelect;
