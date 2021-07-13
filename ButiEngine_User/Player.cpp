@@ -181,14 +181,15 @@ void ButiEngine::Player::Control()
 	if (InputManager::OnPushRightKey())
 	{
 		animation = ButiEngine::Player::WALK;
-		velocity.x = 2.0f;
+		velocity.x = WALK_SPEED;
 	}
 	else if (InputManager::OnPushLeftKey())
 	{
 		animation = ButiEngine::Player::WALK;
-		velocity.x = -2.0f;
+		velocity.x = -WALK_SPEED;
 	}
 	Vector3 scale = gameObject.lock()->transform->GetLocalScale();
+	//歩く向きが逆になったらプレイヤーの向きを逆にする
 	if (velocity.x != 0 && scale.x > 0 != velocity.x > 0)
 	{
 		scale.x *= -1;
@@ -199,15 +200,7 @@ void ButiEngine::Player::Control()
 	{
 		if ((InputManager::OnTriggerJumpKey() || jumpInputFrame > 0))
 		{
-			jumpInputFrame = 0;
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_jump, GameSettings::masterVolume);
-			velocity.y = JUMP_FORCE;
-			if (gravity > 0)
-			{
-				velocity.y *= -1;
-			}
-			grounded = false;
-			jump = true;
+			Jump();
 		}
 		if (InputManager::OnTriggerGrabKey())
 		{
@@ -276,6 +269,19 @@ void ButiEngine::Player::CheckGravity()
 	{
 		//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_powerUp, 0.1f);
 	}
+}
+
+void ButiEngine::Player::Jump()
+{
+	jumpInputFrame = 0;
+	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_jump, GameSettings::masterVolume);
+	velocity.y = JUMP_FORCE;
+	if (gravity > 0)
+	{
+		velocity.y *= -1;
+	}
+	grounded = false;
+	jump = true;
 }
 
 void ButiEngine::Player::OnJump()

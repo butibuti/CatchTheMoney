@@ -69,6 +69,7 @@ namespace ButiEngine {
 		std::weak_ptr<CBuffer<LightVariable>> wkp_screenScroll;
 
 		std::shared_ptr<SpliteAnimationComponent> shp_spriteAnimation;
+		const float WALK_SPEED = 2.0f;
 		const float JUMP_FORCE = 3.8f;
 		const int JUMP_ENTERABLE_FRAME = 10;
 		const int FREEZE_FRAME = 10;
@@ -117,8 +118,11 @@ namespace ButiEngine {
 		void Control();
 		//所属しているパネルの重力確認
 		void CheckGravity();
+
+		void Jump();
 		//ジャンプしている時
 		void OnJump();
+		
 		void Move();
 		void MoveX();
 		void MoveY();
