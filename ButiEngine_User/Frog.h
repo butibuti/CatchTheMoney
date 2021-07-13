@@ -21,10 +21,13 @@ namespace ButiEngine {
 		{
 			archive(isActive);
 		}
+		//裏側のカエルを指定
 		void SetBackFrog(std::weak_ptr<GameObject> arg_backFrog) { wkp_backFrog = arg_backFrog; }
 		std::weak_ptr<GameObject> GetBackFrog() { return wkp_backFrog; }
+		//裏側のカエルと比べてプレイヤーに近いか
 		bool IsNearPlayer() { return nearPlayer; }
 		void SetNearPlayer(bool arg_flag) { nearPlayer = arg_flag; }
+		//生成時のカエルの向きで最初の重力を決める
 		void SetDefaultGravity(bool arg_top);
 		void SetGravity(float arg_gravity) { gravity = arg_gravity; }
 		bool IsGrabbed() { return grabbed; }
@@ -89,15 +92,22 @@ namespace ButiEngine {
 		int holdAppleCount;
 		bool isExplosion;
 
+		//舌の生成
 		void CreateSita();
+		//所属しているパネルの重力確認
 		void CheckGravity();
+		//裏側のカエルよりプレイヤーに近いか確認する
 		void CheckNearPlayer();
+		//移動関連
 		void MoveY();
 		void BackY();
+		//裏側のカエルに合わせる
 		void Interlock();
+		//プレイヤー登録
 		void StorePlayer();
+		//プレイヤーとの衝突判定
 		void CheckHitPlayer();
-		void FollowPlayer();
+		//アニメーション関連
 		void Animation();
 		void SpriteAnimation();
 	};
