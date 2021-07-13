@@ -189,7 +189,7 @@ void ButiEngine::Player::Control()
 		velocity.x = -WALK_SPEED;
 	}
 	Vector3 scale = gameObject.lock()->transform->GetLocalScale();
-	//歩く向きが逆になったらプレイヤーの向きを逆にする
+	//歩く向きが反転したらプレイヤーの向きを反転させる
 	if (velocity.x != 0 && scale.x > 0 != velocity.x > 0)
 	{
 		scale.x *= -1;
@@ -211,8 +211,10 @@ void ButiEngine::Player::Control()
 	{
 		if (InputManager::OnTriggerGrabKey())
 		{
+			//空中にいるときにつかむボタンを押したら音を鳴らす
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_not, GameSettings::masterVolume);
 		}
+		//ジャンプ先行入力処理
 		if (InputManager::OnTriggerJumpKey())
 		{
 			jumpInputFrame = JUMP_ENTERABLE_FRAME;
@@ -221,6 +223,7 @@ void ButiEngine::Player::Control()
 		{
 			jumpInputFrame--;
 		}
+
 		shp_spriteAnimation->SetHorizontalAnim(0);
 		shp_mobiusLoop->GetRight().lock()->GetGameComponent<SpliteAnimationComponent>()->SetHorizontalAnim(0);
 		shp_mobiusLoop->GetLeft().lock()->GetGameComponent<SpliteAnimationComponent>()->SetHorizontalAnim(0);
@@ -230,7 +233,9 @@ void ButiEngine::Player::Control()
 
 void ButiEngine::Player::CheckGravity()
 {
+	//自分が所属しているパネルを取得
 	auto closestPanel = gameObject.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel();
+
 	float previousGravity = gravity;
 	if (closestPanel.lock())
 	{
@@ -244,6 +249,7 @@ void ButiEngine::Player::CheckGravity()
 			}
 		}
 		int coreCount = panelComponent->GetGravityCoreCount();
+		//パネルの重力に合わせる
 		gravity = panelComponent->GetGravity();
 		if (gravity == 0)
 		{
@@ -257,17 +263,12 @@ void ButiEngine::Player::CheckGravity()
 			}
 		}
 	}
-
+	//重力が反転していたらプレイヤーの向きを反転させる
 	if ((gravity > 0) != (previousGravity > 0))
 	{
 		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
 		scale.y *= -1;
 		gameObject.lock()->transform->SetLocalScale(scale);
-		//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_reverse, 0.1f);
-	}
-	else if (abs(gravity) > abs(previousGravity))
-	{
-		//GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_powerUp, 0.1f);
 	}
 }
 
@@ -552,6 +553,7 @@ void ButiEngine::Player::Animation()
 void ButiEngine::Player::OnSwallowedFrog()
 {
 	if (!wkp_swallowFrog.lock()) { return; }
+	//カエルが爆発したらリンゴを出す
 	if (wkp_swallowFrog.lock()->GetGameComponent<Frog>()->IsExplosion())
 	{
 		gameObject.lock()->transform->SetLocalScale(defaultScale);
