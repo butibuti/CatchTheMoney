@@ -14,16 +14,16 @@ namespace ButiEngine {
 		void Stop() const override;
 		void SetProjectionTexture(const TextureTag& arg_tag)override;
 		void SetDepthStencil(const TextureTag& arg_tag)override;
-		void ChangeMode(const BlendMode& arg_blendMode)override;
 		void ShowUI()override;
 		void End()override;
 	private:
 
 		std::weak_ptr<GraphicDevice_Dx12> wkp_graphicDevice;
+		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> drawCommandList;
 
 		D3D12_RECT     scissorRect;
 		D3D12_VIEWPORT    viewport;
-		std::shared_ptr<IRenderTarget> shp_renderTarget;
+		std::vector< std::shared_ptr<IRenderTarget>> vec_shp_renderTarget;
 		std::shared_ptr<IDepthStencil> shp_depthStencil;
 	};
 }

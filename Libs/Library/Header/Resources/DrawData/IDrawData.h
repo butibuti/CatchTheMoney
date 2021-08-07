@@ -5,26 +5,6 @@
 #include"../../Common/CArrayBuffer.h"
 namespace ButiEngine {
 
-	class IMatrixUpdater {
-	public:
-		IMatrixUpdater(std::shared_ptr < CBuffer<ShaderVariable>> arg_cbuffer, std::shared_ptr<Transform> arg_transform, std::weak_ptr<GraphicDevice> arg_wkp_graphicDevice, Matrix4x4& arg_mat) {
-			cbuffer = arg_cbuffer;
-			transform = arg_transform;
-			wkp_graphicDevice = arg_wkp_graphicDevice;
-			p_worldMatrix = &arg_mat;
-		}
-		void Release() {
-			cbuffer = nullptr;
-			transform = nullptr;
-		}
-		virtual void WorldMatrixUpdate() = 0;
-		void TransformUpdate();
-	protected:
-		std::shared_ptr < CBuffer<ShaderVariable>> cbuffer;
-		std::shared_ptr<Transform> transform;
-		Matrix4x4* p_worldMatrix;
-		std::weak_ptr<GraphicDevice> wkp_graphicDevice;
-	};
 	
 
 	struct DrawInformation :public IObject {
@@ -100,10 +80,10 @@ namespace ButiEngine {
 		inline float GetMaxZ(const Matrix4x4& arg_viewMatrix){
 			
 			auto viewPos =transform.GetPosition_Transpose()  * arg_viewMatrix;
-
+			//viewZ = viewPos.z;
 			return viewPos.z;
 		}
-		
+		//float viewZ;
 		ModelTag modelTag;
 		
 		MeshTag meshTag;
@@ -153,7 +133,7 @@ namespace ButiEngine {
 			return nullptr;
 		}
 	protected:
-		std::shared_ptr< IMatrixUpdater >shp_worldMatrixUpdater;
+
 		UINT cBufferCount = 0;
 		std::shared_ptr < CBuffer<ShaderVariable>> cbuffer;
 		std::shared_ptr<Collision::CollisionPrimitive>shp_primitive;
@@ -164,7 +144,7 @@ namespace ButiEngine {
 		void PreInitialize() override{}
 
 		virtual void SetTransform(std::shared_ptr<Transform>& arg_transform) = 0;
-
+		virtual bool IsCreated()=0;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_AABB> GetMeshAABB()override;
 		std::shared_ptr<Collision::CollisionPrimitive_Box_OBB> GetMeshOBB()override;
 
@@ -178,7 +158,7 @@ namespace ButiEngine {
 		void PreInitialize() override;
 		void Draw()override;
 		void DrawBefore() override;
-		float GetZ()override;
+		float GetZ(const Matrix4x4& arg_vpMatrix)override;
 		void SetInfo() override;
 		void SetInfo_WithoutCommand() override;
 		void BufferUpdate() override;
@@ -190,6 +170,9 @@ namespace ButiEngine {
 		void SetPrimitive(std::shared_ptr<Collision::CollisionPrimitive>arg_prim) override;
 		void SetOctRegistPtr(unsigned int* arg_ptr) override;
 		std::shared_ptr<Collision::CollisionPrimitive> GetPrimitive() override;
+		bool IsCreated()override {
+			return shp_afterDrawObj->IsCreated() && shp_befDrawObj->IsCreated();
+		}
 		unsigned int* GetOctRegistPtr() override;
 
 		inline std::shared_ptr<ICBuffer> GetICBuffer(const std::string& arg_bufferName)override {

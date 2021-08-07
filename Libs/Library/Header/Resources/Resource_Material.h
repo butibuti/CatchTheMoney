@@ -3,7 +3,7 @@
 namespace ButiEngine {
 	struct Resource_Material :public IResource_Material
 	{
-		Resource_Material(const MaterialVariable& arg_var);
+		Resource_Material(const MaterialValue& arg_var);
 		void Initialize()override {};
 		void PreInitialize()override {};
 		const std::string& GetMaterialName();
@@ -27,7 +27,7 @@ namespace ButiEngine {
 		std::vector< TextureTag >textureTag;
 		TextureTag sphereTextureTag ;
 	protected:
-		MaterialVariable materialVar;
+		MaterialValue materialVar;
 		std::string materialName;
 		std::string materialNameEng;
 		std::string comment;

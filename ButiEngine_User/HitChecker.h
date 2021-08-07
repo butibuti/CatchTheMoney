@@ -18,7 +18,6 @@ namespace ButiEngine {
 		}
 
 		void OnCollision(std::weak_ptr<GameObject> arg_other)override;
-		void ShowGUI()override;
 	private:
 
 		std::string hitObjName;

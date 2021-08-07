@@ -24,16 +24,18 @@ namespace ButiEngine {
 	};
 
 
-	struct Fog {
+	struct RenderingSceneInfo {
 
 		Vector4 fogColor;
 		Vector4 cameraPos;
 		Vector2 fogCoord;
 		Vector2 pixelScale;
-		Vector4 worldAnimationParam;
 		Matrix4x4 shadowVP;
+		Matrix4x4 shadowV;
+		Matrix4x4 forwordCameraMatrix;
+		Vector3 shadowCameraPos;
 		float Time=0.0;
-		Fog() {
+		RenderingSceneInfo() {
 			memset(this,0,sizeof(256));
 		}
 
@@ -45,11 +47,12 @@ namespace ButiEngine {
 			archive(fogColor);
 			archive(cameraPos);
 			archive(fogCoord);
-			archive(worldAnimationParam);
 			archive(shadowVP);
+			archive(shadowV);
+			archive(forwordCameraMatrix);
+			archive(shadowCameraPos);
 			archive(Time);
 		}
-
 	};
 
 	struct ObjectInformation {
@@ -78,6 +81,11 @@ namespace ButiEngine {
 		bool ShowUI() { 
 			bool output = false;
 			if (GUI::DragFloat4("LightDirection", lightDir, 0.01f, -500.0f, 500.0f)) {
+				Vector3 buff = lightDir;
+				buff.Normalize();
+				lightDir.x = buff.x;
+				lightDir.y = buff.y;
+				lightDir.z = buff.z;
 				output= true;
 			}
 			if (GUI::DragFloat4("Color", color, 0.01f, -500.0f, 500.0f)) {
@@ -136,12 +144,15 @@ namespace ButiEngine {
 		}
 	};
 
-	struct MaterialVariable {
+	struct MaterialValue {
 		Vector4 emissive=Vector4(1.0f,1.0f,1.0f,1.0f);
 		Vector4 diffuse = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 		Vector4 ambient = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 		Vector4 specular = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-		MaterialVariable() {
+		//roughness ÇÕåªç›emissiveÇÃAÇégóp
+		float materialID = 2.1;
+		float roughness;
+		MaterialValue() {
 			memset(this, 0, sizeof(256));
 		};
 		template<class Archive>
@@ -155,7 +166,7 @@ namespace ButiEngine {
 		bool ShowUI() { 
 
 			bool ret = false;
-			if (GUI::DragFloat4("Emissive", &emissive.x, 0.01f, 0.0f, 1.0f)) {
+			if (GUI::DragFloat3("Emissive", &emissive.x, 0.01f, 0.0f, 1.0f)) {
 				ret = true;
 			}
 			if (GUI::DragFloat4("Diffuse", &diffuse.x, 0.01f, 0.0f, 1.0f)) {
@@ -167,7 +178,47 @@ namespace ButiEngine {
 			if (GUI::DragFloat4("Ambient", &ambient.x, 0.01f, 0.0f, 1.0f)) {
 				ret= true;
 			}
+			if (GUI::DragFloat("roughness", emissive.w, 0.01f, 0.0f, 1.0f)) {
+				ret = true;
+			}
 			return ret; 
+		}
+	};
+
+	struct MaterialValue_Deferred {
+		Vector4 emissive = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		Vector4 diffuse = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		Vector4 ambient = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		Vector4 specular = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+
+		MaterialValue_Deferred() {
+
+		};
+		template<class Archive>
+		void serialize(Archive& archive)
+		{
+			archive(emissive);
+			archive(diffuse);
+			archive(ambient);
+			archive(specular);
+		}
+		bool ShowUI() {
+
+			bool ret = false;
+			if (GUI::DragFloat3("Emissive", &emissive.x, 0.01f, 0.0f, 1.0f)) {
+				ret = true;
+			}
+			if (GUI::DragFloat4("Diffuse", &diffuse.x, 0.01f, 0.0f, 1.0f)) {
+				ret = true;
+			}
+			if (GUI::DragFloat4("Specular", &specular.x, 0.01f, 0.0f, 1.0f)) {
+				ret = true;
+			}
+			if (GUI::DragFloat4("Ambient", &ambient.x, 0.01f, 0.0f, 1.0f)) {
+				ret = true;
+			}
+
+			return ret;
 		}
 	};
 

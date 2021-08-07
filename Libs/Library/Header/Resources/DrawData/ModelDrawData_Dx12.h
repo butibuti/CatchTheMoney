@@ -6,9 +6,8 @@ namespace ButiEngine {
 		ModelDrawData_Dx12(const ModelTag& arg_model, const ShaderTag& arg_shader, std::shared_ptr<IRenderer> arg_shp_renderer, std::weak_ptr<GraphicDevice_Dx12> arg_wkp_graphicDevice, std::shared_ptr< DrawInformation >arg_shp_drawInfo, std::shared_ptr<Transform>arg_shp_transform, std::shared_ptr<IBoneObject> arg_shp_bone);
 		ModelDrawData_Dx12(const ModelTag& arg_model, const ShaderTag& arg_shader, const std::vector<MaterialTag>& arg_materialTag,std::shared_ptr<IRenderer> arg_shp_renderer, std::weak_ptr<GraphicDevice_Dx12> arg_wkp_graphicDevice,  std::shared_ptr< DrawInformation >arg_shp_drawInfo,std::shared_ptr<Transform>arg_shp_transform,std::shared_ptr<IBoneObject> arg_shp_bone);
 		
-
-		inline float GetZ()override {
-			return  GetMaxZ( wkp_graphicDevice.lock()->GetRawViewMatrix());
+		inline float GetZ(const Matrix4x4& arg_vpMatrix)override {
+			return  GetMaxZ( arg_vpMatrix);
 		}
 		void Initialize()override;
 

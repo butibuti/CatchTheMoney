@@ -1,7 +1,8 @@
 #pragma once
 #ifndef BUTI_MATH_H
 #define BUTI_MATH_H
-namespace ButiEngine {
+namespace ButiEngine
+{
 	static const float BM_PI = 3.141592654f;
 	static const float BM_2PI = 6.283185307f;
 	static const float BM_1DIVPI = 0.318309886f;
@@ -207,14 +208,19 @@ namespace ButiEngine {
 			*this = (*this) * other;
 			return *this;
 		}
-		inline bool operator==(const Matrix4x4& other) const{
-			
+		inline bool operator==(const Matrix4x4& other) const {
 
-			return (this->_11 == other._11&& this->_12 == other._12&& this->_13 == other._13&& this->_14 == other._14&&
-				this->_21 == other._21 && this->_22 == other._22 && this->_23 == other._23 && this->_24 == other._24&&
-				this->_31 == other._31 && this->_32 == other._32 && this->_33 == other._33 && this->_34 == other._34&&
+
+			return (this->_11 == other._11 && this->_12 == other._12 && this->_13 == other._13 && this->_14 == other._14 &&
+				this->_21 == other._21 && this->_22 == other._22 && this->_23 == other._23 && this->_24 == other._24 &&
+				this->_31 == other._31 && this->_32 == other._32 && this->_33 == other._33 && this->_34 == other._34 &&
 				this->_41 == other._41 && this->_42 == other._42 && this->_43 == other._43 && this->_44 == other._44
 				);
+		}
+		inline bool operator!=(const Matrix4x4& other) const {
+
+
+			return !((*this) == other);
 		}
 
 		inline Vector4& operator [](const unsigned int idx);
@@ -770,7 +776,7 @@ namespace ButiEngine {
 
 		inline const Vector2 operator -() const
 		{
-			return (*this) * -1;
+			return  (*this) * -1;
 		}
 
 		inline bool operator==(const Vector2& other)
@@ -796,6 +802,7 @@ namespace ButiEngine {
 		}
 		inline operator Vector3() const;
 		inline operator Vector4() const;
+
 
 		inline Vector2& Floor(int len=1)
 		{
@@ -1656,6 +1663,9 @@ namespace ButiEngine {
 		inline bool operator==(const Vector4& other)const {
 			return this->x == other.x && this->y == other.y && this->z == other.z && this->w == other.w;
 		}
+		inline bool operator==(const int other)const {
+			return this->x == other && this->y == other && this->z == other && this->w == other;
+		}
 
 		inline bool operator!=(const Vector4& other)const {
 			return !((*this) == other);
@@ -2011,8 +2021,8 @@ namespace ButiEngine {
 		{
 			float px = this->x, py = this->y, pz = this->z, pw = this->w;
 			float qx = other.x, qy = other.y, qz = other.z, qw = other.w;
-			return Quat(qw*px -qz*py + qy*pz + qx*pw, qz*px + qw*py-qx*pz + qy*pw,
-				-qy*px + qx*py + qw*pz + qz*pw, -qx*px-qy*py-qz*pz + qw*pw);
+			return Quat(qw * px - qz * py + qy * pz + qx * pw, qz * px + qw * py - qx * pz + qy * pw,
+				-qy * px + qx * py + qw * pz + qz * pw, -qx * px - qy * py - qz * pz + qw * pw);
 		}
 		inline Quat operator /(const Quat& other) const
 		{
@@ -2029,7 +2039,7 @@ namespace ButiEngine {
 			this->x = (ax * bw + aw * bx + ay * bz - az * by);
 			this->y = (ay * bw + aw * by + az * bx - ax * bz);
 			this->z = (az * bw + aw * bz + ax * by - ay * bx);
-			this->w=(aw * bw - ax * bx - ay * by - az * bz);
+			this->w = (aw * bw - ax * bx - ay * by - az * bz);
 			return *this;
 		}
 		inline Quat& operator /=(const Quat& other) {
@@ -2230,7 +2240,7 @@ namespace ButiEngine {
 			return *this;
 		}
 #endif
-		
+
 	};
 
 
@@ -2250,94 +2260,94 @@ namespace ButiEngine {
 	namespace MathHelper
 	{
 
-		static  Matrix4x4 GetLookAtRotation(const Vector3& arg_lookPos,const Vector3& arg_targetPos, const Vector3& arg_upAxis) {
-			Vector3 z = ((Vector3)(arg_targetPos - arg_lookPos)).GetNormalize();
-			Vector3 x = arg_upAxis.GetCross(z).GetNormalize();
-			Vector3 y = z.GetCross(x).GetNormalize();
+	static  Matrix4x4 GetLookAtRotation(const Vector3& arg_lookPos, const Vector3& arg_targetPos, const Vector3& arg_upAxis) {
+		Vector3 z = ((Vector3)(arg_targetPos - arg_lookPos)).GetNormalize();
+		Vector3 x = arg_upAxis.GetCross(z).GetNormalize();
+		Vector3 y = z.GetCross(x).GetNormalize();
 
-			auto out = Matrix4x4();
-			out._11 = x.x; out._12 = x.y; out._13 = x.z;
-			out._21 = y.x; out._22 = y.y; out._23 = y.z;
-			out._31 = z.x; out._32 = z.y; out._33 = z.z;
+		auto out = Matrix4x4();
+		out._11 = x.x; out._12 = x.y; out._13 = x.z;
+		out._21 = y.x; out._22 = y.y; out._23 = y.z;
+		out._31 = z.x; out._32 = z.y; out._33 = z.z;
 
 
+		return out;
+	}
+
+
+	static Vector3 Slide(const Vector3& vec, const Vector3& normal)
+	{
+		float Len = vec.Dot(normal);
+		Vector3 Contact = normal * Len;
+		return (vec - Contact);
+	}
+
+
+
+	static Quat LearpQuat(const Quat& arg_firstQuat, const Quat& arg_secondQuat, const float pase) {
+		Quat secQ = arg_secondQuat;
+		if (arg_firstQuat.Dot(secQ) <= 0) {
+			secQ = -secQ;
+		}
+		Quat out = Quat();
+		const float len1 = arg_firstQuat.GetLength();
+		const float len2 = arg_firstQuat.GetLength();
+
+		if (len1 == 0.0f || len2 == 0.0f)
 			return out;
+
+		const float cos_val = (arg_firstQuat[0] * secQ[0] + arg_firstQuat[1] * secQ[1] + arg_firstQuat[2] * secQ[2] + arg_firstQuat[3] * secQ[3]) / (len1 * len2);
+
+
+		if (abs(cos_val - 1.0f) < 0.001) {
+			return arg_firstQuat;
 		}
+		const float w = acosf(cos_val);
+		const float sin_w = sinf(w);
+		const float sin_t_w = sinf(pase * w);
+		const float sin_inv_t_w = sinf((1.0f - pase) * w);
+		const float mult_q1 = sin_inv_t_w / sin_w;
+		const float mult_q2 = sin_t_w / sin_w;
 
 
-		static Vector3 Slide(const Vector3& vec, const Vector3& normal)
-		{
-			float Len = vec.Dot( normal);
-			Vector3 Contact = normal * Len;
-			return (vec - Contact);
+		for (int i = 0; i < 4; i++)
+			out[i] = mult_q1 * arg_firstQuat[i] + mult_q2 * secQ[i];
+
+		return out;
+	}
+	static Vector3 LarpPosition(const Vector3& arg_startPoint, const Vector3& arg_endPoint, const float t) {
+		return arg_startPoint + (arg_endPoint - arg_startPoint) * t;
+
+	}
+
+	static Vector3 LarpPosition(const Vector3& arg_startPoint, const Vector3& arg_endPoint, const float xt, const float yt, const float zt) {
+		return Vector3(arg_startPoint.x + (arg_endPoint.x - arg_startPoint.x) * xt, arg_startPoint.y + (arg_endPoint.y - arg_startPoint.y) * yt, arg_startPoint.z + (arg_endPoint.z - arg_startPoint.z) * zt);
+
+	}
+
+	static Vector3 GetMobiusPoint(const float arg_time, const float arg_radius) {
+		Vector3 output;
+
+		output.x = -(arg_radius * cos(arg_time) + 2) * sin(2 * arg_time);
+		output.y = (arg_radius * cos(arg_time) + 2) * cos(2 * arg_time);
+		output.z = arg_radius * sin(arg_time);
+
+		return output;
+	}
+	static Vector3 GetMobiusNormal(const float arg_time, const float arg_radius) {
+		if (arg_radius == 0) {
+
+			Vector3 point1 = GetMobiusPoint(arg_time, arg_radius), point2 = GetMobiusPoint(arg_time, -1), point3 = GetMobiusPoint(arg_time + ToRadian(0.5f), arg_radius);
+
+			return (point2 - point1).GetCross(point3 - point1).GetNormalize();
 		}
+		else {
+			Vector3 point1 = GetMobiusPoint(arg_time, arg_radius), point2 = GetMobiusPoint(arg_time, 0), point3 = GetMobiusPoint(arg_time + ToRadian(0.5f), arg_radius);
 
-		
-
-		static Quat LearpQuat(const Quat& arg_firstQuat, const Quat& arg_secondQuat, const float pase) {
-			Quat secQ = arg_secondQuat;
-			if (arg_firstQuat.Dot(secQ) <= 0) {
-				secQ = -secQ;
-			}
-			Quat out = Quat();
-			const float len1 = arg_firstQuat.GetLength();
-			const float len2 = arg_firstQuat.GetLength();
-
-			if (len1 == 0.0f || len2 == 0.0f)
-				return out;
-
-			const float cos_val = (arg_firstQuat[0] * secQ[0] + arg_firstQuat[1] * secQ[1] + arg_firstQuat[2] * secQ[2] + arg_firstQuat[3] * secQ[3]) / (len1 * len2);
-
-
-			if (abs(cos_val - 1.0f) < 0.001) {
-				return arg_firstQuat;
-			}
-			const float w = acosf(cos_val);
-			const float sin_w = sinf(w);
-			const float sin_t_w = sinf(pase * w);
-			const float sin_inv_t_w = sinf((1.0f - pase) * w);
-			const float mult_q1 = sin_inv_t_w / sin_w;
-			const float mult_q2 = sin_t_w / sin_w;
-
-
-			for (int i = 0; i < 4; i++)
-				out[i] = mult_q1 * arg_firstQuat[i] + mult_q2 * secQ[i];
-
-			return out;
+			return (point2 - point1).GetCross(point3 - point1).GetNormalize();
 		}
-		static Vector3 LarpPosition(const Vector3& arg_startPoint, const Vector3& arg_endPoint, const float t) {
-			return arg_startPoint + (arg_endPoint - arg_startPoint) * t;
-
-		}
-
-		static Vector3 LarpPosition(const Vector3& arg_startPoint, const Vector3& arg_endPoint, const float xt, const float yt, const float zt) {
-			return Vector3(arg_startPoint.x + (arg_endPoint.x - arg_startPoint.x) * xt, arg_startPoint.y + (arg_endPoint.y - arg_startPoint.y) * yt, arg_startPoint.z + (arg_endPoint.z - arg_startPoint.z) * zt);
-
-		}
-
-		static Vector3 GetMobiusPoint(const float arg_time,const float arg_radius) {
-			Vector3 output;
-
-			output.x = -(arg_radius * cos(arg_time) + 2) * sin(2 * arg_time);
-			output.y = (arg_radius * cos(arg_time) + 2) * cos(2 * arg_time);
-			output.z = arg_radius * sin(arg_time);
-
-			return output;
-		}
-		static Vector3 GetMobiusNormal(const float arg_time, const float arg_radius) {
-			if (arg_radius == 0) {
-
-				Vector3 point1 = GetMobiusPoint(arg_time, arg_radius), point2 = GetMobiusPoint(arg_time, -1), point3 = GetMobiusPoint(arg_time + ToRadian(0.5f), arg_radius);
-
-				return (point2 - point1).GetCross(point3 - point1).GetNormalize();
-			}
-			else {
-				Vector3 point1 = GetMobiusPoint(arg_time, arg_radius), point2 = GetMobiusPoint(arg_time, 0), point3 = GetMobiusPoint(arg_time + ToRadian(0.5f), arg_radius);
-
-				return (point2 - point1).GetCross(point3 - point1).GetNormalize();
-			}
-		}
-	};
+	}
+	}
 
 
 
@@ -3144,293 +3154,323 @@ namespace ButiEngine {
 }
 
 namespace std {
-	static std::string to_string(const ButiEngine::Vector2& arg_v) {
-		return std::to_string(arg_v.x) + "," + std::to_string(arg_v.y);
-	}
-	static std::string to_string(const ButiEngine::Vector3& arg_v) {
-		return std::to_string(arg_v.x) + "," + std::to_string(arg_v.y) + "," + std::to_string(arg_v.z);
-	}
-	static std::string to_string(const ButiEngine::Vector4& arg_v) {
-		return std::to_string(arg_v.x) + "," + std::to_string(arg_v.y) + "," + std::to_string(arg_v.z) + "," + std::to_string(arg_v.w);
-	}
-	static std::string to_string(const ButiEngine::Quat& arg_v) {
-		return std::to_string(arg_v.x) + "," + std::to_string(arg_v.y) + "," + std::to_string(arg_v.z) + "," + std::to_string(arg_v.w);
-	}
-	static std::string to_string(const ButiEngine::Matrix4x4& arg_v) {
-		return std::to_string(arg_v._11) + "," + std::to_string(arg_v._12) + "," + std::to_string(arg_v._13) + "," + std::to_string(arg_v._14) + "," +
-			std::to_string(arg_v._21) + "," + std::to_string(arg_v._22) + "," + std::to_string(arg_v._23) + "," + std::to_string(arg_v._24) + "," +
-			std::to_string(arg_v._31) + "," + std::to_string(arg_v._32) + "," + std::to_string(arg_v._33) + "," + std::to_string(arg_v._34) + "," +
-			std::to_string(arg_v._41) + "," + std::to_string(arg_v._42) + "," + std::to_string(arg_v._43) + "," + std::to_string(arg_v._44);
-	}
+static std::string to_string(const bool arg_v) {
+	return arg_v ? "true" :"false";
+}
+static std::string to_string(const ButiEngine::Vector2& arg_v) {
+	return std::to_string(arg_v.x) + "," + std::to_string(arg_v.y);
+}
+static std::string to_string(const ButiEngine::Vector3& arg_v) {
+	return std::to_string(arg_v.x) + "," + std::to_string(arg_v.y) + "," + std::to_string(arg_v.z);
+}
+static std::string to_string(const ButiEngine::Vector4& arg_v) {
+	return std::to_string(arg_v.x) + "," + std::to_string(arg_v.y) + "," + std::to_string(arg_v.z) + "," + std::to_string(arg_v.w);
+}
+static std::string to_string(const ButiEngine::Quat& arg_v) {
+	return std::to_string(arg_v.x) + "," + std::to_string(arg_v.y) + "," + std::to_string(arg_v.z) + "," + std::to_string(arg_v.w);
+}
+static std::string to_string(const ButiEngine::Matrix4x4& arg_v) {
+	return std::to_string(arg_v._11) + "," + std::to_string(arg_v._12) + "," + std::to_string(arg_v._13) + "," + std::to_string(arg_v._14) + "," +
+		std::to_string(arg_v._21) + "," + std::to_string(arg_v._22) + "," + std::to_string(arg_v._23) + "," + std::to_string(arg_v._24) + "," +
+		std::to_string(arg_v._31) + "," + std::to_string(arg_v._32) + "," + std::to_string(arg_v._33) + "," + std::to_string(arg_v._34) + "," +
+		std::to_string(arg_v._41) + "," + std::to_string(arg_v._42) + "," + std::to_string(arg_v._43) + "," + std::to_string(arg_v._44);
+}
+static bool stob(const std::string& arg_v){
+	return arg_v=="true" ? true : false;
+}
 }
 
 namespace StrConvert {
-	template <typename T>
-	static T ConvertString(const std::string& arg_str) {
+template <typename T>
+static T ConvertString(const std::string& arg_str) {
 
-		const char* _Ptr = arg_str.c_str();
-		char* _Eptr;
 
-		const long _Ans = _CSTD strtol(_Ptr, &_Eptr, 10);
 
+	return T();
+}
+template <>
+static int ConvertString(const std::string& arg_str) {
+
+	const char* _Ptr = arg_str.c_str();
+	char* _Eptr;
+
+	const long _Ans = _CSTD strtol(_Ptr, &_Eptr, 10);
+
+	if (_Ptr == _Eptr) {
+		//–³Œø‚È•ÏŠ·
+		return 0;
+	}
+
+
+	return static_cast<int>(_Ans);
+}
+template <>
+static long long int ConvertString(const std::string& arg_str) {
+
+	const char* _Ptr = arg_str.c_str();
+	char* _Eptr;
+
+	const long _Ans = _CSTD strtol(_Ptr, &_Eptr, 10);
+
+	if (_Ptr == _Eptr) {
+		//–³Œø‚È•ÏŠ·
+		return 0;
+	}
+
+
+	return static_cast<long long int>(_Ans);
+}
+template <>
+static float ConvertString(const std::string& arg_str) {
+
+	const char* _Ptr = arg_str.c_str();
+	char* _Eptr;
+	const float _Ans = _CSTD strtof(_Ptr, &_Eptr);
+
+	if (_Ptr == _Eptr) {
+		//–³Œø‚È•ÏŠ·
+		return 0.00f;
+	}
+	return _Ans;
+}
+template <>
+static double ConvertString(const std::string& arg_str) {
+	int& _Errno_ref = errno;
+	const char* _Ptr = arg_str.c_str();
+	char* _Eptr;
+	_Errno_ref = 0;
+	const double _Ans = _CSTD strtod(_Ptr, &_Eptr);
+
+	if (_Ptr == _Eptr) {
+		//–³Œø‚È•ÏŠ·
+		return 0.00;
+	}
+	return _Ans;
+}
+template <>
+static ButiEngine::Vector2 ConvertString(const std::string& arg_str) {
+	auto splited = std::vector<std::string>();
+	int first = 0;
+	int last = arg_str.find_first_of(",");
+	if (last == std::string::npos) {
+		//–³Œø‚È•ÏŠ·
+		return ButiEngine::Vector2();
+	}
+	while (first < arg_str.size())
+	{
+		auto subString = arg_str.substr(first, last - first);
+		splited.push_back(subString);
+		first = last + 1;
+		last = arg_str.find_first_of(",", first);
+		if (last == std::string::npos) {
+			last = arg_str.size();
+		}
+	}
+	if (splited.size() < 2) {
+		//–³Œø‚È•ÏŠ·
+		return ButiEngine::Vector2();
+	}
+
+
+	const char* _Ptr;
+	char* _Eptr = nullptr;
+
+	ButiEngine::Vector2 _Ans;
+
+	for (int i = 0; i < 2; i++) {
+
+		_Ptr = splited[i].c_str();
+		_Eptr = nullptr;
+		float f = _CSTD strtof(_Ptr, &_Eptr);
 		if (_Ptr == _Eptr) {
 			//–³Œø‚È•ÏŠ·
-			return 0;
+			return _Ans;
 		}
-
-
-		return static_cast<T>(_Ans);
+		_Ans[i] = f;
 	}
-	template <>
-	static float ConvertString(const std::string& arg_str) {
 
-		const char* _Ptr = arg_str.c_str();
-		char* _Eptr;
-		const float _Ans = _CSTD strtof(_Ptr, &_Eptr);
+	return _Ans;
+}
+template <>
+static ButiEngine::Vector3 ConvertString(const std::string& arg_str) {
+	auto splited = std::vector<std::string>();
+	int first = 0;
+	int last = arg_str.find_first_of(",");
+	if (last == std::string::npos) {
+		//–³Œø‚È•ÏŠ·
+		return ButiEngine::Vector3();
+	}
+	while (first < arg_str.size())
+	{
+		auto subString = arg_str.substr(first, last - first);
+		splited.push_back(subString);
+		first = last + 1;
+		last = arg_str.find_first_of(",", first);
+		if (last == std::string::npos) {
+			last = arg_str.size();
+		}
+	}
+	if (splited.size() < 3) {
+		//–³Œø‚È•ÏŠ·
+		return ButiEngine::Vector3();
+	}
 
+
+	const char* _Ptr;
+	char* _Eptr = nullptr;
+
+	ButiEngine::Vector3 _Ans;
+
+	for (int i = 0; i < 3; i++) {
+
+		_Ptr = splited[i].c_str();
+		_Eptr = nullptr;
+		float f = _CSTD strtof(_Ptr, &_Eptr);
 		if (_Ptr == _Eptr) {
 			//–³Œø‚È•ÏŠ·
-			return 0.00f;
+			return _Ans;
 		}
-		return _Ans;
+		_Ans[i] = f;
 	}
-	template <>
-	static double ConvertString(const std::string& arg_str) {
-		int& _Errno_ref = errno;
-		const char* _Ptr = arg_str.c_str();
-		char* _Eptr;
-		_Errno_ref = 0;
-		const double _Ans = _CSTD strtod(_Ptr, &_Eptr);
 
+
+
+	return _Ans;
+}
+template <>
+static ButiEngine::Vector4 ConvertString(const std::string& arg_str) {
+	auto splited = std::vector<std::string>();
+	int first = 0;
+	int last = arg_str.find_first_of(",");
+	if (last == std::string::npos) {
+		//–³Œø‚È•ÏŠ·
+		return ButiEngine::Vector4();
+	}
+	while (first < arg_str.size())
+	{
+		auto subString = arg_str.substr(first, last - first);
+		splited.push_back(subString);
+		first = last + 1;
+		last = arg_str.find_first_of(",", first);
+		if (last == std::string::npos) {
+			last = arg_str.size();
+		}
+	}
+	if (splited.size() < 4) {
+		//–³Œø‚È•ÏŠ·
+		return ButiEngine::Vector4();
+	}
+
+
+	const char* _Ptr;
+	char* _Eptr = nullptr;
+
+	ButiEngine::Vector4 _Ans;
+
+	for (int i = 0; i < 4; i++) {
+
+		_Ptr = splited[i].c_str();
+		_Eptr = nullptr;
+		float f = _CSTD strtof(_Ptr, &_Eptr);
 		if (_Ptr == _Eptr) {
 			//–³Œø‚È•ÏŠ·
-			return 0.00;
+			return _Ans;
 		}
-		return _Ans;
+		_Ans[i] = f;
 	}
-	template <>
-	static ButiEngine::Vector2 ConvertString(const std::string& arg_str) {
-		auto splited = std::vector<std::string>();
-		int first = 0;
-		int last = arg_str.find_first_of(",");
-		if (last == std::string::npos){
+
+
+	return _Ans;
+}
+template <>
+static ButiEngine::Quat ConvertString(const std::string& arg_str) {
+	auto splited = std::vector<std::string>();
+	int first = 0;
+	int last = arg_str.find_first_of(",");
+	if (last == std::string::npos) {
+		//–³Œø‚È•ÏŠ·
+		return ButiEngine::Quat();
+	}
+	while (first < arg_str.size())
+	{
+		auto subString = arg_str.substr(first, last - first);
+		splited.push_back(subString);
+		first = last + 1;
+		last = arg_str.find_first_of(",", first);
+		if (last == std::string::npos) {
+			last = arg_str.size();
+		}
+	}
+	if (splited.size() < 4) {
+		//–³Œø‚È•ÏŠ·
+		return ButiEngine::Quat();
+	}
+
+
+	const char* _Ptr;
+	char* _Eptr = nullptr;
+
+	ButiEngine::Quat _Ans;
+
+	for (int i = 0; i < 2; i++) {
+
+		_Ptr = splited[i].c_str();
+		_Eptr = nullptr;
+		float f = _CSTD strtof(_Ptr, &_Eptr);
+		if (_Ptr == _Eptr) {
 			//–³Œø‚È•ÏŠ·
-			return ButiEngine::Vector2();
+			return _Ans;
 		}
-		while (first < arg_str.size())
-		{
-			auto subString = arg_str.substr(first, last - first);
-			splited.push_back(subString);
-			first = last + 1;
-			last = arg_str.find_first_of(",", first);
-			if (last == std::string::npos) {
-				last = arg_str.size();
-			}
+		_Ans[i] = f;
+	}
+
+
+	return _Ans;
+}
+template <>
+static ButiEngine::Matrix4x4 ConvertString(const std::string& arg_str) {
+
+	auto splited = std::vector<std::string>();
+	int first = 0;
+	int last = arg_str.find_first_of(",");
+	if (last == std::string::npos) {
+		//–³Œø‚È•ÏŠ·
+		return ButiEngine::Matrix4x4();
+	}
+	while (first < arg_str.size())
+	{
+		auto subString = arg_str.substr(first, last - first);
+		splited.push_back(subString);
+		first = last + 1;
+		last = arg_str.find_first_of(",", first);
+		if (last == std::string::npos) {
+			last = arg_str.size();
 		}
-		if (splited.size()<2) {
-			//–³Œø‚È•ÏŠ·
-			return ButiEngine::Vector2();
-		}
+	}
+	if (splited.size() < 16) {
+		//–³Œø‚È•ÏŠ·
+		return ButiEngine::Matrix4x4();
+	}
+	ButiEngine::Matrix4x4 _Ans;
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
 
-
-		const char* _Ptr; 
-		char* _Eptr = nullptr;
-
-		ButiEngine::Vector2 _Ans;
-
-		for (int i = 0; i < 2; i++) {
-
-			_Ptr = splited[i].c_str(); 
-			_Eptr = nullptr;
+			int& _Errno_ref = errno;
+			const char* _Ptr = splited[i * 4 + j].c_str();
+			char* _Eptr;
+			_Errno_ref = 0;
 			float f = _CSTD strtof(_Ptr, &_Eptr);
 			if (_Ptr == _Eptr) {
 				//–³Œø‚È•ÏŠ·
 				return _Ans;
 			}
-			_Ans[i] = f;
+			_Ans[i][j] = f;
 		}
-
-		return _Ans;
 	}
-	template <>
-	static ButiEngine::Vector3 ConvertString(const std::string& arg_str) {
-		auto splited = std::vector<std::string>();
-		int first = 0;
-		int last = arg_str.find_first_of(",");
-		if (last == std::string::npos) {
-			//–³Œø‚È•ÏŠ·
-			return ButiEngine::Vector3();
-		}
-		while (first < arg_str.size())
-		{
-			auto subString = arg_str.substr(first, last - first);
-			splited.push_back(subString);
-			first = last + 1;
-			last = arg_str.find_first_of(",", first);
-			if (last == std::string::npos) {
-				last = arg_str.size();
-			}
-		}
-		if (splited.size() < 3) {
-			//–³Œø‚È•ÏŠ·
-			return ButiEngine::Vector3();
-		}
 
 
-		const char* _Ptr;
-		char* _Eptr = nullptr;
-
-		ButiEngine::Vector3 _Ans;
-
-		for (int i = 0; i < 3; i++) {
-
-			_Ptr = splited[i].c_str();
-			_Eptr = nullptr;
-			float f = _CSTD strtof(_Ptr, &_Eptr);
-			if (_Ptr == _Eptr) {
-				//–³Œø‚È•ÏŠ·
-				return _Ans;
-			}
-			_Ans[i] = f;
-		}
-
-
-
-		return _Ans;
-	}
-	template <>
-	static ButiEngine::Vector4 ConvertString(const std::string& arg_str) {
-		auto splited = std::vector<std::string>();
-		int first = 0;
-		int last = arg_str.find_first_of(",");
-		if (last == std::string::npos) {
-			//–³Œø‚È•ÏŠ·
-			return ButiEngine::Vector4();
-		}
-		while (first < arg_str.size())
-		{
-			auto subString = arg_str.substr(first, last - first);
-			splited.push_back(subString);
-			first = last + 1;
-			last = arg_str.find_first_of(",", first);
-			if (last == std::string::npos) {
-				last = arg_str.size();
-			}
-		}
-		if (splited.size() < 4) {
-			//–³Œø‚È•ÏŠ·
-			return ButiEngine::Vector4();
-		}
-
-
-		const char* _Ptr;
-		char* _Eptr = nullptr;
-
-		ButiEngine::Vector4 _Ans;
-
-		for (int i = 0; i < 4; i++) {
-
-			_Ptr = splited[i].c_str();
-			_Eptr = nullptr;
-			float f = _CSTD strtof(_Ptr, &_Eptr);
-			if (_Ptr == _Eptr) {
-				//–³Œø‚È•ÏŠ·
-				return _Ans;
-			}
-			_Ans[i] = f;
-		}
-
-
-		return _Ans;
-	}
-	template <>
-	static ButiEngine::Quat ConvertString(const std::string& arg_str) {
-		auto splited = std::vector<std::string>();
-		int first = 0;
-		int last = arg_str.find_first_of(",");
-		if (last == std::string::npos) {
-			//–³Œø‚È•ÏŠ·
-			return ButiEngine::Quat();
-		}
-		while (first < arg_str.size())
-		{
-			auto subString = arg_str.substr(first, last - first);
-			splited.push_back(subString);
-			first = last + 1;
-			last = arg_str.find_first_of(",", first);
-			if (last == std::string::npos) {
-				last = arg_str.size();
-			}
-		}
-		if (splited.size() < 4) {
-			//–³Œø‚È•ÏŠ·
-			return ButiEngine::Quat();		}
-
-
-		const char* _Ptr;
-		char* _Eptr = nullptr;
-
-		ButiEngine::Quat _Ans;
-
-		for (int i = 0; i < 2; i++) {
-
-			_Ptr = splited[i].c_str();
-			_Eptr = nullptr;
-			float f = _CSTD strtof(_Ptr, &_Eptr);
-			if (_Ptr == _Eptr) {
-				//–³Œø‚È•ÏŠ·
-				return _Ans;
-			}
-			_Ans[i] = f;
-		}
-
-
-		return _Ans;
-	}
-	template <>
-	static ButiEngine::Matrix4x4 ConvertString(const std::string& arg_str) {
-
-		auto splited = std::vector<std::string>();
-		int first = 0;
-		int last = arg_str.find_first_of(",");
-		if (last == std::string::npos) {
-			//–³Œø‚È•ÏŠ·
-			return ButiEngine::Matrix4x4();
-		}
-		while (first < arg_str.size())
-		{
-			auto subString = arg_str.substr(first, last - first);
-			splited.push_back(subString);
-			first = last + 1;
-			last = arg_str.find_first_of(",", first);
-			if (last == std::string::npos) {
-				last = arg_str.size();
-			}
-		}
-		if (splited.size() < 16) {
-			//–³Œø‚È•ÏŠ·
-			return ButiEngine::Matrix4x4();
-		}
-		ButiEngine::Matrix4x4 _Ans;
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-
-				int& _Errno_ref = errno;
-				const char* _Ptr = splited[i*4+j].c_str();
-				char* _Eptr;
-				_Errno_ref = 0;
-				float f = _CSTD strtof(_Ptr, &_Eptr);
-				if (_Ptr == _Eptr) {
-					//–³Œø‚È•ÏŠ·
-					return _Ans;
-				}
-				_Ans[i][j] = f;
-			}
-		}
-
-
-		return _Ans;
-	}
+	return _Ans;
+}
 
 
 }

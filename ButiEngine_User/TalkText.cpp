@@ -59,8 +59,8 @@ void ButiEngine::TalkText::Start()
 	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 	shp_pauseManager = GetManager().lock()->GetGameObject("PauseManager").lock()->GetGameComponent<PauseManager>();
 
-	se_bigText = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Daikokuten_Big.wav");
-	se_normalText = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Daikokuten_Small.wav");
+	se_bigText = SoundTag("Sound/Daikokuten_Big.wav");
+	se_normalText = SoundTag("Sound/Daikokuten_Small.wav");
 
 	wkp_daikokuten = GetManager().lock()->GetGameObject("Daikokuten");
 	wkp_daikokutenAppear = GetManager().lock()->GetGameObject("Daikokuten_Appear");

@@ -4,61 +4,8 @@
 #include"stdafx.h"
 namespace ButiEngine {
 
-	class Scene :public IScene
-	{
-	public:
-		Scene(std::weak_ptr<ISceneManager> arg_wkp_sceneManager, std::shared_ptr< SceneInformation> argSceneInformation);
-		void Release()override;
-		virtual void OnSet();
-		virtual void OnInitialize() {}
-		virtual void  OnUpdate() {}
-		virtual void  OnSceneEnd() {}
-		void ActiveCollision(const UINT arg_layerCount=1);
-		void PreInitialize()override;
-		std::unique_ptr<IWindow>& GetWindow()override;
+	std::shared_ptr<IScene> CreateScene(std::weak_ptr<ISceneManager> arg_wkp_sceneManager, std::shared_ptr< SceneInformation> argSceneInformation);
 
-		void Update()override final;
-		void UIUpdate()override;
-		void EditCameraUpdate()override;
-		void RegistGameObjects()override;
-		void Set()override final;
-		void BefDraw()override final;
-		void Draw()override final;
-		void Initialize()override final;
-		std::shared_ptr<ICamera> GetCamera(const std::string& arg_camName) override final;
-		std::shared_ptr<ICamera> GetCamera(const UINT arg_camNum = 0) override final;
-		std::shared_ptr<ICamera> AddCamera(CameraProjProperty& arg_prop, const std::string& arg_cameraName, const bool arg_initActive) override final;
-		void RemoveCamera(const std::string& arg_camName) override final;
-		void RemoveCamera(const UINT arg_camNum) override final;
-		void SceneEnd()override final;
-		std::shared_ptr<IResourceContainer> GetResourceContainer();
-		std::shared_ptr<IRenderer> GetRenderer()override;
-		std::weak_ptr< ISceneManager> GetSceneManager()override;
-		std::weak_ptr<ICollisionManager> GetCollisionManager()override;
-		std::shared_ptr< SceneInformation> GetSceneInformation()override;
-		std::shared_ptr< SceneChangeInformation> GetSceneChangeInformation() override;
-		std::shared_ptr< SceneRenderingInformation> GetSceneRenderingInformation()override;
-		void Save()override;
-		void Start()override;
-		void ShowGameObjectManagerUI()override;
-		void CameraActivation() override;
-		void CameraEditActivation() override;
-		void ShowRenderingUI()override;
-		void ShowInspectorUI()override;
-		void ShowHeirarcyUI()override;
-		
-	protected:
-		std::shared_ptr<ISceneManager> shp_sceneManager;
-		std::shared_ptr<GameObjectManager> shp_gameObjectManager;
-		std::shared_ptr<ICollisionManager> shp_collisionManager;
-	private:
-		std::shared_ptr<IRenderer>shp_renderer;
-		std::vector< std::shared_ptr<ICamera>> vec_cameras;
-		std::shared_ptr< SceneInformation> sceneInformation;
-		std::shared_ptr< SceneRenderingInformation> shp_renderingInfo;
-		std::shared_ptr< SceneChangeInformation> shp_changeInfo;
-
-	};
 }
 #endif // !_Scene_H_
 

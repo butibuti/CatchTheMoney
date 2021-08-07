@@ -85,9 +85,9 @@ void ButiEngine::Title::Start()
 	wkp_titleLogo = GetManager().lock()->AddObjectFromCereal("TitleLogo", ObjectFactory::Create<Transform>(Vector3(0,100,0), Vector3::Zero, Vector3(1440, 810, 1)));
 	GetManager().lock()->AddObjectFromCereal("TitleAbutton", ObjectFactory::Create<Transform>(Vector3(0, -180, -0.02f), Vector3::Zero, Vector3(180, 180, 1)));
 	
-	bgm = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/BGM1.wav");
-	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
-	se_zoomOut = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Title.wav");
+	bgm = SoundTag("Sound/BGM1.wav");
+	se_enter = SoundTag("Sound/Enter.wav");
+	se_zoomOut = SoundTag("Sound/Title.wav");
 
 	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, GameSettings::masterVolume + 0.1f);
 

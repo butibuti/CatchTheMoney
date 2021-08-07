@@ -14,7 +14,7 @@ namespace ButiEngine {
 		void RegistGameObject();
 		void Initialize()override;
 		void PreInitialize()override;
-		void ShowUI();
+		void ShowGUI();
 		void Release();
 		void Initialize_cereal();
 

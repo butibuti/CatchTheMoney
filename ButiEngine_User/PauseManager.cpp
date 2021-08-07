@@ -73,9 +73,9 @@ void ButiEngine::PauseManager::Start()
 		wkp_button_select = GetManager().lock()->AddObjectFromCereal("PauseButton_Select");
 	}
 
-	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
-	se_select = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Select-Click.wav");
-	se_pick = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Pause.wav");
+	se_enter = SoundTag("Sound/Enter.wav");
+	se_select = SoundTag("Sound/Select-Click.wav");
+	se_pick = SoundTag("Sound/Pause.wav");
 
 	initBGScale = Vector3(0.0f, 0.0f, 1.0f);
 	defaultBGScale = Vector3(1920.0f, 1080.0f, 1.0f);

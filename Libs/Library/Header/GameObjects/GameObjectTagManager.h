@@ -1,5 +1,5 @@
 #pragma once
-#include"../Common/ID.h"
+#include"../Library/ButiUtil/Util/ID.h"
 namespace ButiEngine {
 	class GameObject;
 	using GameObjectTag= ID<GameObject>;

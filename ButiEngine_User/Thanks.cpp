@@ -147,12 +147,12 @@ void ButiEngine::Thanks::Start()
 
 	//wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 0, 0), Vector3::Zero, Vector3(1920, 1080, 1)));
 
-	bgm = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/BGM1.wav");
-	se_apple = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Clear.wav");
-	se_zoom = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Title.wav");
-	se_exp = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/ClearExp.wav");
-	se_dash = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Rat_Dash.wav");
-	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
+	bgm = SoundTag("Sound/BGM1.wav");
+	se_apple = SoundTag("Sound/Clear.wav");
+	se_zoom = SoundTag("Sound/Title.wav");
+	se_exp = SoundTag("Sound/ClearExp.wav");
+	se_dash = SoundTag("Sound/Rat_Dash.wav");
+	se_enter = SoundTag("Sound/Enter.wav");
 
 	shp_appleParent = GetManager().lock()->AddObject(ObjectFactory::Create<Transform>(),"appleParent").lock();
 

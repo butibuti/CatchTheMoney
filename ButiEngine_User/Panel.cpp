@@ -42,7 +42,7 @@ void ButiEngine::Panel::Start()
 	gravity = 0.0f;
 	once = true;
 
-	se_cancel = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/GravityCancel.wav");
+	se_cancel = SoundTag("Sound/GravityCancel.wav");
 
 	
 }

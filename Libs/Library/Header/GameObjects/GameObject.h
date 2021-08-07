@@ -71,15 +71,20 @@ namespace ButiEngine {
 		std::shared_ptr<GameComponent> GetGameComponent(const std::string& arg_gameComponentName,unsigned int index);
 
 
-		template <typename T>
-		std::shared_ptr<T> GetGameComponent(unsigned int index=0) {
+		template <typename T> inline
+		std::shared_ptr<T> GetGameComponent(const unsigned int index ) {
 			std::string arg_gameComponentName = ObjectFactory::Create<T>()->GetGameComponentName();
 
-			auto ret = GetGameComponent(arg_gameComponentName,index);
+			auto ret = GetGameComponent(arg_gameComponentName, index);
 			if (!ret) {
 				return nullptr;
 			}
 			return ret->GetThis<T>();
+		}
+
+		template <typename T>inline
+		std::shared_ptr<T> GetGameComponent() {
+			return GetGameComponent<T>(0);
 		}
 
 

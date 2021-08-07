@@ -82,10 +82,10 @@ void ButiEngine::Frog::Start()
 	angelFrogComponent->Start();
 	angelFrogComponent->SetIsActive(false);
 
-	se_explosion = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Kaeru_Explosion1.wav");
-	se_extend = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Kaeru_Extend.wav");
-	se_sitaOut = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/sita_Extend.wav");
-	se_eat = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Kaeru_Eat.wav");
+	se_explosion = SoundTag("Sound/Kaeru_Explosion1.wav");
+	se_extend = SoundTag("Sound/Kaeru_Extend.wav");
+	se_sitaOut = SoundTag("Sound/sita_Extend.wav");
+	se_eat = SoundTag("Sound/Kaeru_Eat.wav");
 
 	int partType = 0;
 	for (int i = 0; i < 12; i++)

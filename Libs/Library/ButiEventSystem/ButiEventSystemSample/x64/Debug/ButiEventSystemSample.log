@@ -1,0 +1,6 @@
+﻿  main.cpp
+D:\K019G1120\Projects\ButiEngine\Libs\Library\ButiEventSystem\ButiEventSystemSample\main.cpp(81,1): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+D:\K019G1120\Projects\ButiEngine\Libs\Library\ButiEventSystem\ButiEventSystemSample\main.cpp(69): message : クラス テンプレート メンバー関数 'void EventMessenger<int>::Regist(std::shared_ptr<EventListenerRegister<int>>,const int)' のコンパイル中
+D:\K019G1120\Projects\ButiEngine\Libs\Library\ButiEventSystem\ButiEventSystemSample\main.cpp(183): message : コンパイル対象の関数 テンプレート インスタンス化 'void EventMessenger<int>::Regist(std::shared_ptr<EventListenerRegister<int>>,const int)' のリファレンスを確認してください
+D:\K019G1120\Projects\ButiEngine\Libs\Library\ButiEventSystem\ButiEventSystemSample\main.cpp(163): message : コンパイル対象の クラス テンプレート インスタンス化 'EventMessenger<int>' のリファレンスを確認してください
+  ButiEventSystemSample.vcxproj -> D:\K019G1120\Projects\ButiEngine\Libs\Library\ButiEventSystem\x64\Debug\ButiEventSystemSample.exe

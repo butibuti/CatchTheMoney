@@ -9,15 +9,17 @@ namespace ButiEngine {
 	public:
 		ResourceFactory_Dx12(std::weak_ptr<GraphicDevice> arg_wkp_graphicDevice);
 		std::shared_ptr<Resource_Texture> CreateTextureFromFile(const std::string& filePath)override;
-		std::shared_ptr<Resource_Texture> CreateRenderTargetTexture(const UINT width, const UINT height)override;
+		std::shared_ptr<Resource_Texture> CreateRenderTargetTexture(const UINT width, const UINT height,const int format)override;
 		std::shared_ptr<Resource_Texture> CreateDepthStencilTexture(const UINT width, const UINT height)override;
+		std::shared_ptr<Resource_Texture> CreateEmptyTexture(const UINT width, const UINT height)override;
 
 
 		std::shared_ptr<Resource_PixelShader> CreatePixelShaderFromFile(const std::string& filePath )override;
 		std::shared_ptr<Resource_VertexShader> CreateVertexShaderFromFile(const std::string& filePath )override;
 		std::shared_ptr<Resource_GeometryShader> CreateGeometryShaderFromFile(const std::string& filePath )override;
-		std::shared_ptr<Resource_Material> CreateMaterial(const MaterialVariable& arg_materialVar, const TextureTag& arg_textureTag)override;
-		std::shared_ptr<Resource_Material> CreateMaterial(const MaterialVariable& arg_materialVar, const std::vector< TextureTag>& arg_textureTag)override;
+		std::shared_ptr<Resource_Material> CreateMaterial(const MaterialValue& arg_materialVar, const TextureTag& arg_textureTag)override;
+		std::shared_ptr<Resource_Material> CreateMaterial(const MaterialValue& arg_materialVar, const std::vector< TextureTag>& arg_textureTag)override;
+		std::shared_ptr<Resource_Material> CreateMaterialList(const MaterialValue& arg_materialVar, const std::vector< TextureTag>& arg_textureTag, std::shared_ptr<IResourceContainer> arg_shp_resourceContainer)override;
 		template<typename T>
 		std::shared_ptr<Resource_Mesh> CreateMesh(const BackupData<T>& inputMeshData) {
 			auto shp_graphicDevice_Dx12 = wkp_graphicDevice.lock()->GetThis<GraphicDevice_Dx12>();
@@ -45,9 +47,9 @@ namespace ButiEngine {
 
 
 			UINT vertexBufferSize = (UINT)(sizeof(T) * inputMeshData.vertices.size());
-			auto defDesc = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-			auto vBuffDesc= CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize);
-			auto updesc = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+			D3D12_HEAP_PROPERTIES defDesc = HeapPropertiesHelper::GetHeapProp(D3D12_HEAP_TYPE_DEFAULT);
+			D3D12_HEAP_PROPERTIES updesc = HeapPropertiesHelper::GetHeapProp(D3D12_HEAP_TYPE_UPLOAD);
+			D3D12_RESOURCE_DESC vBuffDesc = ResourceDescHelper::GetBufferResourceDesc(vertexBufferSize);
 			//頂点バッファの作成
 			{
 				shp_graphicDevice_Dx12->GetDevice().CreateCommittedResource(
@@ -74,7 +76,7 @@ namespace ButiEngine {
 			vertexCount = static_cast<UINT>(inputMeshData.vertices.size());
 			//インデックスバッファの作成
 			UINT indexBufferSize = static_cast<UINT>(sizeof(UINT) * inputMeshData.indices.size());
-			auto indexBuffDesc = CD3DX12_RESOURCE_DESC::Buffer(indexBufferSize);
+			D3D12_RESOURCE_DESC indexBuffDesc = ResourceDescHelper::GetBufferResourceDesc(indexBufferSize);
 			{
 				shp_graphicDevice_Dx12->GetDevice().CreateCommittedResource(
 					&defDesc,
@@ -142,9 +144,9 @@ namespace ButiEngine {
 
 
 			UINT vertexBufferSize = (UINT)(sizeof(T) * inputMeshData.vertices.size());
-			auto defDesc = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-			auto updesc= CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-			auto vBuffDesc = CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize);
+			D3D12_HEAP_PROPERTIES defDesc = HeapPropertiesHelper::GetHeapProp(D3D12_HEAP_TYPE_DEFAULT);
+			D3D12_HEAP_PROPERTIES updesc= HeapPropertiesHelper::GetHeapProp(D3D12_HEAP_TYPE_UPLOAD);
+			D3D12_RESOURCE_DESC vBuffDesc = ResourceDescHelper::GetBufferResourceDesc(vertexBufferSize);
 			//頂点バッファの作成
 			{
 				shp_graphicDevice_Dx12->GetDevice().CreateCommittedResource(
@@ -171,7 +173,7 @@ namespace ButiEngine {
 			vertexCount = static_cast<UINT>(inputMeshData.vertices.size());
 			//インデックスバッファの作成
 			UINT indexBufferSize = static_cast<UINT>(sizeof(UINT) * inputMeshData.indices.size());
-			auto indexDesc = CD3DX12_RESOURCE_DESC::Buffer(indexBufferSize);
+			D3D12_RESOURCE_DESC indexDesc = ResourceDescHelper::GetBufferResourceDesc(indexBufferSize);
 			{
 				shp_graphicDevice_Dx12->GetDevice().CreateCommittedResource(
 					&defDesc,

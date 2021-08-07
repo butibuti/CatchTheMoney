@@ -1,9 +1,101 @@
 #pragma once
+#ifndef DEFAULTGAMECOMPONENT_H_
+#define DEFAULTGAMECOMPONENT_H_
+
 #include "../../GameComponentHeader.h"
 #include"Header/Common/CollisionPrimitive.h"
 #include"Header/Resources/Vertex.h"
 #include"../../Resources/DrawData/IDrawData.h"
 
+namespace ButiScript {
+	class CompiledData;
+	class VirtualCPU;
+	class IValue;
+	class IGlobalValueSaveObject {
+	public:
+
+		virtual void RestoreValue(IValue** arg_v)const = 0;
+		virtual void SetCompiledData(std::shared_ptr<CompiledData> arg_shp_data){}
+		virtual int GetTypeIndex()const = 0;
+		virtual void SetTypeIndex(const int arg_index)=0;
+	};
+	class GlobalScriptTypeValueSaveObject :public IGlobalValueSaveObject {
+	public:
+		GlobalScriptTypeValueSaveObject(){}
+		void SetCompiledData(std::shared_ptr<CompiledData> arg_shp_data) { shp_compiledData = arg_shp_data; }
+		void RestoreValue(IValue** arg_v)const override;
+		void Push(std::shared_ptr<IGlobalValueSaveObject> shp_value,int index) {
+			shp_value->SetTypeIndex(index);
+			vec_data.push_back(shp_value);
+		}
+		int GetTypeIndex()const override {
+			return type;
+		}
+		void SetTypeIndex(const int arg_index)override {
+			type = arg_index;
+		}
+		template<class Archive>
+		void serialize(Archive& archive)
+		{
+			archive(vec_data);
+			archive(type);
+		}
+	private:
+		std::vector<std::shared_ptr<IGlobalValueSaveObject>> vec_data;
+		std::shared_ptr<CompiledData>shp_compiledData;
+		int type;
+	};
+	template<typename T>
+	class GlobalValueSaveObject :public IGlobalValueSaveObject {
+	public:
+		GlobalValueSaveObject(const T& arg_value) {
+			data = arg_value;
+		}
+		GlobalValueSaveObject() {
+		}
+		void RestoreValue(IValue** arg_v)const override;
+		int GetTypeIndex()const override {
+			return type;
+		}
+		void SetTypeIndex(const int arg_index)override {
+			type = arg_index;
+		}
+		template<class Archive>
+		void serialize(Archive& archive)
+		{
+			archive(data);
+			archive(type);
+		}
+	private:
+		T data;
+		int type;
+	};
+	template<typename T>
+	class GlobalSharedPtrValueSaveObject :public IGlobalValueSaveObject {
+	public:
+		GlobalSharedPtrValueSaveObject(std::shared_ptr<T> arg_value) {
+			data = arg_value;
+		}
+		GlobalSharedPtrValueSaveObject() {
+		}
+		void RestoreValue(IValue** arg_v)const override;
+		int GetTypeIndex()const override {
+			return type;
+		}
+		void SetTypeIndex(const int arg_index)override {
+			type = arg_index;
+		}
+		template<class Archive>
+		void serialize(Archive& archive)
+		{
+			archive(data);
+			archive(type);
+		}
+	private:
+		std::shared_ptr<T> data;
+		int type;
+	};
+}
 namespace ButiEngine {
 	class CameraMan :public  GameComponent {
 	public:
@@ -111,7 +203,8 @@ namespace ButiEngine {
 		float speed = 0.002f;;
 		Easing::EasingType easeType = Easing::EasingType::EaseIn;
 		bool isReverse = false;
-	}; class UIAnimation :public TransformAnimation
+	}; 
+	class UIAnimation :public TransformAnimation
 	{
 	public:
 		std::string GetGameComponentName()override {
@@ -514,12 +607,44 @@ namespace ButiEngine {
 		}
 	protected:
 	};
-	
+
+
+
+
+	class ButiScriptBehavior :public GameComponent
+	{
+	public:
+
+		void OnUpdate()override;
+		void OnSet()override;
+		void OnShowUI()override;
+		void Start();
+		void Execute(std::string& arg_function);
+		std::string GetGameComponentName()override {
+			return "ButiScriptBehavior";
+		}
+		std::shared_ptr<GameComponent> Clone()override;
+		void OnRemove()override;
+
+		void GlobalValueSave();
+		template<class Archive>
+		void serialize(Archive& archive)
+		{
+			archive(isActive);
+			archive(scriptTag);
+			archive(updateEntryPoint);
+			GlobalValueSave();
+			archive(vec_saveObject);
+		}
+		void VirtualMachineInitialize();
+	private:
+
+		std::vector<std::shared_ptr<ButiScript::IGlobalValueSaveObject>> vec_saveObject;
+		std::shared_ptr<ButiScript::VirtualCPU> shp_VM;
+		ScriptTag scriptTag;
+		std::string updateEntryPoint="main";
+	};
 }
-
-//static const ButiEngine::GameComponentRegister  compRegister = ButiEngine::GameComponentRegister(ButiEngine::ObjectFactory::Create <ButiEngine::CameraMan>());
-
-
 BUTI_REGIST_GAMECOMPONENT(UIComponent)
 
 BUTI_REGIST_GAMECOMPONENT(MeshDrawComponent)
@@ -527,10 +652,23 @@ BUTI_REGIST_GAMECOMPONENT(MeshDrawComponent_Static)
 
 
 CEREAL_REGISTER_POLYMORPHIC_RELATION(ButiEngine::MeshDrawComponent, ButiEngine::MeshDrawComponent_Static);
+BUTI_REGIST_BUTISCRIPTTYPE(int);
+BUTI_REGIST_BUTISCRIPTTYPE(float);
+BUTI_REGIST_BUTISCRIPTTYPE(std::string);
+BUTI_REGIST_BUTISCRIPTTYPE(ButiEngine::Vector2);
+BUTI_REGIST_BUTISCRIPTTYPE(ButiEngine::Vector3);
+BUTI_REGIST_BUTISCRIPTTYPE(ButiEngine::Vector4);
+BUTI_REGIST_BUTISCRIPTSHAREDTYPE(ButiEngine::GameObject);
+BUTI_REGIST_BUTISCRIPTSHAREDTYPE(ButiEngine::ButiScriptBehavior);
+
+
+CEREAL_REGISTER_TYPE(ButiScript::GlobalScriptTypeValueSaveObject);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ButiScript::IGlobalValueSaveObject, ButiScript::GlobalScriptTypeValueSaveObject);
 
 BUTI_REGIST_GAMECOMPONENT(Collision::ColliderComponent)
 BUTI_REGIST_GAMECOMPONENT(SucideComponent)
 BUTI_REGIST_GAMECOMPONENT(TransformAnimation)
+BUTI_REGIST_GAMECOMPONENT(ButiScriptBehavior)
 
 
 //å„Ç≈å¬ï Ç….hÇçÏÇÈÇ‚Ç¬ÇÁ
@@ -549,3 +687,5 @@ BUTI_REGIST_GAMECOMPONENT(SplineCurveMover)
 BUTI_REGIST_GAMECOMPONENT(UIAnimation)
 BUTI_REGIST_GAMECOMPONENT(ChaseComponent)
 
+
+#endif // !DEFAULTGAMECOMPONENT_H_

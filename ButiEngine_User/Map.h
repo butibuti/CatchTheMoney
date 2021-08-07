@@ -1,5 +1,6 @@
 #pragma once
 #include"Header/GameComponentHeader.h"
+#include"ButiUtil/Util/CSVData.h"
 namespace ButiEngine {
 
 	class PanelManager;

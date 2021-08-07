@@ -35,6 +35,10 @@ namespace ButiEngine {
 
 	};
 
+	struct GUIWindowReaction {
+		bool isHovered = false;
+		bool isClosed = false;
+	};
 	class IObject :public std::enable_shared_from_this<IObject>
 	{
 		friend class ObjectFactory;
@@ -112,7 +116,7 @@ namespace ButiEngine {
 		bool IsCereal() { return isCereal; }
 		virtual void PreInitialize() = 0;
 		virtual void Initialize() = 0;
-		virtual void ShowGUI() {}
+		virtual GUIWindowReaction ShowGUI() { return GUIWindowReaction(); }
 
 	};
 }

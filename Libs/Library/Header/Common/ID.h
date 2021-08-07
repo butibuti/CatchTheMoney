@@ -77,12 +77,7 @@ namespace ButiEngine {
 
 			return map_shp_resource.at(arg_key);
 		}
-		std::string GetIDName(ID<T> arg_id) {
-			if (arg_id.IsEmpty()) {
-				return "none";
-			}
-			return arg_id.GetID();
-		}
+
 		ID<T> AddValue(std::shared_ptr<T> arg_value, const std::string& arg_key) {
 			ID<T> output(std::make_shared<std::string>(arg_key));
 			if (map_shp_resource.count( arg_key)) {
@@ -165,6 +160,16 @@ namespace ButiEngine {
 			auto end = map_shp_resource.end();
 			for (auto itr = map_shp_resource.begin(); itr != end; itr++) {
 				output.push_back(itr->second);
+			}
+
+			return output;
+		}
+		std::vector< std::string> GetResourceNames() {
+			std::vector< std::string> output;
+			output.reserve(map_shp_resource.size());
+			auto end = map_shp_resource.end();
+			for (auto itr = map_shp_resource.begin(); itr != end; itr++) {
+				output.push_back(itr->first);
 			}
 
 			return output;

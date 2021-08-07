@@ -1,11 +1,15 @@
+#ifndef DESCRIPTORHEAPMANAGER_H
+#define DESCRIPTORHEAPMANAGER_H
+
+
 #pragma once
 #include<memory>
 #include <commctrl.h> 
-#include <D3dx12.h>
+#include <d3d12.h>
 namespace ButiEngine {
 	struct HandleInformation {
-		CD3DX12_GPU_DESCRIPTOR_HANDLE GPUHandle;
-		CD3DX12_CPU_DESCRIPTOR_HANDLE CPUHandle;
+		D3D12_GPU_DESCRIPTOR_HANDLE GPUHandle;
+		D3D12_CPU_DESCRIPTOR_HANDLE CPUHandle;
 		UINT index;
 	};
 	struct BackUpConstantBufferData {
@@ -56,3 +60,6 @@ namespace ButiEngine {
 	};
 
 }
+
+
+#endif // !DESCRIPTORHEAPMANAGER_H

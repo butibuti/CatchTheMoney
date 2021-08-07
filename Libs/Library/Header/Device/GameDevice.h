@@ -15,7 +15,9 @@ namespace ButiEngine {
 		static float WorldSpeed;
 		static std::unique_ptr<Input>& GetInput();
 		static void SetIsEnd(const bool arg_isEnd);
-		static bool GetIsEnd() ;
+		static bool GetIsEnd();
+		static void SetReturnCode(const int arg_returnCode);
+		static int GetReturnCode();
 	private:
 		GameDevice();
 		static std::unique_ptr<Input> input;

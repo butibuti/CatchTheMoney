@@ -2,6 +2,18 @@
 
 namespace ButiEngine {
 
+	struct RenderingPathInfo :public IObject {
+		void Initialize() {}
+		void PreInitialize() {}
+		virtual std::shared_ptr<IRenderingPath> CreateRenderingPath(std::shared_ptr<IRenderer> arg_shp_renderer,std::shared_ptr<GraphicDevice> arg_shp_graphicDevice) = 0;
+		int order;
+		template<class Archive>
+		void serialize(Archive& archive)
+		{
+			archive(order);
+		}
+
+	};
 	struct SceneInformation :public IObject
 	{
 	public:
@@ -35,18 +47,16 @@ namespace ButiEngine {
 		template<class Archive>
 		void serialize(Archive& archive)
 		{
-			archive(vec_cameraTransform);
-			archive(vec_cameraProperty);
+			archive(vec_renderingPathInfo);
 			archive(vec_shadowCameraIndex);
-			archive(vec_shadowTexture);
-			archive(vec_staticShadowTexture);
+			archive(vec_shadowTextures);
+			archive(vec_staticShadowTextures);
 			archive(layerCount);
 		}
-		std::vector<std::shared_ptr<Transform>> vec_cameraTransform;
-		std::vector<CameraProjProperty> vec_cameraProperty;
+		std::vector<std::shared_ptr< RenderingPathInfo>> vec_renderingPathInfo;
+		std::vector<std::vector<TextureTag>> vec_shadowTextures;
+		std::vector<std::vector<TextureTag>> vec_staticShadowTextures;
 		std::vector<int> vec_shadowCameraIndex;
-		std::vector<TextureTag> vec_shadowTexture;
-		std::vector<TextureTag> vec_staticShadowTexture;
 		int layerCount = 1;
 	private:
 	};

@@ -9,6 +9,7 @@ namespace ButiEngine {
 
 		static void ReadCompiled(const std::string& fileName, Microsoft::WRL::ComPtr<ID3DBlob>& out);
 		static void ReadCompiledInputLayout( const std::string& fileName, std::vector<D3D12_INPUT_ELEMENT_DESC>& vec_inputElementDesc);
+		static void ReadCompiledPSOutput(const std::string& fileName, std::vector<int>& vec_inputElementDesc);
 	}
 
 	class Resource_PixelShader_Dx12 :public Resource_PixelShader
@@ -18,11 +19,14 @@ namespace ButiEngine {
 		~Resource_PixelShader_Dx12();
 		void Attach()const override;
 		void SetGraphicDevice(std::shared_ptr<GraphicDevice> arg_graphicDevice) override;
-		
+		std::vector<int>& GetFormats()override;
 		Microsoft::WRL::ComPtr<ID3DBlob>& GetPixelShaderBlob();
+		std::string GetName()const override;
 	private:
 		Microsoft::WRL::ComPtr<ID3DBlob> pixelShaderBlob = nullptr;
 		std::weak_ptr<GraphicDevice_Dx12> wkp_graphicDevice;
+		std::vector<int> vec_formats;
+		std::string shaderName;
 	};
 	class Resource_VertexShader_Dx12 :public Resource_VertexShader
 	{
@@ -34,10 +38,12 @@ namespace ButiEngine {
 		
 		Microsoft::WRL::ComPtr<ID3DBlob>& GetVertexShaderBlob();
 		std::vector<D3D12_INPUT_ELEMENT_DESC>& GetInputLayoutVector();
+		std::string GetName()const override;
 	private:
 		Microsoft::WRL::ComPtr<ID3DBlob> vertexShaderBlob = nullptr;
 		std::vector<D3D12_INPUT_ELEMENT_DESC> vec_inputElementDesc;
 		std::weak_ptr<GraphicDevice_Dx12> wkp_graphicDevice;
+		std::string shaderName;
 	};
 	class Resource_GeometryShader_Dx12 :public Resource_GeometryShader {
 	public:
@@ -47,8 +53,10 @@ namespace ButiEngine {
 		void SetGraphicDevice(std::shared_ptr<GraphicDevice> arg_graphicDevice) override;
 
 		Microsoft::WRL::ComPtr<ID3DBlob>& GetGeometryShaderBlob();
+		std::string GetName()const override;
 	private:
 		Microsoft::WRL::ComPtr<ID3DBlob> geometryShaderBlob = nullptr;
 		std::weak_ptr<GraphicDevice_Dx12> wkp_graphicDevice;
+		std::string shaderName;
 	};
 }

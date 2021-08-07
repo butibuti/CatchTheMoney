@@ -13,6 +13,7 @@ namespace ButiEngine {
 		void Initialize(std::weak_ptr<IApplication> arg_wkp_app);
 		bool CheckKey(const UINT index);
 		bool TriggerKey(const UINT index);
+		bool ReleaseKey(const UINT index);
 		bool CheckKey(const Keys index);
 		bool TriggerKey(const Keys index);
 		bool ReleaseKey(const Keys index);

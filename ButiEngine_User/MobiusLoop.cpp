@@ -97,12 +97,11 @@ void ButiEngine::MobiusLoop::OnShowUI()
 		right = wkp_left;
 		left = wkp_right;
 	}
-	GUI::Text("Right:%f", right.lock()->transform->GetWorldPosition().x);
-	GUI::Text("Left:%f", left.lock()->transform->GetWorldPosition().x);
 }
 
 void ButiEngine::MobiusLoop::ShowGUI()
 {
+
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::MobiusLoop::Clone()
@@ -315,6 +314,10 @@ void ButiEngine::MobiusLoop::SetSitaPosition()
 	Vector3 localPosition = Vector3::Zero;
 
 	float scaleX = gameObject.lock()->transform->GetWorldScale().x;
+
+	if (abs(scaleX) < 0.001) {
+		return;
+	}
 
 	localPosition.x = GameSettings::windowWidth / scaleX;
 	wkp_right.lock()->transform->SetLocalPostionX(localPosition.x);

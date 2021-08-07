@@ -23,7 +23,7 @@
 #include "TutorialSelect.h"
 #include"Header/GameObjects/DefaultGameComponent/PositionAnimationComponent.h"
 
-#define OUTPUT_STAGERENDERTARGET
+//#define OUTPUT_STAGERENDERTARGET
 #ifdef DEBUG
 
 static int f = 0;
@@ -93,7 +93,6 @@ void ButiEngine::StageManager::OnUpdate()
 	ModeChange();
 	ChangeUIAlpha();
 
-	GetManager().lock()->GetApplication().lock()->GetGUIController()->SetGUIObject(GetThis<StageManager>());
 
 	if (mode == GameMode::Edit) {
 		auto swing = shp_scrollManager->GetCurrentScrollSwing()*360;
@@ -261,12 +260,12 @@ void ButiEngine::StageManager::Start()
 		}
 	}
 
-	bgm = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/BGM.wav");
-	se_clear = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Clear.wav");
-	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
-	se_select = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Select-Click.wav");
-	se_panelMode = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Panel_Pick.wav");
-	se_charaMode = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Panel_Drop.wav");
+	bgm = SoundTag("Sound/BGM.wav");
+	se_clear = SoundTag("Sound/Clear.wav");
+	se_enter = SoundTag("Sound/Enter.wav");
+	se_select = SoundTag("Sound/Select-Click.wav");
+	se_panelMode = SoundTag("Sound/Panel_Pick.wav");
+	se_charaMode = SoundTag("Sound/Panel_Drop.wav");
 	if (!GameSettings::isTitle)
 	{
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, GameSettings::masterVolume);
@@ -284,6 +283,7 @@ void ButiEngine::StageManager::Start()
 
 void ButiEngine::StageManager::ShowGUI()
 {
+
 }
 
 void ButiEngine::StageManager::OnCollision(std::weak_ptr<GameObject> arg_other)

@@ -8,11 +8,10 @@ void GSMain(
         
         for (int j = 0; j<3; j++) {
             Pixel outlinePixel;
-            float4 viewPosition= mul(input[j].position, viewMatrix);
-            outlinePixel.position = input[j].position + float4(input[j].normal, 0) * lightDir.w*(viewPosition.z/viewPosition.w/5);
 
-            outlinePixel.position = mul(outlinePixel.position, viewMatrix);
-            outlinePixel.position = mul(outlinePixel.position, projectionMatrix);
+            outlinePixel.position = input[j].position + float4(input[j].normal, 0) * ExInfo.w*0.001;
+
+            outlinePixel.position = mul(outlinePixel.position, mvpMatrix);
             stream.Append(outlinePixel);
         }
 }

@@ -70,8 +70,8 @@ void ButiEngine::ScrollManager::OnUpdate()
 	
 	//previousScroll = previousScroll * (1.0f - 0.15f) + currentScroll * 0.15f;
 
-	wkp_screenScroll.lock()->Get().lightDir.x = previousScroll;
-	wkp_sideScroll.lock()->Get().lightDir.x = previousScroll;
+	wkp_screenScroll.lock()->Get().ExInfo.w = previousScroll;
+	wkp_sideScroll.lock()->Get().ExInfo.w = previousScroll;
 }
 
 void ButiEngine::ScrollManager::OnSet()

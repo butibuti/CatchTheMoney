@@ -18,7 +18,10 @@ namespace ButiEngine {
 		AlphaBlend = 0, Addition = 1, Subtruction = 2, Reverse = 3, NoBlend = 4
 	};
 	enum class BillBoardMode {
-		none = 0, full = 1, x = 2, y = 3, z = 4, removeDecimalPart = 5, removeRotation = 6, removeDecimalPartXY = 7, removeDecimalPartYZ = 8, removeDecimalPartXZ = 9
+		none = 0, full = 1, x = 2, y = 3, z = 4,  
+	};
+	enum class DrawFixParam {
+		none,removeRotation , removeDecimalPart, removeDecimalPartXY , removeDecimalPartYZ , removeDecimalPartXZ 
 	};
 	enum class TopologyType {
 		triangleList = 4, point = 1,  line = 2, triangle = 3, pointList = 1,
@@ -51,7 +54,9 @@ namespace ButiEngine {
 		CullMode cullMode = CullMode::back;
 		FillMode isFill = FillMode::solid;
 		BlendMode blendMode = BlendMode::AlphaBlend;
-		int billboardMode =(int) BillBoardMode::none;
+		BillBoardMode billboardMode =BillBoardMode::none;
+		DrawFixParam drawFixParam = DrawFixParam::none;
+		std::vector<SamplerState >vec_samplerMode = { SamplerState::LinearClamp };
 		TopologyType topologyType = TopologyType::triangleList;
 		bool isShadowMap = false;
 
@@ -62,6 +67,8 @@ namespace ButiEngine {
 			archive(isFill);
 			archive(blendMode);
 			archive(billboardMode);
+			archive(drawFixParam);
+			archive(vec_samplerMode);
 			archive(topologyType);
 			archive(isShadowMap);
 		}
@@ -103,15 +110,15 @@ namespace ButiEngine {
 
 		IWICImagingFactory& GetImageFactory();
 
-		virtual void Update() = 0;
+		virtual void Present() = 0;
 
 
 		virtual void Release() = 0;
 
 		virtual void ResourceUpload() = 0;
 
-		virtual void ResourceUploadRelease() = 0;
-		virtual void ResourceBufferMerge() = 0;
+		virtual void UploadResourceRelease() = 0;
+		virtual void UploadResourceBufferMerge() = 0;
 
 		virtual void DrawStart(){}
 		virtual void SetDefaultRenderTarget() = 0;
@@ -131,6 +138,7 @@ namespace ButiEngine {
 		void SetViewMatrix_billBoardY(const Matrix4x4& arg_viewMatrix);
 		void SetViewMatrix_billBoardZ(const Matrix4x4& arg_viewMatrix);
 		virtual void ResetPipeLine()=0;
+		virtual void PipelineClear() = 0;
 
 		const Matrix4x4& GetViewMatrixBillBoard() {
 			return viewMatrix_billBoard;
@@ -149,8 +157,7 @@ namespace ButiEngine {
 		Vector4 GetClearColor();
 		TextureTag GetDefaultRenderTarget() { return defaultRenderTarget; }
 		void SetDefaultRenderTarget(TextureTag arg_renderTargetTexture) {
-			defaultRenderTarget = arg_renderTargetTexture
-				;
+			defaultRenderTarget = arg_renderTargetTexture;
 		}
 	protected:
 		TextureTag defaultRenderTarget;

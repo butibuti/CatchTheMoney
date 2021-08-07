@@ -9,6 +9,7 @@ namespace ButiEngine {
 		void PreInitialize()override {}
 		virtual void Attach()const = 0;
 		virtual void SetGraphicDevice(std::shared_ptr<GraphicDevice> arg_graphicDevice) = 0;
+		virtual std::vector<int>& GetFormats() = 0;
 	};
 	class Resource_VertexShader :public IResource_VertexShader
 	{
@@ -36,7 +37,7 @@ namespace ButiEngine {
 		virtual void Attach()const;
 
 		bool GetIsContainGeometryShader()const;
-
+		void ShowGUI()override;
 		std::string GetShaderName()const;
 
 		std::weak_ptr<IResource_VertexShader> GetVertexShader();

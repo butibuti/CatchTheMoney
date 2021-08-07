@@ -44,7 +44,7 @@ void ButiEngine::ThanksPlayer::Start()
 	gameObject.lock()->transform->SetLocalRotation(Vector3(0, 0, 0));
 	shp_spriteAnimation = gameObject.lock()->GetGameComponent<SpliteAnimationComponent>();
 	shp_spriteAnimation->SetHorizontalAnim(0);
-	se_dash = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Rat_Dash.wav");
+	se_dash = SoundTag("Sound/Rat_Dash.wav");
 }
 
 void ButiEngine::ThanksPlayer::Decision()

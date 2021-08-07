@@ -24,21 +24,19 @@ namespace ButiEngine {
 		void ReloadScene()override;
 		void ReloadScene(const std::string& arg_sceneName)override;
 		void RenewalScene()override;
-		std::weak_ptr<IApplication> GetApplication()override;
+		std::shared_ptr<IApplication> GetApplication()override;
 		inline std::shared_ptr<IScene> GetCurrentScene()override {
 			return currentScene;
 		}
 		void Release()override;
 		~SceneManager();
 	protected:
-		void CreateCamera();
 		std::shared_ptr<IScene> currentScene;
 		std::shared_ptr<IScene> newScene;
 		std::map<std::string, std::shared_ptr<IScene>> map_iscene;
 		std::shared_ptr<AbsoluteTimer> sceneChangeTimer;
 		std::weak_ptr<IApplication> wkp_app;
-		std::shared_ptr<ICamera> shp_camera;
-		bool isReload;
+		bool isReload = false,isSuperReload=false;
 	};
 }
 #endif // !_SceneManager_H_

@@ -50,5 +50,6 @@ ButiEngine_User/Resources/Shader/Compiled/
 
 Libs/Library/cereal/
 Libs/Library/imGUI/
+Libs/Library/ButiScript/
 Libs/Library/lib/
 Libs/Library/Source/

@@ -38,10 +38,10 @@ void ButiEngine::PanelManager::Start()
 	soundNum = 0;
 	reverse = false;
 
-	se_panelLimit = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/PanelLimit.wav");
-	se_slide0 = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/PanelSlide_0.wav");
-	se_slide1 = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/PanelSlide_1.wav");
-	se_slide2 = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/PanelSlide_2.wav");
+	se_panelLimit = SoundTag("Sound/PanelLimit.wav");
+	se_slide0 = SoundTag("Sound/PanelSlide_0.wav");
+	se_slide1 = SoundTag("Sound/PanelSlide_1.wav");
+	se_slide2 = SoundTag("Sound/PanelSlide_2.wav");
 }
 
 void ButiEngine::PanelManager::OnShowUI()

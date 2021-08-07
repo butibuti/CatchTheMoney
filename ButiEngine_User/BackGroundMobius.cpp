@@ -43,7 +43,7 @@ void ButiEngine::BackGroundMobius::OnShowUI()
 
     if (GUI::TreeNode("EaseType1"))
     {
-        GUI::Text(Easing::EasingTypeNames[(int)rotateEaseType].c_str());
+        GUI::Text(Easing::EasingTypeNames[(int)rotateEaseType]);
 
         if (GUI::ArrowButton("##EaseType_UP", GUI::GuiDir_Up)) {
             rotateEaseType = ((Easing::EasingType)(((int)rotateEaseType) + 1));

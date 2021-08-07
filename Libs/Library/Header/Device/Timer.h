@@ -70,14 +70,7 @@ namespace ButiEngine {
 			return cloned;
 		}
 
-		void ShowGUI() {
-			GUI::Checkbox("On/Off", &isOn);
-
-			GUI::DragFloat("Time", &nowCountFrame, 0.1f, 0, maxCountFrame);
-			GUI::DragFloat("MaxTime", &maxCountFrame, 0.1f, 0, 1000);
-
-
-		}
+		void ShowGUI();
 		template<class Archive>
 		void serialize(Archive& archive)
 		{

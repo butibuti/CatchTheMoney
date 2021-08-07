@@ -113,15 +113,15 @@ void ButiEngine::Player::Start()
 
 	gameObject.lock()->RegistReactionComponent(GetThis<GameComponent>());
 
-	se_not = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/PanelLimit.wav");
-	se_dash = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Dash.wav");
-	se_grab = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Grab.wav");
-	se_jump = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Jump.wav");
-	se_put = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Put.wav");
-	se_land = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Land.wav");
-	se_reverse = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/GravityReverse.wav");
-	se_powerUp = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/GravityPowerUp.wav");
-	se_frogIn = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/sita_Shrink.wav");
+	se_not = SoundTag("Sound/PanelLimit.wav");
+	se_dash = SoundTag("Sound/Dash.wav");
+	se_grab = SoundTag("Sound/Grab.wav");
+	se_jump = SoundTag("Sound/Jump.wav");
+	se_put = SoundTag("Sound/Put.wav");
+	se_land = SoundTag("Sound/Land.wav");
+	se_reverse = SoundTag("Sound/GravityReverse.wav");
+	se_powerUp = SoundTag("Sound/GravityPowerUp.wav");
+	se_frogIn = SoundTag("Sound/sita_Shrink.wav");
 	}
 
 void ButiEngine::Player::OnCollisionEnter(std::weak_ptr<GameObject> arg_other)
@@ -138,6 +138,7 @@ void ButiEngine::Player::OnCollisionEnd(std::weak_ptr<GameObject> arg_other)
 
 void ButiEngine::Player::ShowGUI()
 {
+
 }
 
 void ButiEngine::Player::OnShowUI()

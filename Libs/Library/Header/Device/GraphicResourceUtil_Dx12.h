@@ -114,8 +114,13 @@ namespace ButiEngine {
 
 			RetDesc.SampleMask = UINT_MAX;
 			RetDesc.PrimitiveTopologyType = (D3D12_PRIMITIVE_TOPOLOGY_TYPE)arg_topologyType;
-			RetDesc.NumRenderTargets = 1;
-			RetDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+			std::vector<int> & formats= arg_shader->GetPixelShader().lock()->GetThis<Resource_PixelShader_Dx12>()->GetFormats();
+			auto size =formats .size();
+			RetDesc.NumRenderTargets = size;
+			for (int i = 0; i < size; i++) {
+				RetDesc.RTVFormats[i] =(DXGI_FORMAT)formats[i];
+			}
+
 			RetDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 			RetDesc.SampleDesc.Count = 1;
 
@@ -326,8 +331,8 @@ namespace ButiEngine {
 			return Ret;
 		}
 		
-		static inline Microsoft::WRL::ComPtr<ID3D12RootSignature> CreateSrvSmpCbvMat(UINT materialCount, UINT srvCount, D3D12_ROOT_SIGNATURE_DESC& arg_rootSignatureDesc, std::shared_ptr<GraphicDevice_Dx12> arg_wkp_graphicDevice) {
-			auto Ret = arg_wkp_graphicDevice->GetRootSignature(L"SrvSmpCbvMat" + std::to_wstring(materialCount)+L"srv:" + std::to_wstring(srvCount));
+		static inline Microsoft::WRL::ComPtr<ID3D12RootSignature> CreateSrvSmpCbvMat(const UINT materialCount, const UINT srvCount, const UINT samplerCount, D3D12_ROOT_SIGNATURE_DESC& arg_rootSignatureDesc, std::shared_ptr<GraphicDevice_Dx12> arg_wkp_graphicDevice) {
+			auto Ret = arg_wkp_graphicDevice->GetRootSignature(L"SrvSmpCbvMat:" + std::to_wstring(materialCount)+L"srv:" + std::to_wstring(srvCount)+L"sampler:"+std::to_wstring(samplerCount));
 			if (Ret.first != nullptr) {
 				arg_rootSignatureDesc = Ret.second;
 				return Ret.first;
@@ -340,9 +345,12 @@ namespace ButiEngine {
 				ranges.push_back(in);
 				ranges[i].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, i);
 			}
-			CD3DX12_DESCRIPTOR_RANGE sampler;
-			sampler.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER, 1, 0);
-			ranges.push_back(sampler);
+			for (UINT i = 0; i < samplerCount; i++) {
+
+				CD3DX12_DESCRIPTOR_RANGE sampler;
+				sampler.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER, 1, i);
+				ranges.push_back(sampler);
+			}
 			CD3DX12_DESCRIPTOR_RANGE cbv;
 			cbv.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);
 			ranges.push_back(cbv);
@@ -361,17 +369,19 @@ namespace ButiEngine {
 				rootParameters.push_back(in);
 			}
 
-			CD3DX12_ROOT_PARAMETER samplerParam;
-			samplerParam.InitAsDescriptorTable(1, &ranges[srvCount], D3D12_SHADER_VISIBILITY_PIXEL);
-			rootParameters.push_back(samplerParam);
+			for (UINT i = 0; i < samplerCount; i++) {
+				CD3DX12_ROOT_PARAMETER samplerParam;
+				samplerParam.InitAsDescriptorTable(1, &ranges[srvCount+i], D3D12_SHADER_VISIBILITY_PIXEL);
+				rootParameters.push_back(samplerParam);
+			}
 
 			CD3DX12_ROOT_PARAMETER cbvParam;
-			cbvParam.InitAsDescriptorTable(1, &ranges[srvCount+1], D3D12_SHADER_VISIBILITY_ALL);
+			cbvParam.InitAsDescriptorTable(1, &ranges[srvCount+samplerCount], D3D12_SHADER_VISIBILITY_ALL);
 			rootParameters.push_back(cbvParam);
 
 			for (UINT i = 0; i < materialCount; i++) {
 				CD3DX12_ROOT_PARAMETER in;
-				in.InitAsDescriptorTable(1, &ranges[srvCount+2 + i], D3D12_SHADER_VISIBILITY_ALL);
+				in.InitAsDescriptorTable(1, &ranges[srvCount + samplerCount +1 + i], D3D12_SHADER_VISIBILITY_ALL);
 				rootParameters.push_back(in);
 			}
 
@@ -381,7 +391,7 @@ namespace ButiEngine {
 			arg_rootSignatureDesc = rootSignatureDesc;
 
 			auto out = CreateDirect(arg_rootSignatureDesc, arg_wkp_graphicDevice);
-			arg_wkp_graphicDevice->SetRootSignature(L"SrvSmpCbvMat" + std::to_wstring(materialCount) + L"srv:" + std::to_wstring(srvCount), out, arg_rootSignatureDesc);
+			arg_wkp_graphicDevice->SetRootSignature(L"SrvSmpCbvMat:" + std::to_wstring(materialCount) + L"srv:" + std::to_wstring(srvCount) + L"sampler:" + std::to_wstring(samplerCount), out, arg_rootSignatureDesc);
 			return out;
 		}
 	}

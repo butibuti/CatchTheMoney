@@ -1,5 +1,5 @@
 #pragma once
-#include"../Device/ObjectFactory.h"
+#include"../Library/ButiUtil/Util/ObjectFactory.h"
 #include"Geometry.h"
 namespace ButiEngine {
 
@@ -10,15 +10,17 @@ namespace ButiEngine {
 	class  Camera:public ICamera
 	{
 	public:
-		std::string GetName() const override;
+		const std::string& GetName() const override;
 		void SetName(const std::string& arg_name) override;
-		void Switch()override;
 		void SetActive(const bool arg_active) override;
 		bool GetActive()const override;
 		void Draw()override;
 		void BefDraw()override;
 		CameraProjProperty& GetCameraProperty()override;
 		Matrix4x4 GetViewProjectionMatrix()override;
+		Matrix4x4 GetProjectionMatrix()override;
+		Matrix4x4 GetViewMatrix()override;
+		Vector3 GetPosition()override;
 		int IsContaineVisibility(std::shared_ptr<Geometry::Box_AABB>arg_AABB)override;
 	protected:
 		Matrix4x4 projectionMatrix;

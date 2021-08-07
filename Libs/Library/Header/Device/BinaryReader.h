@@ -42,6 +42,8 @@ namespace ButiEngine {
 	public:
 		bool ReadStart(const std::string& filePath);
 		void ReadEnd();
+		std::string ReadString();
+		std::string ReadString_All();
 		std::string ReadCharactor(const UINT count);
 		char* ReadCharactor();
 		void* ReadData(const UINT size);
@@ -170,6 +172,7 @@ namespace ButiEngine {
 	public:
 		bool WriteStart(const std::string& filePath);
 		void WriteEnd();
+		void WriteString(const std::string& write);
 		void WriteCharactor(const std::string& write);
 		void WriteCharactor(const char* write,const UINT size);
 		void WriteWCharactor(const  std::wstring & write);

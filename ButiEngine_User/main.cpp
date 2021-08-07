@@ -17,26 +17,34 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 #endif
 
-	//auto app = CreateDefaultApplicationInstance("Choose", WindowPopType::max, 1920, 1080, true);
-	auto app = CreateEditorApplicationInstance("Editor", WindowPopType::max, 1080, 700, false);
-	GameDevice::Initialize();
-	GameDevice::GetInput()->Initialize(app);
 
-	app->PreLoadResources();
+	int returnCode = -1;
+
+	while (returnCode == -1)
+	{
+		ApplicationInitData init = InputApplicationInitData();
+		//auto app = CreateEditorApplicationInstance(init);
+		auto app = CreateDefaultApplicationInstance(init);
+
+		GameDevice::Initialize();
+		//GameDevice::GetInput()->SetCursorHide(true);
+		GameDevice::GetInput()->Initialize(app);
+		app->PreLoadResources();
 #ifdef DEBUG
 
-	app->InitLoadResources();
-	app->GetSceneManager()->LoadScene_Init("");
-	app->GetGraphicDevice()->SetClearColor(Vector4((255.0f / 255.0f), (254.0f / 255.0f), (250.0f / 255.0f), 1.0f));
+		app->InitLoadResources();
+		app->GetSceneManager()->LoadScene_Init(init.initSceneName);
+		app->GetGraphicDevice()->SetClearColor(Vector4((255.0f / 255.0f), (254.0f / 255.0f), (250.0f / 255.0f), 1.0f));
 #else
-	GameDevice::GetInput()->SetCursorHide(true);
-	app->GetSceneManager()->LoadScene_Init("Logo");
-	app->GetGraphicDevice()->SetClearColor(Vector4(0, 0, 0, 1.0f));
+		GameDevice::GetInput()->SetCursorHide(true);
+		app->GetSceneManager()->LoadScene_Init("Logo");
+		app->GetGraphicDevice()->SetClearColor(Vector4(0, 0, 0, 1.0f));
 #endif
+		returnCode = app->Run();
+		app->Exit();
+	}
 
-	int returnCode = app->Run();
 
-	app->Exit();
 
 	return returnCode;
 }

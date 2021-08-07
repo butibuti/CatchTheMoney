@@ -1,19 +1,16 @@
 #pragma once
 #ifndef Common_H
 #define Common_H
-
-
 //
 #include"Common/ButiMath.h"
 #include"Device/GUI.h"
-#include "Device/Easing.h"
-#include"Device/Helper/StringHelper.h"
-#include"Device/BinaryReader.h"
-#include"Device/CSV/CSVData.h"
+#include "../Library/ButiUtil/Util/Easing.h"
+#include"../Library/ButiUtil/Util/Helper/StringHelper.h"
+#include"../Library/ButiUtil/Util/BinaryReader.h"
 
-#include"Common/Util.h"
-#include"Common/ID.h"
-#include"Device/ObjectFactory.h"
+#include"../Library/ButiUtil/Util/Util.h"
+#include"../Library/ButiUtil/Util/ID.h"
+#include"../Library/ButiUtil/Util/ObjectFactory.h"
 #include"Common/Transform.h"
 
 #include"Device/GameDevice.h"
@@ -30,10 +27,8 @@
 #include"Common/CBuffer.h"
 
 #include"Common/Camera.h"
-#include "GameParts/imguiComtroller.h"
 
 #include"GameObjects/GameObject.h"
-
 
 #include"GameObjects/GameComponent.h"
 #include"GameParts/GameObjectManager.h"

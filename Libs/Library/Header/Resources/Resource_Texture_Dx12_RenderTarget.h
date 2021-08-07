@@ -8,9 +8,8 @@ namespace ButiEngine {
 	class Resource_Texture_Dx12_RenderTarget :public Resource_Texture_Dx12,public IRenderTarget
 	{
 	public:
-		Resource_Texture_Dx12_RenderTarget(int width, int height, std::shared_ptr<GraphicDevice> arg_wkp_graphicDevice);
+		Resource_Texture_Dx12_RenderTarget(const int width,const int height,const int format, std::shared_ptr<GraphicDevice> arg_wkp_graphicDevice);
 		void SetRenderTarget(Vector4& arg_clearColor)override;
-		void SetRenderTargetWithoutDepth(Vector4& arg_clearColor)override;
 		void CreateTextureUploadHeap()override;
 		void Initialize()override;
 		void DisSetRenderTarget()override;
@@ -19,6 +18,8 @@ namespace ButiEngine {
 		void ResourceUpdate() override;
 		void Attach(int slot)override; 
 		void ToPNG(const std::string& arg_textureFilePath);
+		GUIWindowReaction ShowTextureWindow(const std::string& arg_windowName ,const int winFrag);
+		void* GetResourcePtr()override;
 		void SetIsCleared(bool arg_isClear)override;
 		Vector2 GetSize()override;
 		void OutputToFile()override;

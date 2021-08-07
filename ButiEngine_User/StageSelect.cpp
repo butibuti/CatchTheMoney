@@ -31,7 +31,7 @@ void ButiEngine::StageSelect::OnUpdate()
 			parentSelectPanel->ChildRotation(-childAngle,stageNum);
 			auto screen = GetManager().lock()->GetGameObject("SelectScreen").lock();
 			screen->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f);
-			std::string materialSource = "StageSelect_";
+			std::string materialSource = "stage_";
 			if (stageNum<10)
 			{
 				materialSource += "0";
@@ -46,7 +46,7 @@ void ButiEngine::StageSelect::OnUpdate()
 			OnPushLeft();
 			parentSelectPanel->ChildRotation(childAngle,stageNum);
 			auto screen = GetManager().lock()->GetGameObject("SelectScreen").lock();
-			screen->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f); std::string materialSource = "StageSelect_";
+			screen->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f); std::string materialSource = "stage_";
 			if (stageNum < 10)
 			{
 				materialSource += "0";
@@ -63,7 +63,7 @@ void ButiEngine::StageSelect::OnUpdate()
 
 
 			auto screen = GetManager().lock()->GetGameObject("SelectScreen").lock();
-			screen->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f); std::string materialSource = "StageSelect_";
+			screen->GetGameComponent<ShakeComponent>()->ShakeStart(20.0f); std::string materialSource = "stage_";
 			if (stageNum < 10)
 			{
 				materialSource += "0";
@@ -118,16 +118,16 @@ void ButiEngine::StageSelect::Start()
 		sceneManager->RemoveScene(sceneName);
 	}
 
-	se_enter = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Enter.wav");
-	se_select = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Select-Click.wav");
-	se_dash = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Rat_Dash.wav");
-	se_hit = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Rat_Hit.wav");
-	se_start = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/Rat_Start.wav");
-	bgm = gameObject.lock()->GetResourceContainer()->GetSoundTag("Sound/BGM2.wav");
+	se_enter = SoundTag("Sound/Enter.wav");
+	se_select = SoundTag("Sound/Select-Click.wav");
+	se_dash = SoundTag("Sound/Rat_Dash.wav");
+	se_hit = SoundTag("Sound/Rat_Hit.wav");
+	se_start = SoundTag("Sound/Rat_Start.wav");
+	bgm = SoundTag("Sound/BGM2.wav");
 	GetManager().lock()->GetApplication().lock()->GetSoundManager()->StopBGM();
 	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlayBGM(bgm, GameSettings::masterVolume + 0.5f);
 	auto screen = GetManager().lock()->GetGameObject("SelectScreen").lock();
-	std::string materialSource = "StageSelect_";
+	std::string materialSource = "stage_";
 	if (stageNum < 10)
 	{
 		materialSource += "0";
@@ -154,6 +154,7 @@ void ButiEngine::StageSelect::ShowGUI()
 	GUI::BulletText("Count");
 	GUI::Text(count);
 	GUI::End();
+
 }
 
 void ButiEngine::StageSelect::OnCollision(std::weak_ptr<GameObject> arg_other)

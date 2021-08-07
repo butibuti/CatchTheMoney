@@ -3,6 +3,9 @@
 #include"IDrawData.h"
 #include"../../Common/CBuffer_Dx12.h"
 namespace ButiEngine {
+	struct DrawData_Dx12;
+
+	using MatrixUpdateFunc = void (DrawData_Dx12::*)();
 
 	struct DrawData_Dx12 :public MeshDrawData {
 		void Initialize(const UINT srvCount);
@@ -15,10 +18,11 @@ namespace ButiEngine {
 		void CommandSet();
 		std::shared_ptr<ICBuffer> AddICBuffer(std::shared_ptr<ICBuffer> arg_cbuffer)override;
 
+		bool IsCreated()override;
 		Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
 		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList;
 
-		D3D12_GPU_DESCRIPTOR_HANDLE samplerBufferDescriptorHandle;
+		std::vector< D3D12_GPU_DESCRIPTOR_HANDLE >vec_samplerBufferDescriptorHandle;
 
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC pipeLineDesc;
 		//パイプラインステート
@@ -26,9 +30,23 @@ namespace ButiEngine {
 
 		D3D12_RASTERIZER_DESC rasterizerStateDesc;
 		D3D12_ROOT_SIGNATURE_DESC rootdesc;
-		int samplerState=(int)SamplerState::LinearClamp;
 		std::weak_ptr<GraphicDevice_Dx12> wkp_graphicDevice;
 		int textureRegion;
+
+		MatrixUpdateFunc p_matrixUpdateFunc;
+
+	private:
+		void MatrixUpdater_NoRotation();
+		void MatrixUpdater_RemoveDecimalPart();
+		void MatrixUpdater_RemoveDecimalPartXY();
+		void MatrixUpdater_RemoveDecimalPartYZ();
+		void MatrixUpdater_RemoveDecimalPartXZ();
+		void MatrixUpdater_default();
+		void MatrixUpdater_billBoard();
+		void MatrixUpdater_billBoardX();
+		void MatrixUpdater_billBoardY();
+		void MatrixUpdater_billBoardZ();
+
 	};
 
 	struct MeshDrawData_Dx12 :public DrawData_Dx12 {
@@ -48,8 +66,11 @@ namespace ButiEngine {
 			transform = arg_transform->GetMatrix();
 		}
 
-		inline float GetZ()override {
-			return  GetMaxZ(wkp_graphicDevice.lock()->GetRawViewMatrix());
+		inline float GetZ(const Matrix4x4& arg_vpMatrix)override {
+			return  GetMaxZ( arg_vpMatrix);
+		}
+		void ShowZ() override{
+
 		}
 
 		void Initialize()override;

@@ -82,17 +82,21 @@ namespace ButiEngine {
 		void Attach(int slot)override;
 		void CreateTexture(Image* srcImages, size_t nimages, const TexMetadata& metadata);
 		void ToPNG(const std::string& arg_textureFilePath);
+		GUIWindowReaction ShowTextureWindow(const std::string& arg_windowName, const int winFrag)override;
+		void ShowGUI()override;
+		void* GetResourcePtr()override;
 		virtual void CreateTextureUploadHeap();
 		void Initialize()override;
 		Microsoft::WRL::ComPtr<ID3D12Resource> GetTexture();
 		Microsoft::WRL::ComPtr<ID3D12Resource> GetTextureUploadHeap();
 		D3D12_RESOURCE_DESC GetTextureDesc();
+		std::vector<BYTE>& GetRawData()override;
 	 protected:
 		 Resource_Texture_Dx12() {
 		 }
 		void UpdateResourceRelease()override;
 		void ResourceUpdate() override;
-		CD3DX12_GPU_DESCRIPTOR_HANDLE handle;
+		D3D12_GPU_DESCRIPTOR_HANDLE handle;
 		Image image;
 		//テクスチャ用のデスクプリタ
 		D3D12_RESOURCE_DESC textureResDesc;
@@ -100,7 +104,7 @@ namespace ButiEngine {
 		//リソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> texture;
 		//GPUアップロードのためのリソース
-		Microsoft::WRL::ComPtr<ID3D12Resource> textureUploadHeap;
+		Microsoft::WRL::ComPtr<ID3D12Resource> resourceUploadHeap;
 		//テクスチャファイルへのパス
 		std::wstring fileName{ L"" };
 		bool dataRefresh = true;

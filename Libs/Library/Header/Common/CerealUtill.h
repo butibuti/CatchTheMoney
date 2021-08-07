@@ -27,3 +27,12 @@ CEREAL_REGISTER_POLYMORPHIC_RELATION(ButiEngine::ICBuffer, ButiEngine::CBuffer_D
 namespace T{\
 	static const ButiEngine::GameComponentRegister  componentregister = ButiEngine::GameComponentRegister(ButiEngine::ObjectFactory::Create <ButiEngine:: T>());\
 }
+
+#define BUTI_REGIST_BUTISCRIPTTYPE(T)\
+	CEREAL_REGISTER_TYPE(ButiScript::GlobalValueSaveObject< T >);\
+	CEREAL_REGISTER_POLYMORPHIC_RELATION(ButiScript::IGlobalValueSaveObject, ButiScript::GlobalValueSaveObject< T >);\
+
+#define BUTI_REGIST_BUTISCRIPTSHAREDTYPE(T)\
+	CEREAL_REGISTER_TYPE(ButiScript::GlobalSharedPtrValueSaveObject< T >);\
+	CEREAL_REGISTER_POLYMORPHIC_RELATION(ButiScript::IGlobalValueSaveObject, ButiScript::GlobalSharedPtrValueSaveObject< T >);\
+
