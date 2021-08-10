@@ -35,8 +35,8 @@ namespace ButiEngine {
 		Vector3 preRotation;
 		Vector2 preMousePos;
 		Vector2 currMousePos;
-		const float deadZone = 0.3f;
-		float rotationLimit;
+		const float DEAD_ZONE = 0.3f;
+		const float ROTATION_LIMIT = 60.0f;
 		float rotationSpeed;
 		float returnSpeed;
 		int cameraResetFrame;

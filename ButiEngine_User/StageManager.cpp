@@ -37,60 +37,26 @@ void ButiEngine::StageManager::OnUpdate()
 	StorePlayer();
 	StoreFrog();
 
-	const int GOAL_LATE_FRAME = 20;
-	auto player = wkp_player.lock()->GetGameComponent<Player>();
-	if (player->IsTutorial() && !isAddTutorial)
-	{
-		isAddTutorial = true;
-		wkp_tutorialNo = GetManager().lock()->AddObjectFromCereal("Tutorial_No", ObjectFactory::Create<Transform>(Vector3(650, 40, 0), Vector3::Zero, Vector3(200, 76, 1)));
-		wkp_tutorialYes = GetManager().lock()->AddObjectFromCereal("Tutorial_Yes", ObjectFactory::Create<Transform>(Vector3(650, -84, 0), Vector3::Zero, Vector3(200, 76, 1)));
-		wkp_tutorialTextWindow = GetManager().lock()->AddObjectFromCereal("TutorialTextWindow", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.12f), Vector3::Zero, Vector3(1920, 640, 1)));
-		wkp_reverseCheckText = GetManager().lock()->AddObjectFromCereal("ReverseCheckTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
-	
-	}
+	//チュートリアル用のUI追加
+	AddTutorialUI();
 
-	if (player->IsClear() && !player->IsTutorial())
-	{
-		if (clearAnimationFrame == CLEAR_FRAME - GOAL_LATE_FRAME)
-		{
-			Vector3 zoomInPosition;
+	//クリア時の演出用オブジェクト追加
+	AddClearAnimation();
 
-			zoomInPosition = wkp_player.lock()->transform->GetWorldPosition();
-			auto frog = wkp_player.lock()->GetGameComponent<Player>()->GetHoldSita().lock();
-			if (!frog)
-			{
+	//ステージ４のチュートリアル
+	TutorialMode();
 
-
-				GetManager().lock()->AddObjectFromCereal("ClearFlash", ObjectFactory::Create<Transform>(Vector3(0.0f, 0.0f, 1000.0f)));
-				GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_clear, GameSettings::masterVolume);
-			}
-			else {
-
-
-			}
-			auto cameraController = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraController>();
-			cameraController->MobiusZoomIn(zoomInPosition, 30);
-		}
-		else if (clearAnimationFrame == CLEAR_FRAME - 10 - GOAL_LATE_FRAME)
-		{
-			GetManager().lock()->AddObjectFromCereal("ClearBand");
-		}
-		else if (clearAnimationFrame == CLEAR_FRAME - 30 - GOAL_LATE_FRAME)
-		{
-			GetManager().lock()->AddObjectFromCereal("ClearText");
-		}
-		clearAnimationFrame--;
-	}
-
-	if (player->IsTutorial())
-	{
-		TutorialMode();
-	}
-
-
+	//カエル初回出現時のアニメーション
 	FrogEatAnimation();
+
 	OnGoal();
-	ModeChange();
+
+	//Editモード・Charaモードの切り替え
+	if (InputManager::OnTriggerModeChangeKey())
+	{
+		ModeChange();
+	}
+
 	ChangeUIAlpha();
 
 
@@ -99,9 +65,6 @@ void ButiEngine::StageManager::OnUpdate()
 
 		shp_particleEmitter->SetRotation(particleScrollOffset+swing);
 	}
-
-
-
 
 #ifdef OUTPUT_STAGERENDERTARGET 
 #ifdef DEBUG
@@ -149,7 +112,9 @@ void ButiEngine::StageManager::Start()
 	shp_scrollManager = GetManager().lock()->GetGameObject("Screen").lock()->GetGameComponent<ScrollManager>();
 	shp_cameraController = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraController>();
 
+	//UI生成
 	CreateUI();
+
 	if (!GameSettings::isTitle)
 	{
 		wkp_daikokutenHead = GetManager().lock()->GetGameObject("Daikokuten");
@@ -178,65 +143,10 @@ void ButiEngine::StageManager::Start()
 		numComponent->SetNumber(StageSelect::GetStageNum() + 1);
 	}
 
-	{
-		auto stageNum = StageSelect::GetStageNum();
-		if (stageNum == TalkStageNum::FIRST_TALK && !GameSettings::isTitle)
-		{
-			//最初の会話用テキスト追加
-			wkp_talkText = GetManager().lock()->AddObjectFromCereal("FirstTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
-			CommonTextObject();
-		}
-		else if(stageNum == TalkStageNum::PANEL_TALK && !GameSettings::isTitle)
-		{
-			//パネル移動説明用テキスト追加
-			wkp_talkText = GetManager().lock()->AddObjectFromCereal("PanelTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
-			CommonTextObject();
-		}
-		else if (stageNum == TalkStageNum::REVERSE_TALK && !GameSettings::isTitle)
-		{
-			//反転説明用テキスト追加
-			if (GameSettings::isTutorialInit)
-			{
-				wkp_talkText = GetManager().lock()->AddObjectFromCereal("ReverseSecondTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
-			}
-			else
-			{
-				wkp_talkText = GetManager().lock()->AddObjectFromCereal("ReverseTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
-			}
-            CommonTextObject();
-		}
-		else if (stageNum == TalkStageNum::REVERSE_RE_TALK && !GameSettings::isTitle)
-		{
-			//反転再警告用テキスト追加
-			wkp_talkText = GetManager().lock()->AddObjectFromCereal("ReverseRemindTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
-			CommonTextObject();
-		}
-		else if (stageNum == TalkStageNum::GRAVITY_TALK && !GameSettings::isTitle)
-		{
-			//重力コア説明用テキスト追加
-			wkp_talkText = GetManager().lock()->AddObjectFromCereal("GravityTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
-			CommonTextObject();
-		}
-		else if (stageNum == TalkStageNum::FROG_TALK && !GameSettings::isTitle)
-		{
-			//カエル説明時のみイレギュラー処理
-			frogEatAnimationCount = 240;
-			TalkText::Revive();
-		}
-		else if (stageNum == TalkStageNum::LAST_TALK && !GameSettings::isTitle)
-		{
-			//最後の会話用テキスト追加
-			wkp_talkText = GetManager().lock()->AddObjectFromCereal("LastTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
-			CommonTextObject();
-		}
-		else
-		{
-			//テキスト出さないステージはDelete
-			TalkText::Delete();
-		}
-	}
+	//会話テキスト追加
+	AddTalkText();
 
-	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 0, -0.7f), Vector3::Zero, Vector3(2112, 1188, 1)));
+	GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 0, -0.7f), Vector3::Zero, Vector3(2112, 1188, 1)));
 
 	shp_map->PutTile();
 
@@ -245,7 +155,7 @@ void ButiEngine::StageManager::Start()
 	mode = GameMode::Chara;
 	shp_particleEmitter= GetManager().lock()->GetGameObject("SquareParticleEmitter").lock()->GetGameComponent<SquareParticleEmitter>();
 
-	modeUIPosition = Vector3(710.0f, -410.0f, -0.1f);
+	defaultModeUIScale = Vector3(180.0f);
 
 	clearButtonAnimation = false;
 	selectedNext = true;
@@ -297,8 +207,10 @@ std::shared_ptr<ButiEngine::GameComponent> ButiEngine::StageManager::Clone()
 
 void ButiEngine::StageManager::OnGoal()
 {
+	//ゴール時
 	if (clearAnimationFrame == 30)
 	{
+		//クリア時の選択肢出現
 		shp_buttonNext->Appear();
 		if (StageSelect::GetStageNum() != StageSelect::GetMaxStage())
 		{
@@ -307,6 +219,7 @@ void ButiEngine::StageManager::OnGoal()
 	}
 	else if (!clearButtonAnimation && clearAnimationFrame < 0)
 	{
+		//決定時
 		clearButtonAnimation = true;
 		shp_buttonNext->OnSelected();
 	}
@@ -317,27 +230,29 @@ void ButiEngine::StageManager::OnGoal()
 	}
 	if (fadeCount == 1)
 	{
+		//フェードアウト用オブジェクト追加
 		GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 1134, -0.7f), Vector3::Zero, Vector3(2112, 1188, 1)));
 	}
+	//シーンの切り替え
 	if (fadeCount > 30)
 	{
 		shp_map->DestoryBlock();
-		//ChangeScene("StageSelect");
-		//int nextStageNum = StageSelect::GetStageNum() + 1;
-		//StageSelect::SetStageNum(nextStageNum);
 		
 		int nextStageNum = StageSelect::GetStageNum() + 1;
 		if (nextStageNum > StageSelect::GetMaxStage())
 		{
+			//最終ステージクリア時、クリアシーンへ
 			StageSelect::SetRemoveStageName("none");
 			std::string sceneName = "ClearScene";
 			ChangeScene(sceneName);
 		}
 		else
 		{
+			//次のステージへ(ステージ名)
 			std::string sceneName = "Stage" + std::to_string(StageSelect::GetStageNum());
 			if (nextSceneName == "StageSelect")
 			{
+				//次のステージ以外へ戻るときはシーン名を"none"
 				sceneName = "none";
 			}
 			StageSelect::SetRemoveStageName(sceneName);
@@ -367,62 +282,24 @@ void ButiEngine::StageManager::ChangeScene(const std::string& arg_sceneName)
 
 void ButiEngine::StageManager::ModeChange()
 {
-	if (InputManager::OnTriggerModeChangeKey())
+	if (shp_cameraController->IsAnimation()) { return; }
+	if (shp_panelManager->IsAnimation()) { return; }
+	if (shp_pauseManager->IsPause()) { return; }
+	if (StageSelect::GetStageNum() == 0) { return; }
+	if (wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock()) { return; }
+	auto player = wkp_player.lock()->GetGameComponent<Player>();
+	if (player->IsClear() || player->IsFreeze() || player->IsTutorial()) { return; }
+	if (wkp_frog.lock() && wkp_frog.lock()->GetGameComponent<Frog>()->IsAnimation()) { return; }
+
+	shp_scrollManager->ResetScroll();
+		
+	if (mode == GameMode::Chara)
 	{
-		if (shp_cameraController->IsAnimation()) { return; }
-		if (shp_panelManager->IsAnimation()) { return; }
-		if (shp_pauseManager->IsPause()) { return; }
-		if (StageSelect::GetStageNum() == 0) { return; }
-		if (wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock()->GetGameComponent<Panel>()->IsLock()) { return; }
-		if (wkp_player.lock()->GetGameComponent<Player>()->IsClear()) { return; }
-		if (wkp_player.lock()->GetGameComponent<Player>()->IsFreeze()) { return; }
-		if (wkp_frog.lock() && wkp_frog.lock()->GetGameComponent<Frog>()->IsAnimation()) { return; }
-
-		shp_scrollManager->ResetScroll();
-		
-		if (mode == GameMode::Chara)
-		{
-			mode = GameMode::Edit;
-
-			wkp_edit.lock()->transform->TranslateZ(1000);
-			wkp_chara.lock()->transform->SetWorldPosition(modeUIPosition);
-
-			shp_cameraController->ZoomOut();
-			shp_panelManager->ResetMoveNum();
-			shp_panelManager->ResetMoveHistories();
-
-			shp_particleEmitter->SetIsEdit(true);
-
-			auto nowPosX = wkp_player.lock()->transform->GetWorldPosition();
-			particleScrollOffset = nowPosX.x-shp_panelManager->GetClosestPanel(nowPosX.x).lock()->transform->GetWorldPosition().x;
-
-			particleScrollOffset = 360 * (particleScrollOffset / (float)GameSettings::windowWidth);
-
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelMode, GameSettings::masterVolume * 3.0f);
-		
-			wkp_daikokutenHead.lock()->GetGameComponent<Daikokuten>()->NormalScale();
-			wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
-			wkp_daikokutenRAppear.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
-			wkp_daikokutenLAppear.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
-		}
-		else
-		{
-			mode = GameMode::Chara;
-			shp_cameraController->ZoomIn(); 
-
-			shp_particleEmitter->SetIsEdit(false);
-
-			wkp_chara.lock()->transform->TranslateZ(1000);
-			wkp_edit.lock()->transform->SetWorldPosition(modeUIPosition);
-
-			shp_cameraController->ZoomIn();
-
-			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_charaMode, GameSettings::masterVolume * 3.0f);
-
-			wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
-			wkp_daikokutenRAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
-			wkp_daikokutenLAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
-		}
+		SetEditMode();
+	}
+	else
+	{
+		SetCharaMode();
 	}
 }
 
@@ -436,15 +313,18 @@ void ButiEngine::StageManager::CreateUI()
 	}
 	else
 	{
+		//キャラ・エディットモードUI関連の追加
 		wkp_x = GetManager().lock()->AddObjectFromCereal("X");
-		wkp_edit = GetManager().lock()->AddObjectFromCereal("Edit");
-		wkp_chara = GetManager().lock()->AddObjectFromCereal("Chara");
+		wkp_switchDaikokuten = GetManager().lock()->AddObjectFromCereal("SwitchDaikokuten");
+		wkp_switchNezumi = GetManager().lock()->AddObjectFromCereal("SwitchNezumi");
+		GetManager().lock()->AddObjectFromCereal("SwitchArrow");
 
 		shp_XMesh = wkp_x.lock()->GetGameComponent<MeshDrawComponent>();
-		shp_EditMesh = wkp_edit.lock()->GetGameComponent<MeshDrawComponent>();
-		shp_CharaMesh = wkp_chara.lock()->GetGameComponent<MeshDrawComponent>();
+		shp_switchDaikokutenMesh = wkp_switchDaikokuten.lock()->GetGameComponent<MeshDrawComponent>();
+		shp_switchNezumiMesh = wkp_switchNezumi.lock()->GetGameComponent<MeshDrawComponent>();
 
-		wkp_chara.lock()->transform->TranslateZ(1000);
+		wkp_switchNezumi.lock()->transform->SetLocalScale(216.0f);
+		shp_switchDaikokutenMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = 0.5f;
 	}
 
 	wkp_buttonNext = GetManager().lock()->AddObjectFromCereal("Button_Next");
@@ -457,6 +337,7 @@ void ButiEngine::StageManager::CreateUI()
 
 void ButiEngine::StageManager::ChangeUIAlpha()
 {
+	return;
 	auto closestPanel = wkp_player.lock()->GetGameComponent<FollowPanel>()->GetClosestPanel().lock();
 	if (!closestPanel) { return; }
 	bool isLock = closestPanel->GetGameComponent<Panel>()->IsLock();
@@ -466,11 +347,11 @@ void ButiEngine::StageManager::ChangeUIAlpha()
 	{
 		alpha = 0.5f;
 	}
-	if (shp_XMesh && shp_EditMesh && shp_CharaMesh)
+	if (shp_XMesh && shp_switchDaikokutenMesh && shp_switchNezumiMesh)
 	{
 		shp_XMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = alpha;
-		shp_EditMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = alpha;
-		shp_CharaMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = alpha;
+		//shp_EditMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = alpha;
+		//shp_CharaMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = alpha;
 	}
 }
 
@@ -521,23 +402,26 @@ void ButiEngine::StageManager::ClearButtonUpdate()
 
 void ButiEngine::StageManager::CommonTextObject()
 {
+	//会話時に必要なUIのテンプレート
 	wkp_textWindow = GetManager().lock()->AddObjectFromCereal("TextWindow", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.12f), Vector3::Zero, Vector3(1920, 640, 1)));
 	GetManager().lock()->AddObjectFromCereal("Abutton", ObjectFactory::Create<Transform>(Vector3(790, -380, -0.16f), Vector3::Zero, Vector3(180, 180, 1)));
 	GetManager().lock()->AddObjectFromCereal("SkipYbutton", ObjectFactory::Create<Transform>(Vector3(675, -200, -0.16f), Vector3::Zero, Vector3(80, 80, 1)));
 	GetManager().lock()->AddObjectFromCereal("SkipText", ObjectFactory::Create<Transform>(Vector3(780, -200, -0.16f), Vector3::Zero, Vector3(160, 80, 1)));
 }
 
+//カエル初回出現時アニメーション
 void ButiEngine::StageManager::FrogEatAnimation()
 {
 	if (StageSelect::GetStageNum() != TalkStageNum::FROG_TALK || frogEatAnimationCount <= 0) return;
 
 	frogEatAnimationCount--;
 	const int ZOOM_IN_START = 230;
+	const int ZOOM_OUT_START = ZOOM_IN_START - 160;
 	if (frogEatAnimationCount == ZOOM_IN_START)
 	{
 		shp_cameraController->FrogZoomIn();
 	}
-	else if (frogEatAnimationCount == ZOOM_IN_START - 160)
+	else if (frogEatAnimationCount == ZOOM_OUT_START)
 	{
 		shp_cameraController->FrogZoomOut();
 	}
@@ -545,7 +429,7 @@ void ButiEngine::StageManager::FrogEatAnimation()
 	if (frogEatAnimationCount == 1)
 	{
 		//カエル説明用テキスト追加
-		wkp_talkText = GetManager().lock()->AddObjectFromCereal("FrogTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+		GetManager().lock()->AddObjectFromCereal("FrogTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
 		CommonTextObject();
 	}
 }
@@ -569,6 +453,8 @@ void ButiEngine::StageManager::StoreFrog()
 void ButiEngine::StageManager::TutorialMode()
 {
 	if (PauseManager::IsPause())return;
+	auto player = wkp_player.lock()->GetGameComponent<Player>();
+	if (!player->IsTutorial())return;
 
 	if (InputManager::OnTriggerUpKey() || InputManager::OnTriggerDownKey())
 	{
@@ -603,9 +489,181 @@ void ButiEngine::StageManager::TutorialMode()
 			wkp_tutorialYes.lock()->GetGameComponent<TransformAnimation>()->SetIsActive(false);
 		}
 
-		wkp_tutorialNo.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
-		wkp_tutorialYes.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
-		wkp_tutorialTextWindow.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
-		wkp_reverseCheckText.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
+		const float AWAY_POS = -3000;
+		wkp_tutorialNo.lock()->transform->SetLocalPosition(Vector3(0, AWAY_POS, 0));
+		wkp_tutorialYes.lock()->transform->SetLocalPosition(Vector3(0, AWAY_POS, 0));
+		wkp_tutorialTextWindow.lock()->transform->SetLocalPosition(Vector3(0, AWAY_POS, 0));
+		wkp_reverseCheckText.lock()->transform->SetLocalPosition(Vector3(0, AWAY_POS, 0));
 	}
+}
+
+void ButiEngine::StageManager::AddTutorialUI()
+{
+	auto player = wkp_player.lock()->GetGameComponent<Player>();
+	if (!player->IsTutorial())return;
+	if (isAddTutorial)return;
+
+	//チュートリアル時に必要なUIを追加する
+	isAddTutorial = true;
+	wkp_tutorialNo = GetManager().lock()->AddObjectFromCereal("Tutorial_No", ObjectFactory::Create<Transform>(Vector3(650, 40, 0), Vector3::Zero, Vector3(200, 76, 1)));
+	wkp_tutorialYes = GetManager().lock()->AddObjectFromCereal("Tutorial_Yes", ObjectFactory::Create<Transform>(Vector3(650, -84, 0), Vector3::Zero, Vector3(200, 76, 1)));
+	wkp_tutorialTextWindow = GetManager().lock()->AddObjectFromCereal("TutorialTextWindow", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.12f), Vector3::Zero, Vector3(1920, 640, 1)));
+	wkp_reverseCheckText = GetManager().lock()->AddObjectFromCereal("ReverseCheckTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+}
+
+void ButiEngine::StageManager::AddClearAnimation()
+{
+	auto player = wkp_player.lock()->GetGameComponent<Player>();
+	if (player->IsTutorial())return;
+	if (!player->IsClear())return;
+
+	//ゴール時にオブジェクトを追加するタイミングを少し遅らせる
+	const int GOAL_LATE_FRAME = 20;
+
+	//クリア時演出に必要なオブジェクトの追加
+	const int ADD_FLASH_FRAME = CLEAR_FRAME - GOAL_LATE_FRAME;
+	const int ADD_BAND_FRAME = ADD_FLASH_FRAME - 10;
+	const int ADD_TEXT_FRAME = ADD_BAND_FRAME - 20;
+	if (clearAnimationFrame == ADD_FLASH_FRAME)
+	{
+		Vector3 zoomInPosition = wkp_player.lock()->transform->GetWorldPosition();
+
+		auto frog = player->GetHoldSita().lock();
+		if (!frog)
+		{
+			GetManager().lock()->AddObjectFromCereal("ClearFlash", ObjectFactory::Create<Transform>(Vector3(0.0f, 0.0f, 1000.0f)));
+			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_clear, GameSettings::masterVolume);
+		}
+
+		auto cameraController = GetManager().lock()->GetGameObject("Camera").lock()->GetGameComponent<CameraController>();
+		cameraController->MobiusZoomIn(zoomInPosition, 30);
+	}
+	else if (clearAnimationFrame == ADD_BAND_FRAME)
+	{
+		GetManager().lock()->AddObjectFromCereal("ClearBand");
+	}
+	else if (clearAnimationFrame == ADD_TEXT_FRAME)
+	{
+		GetManager().lock()->AddObjectFromCereal("ClearText");
+	}
+
+	clearAnimationFrame--;
+}
+
+void ButiEngine::StageManager::AddTalkText()
+{
+	if (GameSettings::isTitle)
+	{
+		TalkText::Delete();
+		return;
+	}
+
+	auto stageNum = StageSelect::GetStageNum();
+	if (stageNum == TalkStageNum::FIRST_TALK)
+	{
+		//最初の会話用テキスト追加
+		GetManager().lock()->AddObjectFromCereal("FirstTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+		CommonTextObject();
+	}
+	else if (stageNum == TalkStageNum::PANEL_TALK)
+	{
+		//パネル移動説明用テキスト追加
+		GetManager().lock()->AddObjectFromCereal("PanelTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+		CommonTextObject();
+	}
+	else if (stageNum == TalkStageNum::REVERSE_TALK)
+	{
+		//反転説明用テキスト追加
+		if (GameSettings::isTutorialInit)
+		{
+			GetManager().lock()->AddObjectFromCereal("ReverseSecondTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+		}
+		else
+		{
+			GetManager().lock()->AddObjectFromCereal("ReverseTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+		}
+		CommonTextObject();
+	}
+	else if (stageNum == TalkStageNum::REVERSE_RE_TALK)
+	{
+		//反転再警告用テキスト追加
+		GetManager().lock()->AddObjectFromCereal("ReverseRemindTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+		CommonTextObject();
+	}
+	else if (stageNum == TalkStageNum::GRAVITY_TALK)
+	{
+		//重力コア説明用テキスト追加
+		GetManager().lock()->AddObjectFromCereal("GravityTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+		CommonTextObject();
+	}
+	else if (stageNum == TalkStageNum::FROG_TALK)
+	{
+		//カエル説明時のみ専用処理
+		frogEatAnimationCount = 240;
+		TalkText::Revive();
+	}
+	else if (stageNum == TalkStageNum::LAST_TALK)
+	{
+		//最後の会話用テキスト追加
+		GetManager().lock()->AddObjectFromCereal("LastTalkText", ObjectFactory::Create<Transform>(Vector3(0, -310, -0.14f), Vector3::Zero, Vector3(1808, 315, 1)));
+		CommonTextObject();
+	}
+	else
+	{
+		//テキスト出さないステージはDelete
+		TalkText::Delete();
+	}
+}
+
+void ButiEngine::StageManager::SetEditMode()
+{
+	//キャラモードならエディットモードへ
+	mode = GameMode::Edit;
+
+	wkp_switchDaikokuten.lock()->transform->SetLocalScale(defaultModeUIScale * 1.2f);
+	wkp_switchNezumi.lock()->transform->SetLocalScale(defaultModeUIScale);
+	shp_switchNezumiMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = 0.5f;
+	shp_switchDaikokutenMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = 1.0f;
+
+	shp_cameraController->ZoomOut();
+	shp_panelManager->ResetMoveNum();
+	shp_panelManager->ResetMoveHistories();
+
+	shp_particleEmitter->SetIsEdit(true);
+
+	auto nowPosX = wkp_player.lock()->transform->GetWorldPosition();
+	particleScrollOffset = nowPosX.x - shp_panelManager->GetClosestPanel(nowPosX.x).lock()->transform->GetWorldPosition().x;
+
+	particleScrollOffset = 360 * (particleScrollOffset / (float)GameSettings::windowWidth);
+
+	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelMode, GameSettings::masterVolume * 3.0f);
+
+	//オヤブンを出現させる
+	wkp_daikokutenHead.lock()->GetGameComponent<Daikokuten>()->NormalScale();
+	wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
+	wkp_daikokutenRAppear.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
+	wkp_daikokutenLAppear.lock()->GetGameComponent<ParentDaikokuten>()->Appear();
+}
+
+void ButiEngine::StageManager::SetCharaMode()
+{
+	//エディットモードならキャラモードへ
+	mode = GameMode::Chara;
+	shp_cameraController->ZoomIn();
+
+	shp_particleEmitter->SetIsEdit(false);
+	//少し大きくする
+	wkp_switchNezumi.lock()->transform->SetLocalScale(defaultModeUIScale * 1.2f);
+	wkp_switchDaikokuten.lock()->transform->SetLocalScale(defaultModeUIScale);
+	shp_switchDaikokutenMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = 0.5f;
+	shp_switchNezumiMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = 1.0f;
+
+	shp_cameraController->ZoomIn();
+
+	GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_charaMode, GameSettings::masterVolume * 3.0f);
+
+	//オヤブンを引っ込める
+	wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+	wkp_daikokutenRAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+	wkp_daikokutenLAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
 }

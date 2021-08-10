@@ -28,8 +28,8 @@ void ButiEngine::ClearZanzo::OnSet()
 void ButiEngine::ClearZanzo::Start()
 {
 	animationCount = 0;
-	gameObject.lock()->transform->SetLocalPosition(Vector3(-30, 350, 0.02f));
-	gameObject.lock()->transform->SetLocalScale(Vector3(1600, 320, 1));
+	gameObject.lock()->transform->SetLocalPosition(Vector3(170, 350, 0.02f));
+	gameObject.lock()->transform->SetLocalScale(Vector3(2000, 320, 1));
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::ClearZanzo::Clone()

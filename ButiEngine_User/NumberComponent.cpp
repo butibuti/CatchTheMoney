@@ -33,6 +33,7 @@ void ButiEngine::NumberComponent::SetDigit(int arg_digit)
 	digit = arg_digit;
 }
 
+//“n‚³‚ê‚½’l‚ÌŒ…”‚ğ•Ô‚·ŠÖ”
 unsigned int ButiEngine::NumberComponent::GetDigit(unsigned int arg_number)
 {
 	unsigned int _digit = 0;

@@ -136,6 +136,7 @@ bool ButiEngine::PanelManager::IsAnimation()
 
 void ButiEngine::PanelManager::Control()
 {
+	if (reset) { return; }
 	if (InputManager::OnTriggerRightKey())
 	{
 		/*if (moveNum >= MOVE_LIMIT)

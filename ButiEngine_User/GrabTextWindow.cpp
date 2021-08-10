@@ -12,14 +12,12 @@ void ButiEngine::GrabTextWindow::OnUpdate()
 	if (wkp_target.lock())
 	{
 		auto core = shp_player->GetHoldCore().lock();
-		auto frog = shp_player->GetHoldFrog().lock();
 		auto goal = shp_player->GetHoldGoal().lock();
-		bool noGrab = (!core && !frog&&!goal);
-		if (StageManager::GetMode()==GameMode::Chara&&(
-			noGrab && shp_player->IsHitCore() ||
-			/*noGrab && shp_player->IsHitFrog() ||*/
-			noGrab && shp_player->IsHitGoal() ||
-			noGrab && shp_player->IsHitSita()))
+		bool noGrab = (!core && !goal);
+		if (StageManager::GetMode()==GameMode::Chara && (
+			(noGrab && shp_player->IsHitCore()) ||
+			(noGrab && shp_player->IsHitGoal()) ||
+			(noGrab && shp_player->IsHitSita())))
 		{
 			//gameObject.lock()->transform->SetWorldPosition(initPos);
 			currentScale = MAX_SCALE;
@@ -48,7 +46,8 @@ void ButiEngine::GrabTextWindow::OnUpdate()
 	position.x -= 100.0f;
 	gameObject.lock()->transform->SetLocalPosition(position);
 
-	previousScale = previousScale * (1.0f - 0.3f) + currentScale * 0.3f;
+	const float LERP_SCALE = 0.3f;
+	previousScale = previousScale * (1.0f - LERP_SCALE) + currentScale * LERP_SCALE;
 
 	gameObject.lock()->transform->SetLocalScale(Vector3(previousScale, previousScale, 1));
 }

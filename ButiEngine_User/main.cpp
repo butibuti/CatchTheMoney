@@ -23,8 +23,8 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	while (returnCode == -1)
 	{
 		ApplicationInitData init = InputApplicationInitData();
-		//auto app = CreateEditorApplicationInstance(init);
-		auto app = CreateDefaultApplicationInstance(init);
+		auto app = CreateEditorApplicationInstance(init);
+		//auto app = CreateDefaultApplicationInstance(init);
 
 		GameDevice::Initialize();
 		//GameDevice::GetInput()->SetCursorHide(true);

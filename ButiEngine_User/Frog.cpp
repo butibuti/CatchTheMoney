@@ -22,13 +22,12 @@ void ButiEngine::Frog::OnUpdate()
 		gameObject.lock()->GetGameComponent<MeshDrawComponent>()->ReRegist();
 		once = false;
 	}
-	Interlock();
 	if (shp_pauseManager->IsPause() ||
 		StageManager::GetMode() == GameMode::Edit)
 	{
 		return;
 	}
-
+	Interlock();
 	CheckNearPlayer();
 	Animation();
 	if (onceCount < 100 && StageSelect::GetStageNum() == TalkStageNum::FROG_TALK)
@@ -49,7 +48,6 @@ void ButiEngine::Frog::OnUpdate()
 	if (!nearPlayer) { return; }
 	MoveY();
 	CheckGravity();
-	FollowPlayer();
 }
 
 void ButiEngine::Frog::OnSet()
@@ -143,7 +141,6 @@ void ButiEngine::Frog::Start()
 
 void ButiEngine::Frog::OnShowUI()
 {
-	GUI::Text("%f", gameObject.lock()->transform->GetWorldPosition().z);
 }
 
 std::shared_ptr<ButiEngine::GameComponent> ButiEngine::Frog::Clone()
@@ -217,6 +214,7 @@ void ButiEngine::Frog::CheckGravity()
 	if (closestPanel.lock())
 	{
 		auto panelComponent = closestPanel.lock()->GetGameComponent<Panel>();
+		//パネルの重力に合わせる
 		gravity = panelComponent->GetGravity();
 		if (gravity == 0)
 		{
@@ -230,7 +228,7 @@ void ButiEngine::Frog::CheckGravity()
 			}
 		}
 	}
-
+	//重力が反転したらカエルの向きも反転させる
 	if ((gravity > 0) != (previousGravity > 0))
 	{
 		Vector3 scale = gameObject.lock()->transform->GetLocalScale();
@@ -360,37 +358,9 @@ void ButiEngine::Frog::CheckHitPlayer()
 	auto player = wkp_player.lock()->GetGameComponent<Player>();
 	auto playerAABB = player->GetAABB();
 
-	player->ResetHitFrog();
 	if (Geometry::BoxHit::IsHitBox_AABB(*shp_AABB, *playerAABB))
 	{
 		player->OnCollisionFrog(gameObject);
-	}
-}
-
-void ButiEngine::Frog::FollowPlayer()
-{
-	if (!grabbed) { return; }
-
-	Vector3 playerPos = wkp_player.lock()->transform->GetWorldPosition();
-	Vector3 targetPos = gameObject.lock()->transform->GetWorldPosition();
-	float playerGravity = wkp_player.lock()->GetGameComponent<Player>()->GetGravity();
-	float difference = 16.0f;
-
-	if (playerGravity > 0)
-	{
-		difference *= -1;
-	}
-
-	targetPos.y = playerPos.y + difference;
-	gameObject.lock()->transform->SetWorldPostionY(targetPos.y);
-
-	Vector3 scale = gameObject.lock()->transform->GetLocalScale();
-	Vector3 playerScale = wkp_player.lock()->transform->GetLocalScale();
-
-	if (playerScale.x < 0 != scale.x < 0)
-	{
-		scale.x *= -1;
-		gameObject.lock()->transform->SetLocalScale(scale);
 	}
 }
 

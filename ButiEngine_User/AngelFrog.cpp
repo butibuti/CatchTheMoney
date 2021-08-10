@@ -10,7 +10,8 @@ void ButiEngine::AngelFrog::OnUpdate()
 	else
 	{
 		//ƒ‰ƒCƒt‚ª‚È‚­‚È‚Á‚½‚ç”ò‚Î‚·
-		gameObject.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
+		const float AWAY_POS = -3000;
+		gameObject.lock()->transform->SetLocalPosition(Vector3(0, AWAY_POS, 0));
 		return;
 	}
 	

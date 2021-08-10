@@ -6,7 +6,8 @@ void ButiEngine::SelectPlayer::OnUpdate()
 {
 	if (isAway)
 	{
-		gameObject.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
+		const float AWAY_POS = -4000;
+		gameObject.lock()->transform->SetLocalPosition(Vector3(0, AWAY_POS, 0));
 		return;
 	}
 	if (isDecision)
@@ -15,7 +16,8 @@ void ButiEngine::SelectPlayer::OnUpdate()
 	}    
 	else
 	{
-		if (animationFrame < 4)
+		const int ANIMATION_RATE = 4;
+		if (animationFrame < ANIMATION_RATE)
 		{
 			animationFrame++;
 		}
@@ -66,20 +68,23 @@ void ButiEngine::SelectPlayer::DecisionAnimation()
 {
 	animationTime++;
 
-	if (animationTime < 30)
+	const int RUN_UP_FRAME = 30;
+	const int RESPAWN_FRAME = 50;
+	if (animationTime < RUN_UP_FRAME)
 	{
-		velocityX += 0.05f;
+		const float FRICTION = 0.05f;
+		velocityX += FRICTION;
 		position.x += velocityX;
 	}
-	else if (animationTime == 30)
+	else if (animationTime == RUN_UP_FRAME)
 	{
-		position.y = -4000;
+		const float AWAY_POS = -4000;
+		position.y = AWAY_POS;
 	}
-	else if (animationTime == 50)
+	else if (animationTime == RESPAWN_FRAME)
 	{
 		position = Vector3(100, 400, 0);
 		gameObject.lock()->transform->SetLocalScale(Vector3(80, 80, 1));
 		gameObject.lock()->transform->SetLocalRotation(Vector3(-180, 0, -180));
 	}
-
 }

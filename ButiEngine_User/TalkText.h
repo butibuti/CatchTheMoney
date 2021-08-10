@@ -60,16 +60,20 @@ namespace ButiEngine {
 		bool isInterval;
 		Vector3 initPos;
 
+		const float SHAKE_POWER = 8.0f;
+
 		static bool isNotMove;
 		static bool isDelete;
 		bool isGeneratedControl=false;
 		void TextEffect();
 		void NormalTalk();
-		void AbnormalTalk();
+		void FrogTalk();
+		void NextTalk();
+		void DaikokutenDisappear();
 		void FrogInterval();
 		bool SetCamera();
 		bool Once();
-		void NextText();
+		void TextProgress();
 		void Skip();
 	};
 

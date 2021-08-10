@@ -230,6 +230,7 @@
     <ClCompile Include="ThanksPlayer.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="TitleLogo.cpp" />
+    <ClCompile Include="TitlePlayer.cpp" />
     <ClCompile Include="TutorialSelect.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -296,6 +297,7 @@
     <ClInclude Include="ThanksPlayer.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="TitleLogo.h" />
+    <ClInclude Include="TitlePlayer.h" />
     <ClInclude Include="TutorialSelect.h" />
   </ItemGroup>
   <ItemGroup>

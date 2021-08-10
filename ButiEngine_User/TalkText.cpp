@@ -21,19 +21,24 @@ void ButiEngine::TalkText::OnUpdate()
 	//カエルの会話後に一定時間経過でもう一度テキストを呼び戻す
 	FrogInterval();
 
-	//画面外に飛ばすか
+	//会話を出すか出さないか
 	if (isDelete)
 	{
-		if (StageSelect::GetStageNum()==0&& !isGeneratedControl) {
+		if (StageSelect::GetStageNum() == 0 && !isGeneratedControl) {
 			GetManager().lock()->AddObjectFromCereal("Control");
 			isGeneratedControl = true;
 		}
 
-		gameObject.lock()->transform->SetLocalPosition(Vector3(0, -3000, 0));
+		//出さない場合
+		//画面外に飛ばす
+		const float AWAY_POS = -3000;
+		gameObject.lock()->transform->SetLocalPosition(Vector3(0, AWAY_POS, 0));
 		return;
 	}
 	else
 	{
+		//出す場合
+		//画面内へ
 		gameObject.lock()->transform->SetLocalPosition(initPos);
 	}
 
@@ -44,7 +49,7 @@ void ButiEngine::TalkText::OnUpdate()
 	if (Once()) return;
 
 	//テキストを進める
-	NextText();
+	TextProgress();
 
 	//テキストを飛ばす
 	Skip();
@@ -106,17 +111,18 @@ void ButiEngine::TalkText::Revive()
 
 void ButiEngine::TalkText::TextEffect()
 {
-	//ステージに応じて会話に付ける演出を変える
 	auto stageNum = StageSelect::GetStageNum();
+
+	//ステージに応じて会話に付ける演出を変える
 	if (stageNum == TalkStageNum::FIRST_TALK ||
 		stageNum == TalkStageNum::PANEL_TALK ||
 		stageNum == TalkStageNum::REVERSE_RE_TALK)
 	{
-		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
-		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(SHAKE_POWER);
+		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(SHAKE_POWER);
 		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(false);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
-		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(SHAKE_POWER);
 	}
 	else if (stageNum == TalkStageNum::REVERSE_TALK && !GameSettings::isTutorialInit)
 	{
@@ -127,16 +133,16 @@ void ButiEngine::TalkText::TextEffect()
 		}
 		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(false);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
-		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(SHAKE_POWER);
 	}
 	else if (stageNum == TalkStageNum::REVERSE_TALK && GameSettings::isTutorialInit)
 	{
 		//チュートリアルもう一度
-		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
-		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(SHAKE_POWER);
+		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(SHAKE_POWER);
 		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(false);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
-		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(SHAKE_POWER);
 	}
 	else if (stageNum == TalkStageNum::GRAVITY_TALK ||
 		     stageNum == TalkStageNum::FROG_TALK)
@@ -145,40 +151,38 @@ void ButiEngine::TalkText::TextEffect()
 	}
 	else if (stageNum == TalkStageNum::LAST_TALK)
 	{
-		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
-		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(SHAKE_POWER);
+		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(SHAKE_POWER);
 		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(true);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
-		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8);
+		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(SHAKE_POWER);
 	}
 }
 
+//通常時の会話
 void ButiEngine::TalkText::NormalTalk()
 {
-	//通常時の会話
 	if (textCount < shp_spriteAnimation->GetVarticalSplitScale())
 	{
-		TextEffect();
-		shp_spriteAnimation->UpdateVarticalAnim(1);
+		//テキストを進める
+		NextTalk();
 	}
 	else
 	{
 		isDelete = true;
-		wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
-		wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
-		wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+		DaikokutenDisappear();
 	}
 }
 
-void ButiEngine::TalkText::AbnormalTalk()
+//カエル説明時の例外処理
+void ButiEngine::TalkText::FrogTalk()
 {
-	//カエル説明時の例外処理
 	if (!isInterval)
 	{
 		if (textCount < shp_spriteAnimation->GetVarticalSplitScale() - 1)
 		{
-			TextEffect();
-			shp_spriteAnimation->UpdateVarticalAnim(1);
+			//テキストを進める
+			NextTalk();
 		}
 		else
 		{
@@ -186,9 +190,7 @@ void ButiEngine::TalkText::AbnormalTalk()
 			isDelete = true;
 			isNotMove = true;
 			TextEffect();
-			wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
-			wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
-			wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+			DaikokutenDisappear();
 		}
 	}
 	else
@@ -196,15 +198,27 @@ void ButiEngine::TalkText::AbnormalTalk()
 		isDelete = true;
 		isNotMove = false;
 		TextEffect();
-		wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
-		wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
-		wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+		DaikokutenDisappear();
 
 		auto frog = GetManager().lock()->GetGameObject("Frog").lock()->GetGameComponent<Frog>();
 		frog->PlayAnimation();
 		frog->GetBackFrog().lock()->GetGameComponent<Frog>()->PlayAnimation();
 	}
 
+}
+
+void ButiEngine::TalkText::NextTalk()
+{
+	TextEffect();
+	shp_spriteAnimation->UpdateVarticalAnim(1);
+}
+
+//オヤブンが去る処理
+void ButiEngine::TalkText::DaikokutenDisappear()
+{
+	wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+	wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+	wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
 }
 
 void ButiEngine::TalkText::FrogInterval()
@@ -244,15 +258,15 @@ bool ButiEngine::TalkText::Once()
 	{
 		return false;
 	}
-	//少し遅らせる
-	const int ONCE_FRAME = 44;
+	const int SHAKE_FRAME = 40;
+	const int ONCE_FRAME = 44;	//少し遅らせる
 	if (onceFrame == ONCE_FRAME)
 	{
-		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 40);
-		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 40);
+		wkp_camera.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(SHAKE_POWER, SHAKE_FRAME);
+		wkp_cameraUI.lock()->GetGameComponent<ShakeComponent>()->ShakeStart(SHAKE_POWER, SHAKE_FRAME);
 		wkp_daikokutenReaction.lock()->GetGameComponent<ParentDaikokuten>()->Reaction(true);
 		GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_bigText, GameSettings::masterVolume);
-		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(8, 40);
+		GetManager().lock()->GetGameObject("TextWindow").lock()->GetGameComponent<ShakeComponent>()->ShakeStart(SHAKE_POWER, SHAKE_FRAME);
 	}
 	if (onceFrame <= ONCE_FRAME)
 	{
@@ -262,7 +276,7 @@ bool ButiEngine::TalkText::Once()
 	return false;
 }
 
-void ButiEngine::TalkText::NextText()
+void ButiEngine::TalkText::TextProgress()
 {
 	const int WAIT_FRAME = 12;
 	if (InputManager::OnTriggerDecisionKey() && waitTime > WAIT_FRAME)
@@ -275,7 +289,7 @@ void ButiEngine::TalkText::NextText()
 		}
 		else
 		{
-			AbnormalTalk();
+			FrogTalk();
 		}
 
 	}
@@ -291,9 +305,7 @@ void ButiEngine::TalkText::Skip()
 	{
 		isNotMove = false;
 		isDelete = true;
-		wkp_daikokutenAppear.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
-		wkp_daikokutenRHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
-		wkp_daikokutenLHand.lock()->GetGameComponent<ParentDaikokuten>()->Disappear();
+		DaikokutenDisappear();
 
 		if (StageSelect::GetStageNum() == TalkStageNum::FROG_TALK)
 		{

@@ -145,8 +145,6 @@ void ButiEngine::Thanks::Start()
 	wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject2", ObjectFactory::Create<Transform>(Vector3(0, 0, -0.7f), Vector3::Zero, Vector3(2112, 1188, 1)));
 	nextFlag = false;
 
-	//wkp_fadeObject = GetManager().lock()->AddObjectFromCereal("FadeObject", ObjectFactory::Create<Transform>(Vector3(0, 0, 0), Vector3::Zero, Vector3(1920, 1080, 1)));
-
 	bgm = SoundTag("Sound/BGM1.wav");
 	se_apple = SoundTag("Sound/Clear.wav");
 	se_zoom = SoundTag("Sound/Title.wav");
