@@ -22,6 +22,7 @@
 #include"Frog.h"
 #include "TutorialSelect.h"
 #include"Header/GameObjects/DefaultGameComponent/PositionAnimationComponent.h"
+#include"RotateButtonUI.h"
 
 //#define OUTPUT_STAGERENDERTARGET
 #ifdef DEBUG
@@ -318,6 +319,10 @@ void ButiEngine::StageManager::CreateUI()
 		wkp_switchDaikokuten = GetManager().lock()->AddObjectFromCereal("SwitchDaikokuten");
 		wkp_switchNezumi = GetManager().lock()->AddObjectFromCereal("SwitchNezumi");
 		GetManager().lock()->AddObjectFromCereal("SwitchArrow");
+		if (stageNum >= 3)
+		{
+			wkp_RotateButtonUI = GetManager().lock()->AddObjectFromCereal("RotateButtonUI");
+		}
 
 		shp_XMesh = wkp_x.lock()->GetGameComponent<MeshDrawComponent>();
 		shp_switchDaikokutenMesh = wkp_switchDaikokuten.lock()->GetGameComponent<MeshDrawComponent>();
@@ -625,6 +630,12 @@ void ButiEngine::StageManager::SetEditMode()
 	shp_switchNezumiMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = 0.5f;
 	shp_switchDaikokutenMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = 1.0f;
 
+	//•\Ž¦
+	if (wkp_RotateButtonUI.lock())
+	{
+		wkp_RotateButtonUI.lock()->GetGameComponent<RotateButtonUI>()->Appear();
+	}
+
 	shp_cameraController->ZoomOut();
 	shp_panelManager->ResetMoveNum();
 	shp_panelManager->ResetMoveHistories();
@@ -657,6 +668,12 @@ void ButiEngine::StageManager::SetCharaMode()
 	wkp_switchDaikokuten.lock()->transform->SetLocalScale(defaultModeUIScale);
 	shp_switchDaikokutenMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = 0.5f;
 	shp_switchNezumiMesh->GetCBuffer<ObjectInformation>("ObjectInformation")->Get().lightDir.w = 1.0f;
+
+	//”ñ•\Ž¦
+	if (wkp_RotateButtonUI.lock())
+	{
+		wkp_RotateButtonUI.lock()->GetGameComponent<RotateButtonUI>()->Disappear();
+	}
 
 	shp_cameraController->ZoomIn();
 

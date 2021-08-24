@@ -67,6 +67,7 @@
     <ClCompile Include="ThanksPlayer.cpp" />
     <ClCompile Include="ClearZanzo.cpp" />
     <ClCompile Include="TitlePlayer.cpp" />
+    <ClCompile Include="RotateButtonUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackDraw.h" />
@@ -134,6 +135,7 @@
     <ClInclude Include="ThanksPlayer.h" />
     <ClInclude Include="ClearZanzo.h" />
     <ClInclude Include="TitlePlayer.h" />
+    <ClInclude Include="RotateButtonUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ButiEngine_User.rc" />

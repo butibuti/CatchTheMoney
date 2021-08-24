@@ -58,6 +58,7 @@ namespace ButiEngine {
 		std::weak_ptr<GameObject> wkp_buttonNext;
 		std::weak_ptr<GameObject> wkp_buttonSelect;
 		std::weak_ptr<GameObject> wkp_textWindow;
+		std::weak_ptr<GameObject> wkp_RotateButtonUI;
 
 		std::weak_ptr<GameObject> wkp_daikokutenHead;
 		std::weak_ptr<GameObject> wkp_daikokutenHandLeft;

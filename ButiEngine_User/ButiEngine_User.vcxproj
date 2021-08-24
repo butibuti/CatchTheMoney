@@ -206,6 +206,7 @@
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'"> /bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="ReverseText.cpp" />
+    <ClCompile Include="RotateButtonUI.cpp" />
     <ClCompile Include="SceneChangeAnimation.cpp" />
     <ClCompile Include="ScrollManager.cpp" />
     <ClCompile Include="SelectFlash.cpp" />
@@ -276,6 +277,7 @@
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ReverseText.h" />
+    <ClInclude Include="RotateButtonUI.h" />
     <ClInclude Include="SceneChangeAnimation.h" />
     <ClInclude Include="ScrollManager.h" />
     <ClInclude Include="SelectFlash.h" />
