@@ -11,6 +11,7 @@
 #include"ShakeComponent.h"
 #include"ReverseText.h"
 #include"StageManager.h"
+#include"StageSelect.h"
 
 void ButiEngine::PanelManager::OnUpdate()
 {
@@ -182,7 +183,7 @@ void ButiEngine::PanelManager::Control()
 		}
 		reset = true;
 	}
-	else if (InputManager::OnTriggerReversePanelKey())
+	else if (InputManager::OnTriggerReversePanelKey() && StageSelect::GetStageNum() >= 3)
 	{
 		soundNum = 0;
 		reverse_moveCount = 0;
