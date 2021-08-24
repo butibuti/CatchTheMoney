@@ -128,8 +128,7 @@ bool ButiEngine::InputManager::OnTriggerMobiusResetRotationKey()
 bool ButiEngine::InputManager::OnTriggerModeChangeKey()
 {
 	return (GameDevice::GetInput()->TriggerKey(Keys::Space) ||
-		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_XB) ||
-		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_Y));
+		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_XB));
 }
 
 bool ButiEngine::InputManager::OnTriggerOpenMenuKey()
@@ -169,6 +168,7 @@ bool ButiEngine::InputManager::OnPushLeftScrollKey()
 
 bool ButiEngine::InputManager::OnTriggerUndoKey()
 {
+	return false;
 	return ((GameDevice::GetInput()->TriggerKey(Keys::LeftCtrl) && GameDevice::GetInput()->CheckKey(Keys::Z)) ||
 		(GameDevice::GetInput()->CheckKey(Keys::LeftCtrl) && GameDevice::GetInput()->TriggerKey(Keys::Z)));
 		//GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_LEFT);
@@ -176,8 +176,9 @@ bool ButiEngine::InputManager::OnTriggerUndoKey()
 
 bool ButiEngine::InputManager::OnTriggerRedoKey()
 {
-	return ((GameDevice::GetInput()->TriggerKey(Keys::LeftCtrl) && GameDevice::GetInput()->CheckKey(Keys::Y)) ||
-		(GameDevice::GetInput()->CheckKey(Keys::LeftCtrl) && GameDevice::GetInput()->TriggerKey(Keys::Y)));
+	return false;
+	//return ((GameDevice::GetInput()->TriggerKey(Keys::LeftCtrl) && GameDevice::GetInput()->CheckKey(Keys::Y)) ||
+	//	(GameDevice::GetInput()->CheckKey(Keys::LeftCtrl) && GameDevice::GetInput()->TriggerKey(Keys::Y)));
 		//GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_BACK);
 }
 
@@ -186,6 +187,12 @@ bool ButiEngine::InputManager::OnTriggerResetPanelKey()
 	return ((GameDevice::GetInput()->TriggerKey(Keys::LeftCtrl) && GameDevice::GetInput()->CheckKey(Keys::R)) ||
 		(GameDevice::GetInput()->CheckKey(Keys::LeftCtrl) && GameDevice::GetInput()->TriggerKey(Keys::R)) ||
 		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_B));
+}
+
+bool ButiEngine::InputManager::OnTriggerReversePanelKey()
+{
+	return (GameDevice::GetInput()->TriggerKey(Keys::Y) ||
+		GameDevice::GetInput()->GetPadButtonTriger(PadButtons::XBOX_Y));
 }
 
 bool ButiEngine::InputManager::OnTriggerDecisionKey()

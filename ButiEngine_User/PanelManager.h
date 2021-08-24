@@ -56,10 +56,12 @@ namespace ButiEngine {
 		const bool LEFT = false;
 		int moveNum;
 		int soundNum;
+		int panelLock_moveNum;
 		std::vector<bool> vec_histories;
 		int currentIndex;
 		bool reset;
 		bool reverse;
+		int reverse_moveCount;
 
 		void Control();
 		void StorePlayer();
@@ -69,6 +71,7 @@ namespace ButiEngine {
 		void Undo(int arg_frame = 15);
 		void Redo(int arg_frame = 15);
 		void Reset();
+		void Reverse();
 		void RemoveHistories();
 		void PlaySlideSound();
 	};

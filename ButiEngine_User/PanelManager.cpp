@@ -23,6 +23,7 @@ void ButiEngine::PanelManager::OnUpdate()
 	}
 	Control();
 	Reset();
+	Reverse();
 }
 
 void ButiEngine::PanelManager::OnSet()
@@ -36,7 +37,9 @@ void ButiEngine::PanelManager::Start()
 	//shp_reverseText = GetManager().lock()->GetGameObject("ParentReverseText").lock()->GetGameComponent<ReverseText>();
 	moveNum = 0;
 	soundNum = 0;
+	panelLock_moveNum = 0;
 	reverse = false;
+	reverse_moveCount = 0;
 
 	se_panelLimit = SoundTag("Sound/PanelLimit.wav");
 	se_slide0 = SoundTag("Sound/PanelSlide_0.wav");
@@ -136,7 +139,7 @@ bool ButiEngine::PanelManager::IsAnimation()
 
 void ButiEngine::PanelManager::Control()
 {
-	if (reset) { return; }
+	if (reset || reverse) { return; }
 	if (InputManager::OnTriggerRightKey())
 	{
 		/*if (moveNum >= MOVE_LIMIT)
@@ -158,7 +161,7 @@ void ButiEngine::PanelManager::Control()
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, GameSettings::masterVolume);
 			return;
 		}*/
-		if (soundNum <= 0)
+		if (panelLock_moveNum <= 0)
 		{
 			shp_shake->ShakeStart(3.0);
 			GetManager().lock()->GetApplication().lock()->GetSoundManager()->PlaySE(se_panelLimit, GameSettings::masterVolume);
@@ -178,6 +181,12 @@ void ButiEngine::PanelManager::Control()
 			return;
 		}
 		reset = true;
+	}
+	else if (InputManager::OnTriggerReversePanelKey())
+	{
+		soundNum = 0;
+		reverse_moveCount = 0;
+		reverse = true;
 	}
 	//if (vec_histories.size() == 0)
 	//{
@@ -282,6 +291,7 @@ void ButiEngine::PanelManager::SwapRight(int arg_frame)
 		moveNum = 0;
 	}
 	soundNum++;
+	panelLock_moveNum++;
 }
 
 void ButiEngine::PanelManager::SwapLeft(int arg_frame)
@@ -306,6 +316,7 @@ void ButiEngine::PanelManager::SwapLeft(int arg_frame)
 		moveNum = 0;
 	}
 	soundNum--;
+	panelLock_moveNum--;
 	PlaySlideSound();
 }
 
@@ -355,8 +366,20 @@ void ButiEngine::PanelManager::Reset()
 	{
 		ResetMoveHistories();
 		soundNum = 0;
+		panelLock_moveNum = 0;
 		reset = false;
 	}
+}
+
+void ButiEngine::PanelManager::Reverse()
+{
+	if (!reverse) { return; }
+	SwapRight(5);
+	RemoveHistories();
+	vec_histories.push_back(RIGHT);
+	currentIndex = vec_histories.size() - 1;
+	reverse_moveCount++;
+	if (reverse_moveCount == 3) { reverse = false; }
 }
 
 void ButiEngine::PanelManager::RemoveHistories()

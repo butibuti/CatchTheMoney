@@ -47,6 +47,7 @@ namespace ButiEngine {
 		static bool OnTriggerUndoKey();
 		static bool OnTriggerRedoKey();
 		static bool OnTriggerResetPanelKey();
+		static bool OnTriggerReversePanelKey();
 
 		//anotherScene
 		static bool OnTriggerDecisionKey();
